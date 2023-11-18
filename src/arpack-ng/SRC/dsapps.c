@@ -4,8 +4,8 @@
 
 /* Table of constant values */
 
-static double d_zero = 0.;
-static double d_one = 1.;
+static double c_b4 = 0.;
+static double c_b5 = 1.;
 static a_int i_one = 1;
 static double d_n1 = -1.;
 
@@ -139,7 +139,7 @@ static double d_n1 = -1.;
 
 /* ----------------------------------------------------------------------- */
 
-int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ldv, double *h__, a_int *ldh, double *resid, double *q, a_int *ldq, double *workd)
+int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ldv, double *h, a_int *ldh, double *resid, double *q, a_int *ldq, double *workd)
 {
     /* Initialized data */
 
@@ -150,9 +150,9 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     double d__1, d__2;
 
     /* Local variables */
-    double c__, f, g;
-    a_int i__, j;
-    double r__, s, a1, a2, a3, a4;
+    double c, f, g;
+    a_int i, j;
+    double r, s, a1, a2, a3, a4;
     static float t0, t1;
     a_int jj;
     double big;
@@ -223,7 +223,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     v -= v_offset;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     q_dim1 = *ldq;
     q_offset = 1 + q_dim1;
     q -= q_offset;
@@ -256,7 +256,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /*     | kplusp used to accumulate the rotations.     | */
     /*     %----------------------------------------------% */
 
-    dlaset_("All", &kplusp, &kplusp, &d_zero, &d_one, &q[q_offset], ldq, (ftnlen)3);
+    dlaset_("All", &kplusp, &kplusp, &c_b4, &c_b5, &q[q_offset], ldq, (ftnlen)3);
 
     /*     %----------------------------------------------% */
     /*     | Quick return if there are no shifts to apply | */
@@ -296,22 +296,22 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
         /*        %------------------------------------------------% */
 
         i__2 = kplusp - 1;
-        for (i__ = istart; i__ <= i__2; ++i__)
+        for (i = istart; i <= i__2; ++i)
         {
-            big = (d__1 = h__[i__ + (h_dim1 << 1)], abs(d__1)) + (d__2 = h__[i__ + 1 + (h_dim1 << 1)], abs(d__2));
-            if (h__[i__ + 1 + h_dim1] <= epsmch * big)
+            big = (d__1 = h[i + (h_dim1 << 1)], abs(d__1)) + (d__2 = h[i + 1 + (h_dim1 << 1)], abs(d__2));
+            if (h[i + 1 + h_dim1] <= epsmch * big)
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit, "_sapps: deflation at row/column no.", (ftnlen)35);
+                    ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit, "_sapps: deflation at row/column no.", (ftnlen)35);
                     ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_sapps: occurred before shift number.", (ftnlen)37);
-                    dvout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
+                    dvout_(&debug_1.logfil, &i_one, &h[i + 1 + h_dim1], &debug_1.ndigit,
                            "_sapps: the corresponding off d"
                            "iagonal element",
                            (ftnlen)46);
                 }
-                h__[i__ + 1 + h_dim1] = 0.;
-                iend = i__;
+                h[i + 1 + h_dim1] = 0.;
+                iend = i;
                 goto L40;
             }
             /* L30: */
@@ -327,9 +327,9 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
             /*           | that attempts to drive h(istart+1,1) to zero.          | */
             /*           %--------------------------------------------------------% */
 
-            f = h__[istart + (h_dim1 << 1)] - shift[jj];
-            g = h__[istart + 1 + h_dim1];
-            dlartg_(&f, &g, &c__, &s, &r__);
+            f = h[istart + (h_dim1 << 1)] - shift[jj];
+            g = h[istart + 1 + h_dim1];
+            dlartg_(&f, &g, &c, &s, &r);
 
             /*            %-------------------------------------------------------% */
             /*            | Apply rotation to the left and right of H;            | */
@@ -337,13 +337,13 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
             /*            | This will create a "bulge".                           | */
             /*            %-------------------------------------------------------% */
 
-            a1 = c__ * h__[istart + (h_dim1 << 1)] + s * h__[istart + 1 + h_dim1];
-            a2 = c__ * h__[istart + 1 + h_dim1] + s * h__[istart + 1 + (h_dim1 << 1)];
-            a4 = c__ * h__[istart + 1 + (h_dim1 << 1)] - s * h__[istart + 1 + h_dim1];
-            a3 = c__ * h__[istart + 1 + h_dim1] - s * h__[istart + (h_dim1 << 1)];
-            h__[istart + (h_dim1 << 1)] = c__ * a1 + s * a2;
-            h__[istart + 1 + (h_dim1 << 1)] = c__ * a4 - s * a3;
-            h__[istart + 1 + h_dim1] = c__ * a3 + s * a4;
+            a1 = c * h[istart + (h_dim1 << 1)] + s * h[istart + 1 + h_dim1];
+            a2 = c * h[istart + 1 + h_dim1] + s * h[istart + 1 + (h_dim1 << 1)];
+            a4 = c * h[istart + 1 + (h_dim1 << 1)] - s * h[istart + 1 + h_dim1];
+            a3 = c * h[istart + 1 + h_dim1] - s * h[istart + (h_dim1 << 1)];
+            h[istart + (h_dim1 << 1)] = c * a1 + s * a2;
+            h[istart + 1 + (h_dim1 << 1)] = c * a4 - s * a3;
+            h[istart + 1 + h_dim1] = c * a3 + s * a4;
 
             /*            %----------------------------------------------------% */
             /*            | Accumulate the rotation in the matrix Q;  Q <- Q*G | */
@@ -354,8 +354,8 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
             i__2 = min(i__3, kplusp);
             for (j = 1; j <= i__2; ++j)
             {
-                a1 = c__ * q[j + istart * q_dim1] + s * q[j + (istart + 1) * q_dim1];
-                q[j + (istart + 1) * q_dim1] = -s * q[j + istart * q_dim1] + c__ * q[j + (istart + 1) * q_dim1];
+                a1 = c * q[j + istart * q_dim1] + s * q[j + (istart + 1) * q_dim1];
+                q[j + (istart + 1) * q_dim1] = -s * q[j + istart * q_dim1] + c * q[j + (istart + 1) * q_dim1];
                 q[j + istart * q_dim1] = a1;
                 /* L60: */
             }
@@ -371,7 +371,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
             /*            %----------------------------------------------% */
 
             i__2 = iend - 1;
-            for (i__ = istart + 1; i__ <= i__2; ++i__)
+            for (i = istart + 1; i <= i__2; ++i)
             {
 
                 /*               %----------------------------------------------% */
@@ -380,15 +380,15 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
                 /*               | by G(i-1,i,theta). g represents the bulge.   | */
                 /*               %----------------------------------------------% */
 
-                f = h__[i__ + h_dim1];
-                g = s * h__[i__ + 1 + h_dim1];
+                f = h[i + h_dim1];
+                g = s * h[i + 1 + h_dim1];
 
                 /*               %----------------------------------% */
                 /*               | Final update with G(i-1,i,theta) | */
                 /*               %----------------------------------% */
 
-                h__[i__ + 1 + h_dim1] = c__ * h__[i__ + 1 + h_dim1];
-                dlartg_(&f, &g, &c__, &s, &r__);
+                h[i + 1 + h_dim1] = c * h[i + 1 + h_dim1];
+                dlartg_(&f, &g, &c, &s, &r);
 
                 /*               %-------------------------------------------% */
                 /*               | The following ensures that h(1:iend-1,1), | */
@@ -396,10 +396,10 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
                 /*               | H, remain non negative.                   | */
                 /*               %-------------------------------------------% */
 
-                if (r__ < 0.)
+                if (r < 0.)
                 {
-                    r__ = -r__;
-                    c__ = -c__;
+                    r = -r;
+                    c = -c;
                     s = -s;
                 }
 
@@ -408,29 +408,29 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
                 /*               | H <- G * H * G',  where G = G(i,i+1,theta) | */
                 /*               %--------------------------------------------% */
 
-                h__[i__ + h_dim1] = r__;
+                h[i + h_dim1] = r;
 
-                a1 = c__ * h__[i__ + (h_dim1 << 1)] + s * h__[i__ + 1 + h_dim1];
-                a2 = c__ * h__[i__ + 1 + h_dim1] + s * h__[i__ + 1 + (h_dim1 << 1)];
-                a3 = c__ * h__[i__ + 1 + h_dim1] - s * h__[i__ + (h_dim1 << 1)];
-                a4 = c__ * h__[i__ + 1 + (h_dim1 << 1)] - s * h__[i__ + 1 + h_dim1];
+                a1 = c * h[i + (h_dim1 << 1)] + s * h[i + 1 + h_dim1];
+                a2 = c * h[i + 1 + h_dim1] + s * h[i + 1 + (h_dim1 << 1)];
+                a3 = c * h[i + 1 + h_dim1] - s * h[i + (h_dim1 << 1)];
+                a4 = c * h[i + 1 + (h_dim1 << 1)] - s * h[i + 1 + h_dim1];
 
-                h__[i__ + (h_dim1 << 1)] = c__ * a1 + s * a2;
-                h__[i__ + 1 + (h_dim1 << 1)] = c__ * a4 - s * a3;
-                h__[i__ + 1 + h_dim1] = c__ * a3 + s * a4;
+                h[i + (h_dim1 << 1)] = c * a1 + s * a2;
+                h[i + 1 + (h_dim1 << 1)] = c * a4 - s * a3;
+                h[i + 1 + h_dim1] = c * a3 + s * a4;
 
                 /*               %----------------------------------------------------% */
                 /*               | Accumulate the rotation in the matrix Q;  Q <- Q*G | */
                 /*               %----------------------------------------------------% */
 
                 /* Computing MIN */
-                i__4 = i__ + jj;
+                i__4 = i + jj;
                 i__3 = min(i__4, kplusp);
                 for (j = 1; j <= i__3; ++j)
                 {
-                    a1 = c__ * q[j + i__ * q_dim1] + s * q[j + (i__ + 1) * q_dim1];
-                    q[j + (i__ + 1) * q_dim1] = -s * q[j + i__ * q_dim1] + c__ * q[j + (i__ + 1) * q_dim1];
-                    q[j + i__ * q_dim1] = a1;
+                    a1 = c * q[j + i * q_dim1] + s * q[j + (i + 1) * q_dim1];
+                    q[j + (i + 1) * q_dim1] = -s * q[j + i * q_dim1] + c * q[j + (i + 1) * q_dim1];
+                    q[j + i * q_dim1] = a1;
                     /* L50: */
                 }
 
@@ -452,9 +452,9 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
         /*        | similarity on transformation H           | */
         /*        %------------------------------------------% */
 
-        if (h__[iend + h_dim1] < 0.)
+        if (h[iend + h_dim1] < 0.)
         {
-            h__[iend + h_dim1] = -h__[iend + h_dim1];
+            h[iend + h_dim1] = -h[iend + h_dim1];
             dscal_(&kplusp, &d_n1, &q[iend * q_dim1 + 1], &i_one);
         }
 
@@ -472,9 +472,9 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
         /*        %-----------------------------------------------------% */
 
         i__2 = kplusp - 1;
-        for (i__ = itop; i__ <= i__2; ++i__)
+        for (i = itop; i <= i__2; ++i)
         {
-            if (h__[i__ + 1 + h_dim1] > 0.)
+            if (h[i + 1 + h_dim1] > 0.)
             {
                 goto L90;
             }
@@ -496,23 +496,23 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /*     %------------------------------------------% */
 
     i__1 = kplusp - 1;
-    for (i__ = itop; i__ <= i__1; ++i__)
+    for (i = itop; i <= i__1; ++i)
     {
-        big = (d__1 = h__[i__ + (h_dim1 << 1)], abs(d__1)) + (d__2 = h__[i__ + 1 + (h_dim1 << 1)], abs(d__2));
-        if (h__[i__ + 1 + h_dim1] <= epsmch * big)
+        big = (d__1 = h[i + (h_dim1 << 1)], abs(d__1)) + (d__2 = h[i + 1 + (h_dim1 << 1)], abs(d__2));
+        if (h[i + 1 + h_dim1] <= epsmch * big)
         {
             if (msglvl > 0)
             {
-                ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit,
+                ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit,
                        "_sapp"
                        "s: deflation at row/column no.",
                        (ftnlen)35);
-                dvout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
+                dvout_(&debug_1.logfil, &i_one, &h[i + 1 + h_dim1], &debug_1.ndigit,
                        "_sapps: the corresponding off diago"
                        "nal element",
                        (ftnlen)46);
             }
-            h__[i__ + 1 + h_dim1] = 0.;
+            h[i + 1 + h_dim1] = 0.;
         }
         /* L100: */
     }
@@ -523,9 +523,9 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /*     | This is not necessary if h(kev+1,1) = 0.         | */
     /*     %-------------------------------------------------% */
 
-    if (h__[*kev + 1 + h_dim1] > 0.)
+    if (h[*kev + 1 + h_dim1] > 0.)
     {
-        dgemv_("N", n, &kplusp, &d_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &d_zero, &workd[*n + 1], &i_one, (ftnlen)1);
+        dgemv_("N", n, &kplusp, &c_b5, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &c_b4, &workd[*n + 1], &i_one, (ftnlen)1);
     }
 
     /*     %-------------------------------------------------------% */
@@ -536,11 +536,11 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /*     %-------------------------------------------------------% */
 
     i__1 = *kev;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        i__2 = kplusp - i__ + 1;
-        dgemv_("N", n, &i__2, &d_one, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &i_one, &d_zero, &workd[1], &i_one, (ftnlen)1);
-        dcopy_(n, &workd[1], &i_one, &v[(kplusp - i__ + 1) * v_dim1 + 1], &i_one);
+        i__2 = kplusp - i + 1;
+        dgemv_("N", n, &i__2, &c_b5, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &c_b4, &workd[1], &i_one, (ftnlen)1);
+        dcopy_(n, &workd[1], &i_one, &v[(kplusp - i + 1) * v_dim1 + 1], &i_one);
         /* L130: */
     }
 
@@ -549,9 +549,9 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /*     %-------------------------------------------------% */
 
     i__1 = *kev;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        dcopy_(n, &v[(*np + i__) * v_dim1 + 1], &i_one, &v[i__ * v_dim1 + 1], &i_one);
+        dcopy_(n, &v[(*np + i) * v_dim1 + 1], &i_one, &v[i * v_dim1 + 1], &i_one);
         /* L140: */
     }
 
@@ -560,7 +560,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /*     | appropriate place if h(kev+1,1) .ne. zero. | */
     /*     %--------------------------------------------% */
 
-    if (h__[*kev + 1 + h_dim1] > 0.)
+    if (h[*kev + 1 + h_dim1] > 0.)
     {
         dcopy_(n, &workd[*n + 1], &i_one, &v[(*kev + 1) * v_dim1 + 1], &i_one);
     }
@@ -574,9 +574,9 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /*     %-------------------------------------% */
 
     dscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &i_one);
-    if (h__[*kev + 1 + h_dim1] > 0.)
+    if (h[*kev + 1 + h_dim1] > 0.)
     {
-        daxpy_(n, &h__[*kev + 1 + h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
+        daxpy_(n, &h[*kev + 1 + h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
     }
 
     if (msglvl > 1)
@@ -585,12 +585,12 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
                "_sapps: sigmak of the updated residual vect"
                "or",
                (ftnlen)45);
-        dvout_(&debug_1.logfil, &i_one, &h__[*kev + 1 + h_dim1], &debug_1.ndigit, "_sapps: betak of the updated residual vector", (ftnlen)44);
-        dvout_(&debug_1.logfil, kev, &h__[(h_dim1 << 1) + 1], &debug_1.ndigit, "_sapps: updated main diagonal of H for next iteration", (ftnlen)53);
+        dvout_(&debug_1.logfil, &i_one, &h[*kev + 1 + h_dim1], &debug_1.ndigit, "_sapps: betak of the updated residual vector", (ftnlen)44);
+        dvout_(&debug_1.logfil, kev, &h[(h_dim1 << 1) + 1], &debug_1.ndigit, "_sapps: updated main diagonal of H for next iteration", (ftnlen)53);
         if (*kev > 1)
         {
             i__1 = *kev - 1;
-            dvout_(&debug_1.logfil, &i__1, &h__[h_dim1 + 2], &debug_1.ndigit, "_sapps: updated sub diagonal of H for next iteration", (ftnlen)52);
+            dvout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit, "_sapps: updated sub diagonal of H for next iteration", (ftnlen)52);
         }
     }
 

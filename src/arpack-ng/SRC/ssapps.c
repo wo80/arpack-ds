@@ -139,7 +139,7 @@ static float s_n1 = -1.f;
 
 /* ----------------------------------------------------------------------- */
 
-int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv, float *h__, a_int *ldh, float *resid, float *q, a_int *ldq, float *workd)
+int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv, float *h, a_int *ldh, float *resid, float *q, a_int *ldq, float *workd)
 {
     /* Initialized data */
 
@@ -150,9 +150,9 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     float r__1, r__2;
 
     /* Local variables */
-    float c__, f, g;
-    a_int i__, j;
-    float r__, s, a1, a2, a3, a4;
+    float c, f, g;
+    a_int i, j;
+    float r, s, a1, a2, a3, a4;
     static float t0, t1;
     a_int jj;
     float big;
@@ -223,7 +223,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     v -= v_offset;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     q_dim1 = *ldq;
     q_offset = 1 + q_dim1;
     q -= q_offset;
@@ -296,22 +296,22 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
         /*        %------------------------------------------------% */
 
         i__2 = kplusp - 1;
-        for (i__ = istart; i__ <= i__2; ++i__)
+        for (i = istart; i <= i__2; ++i)
         {
-            big = (r__1 = h__[i__ + (h_dim1 << 1)], dabs(r__1)) + (r__2 = h__[i__ + 1 + (h_dim1 << 1)], dabs(r__2));
-            if (h__[i__ + 1 + h_dim1] <= epsmch * big)
+            big = (r__1 = h[i + (h_dim1 << 1)], dabs(r__1)) + (r__2 = h[i + 1 + (h_dim1 << 1)], dabs(r__2));
+            if (h[i + 1 + h_dim1] <= epsmch * big)
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit, "_sapps: deflation at row/column no.", (ftnlen)35);
+                    ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit, "_sapps: deflation at row/column no.", (ftnlen)35);
                     ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_sapps: occurred before shift number.", (ftnlen)37);
-                    svout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
+                    svout_(&debug_1.logfil, &i_one, &h[i + 1 + h_dim1], &debug_1.ndigit,
                            "_sapps: the corresponding off d"
                            "iagonal element",
                            (ftnlen)46);
                 }
-                h__[i__ + 1 + h_dim1] = 0.f;
-                iend = i__;
+                h[i + 1 + h_dim1] = 0.f;
+                iend = i;
                 goto L40;
             }
             /* L30: */
@@ -327,9 +327,9 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
             /*           | that attempts to drive h(istart+1,1) to zero.          | */
             /*           %--------------------------------------------------------% */
 
-            f = h__[istart + (h_dim1 << 1)] - shift[jj];
-            g = h__[istart + 1 + h_dim1];
-            slartg_(&f, &g, &c__, &s, &r__);
+            f = h[istart + (h_dim1 << 1)] - shift[jj];
+            g = h[istart + 1 + h_dim1];
+            slartg_(&f, &g, &c, &s, &r);
 
             /*            %-------------------------------------------------------% */
             /*            | Apply rotation to the left and right of H;            | */
@@ -337,13 +337,13 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
             /*            | This will create a "bulge".                           | */
             /*            %-------------------------------------------------------% */
 
-            a1 = c__ * h__[istart + (h_dim1 << 1)] + s * h__[istart + 1 + h_dim1];
-            a2 = c__ * h__[istart + 1 + h_dim1] + s * h__[istart + 1 + (h_dim1 << 1)];
-            a4 = c__ * h__[istart + 1 + (h_dim1 << 1)] - s * h__[istart + 1 + h_dim1];
-            a3 = c__ * h__[istart + 1 + h_dim1] - s * h__[istart + (h_dim1 << 1)];
-            h__[istart + (h_dim1 << 1)] = c__ * a1 + s * a2;
-            h__[istart + 1 + (h_dim1 << 1)] = c__ * a4 - s * a3;
-            h__[istart + 1 + h_dim1] = c__ * a3 + s * a4;
+            a1 = c * h[istart + (h_dim1 << 1)] + s * h[istart + 1 + h_dim1];
+            a2 = c * h[istart + 1 + h_dim1] + s * h[istart + 1 + (h_dim1 << 1)];
+            a4 = c * h[istart + 1 + (h_dim1 << 1)] - s * h[istart + 1 + h_dim1];
+            a3 = c * h[istart + 1 + h_dim1] - s * h[istart + (h_dim1 << 1)];
+            h[istart + (h_dim1 << 1)] = c * a1 + s * a2;
+            h[istart + 1 + (h_dim1 << 1)] = c * a4 - s * a3;
+            h[istart + 1 + h_dim1] = c * a3 + s * a4;
 
             /*            %----------------------------------------------------% */
             /*            | Accumulate the rotation in the matrix Q;  Q <- Q*G | */
@@ -354,8 +354,8 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
             i__2 = min(i__3, kplusp);
             for (j = 1; j <= i__2; ++j)
             {
-                a1 = c__ * q[j + istart * q_dim1] + s * q[j + (istart + 1) * q_dim1];
-                q[j + (istart + 1) * q_dim1] = -s * q[j + istart * q_dim1] + c__ * q[j + (istart + 1) * q_dim1];
+                a1 = c * q[j + istart * q_dim1] + s * q[j + (istart + 1) * q_dim1];
+                q[j + (istart + 1) * q_dim1] = -s * q[j + istart * q_dim1] + c * q[j + (istart + 1) * q_dim1];
                 q[j + istart * q_dim1] = a1;
                 /* L60: */
             }
@@ -371,7 +371,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
             /*            %----------------------------------------------% */
 
             i__2 = iend - 1;
-            for (i__ = istart + 1; i__ <= i__2; ++i__)
+            for (i = istart + 1; i <= i__2; ++i)
             {
 
                 /*               %----------------------------------------------% */
@@ -380,15 +380,15 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
                 /*               | by G(i-1,i,theta). g represents the bulge.   | */
                 /*               %----------------------------------------------% */
 
-                f = h__[i__ + h_dim1];
-                g = s * h__[i__ + 1 + h_dim1];
+                f = h[i + h_dim1];
+                g = s * h[i + 1 + h_dim1];
 
                 /*               %----------------------------------% */
                 /*               | Final update with G(i-1,i,theta) | */
                 /*               %----------------------------------% */
 
-                h__[i__ + 1 + h_dim1] = c__ * h__[i__ + 1 + h_dim1];
-                slartg_(&f, &g, &c__, &s, &r__);
+                h[i + 1 + h_dim1] = c * h[i + 1 + h_dim1];
+                slartg_(&f, &g, &c, &s, &r);
 
                 /*               %-------------------------------------------% */
                 /*               | The following ensures that h(1:iend-1,1), | */
@@ -396,10 +396,10 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
                 /*               | H, remain non negative.                   | */
                 /*               %-------------------------------------------% */
 
-                if (r__ < 0.f)
+                if (r < 0.f)
                 {
-                    r__ = -r__;
-                    c__ = -c__;
+                    r = -r;
+                    c = -c;
                     s = -s;
                 }
 
@@ -408,29 +408,29 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
                 /*               | H <- G * H * G',  where G = G(i,i+1,theta) | */
                 /*               %--------------------------------------------% */
 
-                h__[i__ + h_dim1] = r__;
+                h[i + h_dim1] = r;
 
-                a1 = c__ * h__[i__ + (h_dim1 << 1)] + s * h__[i__ + 1 + h_dim1];
-                a2 = c__ * h__[i__ + 1 + h_dim1] + s * h__[i__ + 1 + (h_dim1 << 1)];
-                a3 = c__ * h__[i__ + 1 + h_dim1] - s * h__[i__ + (h_dim1 << 1)];
-                a4 = c__ * h__[i__ + 1 + (h_dim1 << 1)] - s * h__[i__ + 1 + h_dim1];
+                a1 = c * h[i + (h_dim1 << 1)] + s * h[i + 1 + h_dim1];
+                a2 = c * h[i + 1 + h_dim1] + s * h[i + 1 + (h_dim1 << 1)];
+                a3 = c * h[i + 1 + h_dim1] - s * h[i + (h_dim1 << 1)];
+                a4 = c * h[i + 1 + (h_dim1 << 1)] - s * h[i + 1 + h_dim1];
 
-                h__[i__ + (h_dim1 << 1)] = c__ * a1 + s * a2;
-                h__[i__ + 1 + (h_dim1 << 1)] = c__ * a4 - s * a3;
-                h__[i__ + 1 + h_dim1] = c__ * a3 + s * a4;
+                h[i + (h_dim1 << 1)] = c * a1 + s * a2;
+                h[i + 1 + (h_dim1 << 1)] = c * a4 - s * a3;
+                h[i + 1 + h_dim1] = c * a3 + s * a4;
 
                 /*               %----------------------------------------------------% */
                 /*               | Accumulate the rotation in the matrix Q;  Q <- Q*G | */
                 /*               %----------------------------------------------------% */
 
                 /* Computing MIN */
-                i__4 = i__ + jj;
+                i__4 = i + jj;
                 i__3 = min(i__4, kplusp);
                 for (j = 1; j <= i__3; ++j)
                 {
-                    a1 = c__ * q[j + i__ * q_dim1] + s * q[j + (i__ + 1) * q_dim1];
-                    q[j + (i__ + 1) * q_dim1] = -s * q[j + i__ * q_dim1] + c__ * q[j + (i__ + 1) * q_dim1];
-                    q[j + i__ * q_dim1] = a1;
+                    a1 = c * q[j + i * q_dim1] + s * q[j + (i + 1) * q_dim1];
+                    q[j + (i + 1) * q_dim1] = -s * q[j + i * q_dim1] + c * q[j + (i + 1) * q_dim1];
+                    q[j + i * q_dim1] = a1;
                     /* L50: */
                 }
 
@@ -452,9 +452,9 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
         /*        | similarity on transformation H           | */
         /*        %------------------------------------------% */
 
-        if (h__[iend + h_dim1] < 0.f)
+        if (h[iend + h_dim1] < 0.f)
         {
-            h__[iend + h_dim1] = -h__[iend + h_dim1];
+            h[iend + h_dim1] = -h[iend + h_dim1];
             sscal_(&kplusp, &s_n1, &q[iend * q_dim1 + 1], &i_one);
         }
 
@@ -472,9 +472,9 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
         /*        %-----------------------------------------------------% */
 
         i__2 = kplusp - 1;
-        for (i__ = itop; i__ <= i__2; ++i__)
+        for (i = itop; i <= i__2; ++i)
         {
-            if (h__[i__ + 1 + h_dim1] > 0.f)
+            if (h[i + 1 + h_dim1] > 0.f)
             {
                 goto L90;
             }
@@ -496,23 +496,23 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     /*     %------------------------------------------% */
 
     i__1 = kplusp - 1;
-    for (i__ = itop; i__ <= i__1; ++i__)
+    for (i = itop; i <= i__1; ++i)
     {
-        big = (r__1 = h__[i__ + (h_dim1 << 1)], dabs(r__1)) + (r__2 = h__[i__ + 1 + (h_dim1 << 1)], dabs(r__2));
-        if (h__[i__ + 1 + h_dim1] <= epsmch * big)
+        big = (r__1 = h[i + (h_dim1 << 1)], dabs(r__1)) + (r__2 = h[i + 1 + (h_dim1 << 1)], dabs(r__2));
+        if (h[i + 1 + h_dim1] <= epsmch * big)
         {
             if (msglvl > 0)
             {
-                ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit,
+                ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit,
                        "_sapp"
                        "s: deflation at row/column no.",
                        (ftnlen)35);
-                svout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
+                svout_(&debug_1.logfil, &i_one, &h[i + 1 + h_dim1], &debug_1.ndigit,
                        "_sapps: the corresponding off diago"
                        "nal element",
                        (ftnlen)46);
             }
-            h__[i__ + 1 + h_dim1] = 0.f;
+            h[i + 1 + h_dim1] = 0.f;
         }
         /* L100: */
     }
@@ -523,7 +523,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     /*     | This is not necessary if h(kev+1,1) = 0.         | */
     /*     %-------------------------------------------------% */
 
-    if (h__[*kev + 1 + h_dim1] > 0.f)
+    if (h[*kev + 1 + h_dim1] > 0.f)
     {
         sgemv_("N", n, &kplusp, &s_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[*n + 1], &i_one, (ftnlen)1);
     }
@@ -536,11 +536,11 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     /*     %-------------------------------------------------------% */
 
     i__1 = *kev;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        i__2 = kplusp - i__ + 1;
-        sgemv_("N", n, &i__2, &s_one, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[1], &i_one, (ftnlen)1);
-        scopy_(n, &workd[1], &i_one, &v[(kplusp - i__ + 1) * v_dim1 + 1], &i_one);
+        i__2 = kplusp - i + 1;
+        sgemv_("N", n, &i__2, &s_one, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[1], &i_one, (ftnlen)1);
+        scopy_(n, &workd[1], &i_one, &v[(kplusp - i + 1) * v_dim1 + 1], &i_one);
         /* L130: */
     }
 
@@ -555,7 +555,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     /*     | appropriate place if h(kev+1,1) .ne. zero. | */
     /*     %--------------------------------------------% */
 
-    if (h__[*kev + 1 + h_dim1] > 0.f)
+    if (h[*kev + 1 + h_dim1] > 0.f)
     {
         scopy_(n, &workd[*n + 1], &i_one, &v[(*kev + 1) * v_dim1 + 1], &i_one);
     }
@@ -569,9 +569,9 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     /*     %-------------------------------------% */
 
     sscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &i_one);
-    if (h__[*kev + 1 + h_dim1] > 0.f)
+    if (h[*kev + 1 + h_dim1] > 0.f)
     {
-        saxpy_(n, &h__[*kev + 1 + h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
+        saxpy_(n, &h[*kev + 1 + h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
     }
 
     if (msglvl > 1)
@@ -580,12 +580,12 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
                "_sapps: sigmak of the updated residual vect"
                "or",
                (ftnlen)45);
-        svout_(&debug_1.logfil, &i_one, &h__[*kev + 1 + h_dim1], &debug_1.ndigit, "_sapps: betak of the updated residual vector", (ftnlen)44);
-        svout_(&debug_1.logfil, kev, &h__[(h_dim1 << 1) + 1], &debug_1.ndigit, "_sapps: updated main diagonal of H for next iteration", (ftnlen)53);
+        svout_(&debug_1.logfil, &i_one, &h[*kev + 1 + h_dim1], &debug_1.ndigit, "_sapps: betak of the updated residual vector", (ftnlen)44);
+        svout_(&debug_1.logfil, kev, &h[(h_dim1 << 1) + 1], &debug_1.ndigit, "_sapps: updated main diagonal of H for next iteration", (ftnlen)53);
         if (*kev > 1)
         {
             i__1 = *kev - 1;
-            svout_(&debug_1.logfil, &i__1, &h__[h_dim1 + 2], &debug_1.ndigit, "_sapps: updated sub diagonal of H for next iteration", (ftnlen)52);
+            svout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit, "_sapps: updated sub diagonal of H for next iteration", (ftnlen)52);
         }
     }
 

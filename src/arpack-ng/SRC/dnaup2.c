@@ -184,7 +184,7 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int dnaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np, double *tol, double *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter, double *v, a_int *ldv, double *h__, a_int *ldh, double *ritzr, double *ritzi, double *bounds, double *q, a_int *ldq, double *workl, a_int *ipntr, double *workd, a_int *info, ftnlen bmat_len, ftnlen which_len)
+int dnaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np, double *tol, double *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter, double *v, a_int *ldv, double *h, a_int *ldh, double *ritzr, double *ritzi, double *bounds, double *q, a_int *ldq, double *workl, a_int *ipntr, double *workd, a_int *info, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
     a_int h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2;
@@ -293,7 +293,7 @@ int dnaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
     v -= v_offset;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     q_dim1 = *ldq;
     q_offset = 1 + q_dim1;
     q -= q_offset;
@@ -419,7 +419,7 @@ int dnaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
     /*     | Compute the first NEV steps of the Arnoldi factorization | */
     /*     %----------------------------------------------------------% */
 
-    dnaitr_(ido, bmat, n, &i_zero, nev, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h__[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
+    dnaitr_(ido, bmat, n, &i_zero, nev, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
 
     /*     %---------------------------------------------------% */
     /*     | ido .ne. 99 implies use of reverse communication  | */
@@ -487,7 +487,7 @@ L1000:
 L20:
     update = TRUE_;
 
-    dnaitr_(ido, bmat, n, nev, np, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h__[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
+    dnaitr_(ido, bmat, n, nev, np, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
 
     /*        %---------------------------------------------------% */
     /*        | ido .ne. 99 implies use of reverse communication  | */
@@ -521,7 +521,7 @@ L20:
     /*        | of the current upper Hessenberg matrix.                | */
     /*        %--------------------------------------------------------% */
 
-    dneigh_(&rnorm, &kplusp, &h__[h_offset], ldh, &ritzr[1], &ritzi[1], &bounds[1], &q[q_offset], ldq, &workl[1], &ierr);
+    dneigh_(&rnorm, &kplusp, &h[h_offset], ldh, &ritzr[1], &ritzi[1], &bounds[1], &q[q_offset], ldq, &workl[1], &ierr);
 
     if (ierr != 0)
     {
@@ -655,7 +655,7 @@ L20:
         /*           |  Use h( 3,1 ) as storage to communicate  | */
         /*           |  rnorm to _neupd if needed               | */
         /*           %------------------------------------------% */
-        h__[h_dim1 + 3] = rnorm;
+        h[h_dim1 + 3] = rnorm;
 
         /*           %----------------------------------------------% */
         /*           | To be consistent with dngets , we first do a  | */
@@ -936,7 +936,7 @@ L50:
     /*        | The first 2*N locations of WORKD are used as workspace. | */
     /*        %---------------------------------------------------------% */
 
-    dnapps_(n, nev, np, &ritzr[1], &ritzi[1], &v[v_offset], ldv, &h__[h_offset], ldh, &resid[1], &q[q_offset], ldq, &workl[1], &workd[1]);
+    dnapps_(n, nev, np, &ritzr[1], &ritzi[1], &v[v_offset], ldv, &h[h_offset], ldh, &resid[1], &q[q_offset], ldq, &workl[1], &workd[1]);
 
     /*        %---------------------------------------------% */
     /*        | Compute the B-norm of the updated residual. | */
@@ -995,7 +995,7 @@ L100:
                "_naup2: B-n"
                "orm of residual for compressed factorization",
                (ftnlen)55);
-        dmout_(&debug_1.logfil, nev, nev, &h__[h_offset], ldh, &debug_1.ndigit, "_naup2: Compressed upper Hessenberg matrix H", (ftnlen)44);
+        dmout_(&debug_1.logfil, nev, nev, &h[h_offset], ldh, &debug_1.ndigit, "_naup2: Compressed upper Hessenberg matrix H", (ftnlen)44);
     }
 
     goto L1000;

@@ -151,7 +151,7 @@ static float s_n1 = -1.f;
 
 /* ----------------------------------------------------------------------- */
 
-int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float *v, a_int *ldv, float *h__, a_int *ldh, float *resid, float *q, a_int *ldq, float *workl, float *workd)
+int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float *v, a_int *ldv, float *h, a_int *ldh, float *resid, float *q, a_int *ldq, float *workl, float *workd)
 {
     /* Initialized data */
 
@@ -162,9 +162,9 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     float r__1, r__2;
 
     /* Local variables */
-    float c__, f, g;
-    a_int i__, j;
-    float r__, s, t, u[3];
+    float c, f, g;
+    a_int i, j;
+    float r, s, t, u[3];
     static float t0, t1;
     float h11, h12, h21, h22, h32;
     a_int jj, ir, nr;
@@ -248,7 +248,7 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     v -= v_offset;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     q_dim1 = *ldq;
     q_offset = 1 + q_dim1;
     q -= q_offset;
@@ -385,7 +385,7 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         /*        %--------------------------------------------------% */
 
         i__2 = kplusp - 1;
-        for (i__ = istart; i__ <= i__2; ++i__)
+        for (i = istart; i <= i__2; ++i)
         {
 
             /*           %----------------------------------------% */
@@ -394,27 +394,27 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             /*           | REFERENCE: LAPACK subroutine slahqr    | */
             /*           %----------------------------------------% */
 
-            tst1 = (r__1 = h__[i__ + i__ * h_dim1], dabs(r__1)) + (r__2 = h__[i__ + 1 + (i__ + 1) * h_dim1], dabs(r__2));
+            tst1 = (r__1 = h[i + i * h_dim1], dabs(r__1)) + (r__2 = h[i + 1 + (i + 1) * h_dim1], dabs(r__2));
             if (tst1 == 0.f)
             {
                 i__3 = kplusp - jj + 1;
-                tst1 = slanhs_("1", &i__3, &h__[h_offset], ldh, &workl[1], (ftnlen)1);
+                tst1 = slanhs_("1", &i__3, &h[h_offset], ldh, &workl[1], (ftnlen)1);
             }
             /* Computing MAX */
             r__2 = ulp * tst1;
-            if ((r__1 = h__[i__ + 1 + i__ * h_dim1], dabs(r__1)) <= dmax(r__2, smlnum))
+            if ((r__1 = h[i + 1 + i * h_dim1], dabs(r__1)) <= dmax(r__2, smlnum))
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit, "_napps: matrix splitting at row/column no.", (ftnlen)42);
+                    ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit, "_napps: matrix splitting at row/column no.", (ftnlen)42);
                     ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_napps: matrix splitting with shift number.", (ftnlen)43);
-                    svout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + i__ * h_dim1], &debug_1.ndigit,
+                    svout_(&debug_1.logfil, &i_one, &h[i + 1 + i * h_dim1], &debug_1.ndigit,
                            "_napps: off diagonal "
                            "element.",
                            (ftnlen)29);
                 }
-                iend = i__;
-                h__[i__ + 1 + i__ * h_dim1] = 0.f;
+                iend = i;
+                h[i + 1 + i * h_dim1] = 0.f;
                 goto L40;
             }
             /* L30: */
@@ -453,8 +453,8 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             goto L100;
         }
 
-        h11 = h__[istart + istart * h_dim1];
-        h21 = h__[istart + 1 + istart * h_dim1];
+        h11 = h[istart + istart * h_dim1];
+        h21 = h[istart + 1 + istart * h_dim1];
         if (dabs(sigmai) <= 0.f)
         {
 
@@ -466,15 +466,15 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             g = h21;
 
             i__2 = iend - 1;
-            for (i__ = istart; i__ <= i__2; ++i__)
+            for (i = istart; i <= i__2; ++i)
             {
 
                 /*              %-----------------------------------------------------% */
                 /*              | Construct the plane rotation G to zero out the bulge | */
                 /*              %-----------------------------------------------------% */
 
-                slartg_(&f, &g, &c__, &s, &r__);
-                if (i__ > istart)
+                slartg_(&f, &g, &c, &s, &r);
+                if (i > istart)
                 {
 
                     /*                 %-------------------------------------------% */
@@ -483,14 +483,14 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                     /*                 | H, remain non negative.                   | */
                     /*                 %-------------------------------------------% */
 
-                    if (r__ < 0.f)
+                    if (r < 0.f)
                     {
-                        r__ = -r__;
-                        c__ = -c__;
+                        r = -r;
+                        c = -c;
                         s = -s;
                     }
-                    h__[i__ + (i__ - 1) * h_dim1] = r__;
-                    h__[i__ + 1 + (i__ - 1) * h_dim1] = 0.f;
+                    h[i + (i - 1) * h_dim1] = r;
+                    h[i + 1 + (i - 1) * h_dim1] = 0.f;
                 }
 
                 /*              %---------------------------------------------% */
@@ -498,11 +498,11 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                 /*              %---------------------------------------------% */
 
                 i__3 = kplusp;
-                for (j = i__; j <= i__3; ++j)
+                for (j = i; j <= i__3; ++j)
                 {
-                    t = c__ * h__[i__ + j * h_dim1] + s * h__[i__ + 1 + j * h_dim1];
-                    h__[i__ + 1 + j * h_dim1] = -s * h__[i__ + j * h_dim1] + c__ * h__[i__ + 1 + j * h_dim1];
-                    h__[i__ + j * h_dim1] = t;
+                    t = c * h[i + j * h_dim1] + s * h[i + 1 + j * h_dim1];
+                    h[i + 1 + j * h_dim1] = -s * h[i + j * h_dim1] + c * h[i + 1 + j * h_dim1];
+                    h[i + j * h_dim1] = t;
                     /* L50: */
                 }
 
@@ -511,13 +511,13 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                 /*              %---------------------------------------------% */
 
                 /* Computing MIN */
-                i__4 = i__ + 2;
+                i__4 = i + 2;
                 i__3 = min(i__4, iend);
                 for (j = 1; j <= i__3; ++j)
                 {
-                    t = c__ * h__[j + i__ * h_dim1] + s * h__[j + (i__ + 1) * h_dim1];
-                    h__[j + (i__ + 1) * h_dim1] = -s * h__[j + i__ * h_dim1] + c__ * h__[j + (i__ + 1) * h_dim1];
-                    h__[j + i__ * h_dim1] = t;
+                    t = c * h[j + i * h_dim1] + s * h[j + (i + 1) * h_dim1];
+                    h[j + (i + 1) * h_dim1] = -s * h[j + i * h_dim1] + c * h[j + (i + 1) * h_dim1];
+                    h[j + i * h_dim1] = t;
                     /* L60: */
                 }
 
@@ -526,13 +526,13 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                 /*              %----------------------------------------------------% */
 
                 /* Computing MIN */
-                i__4 = i__ + jj;
+                i__4 = i + jj;
                 i__3 = min(i__4, kplusp);
                 for (j = 1; j <= i__3; ++j)
                 {
-                    t = c__ * q[j + i__ * q_dim1] + s * q[j + (i__ + 1) * q_dim1];
-                    q[j + (i__ + 1) * q_dim1] = -s * q[j + i__ * q_dim1] + c__ * q[j + (i__ + 1) * q_dim1];
-                    q[j + i__ * q_dim1] = t;
+                    t = c * q[j + i * q_dim1] + s * q[j + (i + 1) * q_dim1];
+                    q[j + (i + 1) * q_dim1] = -s * q[j + i * q_dim1] + c * q[j + (i + 1) * q_dim1];
+                    q[j + i * q_dim1] = t;
                     /* L70: */
                 }
 
@@ -540,10 +540,10 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                 /*              | Prepare for next rotation | */
                 /*              %---------------------------% */
 
-                if (i__ < iend - 1)
+                if (i < iend - 1)
                 {
-                    f = h__[i__ + 1 + i__ * h_dim1];
-                    g = h__[i__ + 2 + i__ * h_dim1];
+                    f = h[i + 1 + i * h_dim1];
+                    g = h[i + 2 + i * h_dim1];
                 }
                 /* L80: */
             }
@@ -559,9 +559,9 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             /*           | Complex conjugate shifts ==> apply double shift QR | */
             /*           %----------------------------------------------------% */
 
-            h12 = h__[istart + (istart + 1) * h_dim1];
-            h22 = h__[istart + 1 + (istart + 1) * h_dim1];
-            h32 = h__[istart + 2 + (istart + 1) * h_dim1];
+            h12 = h[istart + (istart + 1) * h_dim1];
+            h22 = h[istart + 1 + (istart + 1) * h_dim1];
+            h32 = h[istart + 2 + (istart + 1) * h_dim1];
 
             /*           %---------------------------------------------------------% */
             /*           | Compute 1st column of (H - shift*I)*(H - conj(shift)*I) | */
@@ -574,11 +574,11 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             u[2] = h32;
 
             i__2 = iend - 1;
-            for (i__ = istart; i__ <= i__2; ++i__)
+            for (i = istart; i <= i__2; ++i)
             {
 
                 /* Computing MIN */
-                i__3 = 3, i__4 = iend - i__ + 1;
+                i__3 = 3, i__4 = iend - i + 1;
                 nr = min(i__3, i__4);
 
                 /*              %-----------------------------------------------------% */
@@ -588,13 +588,13 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
 
                 slarfg_(&nr, u, &u[1], &i_one, &tau);
 
-                if (i__ > istart)
+                if (i > istart)
                 {
-                    h__[i__ + (i__ - 1) * h_dim1] = u[0];
-                    h__[i__ + 1 + (i__ - 1) * h_dim1] = 0.f;
-                    if (i__ < iend - 1)
+                    h[i + (i - 1) * h_dim1] = u[0];
+                    h[i + 1 + (i - 1) * h_dim1] = 0.f;
+                    if (i < iend - 1)
                     {
-                        h__[i__ + 2 + (i__ - 1) * h_dim1] = 0.f;
+                        h[i + 2 + (i - 1) * h_dim1] = 0.f;
                     }
                 }
                 u[0] = 1.f;
@@ -603,35 +603,35 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                 /*              | Apply the reflector to the left of H | */
                 /*              %--------------------------------------% */
 
-                i__3 = kplusp - i__ + 1;
-                slarf_("Left", &nr, &i__3, u, &i_one, &tau, &h__[i__ + i__ * h_dim1], ldh, &workl[1], (ftnlen)4);
+                i__3 = kplusp - i + 1;
+                slarf_("Left", &nr, &i__3, u, &i_one, &tau, &h[i + i * h_dim1], ldh, &workl[1], (ftnlen)4);
 
                 /*              %---------------------------------------% */
                 /*              | Apply the reflector to the right of H | */
                 /*              %---------------------------------------% */
 
                 /* Computing MIN */
-                i__3 = i__ + 3;
+                i__3 = i + 3;
                 ir = min(i__3, iend);
-                slarf_("Right", &ir, &nr, u, &i_one, &tau, &h__[i__ * h_dim1 + 1], ldh, &workl[1], (ftnlen)5);
+                slarf_("Right", &ir, &nr, u, &i_one, &tau, &h[i * h_dim1 + 1], ldh, &workl[1], (ftnlen)5);
 
                 /*              %-----------------------------------------------------% */
                 /*              | Accumulate the reflector in the matrix Q;  Q <- Q*G | */
                 /*              %-----------------------------------------------------% */
 
-                slarf_("Right", &kplusp, &nr, u, &i_one, &tau, &q[i__ * q_dim1 + 1], ldq, &workl[1], (ftnlen)5);
+                slarf_("Right", &kplusp, &nr, u, &i_one, &tau, &q[i * q_dim1 + 1], ldq, &workl[1], (ftnlen)5);
 
                 /*              %----------------------------% */
                 /*              | Prepare for next reflector | */
                 /*              %----------------------------% */
 
-                if (i__ < iend - 1)
+                if (i < iend - 1)
                 {
-                    u[0] = h__[i__ + 1 + i__ * h_dim1];
-                    u[1] = h__[i__ + 2 + i__ * h_dim1];
-                    if (i__ < iend - 2)
+                    u[0] = h[i + 1 + i * h_dim1];
+                    u[1] = h[i + 2 + i * h_dim1];
+                    if (i < iend - 2)
                     {
-                        u[2] = h__[i__ + 3 + i__ * h_dim1];
+                        u[2] = h[i + 3 + i * h_dim1];
                     }
                 }
 
@@ -671,14 +671,14 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     i__1 = *kev;
     for (j = 1; j <= i__1; ++j)
     {
-        if (h__[j + 1 + j * h_dim1] < 0.f)
+        if (h[j + 1 + j * h_dim1] < 0.f)
         {
             i__2 = kplusp - j + 1;
-            sscal_(&i__2, &s_n1, &h__[j + 1 + j * h_dim1], ldh);
+            sscal_(&i__2, &s_n1, &h[j + 1 + j * h_dim1], ldh);
             /* Computing MIN */
             i__3 = j + 2;
             i__2 = min(i__3, kplusp);
-            sscal_(&i__2, &s_n1, &h__[(j + 1) * h_dim1 + 1], &i_one);
+            sscal_(&i__2, &s_n1, &h[(j + 1) * h_dim1 + 1], &i_one);
             /* Computing MIN */
             i__3 = j + *np + 1;
             i__2 = min(i__3, kplusp);
@@ -688,7 +688,7 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     }
 
     i__1 = *kev;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
 
         /*        %--------------------------------------------% */
@@ -697,16 +697,16 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         /*        | REFERENCE: LAPACK subroutine slahqr        | */
         /*        %--------------------------------------------% */
 
-        tst1 = (r__1 = h__[i__ + i__ * h_dim1], dabs(r__1)) + (r__2 = h__[i__ + 1 + (i__ + 1) * h_dim1], dabs(r__2));
+        tst1 = (r__1 = h[i + i * h_dim1], dabs(r__1)) + (r__2 = h[i + 1 + (i + 1) * h_dim1], dabs(r__2));
         if (tst1 == 0.f)
         {
-            tst1 = slanhs_("1", kev, &h__[h_offset], ldh, &workl[1], (ftnlen)1);
+            tst1 = slanhs_("1", kev, &h[h_offset], ldh, &workl[1], (ftnlen)1);
         }
         /* Computing MAX */
         r__1 = ulp * tst1;
-        if (h__[i__ + 1 + i__ * h_dim1] <= dmax(r__1, smlnum))
+        if (h[i + 1 + i * h_dim1] <= dmax(r__1, smlnum))
         {
-            h__[i__ + 1 + i__ * h_dim1] = 0.f;
+            h[i + 1 + i * h_dim1] = 0.f;
         }
         /* L130: */
     }
@@ -719,7 +719,7 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     /*     | of H would be zero as in exact arithmetic.      | */
     /*     %-------------------------------------------------% */
 
-    if (h__[*kev + 1 + *kev * h_dim1] > 0.f)
+    if (h[*kev + 1 + *kev * h_dim1] > 0.f)
     {
         sgemv_("N", n, &kplusp, &s_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[*n + 1], &i_one, (ftnlen)1);
     }
@@ -730,11 +730,11 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     /*     %----------------------------------------------------------% */
 
     i__1 = *kev;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        i__2 = kplusp - i__ + 1;
-        sgemv_("N", n, &i__2, &s_one, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[1], &i_one, (ftnlen)1);
-        scopy_(n, &workd[1], &i_one, &v[(kplusp - i__ + 1) * v_dim1 + 1], &i_one);
+        i__2 = kplusp - i + 1;
+        sgemv_("N", n, &i__2, &s_one, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[1], &i_one, (ftnlen)1);
+        scopy_(n, &workd[1], &i_one, &v[(kplusp - i + 1) * v_dim1 + 1], &i_one);
         /* L140: */
     }
 
@@ -748,7 +748,7 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     /*     | Copy the (kev+1)-st column of (V*Q) in the appropriate place | */
     /*     %--------------------------------------------------------------% */
 
-    if (h__[*kev + 1 + *kev * h_dim1] > 0.f)
+    if (h[*kev + 1 + *kev * h_dim1] > 0.f)
     {
         scopy_(n, &workd[*n + 1], &i_one, &v[(*kev + 1) * v_dim1 + 1], &i_one);
     }
@@ -762,22 +762,22 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     /*     %-------------------------------------% */
 
     sscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &i_one);
-    if (h__[*kev + 1 + *kev * h_dim1] > 0.f)
+    if (h[*kev + 1 + *kev * h_dim1] > 0.f)
     {
-        saxpy_(n, &h__[*kev + 1 + *kev * h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
+        saxpy_(n, &h[*kev + 1 + *kev * h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
     }
 
     if (msglvl > 1)
     {
         svout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}", (ftnlen)40);
-        svout_(&debug_1.logfil, &i_one, &h__[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}", (ftnlen)37);
+        svout_(&debug_1.logfil, &i_one, &h[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}", (ftnlen)37);
         ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit,
                "_napps: Order "
                "of the final Hessenberg matrix ",
                (ftnlen)45);
         if (msglvl > 2)
         {
-            smout_(&debug_1.logfil, kev, kev, &h__[h_offset], ldh, &debug_1.ndigit,
+            smout_(&debug_1.logfil, kev, kev, &h[h_offset], ldh, &debug_1.ndigit,
                    "_napps: updated Hessenberg matrix H for"
                    " next iteration",
                    (ftnlen)54);

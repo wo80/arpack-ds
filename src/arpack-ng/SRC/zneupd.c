@@ -257,7 +257,7 @@ static a_bool b_true = TRUE_;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d__, a_dcomplex *z__, a_int *ldz, a_dcomplex *sigma, a_dcomplex *workev, char *bmat, a_int *n, char *which, a_int *nev, double *tol, a_dcomplex *resid, a_int *ncv, a_dcomplex *v, a_int *ldv, a_int *iparam, a_int *ipntr, a_dcomplex *workd, a_dcomplex *workl, a_int *lworkl, double *rwork, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
+int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomplex *z, a_int *ldz, a_dcomplex *sigma, a_dcomplex *workev, char *bmat, a_int *n, char *which, a_int *nev, double *tol, a_dcomplex *resid, a_int *ncv, a_dcomplex *v, a_int *ldv, a_int *iparam, a_int *ipntr, a_dcomplex *workd, a_dcomplex *workl, a_int *lworkl, double *rwork, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, i__1, i__2;
@@ -357,8 +357,8 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d__, a_dcomp
     --resid;
     z_dim1 = *ldz;
     z_offset = 1 + z_dim1;
-    z__ -= z_offset;
-    --d__;
+    z -= z_offset;
+    --d;
     --rwork;
     --workev;
     --select;
@@ -711,7 +711,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d__, a_dcomp
 
         if (s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) == 0)
         {
-            zcopy_(&nconv, &workl[iheig], &i_one, &d__[1], &i_one);
+            zcopy_(&nconv, &workl[iheig], &i_one, &d[1], &i_one);
         }
 
         /*        %----------------------------------------------------------% */
@@ -735,7 +735,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d__, a_dcomp
         /*        %--------------------------------------------------------% */
 
         zunm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
-        zlacpy_("All", n, &nconv, &v[v_offset], ldv, &z__[z_offset], ldz, (ftnlen)3);
+        zlacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz, (ftnlen)3);
 
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
@@ -849,7 +849,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d__, a_dcomp
             /*           | Form Z*Q.                                    | */
             /*           %----------------------------------------------% */
 
-            ztrmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &z_one, &workl[invsub], &ldq, &z__[z_offset], ldz, (ftnlen)5, (ftnlen)5, (ftnlen)12, (ftnlen)8);
+            ztrmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &z_one, &workl[invsub], &ldq, &z[z_offset], ldz, (ftnlen)5, (ftnlen)5, (ftnlen)12, (ftnlen)8);
         }
     }
     else
@@ -860,7 +860,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d__, a_dcomp
         /*        | Place the Ritz values computed ZNAUPD into D.    | */
         /*        %--------------------------------------------------% */
 
-        zcopy_(&nconv, &workl[ritz], &i_one, &d__[1], &i_one);
+        zcopy_(&nconv, &workl[ritz], &i_one, &d[1], &i_one);
         zcopy_(&nconv, &workl[ritz], &i_one, &workl[iheig], &i_one);
         zcopy_(&nconv, &workl[bounds], &i_one, &workl[ihbds], &i_one);
     }
@@ -922,14 +922,14 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d__, a_dcomp
             i__2 = k;
             z_div(&z__2, &z_one, &workl[iheig + k - 1]);
             z__1.r = z__2.r + sigma->r, z__1.i = z__2.i + sigma->i;
-            d__[i__2].r = z__1.r, d__[i__2].i = z__1.i;
+            d[i__2].r = z__1.r, d[i__2].i = z__1.i;
             /* L60: */
         }
     }
 
     if (s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) != 0 && msglvl > 1)
     {
-        zvout_(&debug_1.logfil, &nconv, &d__[1], &debug_1.ndigit,
+        zvout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,
                "_neupd: U"
                "ntransformed Ritz values.",
                (ftnlen)34);
@@ -940,7 +940,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d__, a_dcomp
     }
     else if (msglvl > 1)
     {
-        zvout_(&debug_1.logfil, &nconv, &d__[1], &debug_1.ndigit,
+        zvout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,
                "_neupd: C"
                "onverged Ritz values.",
                (ftnlen)30);
@@ -985,7 +985,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d__, a_dcomp
         /*        | purify all the Ritz vectors together. | */
         /*        %---------------------------------------% */
 
-        zgeru_(n, &nconv, &z_one, &resid[1], &i_one, &workev[1], &i_one, &z__[z_offset], ldz);
+        zgeru_(n, &nconv, &z_one, &resid[1], &i_one, &workev[1], &i_one, &z[z_offset], ldz);
     }
 
 L9000:

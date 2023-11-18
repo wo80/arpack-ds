@@ -107,14 +107,14 @@ static double d_zero = 0.;
 
 /* ----------------------------------------------------------------------- */
 
-int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, double *ritzi, double *bounds, double *q, a_int *ldq, double *workl, a_int *ierr)
+int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, double *ritzi, double *bounds, double *q, a_int *ldq, double *workl, a_int *ierr)
 {
     /* System generated locals */
     a_int h_dim1, h_offset, q_dim1, q_offset, i__1;
     double d__1, d__2;
 
     /* Local variables */
-    a_int i__, j;
+    a_int i, j;
     static float t0, t1;
     double vl[1], temp;
     extern double dnrm2_(a_int *, double *, a_int *);
@@ -189,7 +189,7 @@ int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, dou
     --ritzr;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     q_dim1 = *ldq;
     q_offset = 1 + q_dim1;
     q -= q_offset;
@@ -200,7 +200,7 @@ int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, dou
 
     if (msglvl > 2)
     {
-        dmout_(&debug_1.logfil, n, n, &h__[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
+        dmout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
     }
 
     /*     %-----------------------------------------------------------% */
@@ -211,7 +211,7 @@ int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, dou
     /*     | and the last components of the Schur vectors in BOUNDS.   | */
     /*     %-----------------------------------------------------------% */
 
-    dlacpy_("All", n, n, &h__[h_offset], ldh, &workl[1], n, (ftnlen)3);
+    dlacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n, (ftnlen)3);
     i__1 = *n - 1;
     for (j = 1; j <= i__1; ++j)
     {
@@ -261,18 +261,18 @@ int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, dou
 
     iconj = 0;
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        if ((d__1 = ritzi[i__], abs(d__1)) <= 0.)
+        if ((d__1 = ritzi[i], abs(d__1)) <= 0.)
         {
 
             /*           %----------------------% */
             /*           | Real eigenvalue case | */
             /*           %----------------------% */
 
-            temp = dnrm2_(n, &q[i__ * q_dim1 + 1], &i_one);
+            temp = dnrm2_(n, &q[i * q_dim1 + 1], &i_one);
             d__1 = 1. / temp;
-            dscal_(n, &d__1, &q[i__ * q_dim1 + 1], &i_one);
+            dscal_(n, &d__1, &q[i * q_dim1 + 1], &i_one);
         }
         else
         {
@@ -287,13 +287,13 @@ int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, dou
 
             if (iconj == 0)
             {
-                d__1 = dnrm2_(n, &q[i__ * q_dim1 + 1], &i_one);
-                d__2 = dnrm2_(n, &q[(i__ + 1) * q_dim1 + 1], &i_one);
+                d__1 = dnrm2_(n, &q[i * q_dim1 + 1], &i_one);
+                d__2 = dnrm2_(n, &q[(i + 1) * q_dim1 + 1], &i_one);
                 temp = dlapy2_(&d__1, &d__2);
                 d__1 = 1. / temp;
-                dscal_(n, &d__1, &q[i__ * q_dim1 + 1], &i_one);
+                dscal_(n, &d__1, &q[i * q_dim1 + 1], &i_one);
                 d__1 = 1. / temp;
-                dscal_(n, &d__1, &q[(i__ + 1) * q_dim1 + 1], &i_one);
+                dscal_(n, &d__1, &q[(i + 1) * q_dim1 + 1], &i_one);
                 iconj = 1;
             }
             else
@@ -320,16 +320,16 @@ int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, dou
 
     iconj = 0;
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        if ((d__1 = ritzi[i__], abs(d__1)) <= 0.)
+        if ((d__1 = ritzi[i], abs(d__1)) <= 0.)
         {
 
             /*           %----------------------% */
             /*           | Real eigenvalue case | */
             /*           %----------------------% */
 
-            bounds[i__] = *rnorm * (d__1 = workl[i__], abs(d__1));
+            bounds[i] = *rnorm * (d__1 = workl[i], abs(d__1));
         }
         else
         {
@@ -344,8 +344,8 @@ int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, dou
 
             if (iconj == 0)
             {
-                bounds[i__] = *rnorm * dlapy2_(&workl[i__], &workl[i__ + 1]);
-                bounds[i__ + 1] = bounds[i__];
+                bounds[i] = *rnorm * dlapy2_(&workl[i], &workl[i + 1]);
+                bounds[i + 1] = bounds[i];
                 iconj = 1;
             }
             else

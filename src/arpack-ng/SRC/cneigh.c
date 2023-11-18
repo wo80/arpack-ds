@@ -107,7 +107,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int cneigh_(float *rnorm, a_int *n, a_fcomplex *h__, a_int *ldh, a_fcomplex *ritz, a_fcomplex *bounds, a_fcomplex *q, a_int *ldq, a_fcomplex *workl, float *rwork, a_int *ierr)
+int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz, a_fcomplex *bounds, a_fcomplex *q, a_int *ldq, a_fcomplex *workl, float *rwork, a_int *ierr)
 {
     /* System generated locals */
     a_int h_dim1, h_offset, q_dim1, q_offset, i__1;
@@ -183,7 +183,7 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h__, a_int *ldh, a_fcomplex *rit
     --ritz;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     q_dim1 = *ldq;
     q_offset = 1 + q_dim1;
     q -= q_offset;
@@ -194,7 +194,7 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h__, a_int *ldh, a_fcomplex *rit
 
     if (msglvl > 2)
     {
-        cmout_(&debug_1.logfil, n, n, &h__[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
+        cmout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
     }
 
     /*     %----------------------------------------------------------% */
@@ -205,7 +205,7 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h__, a_int *ldh, a_fcomplex *rit
     /*     |    in WORKL(1:N**2), and the Schur vectors in q.         | */
     /*     %----------------------------------------------------------% */
 
-    clacpy_("All", n, n, &h__[h_offset], ldh, &workl[1], n, (ftnlen)3);
+    clacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n, (ftnlen)3);
     claset_("All", n, n, &c_zero, &c_one, &q[q_offset], ldq, (ftnlen)3);
     clahqr_(&b_true, &b_true, n, &i_one, n, &workl[1], ldh, &ritz[1], &i_one, n, &q[q_offset], ldq, ierr);
     if (*ierr != 0)

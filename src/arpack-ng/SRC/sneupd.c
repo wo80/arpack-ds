@@ -312,7 +312,7 @@ static float s_n1 = -1.f;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, float *z__, a_int *ldz, float *sigmar, float *sigmai, float *workev, char *bmat, a_int *n, char *which, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, a_int *ipntr, float *workd, float *workl, a_int *lworkl, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
+int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, float *z, a_int *ldz, float *sigmar, float *sigmai, float *workev, char *bmat, a_int *n, char *which, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, a_int *ipntr, float *workd, float *workl, a_int *lworkl, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, i__1;
@@ -416,7 +416,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
     /* Parameter adjustments */
     z_dim1 = *ldz;
     z_offset = 1 + z_dim1;
-    z__ -= z_offset;
+    z -= z_offset;
     --workd;
     --resid;
     --di;
@@ -815,7 +815,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
         /*        %---------------------------------------------------------% */
 
         sorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
-        slacpy_("All", n, &nconv, &v[v_offset], ldv, &z__[z_offset], ldz, (ftnlen)3);
+        slacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz, (ftnlen)3);
 
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
@@ -988,9 +988,9 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
             /*           | in workl(iheigr) and workl(iheigi).          | */
             /*           %----------------------------------------------% */
 
-            sorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &z__[z_offset], ldz, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
+            sorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &z[z_offset], ldz, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
 
-            strmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &s_one, &workl[invsub], &ldq, &z__[z_offset], ldz, (ftnlen)5, (ftnlen)5, (ftnlen)12, (ftnlen)8);
+            strmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &s_one, &workl[invsub], &ldq, &z[z_offset], ldz, (ftnlen)5, (ftnlen)5, (ftnlen)12, (ftnlen)8);
         }
     }
     else
@@ -1180,7 +1180,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
         /*        | purify all the Ritz vectors together. | */
         /*        %---------------------------------------% */
 
-        sger_(n, &nconv, &s_one, &resid[1], &i_one, &workev[1], &i_one, &z__[z_offset], ldz);
+        sger_(n, &nconv, &s_one, &resid[1], &i_one, &workev[1], &i_one, &z[z_offset], ldz);
     }
 
 L9000:

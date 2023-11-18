@@ -107,14 +107,14 @@ static float s_zero = 0.f;
 
 /* ----------------------------------------------------------------------- */
 
-int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float *ritzi, float *bounds, float *q, a_int *ldq, float *workl, a_int *ierr)
+int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *ritzi, float *bounds, float *q, a_int *ldq, float *workl, a_int *ierr)
 {
     /* System generated locals */
     a_int h_dim1, h_offset, q_dim1, q_offset, i__1;
     float r__1, r__2;
 
     /* Local variables */
-    a_int i__, j;
+    a_int i, j;
     static float t0, t1;
     float vl[1], temp;
     extern double snrm2_(a_int *, float *, a_int *);
@@ -188,7 +188,7 @@ int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float 
     --ritzr;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     q_dim1 = *ldq;
     q_offset = 1 + q_dim1;
     q -= q_offset;
@@ -199,7 +199,7 @@ int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float 
 
     if (msglvl > 2)
     {
-        smout_(&debug_1.logfil, n, n, &h__[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
+        smout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
     }
 
     /*     %-----------------------------------------------------------% */
@@ -210,7 +210,7 @@ int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float 
     /*     | and the last components of the Schur vectors in BOUNDS.   | */
     /*     %-----------------------------------------------------------% */
 
-    slacpy_("All", n, n, &h__[h_offset], ldh, &workl[1], n, (ftnlen)3);
+    slacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n, (ftnlen)3);
     i__1 = *n - 1;
     for (j = 1; j <= i__1; ++j)
     {
@@ -260,18 +260,18 @@ int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float 
 
     iconj = 0;
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        if ((r__1 = ritzi[i__], dabs(r__1)) <= 0.f)
+        if ((r__1 = ritzi[i], dabs(r__1)) <= 0.f)
         {
 
             /*           %----------------------% */
             /*           | Real eigenvalue case | */
             /*           %----------------------% */
 
-            temp = snrm2_(n, &q[i__ * q_dim1 + 1], &i_one);
+            temp = snrm2_(n, &q[i * q_dim1 + 1], &i_one);
             r__1 = 1.f / temp;
-            sscal_(n, &r__1, &q[i__ * q_dim1 + 1], &i_one);
+            sscal_(n, &r__1, &q[i * q_dim1 + 1], &i_one);
         }
         else
         {
@@ -286,13 +286,13 @@ int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float 
 
             if (iconj == 0)
             {
-                r__1 = snrm2_(n, &q[i__ * q_dim1 + 1], &i_one);
-                r__2 = snrm2_(n, &q[(i__ + 1) * q_dim1 + 1], &i_one);
+                r__1 = snrm2_(n, &q[i * q_dim1 + 1], &i_one);
+                r__2 = snrm2_(n, &q[(i + 1) * q_dim1 + 1], &i_one);
                 temp = slapy2_(&r__1, &r__2);
                 r__1 = 1.f / temp;
-                sscal_(n, &r__1, &q[i__ * q_dim1 + 1], &i_one);
+                sscal_(n, &r__1, &q[i * q_dim1 + 1], &i_one);
                 r__1 = 1.f / temp;
-                sscal_(n, &r__1, &q[(i__ + 1) * q_dim1 + 1], &i_one);
+                sscal_(n, &r__1, &q[(i + 1) * q_dim1 + 1], &i_one);
                 iconj = 1;
             }
             else
@@ -319,16 +319,16 @@ int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float 
 
     iconj = 0;
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        if ((r__1 = ritzi[i__], dabs(r__1)) <= 0.f)
+        if ((r__1 = ritzi[i], dabs(r__1)) <= 0.f)
         {
 
             /*           %----------------------% */
             /*           | Real eigenvalue case | */
             /*           %----------------------% */
 
-            bounds[i__] = *rnorm * (r__1 = workl[i__], dabs(r__1));
+            bounds[i] = *rnorm * (r__1 = workl[i], dabs(r__1));
         }
         else
         {
@@ -343,8 +343,8 @@ int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float 
 
             if (iconj == 0)
             {
-                bounds[i__] = *rnorm * slapy2_(&workl[i__], &workl[i__ + 1]);
-                bounds[i__ + 1] = bounds[i__];
+                bounds[i] = *rnorm * slapy2_(&workl[i], &workl[i + 1]);
+                bounds[i + 1] = bounds[i];
                 iconj = 1;
             }
             else

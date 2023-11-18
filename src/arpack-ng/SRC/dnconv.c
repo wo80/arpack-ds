@@ -80,7 +80,7 @@ int dnconv_(a_int *n, double *ritzr, double *ritzi, double *bounds, double *tol,
     double pow_dd(double *, double *);
 
     /* Local variables */
-    a_int i__;
+    a_int i;
     static float t0, t1;
     double eps23, temp;
     extern double dlapy2_(double *, double *), dlamch_(char *, ftnlen);
@@ -153,12 +153,12 @@ int dnconv_(a_int *n, double *ritzr, double *ritzi, double *bounds, double *tol,
 
     *nconv = 0;
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
         /* Computing MAX */
-        d__1 = eps23, d__2 = dlapy2_(&ritzr[i__], &ritzi[i__]);
+        d__1 = eps23, d__2 = dlapy2_(&ritzr[i], &ritzi[i]);
         temp = max(d__1, d__2);
-        if (bounds[i__] <= *tol * temp)
+        if (bounds[i] <= *tol * temp)
         {
             ++(*nconv);
         }

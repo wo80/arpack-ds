@@ -112,7 +112,7 @@ static double d_one = 1.;
 
 /* ----------------------------------------------------------------------- */
 
-int dstqrb_(a_int *n, double *d__, double *e, double *z__, double *work, a_int *info)
+int dstqrb_(a_int *n, double *d, double *e, double *z, double *work, a_int *info)
 {
     /* System generated locals */
     a_int i__1, i__2;
@@ -122,9 +122,9 @@ int dstqrb_(a_int *n, double *d__, double *e, double *z__, double *work, a_int *
     double sqrt(double), d_sign(double *, double *);
 
     /* Local variables */
-    double b, c__, f, g;
-    a_int i__, j, k, l, m;
-    double p, r__, s;
+    double b, c, f, g;
+    a_int i, j, k, l, m;
+    double p, r, s;
     a_int l1, ii, mm, lm1, mm1, nm1;
     double rt1, rt2, eps;
     a_int lsv;
@@ -169,9 +169,9 @@ int dstqrb_(a_int *n, double *d__, double *e, double *z__, double *work, a_int *
 
     /* Parameter adjustments */
     --work;
-    --z__;
+    --z;
     --e;
-    --d__;
+    --d;
 
     /* Function Body */
     *info = 0;
@@ -214,7 +214,7 @@ int dstqrb_(a_int *n, double *d__, double *e, double *z__, double *work, a_int *
     {
         if (icompz == 2)
         {
-            z__[1] = 1.;
+            z[1] = 1.;
         }
         return 0;
     }
@@ -243,10 +243,10 @@ int dstqrb_(a_int *n, double *d__, double *e, double *z__, double *work, a_int *
         i__1 = *n - 1;
         for (j = 1; j <= i__1; ++j)
         {
-            z__[j] = 0.;
+            z[j] = 0.;
             /* L5: */
         }
-        z__[*n] = 1.;
+        z[*n] = 1.;
     }
     /*     ************************************* */
 
@@ -279,7 +279,7 @@ L10:
             {
                 goto L30;
             }
-            if (tst <= sqrt((d__1 = d__[m], abs(d__1))) * sqrt((d__2 = d__[m + 1], abs(d__2))) * eps)
+            if (tst <= sqrt((d__1 = d[m], abs(d__1))) * sqrt((d__2 = d[m + 1], abs(d__2))) * eps)
             {
                 e[m] = 0.;
                 goto L30;
@@ -303,7 +303,7 @@ L30:
     /*     scale submatrix in rows and columns l to lend */
 
     i__1 = lend - l + 1;
-    anorm = dlanst_("i", &i__1, &d__[l], &e[l], (ftnlen)1);
+    anorm = dlanst_("i", &i__1, &d[l], &e[l], (ftnlen)1);
     iscale = 0;
     if (anorm == 0.)
     {
@@ -313,7 +313,7 @@ L30:
     {
         iscale = 1;
         i__1 = lend - l + 1;
-        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &d__[l], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &d[l], n, info, (ftnlen)1);
         i__1 = lend - l;
         dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &e[l], n, info, (ftnlen)1);
     }
@@ -321,14 +321,14 @@ L30:
     {
         iscale = 2;
         i__1 = lend - l + 1;
-        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &d__[l], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &d[l], n, info, (ftnlen)1);
         i__1 = lend - l;
         dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &e[l], n, info, (ftnlen)1);
     }
 
     /*     choose between ql and qr iteration */
 
-    if ((d__1 = d__[lend], abs(d__1)) < (d__2 = d__[l], abs(d__2)))
+    if ((d__1 = d[lend], abs(d__1)) < (d__2 = d[l], abs(d__2)))
     {
         lend = lsv;
         l = lendsv;
@@ -351,7 +351,7 @@ L30:
                 /* Computing 2nd power */
                 d__2 = (d__1 = e[m], abs(d__1));
                 tst = d__2 * d__2;
-                if (tst <= eps2 * (d__1 = d__[m], abs(d__1)) * (d__2 = d__[m + 1], abs(d__2)) + safmin)
+                if (tst <= eps2 * (d__1 = d[m], abs(d__1)) * (d__2 = d[m + 1], abs(d__2)) + safmin)
                 {
                     goto L60;
                 }
@@ -366,7 +366,7 @@ L30:
         {
             e[m] = 0.;
         }
-        p = d__[l];
+        p = d[l];
         if (m == l)
         {
             goto L80;
@@ -379,25 +379,25 @@ L30:
         {
             if (icompz > 0)
             {
-                dlaev2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2, &c__, &s);
-                work[l] = c__;
+                dlaev2_(&d[l], &e[l], &d[l + 1], &rt1, &rt2, &c, &s);
+                work[l] = c;
                 work[*n - 1 + l] = s;
                 /* $$$               call dlasr( 'r', 'v', 'b', n, 2, work( l ), */
                 /* $$$     $                     work( n-1+l ), z( 1, l ), ldz ) */
 
                 /*              *** New starting with version 2.5 *** */
 
-                tst = z__[l + 1];
-                z__[l + 1] = c__ * tst - s * z__[l];
-                z__[l] = s * tst + c__ * z__[l];
+                tst = z[l + 1];
+                z[l + 1] = c * tst - s * z[l];
+                z[l] = s * tst + c * z[l];
                 /*              ************************************* */
             }
             else
             {
-                dlae2_(&d__[l], &e[l], &d__[l + 1], &rt1, &rt2);
+                dlae2_(&d[l], &e[l], &d[l + 1], &rt1, &rt2);
             }
-            d__[l] = rt1;
-            d__[l + 1] = rt2;
+            d[l] = rt1;
+            d[l + 1] = rt2;
             e[l] = 0.;
             l += 2;
             if (l <= lend)
@@ -415,39 +415,39 @@ L30:
 
         /*        form shift. */
 
-        g = (d__[l + 1] - p) / (e[l] * 2.);
-        r__ = dlapy2_(&g, &d_one);
-        g = d__[m] - p + e[l] / (g + d_sign(&r__, &g));
+        g = (d[l + 1] - p) / (e[l] * 2.);
+        r = dlapy2_(&g, &d_one);
+        g = d[m] - p + e[l] / (g + d_sign(&r, &g));
 
         s = 1.;
-        c__ = 1.;
+        c = 1.;
         p = 0.;
 
         /*        inner loop */
 
         mm1 = m - 1;
         i__1 = l;
-        for (i__ = mm1; i__ >= i__1; --i__)
+        for (i = mm1; i >= i__1; --i)
         {
-            f = s * e[i__];
-            b = c__ * e[i__];
-            dlartg_(&g, &f, &c__, &s, &r__);
-            if (i__ != m - 1)
+            f = s * e[i];
+            b = c * e[i];
+            dlartg_(&g, &f, &c, &s, &r);
+            if (i != m - 1)
             {
-                e[i__ + 1] = r__;
+                e[i + 1] = r;
             }
-            g = d__[i__ + 1] - p;
-            r__ = (d__[i__] - g) * s + c__ * 2. * b;
-            p = s * r__;
-            d__[i__ + 1] = g + p;
-            g = c__ * r__ - b;
+            g = d[i + 1] - p;
+            r = (d[i] - g) * s + c * 2. * b;
+            p = s * r;
+            d[i + 1] = g + p;
+            g = c * r - b;
 
             /*           if eigenvectors are desired, then save rotations. */
 
             if (icompz > 0)
             {
-                work[i__] = c__;
-                work[*n - 1 + i__] = -s;
+                work[i] = c;
+                work[*n - 1 + i] = -s;
             }
 
             /* L70: */
@@ -463,18 +463,18 @@ L30:
 
             /*             *** New starting with version 2.5 *** */
 
-            dlasr_("r", "v", "b", &i_one, &mm, &work[l], &work[*n - 1 + l], &z__[l], &i_one, (ftnlen)1, (ftnlen)1, (ftnlen)1);
+            dlasr_("r", "v", "b", &i_one, &mm, &work[l], &work[*n - 1 + l], &z[l], &i_one, (ftnlen)1, (ftnlen)1, (ftnlen)1);
             /*             ************************************* */
         }
 
-        d__[l] -= p;
+        d[l] -= p;
         e[l] = g;
         goto L40;
 
         /*        eigenvalue found. */
 
     L80:
-        d__[l] = p;
+        d[l] = p;
 
         ++l;
         if (l <= lend)
@@ -500,7 +500,7 @@ L30:
                 /* Computing 2nd power */
                 d__2 = (d__1 = e[m - 1], abs(d__1));
                 tst = d__2 * d__2;
-                if (tst <= eps2 * (d__1 = d__[m], abs(d__1)) * (d__2 = d__[m - 1], abs(d__2)) + safmin)
+                if (tst <= eps2 * (d__1 = d[m], abs(d__1)) * (d__2 = d[m - 1], abs(d__2)) + safmin)
                 {
                     goto L110;
                 }
@@ -515,7 +515,7 @@ L30:
         {
             e[m - 1] = 0.;
         }
-        p = d__[l];
+        p = d[l];
         if (m == l)
         {
             goto L130;
@@ -528,7 +528,7 @@ L30:
         {
             if (icompz > 0)
             {
-                dlaev2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2, &c__, &s);
+                dlaev2_(&d[l - 1], &e[l - 1], &d[l], &rt1, &rt2, &c, &s);
                 /* $$$               work( m ) = c */
                 /* $$$               work( n-1+m ) = s */
                 /* $$$               call dlasr( 'r', 'v', 'f', n, 2, work( m ), */
@@ -536,17 +536,17 @@ L30:
 
                 /*               *** New starting with version 2.5 *** */
 
-                tst = z__[l];
-                z__[l] = c__ * tst - s * z__[l - 1];
-                z__[l - 1] = s * tst + c__ * z__[l - 1];
+                tst = z[l];
+                z[l] = c * tst - s * z[l - 1];
+                z[l - 1] = s * tst + c * z[l - 1];
                 /*               ************************************* */
             }
             else
             {
-                dlae2_(&d__[l - 1], &e[l - 1], &d__[l], &rt1, &rt2);
+                dlae2_(&d[l - 1], &e[l - 1], &d[l], &rt1, &rt2);
             }
-            d__[l - 1] = rt1;
-            d__[l] = rt2;
+            d[l - 1] = rt1;
+            d[l] = rt2;
             e[l - 1] = 0.;
             l += -2;
             if (l >= lend)
@@ -564,39 +564,39 @@ L30:
 
         /*        form shift. */
 
-        g = (d__[l - 1] - p) / (e[l - 1] * 2.);
-        r__ = dlapy2_(&g, &d_one);
-        g = d__[m] - p + e[l - 1] / (g + d_sign(&r__, &g));
+        g = (d[l - 1] - p) / (e[l - 1] * 2.);
+        r = dlapy2_(&g, &d_one);
+        g = d[m] - p + e[l - 1] / (g + d_sign(&r, &g));
 
         s = 1.;
-        c__ = 1.;
+        c = 1.;
         p = 0.;
 
         /*        inner loop */
 
         lm1 = l - 1;
         i__1 = lm1;
-        for (i__ = m; i__ <= i__1; ++i__)
+        for (i = m; i <= i__1; ++i)
         {
-            f = s * e[i__];
-            b = c__ * e[i__];
-            dlartg_(&g, &f, &c__, &s, &r__);
-            if (i__ != m)
+            f = s * e[i];
+            b = c * e[i];
+            dlartg_(&g, &f, &c, &s, &r);
+            if (i != m)
             {
-                e[i__ - 1] = r__;
+                e[i - 1] = r;
             }
-            g = d__[i__] - p;
-            r__ = (d__[i__ + 1] - g) * s + c__ * 2. * b;
-            p = s * r__;
-            d__[i__] = g + p;
-            g = c__ * r__ - b;
+            g = d[i] - p;
+            r = (d[i + 1] - g) * s + c * 2. * b;
+            p = s * r;
+            d[i] = g + p;
+            g = c * r - b;
 
             /*           if eigenvectors are desired, then save rotations. */
 
             if (icompz > 0)
             {
-                work[i__] = c__;
-                work[*n - 1 + i__] = s;
+                work[i] = c;
+                work[*n - 1 + i] = s;
             }
 
             /* L120: */
@@ -612,18 +612,18 @@ L30:
 
             /*           *** New starting with version 2.5 *** */
 
-            dlasr_("r", "v", "f", &i_one, &mm, &work[m], &work[*n - 1 + m], &z__[m], &i_one, (ftnlen)1, (ftnlen)1, (ftnlen)1);
+            dlasr_("r", "v", "f", &i_one, &mm, &work[m], &work[*n - 1 + m], &z[m], &i_one, (ftnlen)1, (ftnlen)1, (ftnlen)1);
             /*           ************************************* */
         }
 
-        d__[l] -= p;
+        d[l] -= p;
         e[lm1] = g;
         goto L90;
 
         /*        eigenvalue found. */
 
     L130:
-        d__[l] = p;
+        d[l] = p;
 
         --l;
         if (l >= lend)
@@ -639,14 +639,14 @@ L140:
     if (iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &d__[lsv], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &d[lsv], n, info, (ftnlen)1);
         i__1 = lendsv - lsv;
         dlascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &e[lsv], n, info, (ftnlen)1);
     }
     else if (iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &d__[lsv], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &d[lsv], n, info, (ftnlen)1);
         i__1 = lendsv - lsv;
         dlascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &e[lsv], n, info, (ftnlen)1);
     }
@@ -659,9 +659,9 @@ L140:
         goto L10;
     }
     i__1 = *n - 1;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        if (e[i__] != 0.)
+        if (e[i] != 0.)
         {
             ++(*info);
         }
@@ -677,7 +677,7 @@ L160:
 
         /*        use quick sort */
 
-        dlasrt_("i", n, &d__[1], info, (ftnlen)1);
+        dlasrt_("i", n, &d[1], info, (ftnlen)1);
     }
     else
     {
@@ -687,29 +687,29 @@ L160:
         i__1 = *n;
         for (ii = 2; ii <= i__1; ++ii)
         {
-            i__ = ii - 1;
-            k = i__;
-            p = d__[i__];
+            i = ii - 1;
+            k = i;
+            p = d[i];
             i__2 = *n;
             for (j = ii; j <= i__2; ++j)
             {
-                if (d__[j] < p)
+                if (d[j] < p)
                 {
                     k = j;
-                    p = d__[j];
+                    p = d[j];
                 }
                 /* L170: */
             }
-            if (k != i__)
+            if (k != i)
             {
-                d__[k] = d__[i__];
-                d__[i__] = p;
+                d[k] = d[i];
+                d[i] = p;
                 /* $$$               call dswap( n, z( 1, i ), 1, z( 1, k ), 1 ) */
                 /*           *** New starting with version 2.5 *** */
 
-                p = z__[k];
-                z__[k] = z__[i__];
-                z__[i__] = p;
+                p = z[k];
+                z[k] = z[i];
+                z[i] = p;
                 /*           ************************************* */
             }
             /* L180: */

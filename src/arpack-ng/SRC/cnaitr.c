@@ -218,7 +218,7 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int cnaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_fcomplex *resid, float *rnorm, a_fcomplex *v, a_int *ldv, a_fcomplex *h__, a_int *ldh, a_int *ipntr, a_fcomplex *workd, a_int *info, ftnlen bmat_len)
+int cnaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_fcomplex *resid, float *rnorm, a_fcomplex *v, a_int *ldv, a_fcomplex *h, a_int *ldh, a_int *ipntr, a_fcomplex *workd, a_int *info, ftnlen bmat_len)
 {
     /* Initialized data */
 
@@ -233,7 +233,7 @@ int cnaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_
     double r_imag(a_fcomplex *), sqrt(double);
 
     /* Local variables */
-    a_int i__;
+    a_int i;
     static a_int j;
     static float t0, t1, t2, t3, t4, t5;
     a_int jj;
@@ -328,7 +328,7 @@ int cnaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_
     v -= v_offset;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     --ipntr;
 
     /* Function Body */
@@ -537,8 +537,8 @@ L40:
         /*            | use LAPACK routine clascl               | */
         /*            %-----------------------------------------% */
 
-        clascl_("General", &i__, &i__, rnorm, &s_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
-        clascl_("General", &i__, &i__, rnorm, &s_one, n, &i_one, &workd[ipj], n, &infol, (ftnlen)7);
+        clascl_("General", &i, &i, rnorm, &s_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
+        clascl_("General", &i, &i, rnorm, &s_one, n, &i_one, &workd[ipj], n, &infol, (ftnlen)7);
     }
 
     /*        %------------------------------------------------------% */
@@ -649,7 +649,7 @@ L60:
     /*        | WORKD(IPJ:IPJ+N-1) contains B*OP*v_{j}.  | */
     /*        %------------------------------------------% */
 
-    cgemv_("C", n, &j, &c_one, &v[v_offset], ldv, &workd[ipj], &i_one, &c_zero, &h__[j * h_dim1 + 1], &i_one, (ftnlen)1);
+    cgemv_("C", n, &j, &c_one, &v[v_offset], ldv, &workd[ipj], &i_one, &c_zero, &h[j * h_dim1 + 1], &i_one, (ftnlen)1);
 
     /*        %--------------------------------------% */
     /*        | Orthogonalize r_{j} against V_{j}.   | */
@@ -657,13 +657,13 @@ L60:
     /*        %--------------------------------------% */
 
     q__1.r = -1.f, q__1.i = -0.f;
-    cgemv_("N", n, &j, &q__1, &v[v_offset], ldv, &h__[j * h_dim1 + 1], &i_one, &c_one, &resid[1], &i_one, (ftnlen)1);
+    cgemv_("N", n, &j, &q__1, &v[v_offset], ldv, &h[j * h_dim1 + 1], &i_one, &c_one, &resid[1], &i_one, (ftnlen)1);
 
     if (j > 1)
     {
         i__1 = j + (j - 1) * h_dim1;
         q__1.r = betaj, q__1.i = 0.f;
-        h__[i__1].r = q__1.r, h__[i__1].i = q__1.i;
+        h[i__1].r = q__1.r, h[i__1].i = q__1.i;
     }
 
     arscnd_(&t4);
@@ -764,7 +764,7 @@ L80:
                "_naitr: re-o"
                "rthogonalization; wnorm and rnorm are",
                (ftnlen)49);
-        cvout_(&debug_1.logfil, &j, &h__[j * h_dim1 + 1], &debug_1.ndigit, "_naitr: j-th column of H", (ftnlen)24);
+        cvout_(&debug_1.logfil, &j, &h[j * h_dim1 + 1], &debug_1.ndigit, "_naitr: j-th column of H", (ftnlen)24);
     }
 
     /*        %----------------------------------------------------% */
@@ -783,7 +783,7 @@ L80:
 
     q__1.r = -1.f, q__1.i = -0.f;
     cgemv_("N", n, &j, &q__1, &v[v_offset], ldv, &workd[irj], &i_one, &c_one, &resid[1], &i_one, (ftnlen)1);
-    caxpy_(&j, &c_one, &workd[irj], &i_one, &h__[j * h_dim1 + 1], &i_one);
+    caxpy_(&j, &c_one, &workd[irj], &i_one, &h[j * h_dim1 + 1], &i_one);
 
     orth2 = TRUE_;
     arscnd_(&t2);
@@ -927,7 +927,7 @@ L100:
         timing_1.tcaitr += t1 - t0;
         *ido = 99;
         i__1 = *k + *np - 1;
-        for (i__ = max(1, *k); i__ <= i__1; ++i__)
+        for (i = max(1, *k); i <= i__1; ++i)
         {
 
             /*              %--------------------------------------------% */
@@ -936,27 +936,27 @@ L100:
             /*              | REFERENCE: LAPACK subroutine clahqr        | */
             /*              %--------------------------------------------% */
 
-            i__2 = i__ + i__ * h_dim1;
-            r__1 = h__[i__2].r;
-            r__2 = r_imag(&h__[i__ + i__ * h_dim1]);
-            i__3 = i__ + 1 + (i__ + 1) * h_dim1;
-            r__3 = h__[i__3].r;
-            r__4 = r_imag(&h__[i__ + 1 + (i__ + 1) * h_dim1]);
+            i__2 = i + i * h_dim1;
+            r__1 = h[i__2].r;
+            r__2 = r_imag(&h[i + i * h_dim1]);
+            i__3 = i + 1 + (i + 1) * h_dim1;
+            r__3 = h[i__3].r;
+            r__4 = r_imag(&h[i + 1 + (i + 1) * h_dim1]);
             tst1 = slapy2_(&r__1, &r__2) + slapy2_(&r__3, &r__4);
             if (tst1 == 0.f)
             {
                 i__2 = *k + *np;
-                tst1 = clanhs_("1", &i__2, &h__[h_offset], ldh, &workd[*n + 1], (ftnlen)1);
+                tst1 = clanhs_("1", &i__2, &h[h_offset], ldh, &workd[*n + 1], (ftnlen)1);
             }
-            i__2 = i__ + 1 + i__ * h_dim1;
-            r__1 = h__[i__2].r;
-            r__2 = r_imag(&h__[i__ + 1 + i__ * h_dim1]);
+            i__2 = i + 1 + i * h_dim1;
+            r__1 = h[i__2].r;
+            r__2 = r_imag(&h[i + 1 + i * h_dim1]);
             /* Computing MAX */
             r__3 = ulp * tst1;
             if (slapy2_(&r__1, &r__2) <= dmax(r__3, smlnum))
             {
-                i__3 = i__ + 1 + i__ * h_dim1;
-                h__[i__3].r = 0.f, h__[i__3].i = 0.f;
+                i__3 = i + 1 + i * h_dim1;
+                h[i__3].r = 0.f, h[i__3].i = 0.f;
             }
             /* L110: */
         }
@@ -965,7 +965,7 @@ L100:
         {
             i__1 = *k + *np;
             i__2 = *k + *np;
-            cmout_(&debug_1.logfil, &i__1, &i__2, &h__[h_offset], ldh, &debug_1.ndigit,
+            cmout_(&debug_1.logfil, &i__1, &i__2, &h[h_offset], ldh, &debug_1.ndigit,
                    "_naitr: Final upper Hessenberg matrix H"
                    " of order K+NP",
                    (ftnlen)53);

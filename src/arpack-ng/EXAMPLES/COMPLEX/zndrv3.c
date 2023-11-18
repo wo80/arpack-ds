@@ -29,7 +29,7 @@ static a_dcomplex c_b164 = {10., 0.};
     double d_imag(a_dcomplex *);
 
     /* Local variables */
-    a_dcomplex d__[25], h__;
+    a_dcomplex d[25], h;
     a_int j, n;
     a_dcomplex v[6400] /* was [256][25] */, dd[256], dl[256];
     double rd[75] /* was [25][3] */;
@@ -232,23 +232,23 @@ static a_dcomplex c_b164 = {10., 0.};
     i__1 = n + 1;
     z__2.r = (double)i__1, z__2.i = 0.;
     z_div(&z__1, &c_b2, &z__2);
-    h__.r = z__1.r, h__.i = z__1.i;
+    h.r = z__1.r, h.i = z__1.i;
     i__1 = n - 1;
     for (j = 1; j <= i__1; ++j)
     {
         i__2 = j - 1;
-        z__1.r = h__.r * 1. - h__.i * 0., z__1.i = h__.i * 1. + h__.r * 0.;
+        z__1.r = h.r * 1. - h.i * 0., z__1.i = h.i * 1. + h.r * 0.;
         dl[i__2].r = z__1.r, dl[i__2].i = z__1.i;
         i__2 = j - 1;
-        z__1.r = h__.r * 4. - h__.i * 0., z__1.i = h__.r * 0. + h__.i * 4.;
+        z__1.r = h.r * 4. - h.i * 0., z__1.i = h.r * 0. + h.i * 4.;
         dd[i__2].r = z__1.r, dd[i__2].i = z__1.i;
         i__2 = j - 1;
-        z__1.r = h__.r * 1. - h__.i * 0., z__1.i = h__.i * 1. + h__.r * 0.;
+        z__1.r = h.r * 1. - h.i * 0., z__1.i = h.i * 1. + h.r * 0.;
         du[i__2].r = z__1.r, du[i__2].i = z__1.i;
         /* L20: */
     }
     i__1 = n - 1;
-    z__1.r = h__.r * 4. - h__.i * 0., z__1.i = h__.r * 0. + h__.i * 4.;
+    z__1.r = h.r * 4. - h.i * 0., z__1.i = h.r * 0. + h.i * 4.;
     dd[i__1].r = z__1.r, dd[i__1].i = z__1.i;
 
     zgttrf_(&n, dl, dd, du, du2, ipiv, &ierr);
@@ -414,7 +414,7 @@ L10:
 
         rvec = TRUE_;
 
-        zneupd_(&rvec, "A", select, d__, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+        zneupd_(&rvec, "A", select, d, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
 
         /*        %----------------------------------------------% */
         /*        | Eigenvalues are returned in the one          | */
@@ -473,11 +473,11 @@ L10:
                 av_(&n, &v[(j << 8) - 256], ax);
                 mv_(&n, &v[(j << 8) - 256], mx);
                 i__2 = j - 1;
-                z__1.r = -d__[i__2].r, z__1.i = -d__[i__2].i;
+                z__1.r = -d[i__2].r, z__1.i = -d[i__2].i;
                 zaxpy_(&n, &z__1, mx, &c__1, ax, &c__1);
                 i__2 = j - 1;
-                rd[j - 1] = d__[i__2].r;
-                rd[j + 24] = d_imag(&d__[j - 1]);
+                rd[j - 1] = d[i__2].r;
+                rd[j + 24] = d_imag(&d[j - 1]);
                 rd[j + 49] = dznrm2_(&n, ax, &c__1);
                 rd[j + 49] /= dlapy2_(&rd[j - 1], &rd[j + 24]);
                 /* L80: */
@@ -593,7 +593,7 @@ int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     void z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
-    a_dcomplex h__;
+    a_dcomplex h;
     a_int j;
     a_dcomplex s, dd, dl, du;
 
@@ -609,17 +609,17 @@ int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     i__1 = *n + 1;
     z__2.r = (double)i__1, z__2.i = 0.;
     z_div(&z__1, &c_b2, &z__2);
-    h__.r = z__1.r, h__.i = z__1.i;
+    h.r = z__1.r, h.i = z__1.i;
     z_div(&z__1, &c_b164, &c_b163);
     s.r = z__1.r, s.i = z__1.i;
-    z_div(&z__1, &c_b163, &h__);
+    z_div(&z__1, &c_b163, &h);
     dd.r = z__1.r, dd.i = z__1.i;
     z__3.r = -1., z__3.i = -0.;
-    z_div(&z__2, &z__3, &h__);
+    z_div(&z__2, &z__3, &h);
     z__1.r = z__2.r - s.r, z__1.i = z__2.i - s.i;
     dl.r = z__1.r, dl.i = z__1.i;
     z__3.r = -1., z__3.i = -0.;
-    z_div(&z__2, &z__3, &h__);
+    z_div(&z__2, &z__3, &h);
     z__1.r = z__2.r + s.r, z__1.i = z__2.i + s.i;
     du.r = z__1.r, du.i = z__1.i;
 
@@ -663,7 +663,7 @@ int mv_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     void z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
-    a_dcomplex h__;
+    a_dcomplex h;
     a_int j;
     extern int zscal_(a_int *, a_dcomplex *, a_dcomplex *, a_int *);
 
@@ -706,8 +706,8 @@ int mv_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     i__1 = *n + 1;
     z__2.r = (double)i__1, z__2.i = 0.;
     z_div(&z__1, &c_b2, &z__2);
-    h__.r = z__1.r, h__.i = z__1.i;
-    zscal_(n, &h__, &w[1], &c__1);
+    h.r = z__1.r, h.i = z__1.i;
+    zscal_(n, &h, &w[1], &c__1);
     return 0;
 } /* mv_ */
 

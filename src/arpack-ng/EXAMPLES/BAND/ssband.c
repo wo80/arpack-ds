@@ -343,7 +343,7 @@ static a_int c__3 = 3;
 
 /* --------------------------------------------------------------------- */
 
-int ssband_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, a_int *ldz, float *sigma, a_int *n, float *ab, float *mb, a_int *lda, float *rfac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, float *workd, float *workl, a_int *lworkl, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
+int ssband_(a_bool *rvec, char *howmny, a_bool *select, float *d, float *z, a_int *ldz, float *sigma, a_int *n, float *ab, float *mb, a_int *lda, float *rfac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, float *workd, float *workl, a_int *lworkl, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, rfac_dim1, rfac_offset, i__1, i__2;
@@ -352,7 +352,7 @@ int ssband_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
 
     /* Local variables */
-    a_int i__, j, ido, imid, ibot, ierr, itop, type__;
+    a_int i, j, ido, imid, ibot, ierr, itop, type__;
     extern int sgbmv_(char *, a_int *, a_int *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen);
     a_int ipntr[14];
     extern int scopy_(a_int *, float *, a_int *, float *, a_int *), saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), sgbtrf_(a_int *, a_int *, a_int *, a_int *, float *, a_int *, a_int *, a_int *), slacpy_(char *, a_int *, a_int *, float *, a_int *, float *, a_int *, ftnlen), ssaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen),
@@ -454,10 +454,10 @@ int ssband_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
 
     /* Parameter adjustments */
     --select;
-    --d__;
+    --d;
     z_dim1 = *ldz;
     z_offset = 1 + z_dim1;
-    z__ -= z_offset;
+    z -= z_offset;
     rfac_dim1 = *lda;
     rfac_offset = 1 + rfac_dim1;
     rfac -= rfac_offset;
@@ -612,9 +612,9 @@ int ssband_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
         for (j = 1; j <= i__1; ++j)
         {
             i__2 = ibot;
-            for (i__ = itop; i__ <= i__2; ++i__)
+            for (i = itop; i <= i__2; ++i)
             {
-                rfac[i__ + j * rfac_dim1] = ab[i__ + j * ab_dim1] - *sigma * mb[i__ + j * mb_dim1];
+                rfac[i + j * rfac_dim1] = ab[i + j * ab_dim1] - *sigma * mb[i + j * mb_dim1];
                 /* L50: */
             }
             /* L60: */
@@ -1022,7 +1022,7 @@ L90:
             if (iparam[5] > 0)
             {
 
-                sseupd_(rvec, "A", &select[1], &d__[1], &z__[z_offset], ldz, sigma, bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+                sseupd_(rvec, "A", &select[1], &d[1], &z[z_offset], ldz, sigma, bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info, (ftnlen)1, (ftnlen)1, (ftnlen)2);
 
                 if (*info != 0)
                 {

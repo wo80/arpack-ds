@@ -26,7 +26,7 @@ static float c_b138 = -1.f;
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
 
     /* Local variables */
-    float d__[50] /* was [25][2] */;
+    float d[50] /* was [25][2] */;
     a_int j, n;
     float v[6400] /* was [256][25] */;
     extern int av_(a_int *, float *, float *);
@@ -443,7 +443,7 @@ L10:
 
         rvec = TRUE_;
 
-        sseupd_(&rvec, "All", select, d__, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)3, (ftnlen)1, (ftnlen)2);
+        sseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)3, (ftnlen)1, (ftnlen)2);
 
         /*         %----------------------------------------------% */
         /*         | Eigenvalues are returned in the first column | */
@@ -500,10 +500,10 @@ L10:
                 /*               %---------------------------% */
 
                 av_(&nx, &v[(j << 8) - 256], ax);
-                r__1 = -d__[j - 1];
+                r__1 = -d[j - 1];
                 saxpy_(&n, &r__1, &v[(j << 8) - 256], &c__1, ax, &c__1);
-                d__[j + 24] = snrm2_(&n, ax, &c__1);
-                d__[j + 24] /= (r__1 = d__[j - 1], dabs(r__1));
+                d[j + 24] = snrm2_(&n, ax, &c__1);
+                d[j + 24] /= (r__1 = d[j - 1], dabs(r__1));
 
                 /* L20: */
             }
@@ -512,7 +512,7 @@ L10:
             /*            | Display computed residuals. | */
             /*            %-----------------------------% */
 
-            smout_(&c__6, &nconv, &c__2, d__, &c__25, &c_n6,
+            smout_(&c__6, &nconv, &c__2, d, &c__25, &c_n6,
                    "Ritz values an"
                    "d relative residuals",
                    (ftnlen)34);

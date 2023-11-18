@@ -54,7 +54,7 @@ int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit
     a_int i_len(char *, ftnlen), s_wsfe(cilist *), do_fio(a_int *, char *, ftnlen), e_wsfe(void);
 
     /* Local variables */
-    a_int i__, j, k1, k2, lll;
+    a_int i, j, k1, k2, lll;
     char line[80];
     a_int ndigit;
 
@@ -108,15 +108,15 @@ int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit
     i__1 = i_len(ifmt, ifmt_len);
     lll = min(i__1, 80);
     i__1 = lll;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        *(unsigned char *)&line[i__ - 1] = '-';
+        *(unsigned char *)&line[i - 1] = '-';
         /* L10: */
     }
 
-    for (i__ = lll + 1; i__ <= 80; ++i__)
+    for (i = lll + 1; i <= 80; ++i)
     {
-        *(unsigned char *)&line[i__ - 1] = ' ';
+        *(unsigned char *)&line[i - 1] = ' ';
         /* L20: */
     }
 
@@ -154,22 +154,22 @@ int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit
                 io___9.ciunit = *lout;
                 s_wsfe(&io___9);
                 i__2 = k2;
-                for (i__ = k1; i__ <= i__2; ++i__)
+                for (i = k1; i <= i__2; ++i)
                 {
                     do_fio(&c__3, icol, (ftnlen)1);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                 }
                 e_wsfe();
                 i__2 = *m;
-                for (i__ = 1; i__ <= i__2; ++i__)
+                for (i = 1; i <= i__2; ++i)
                 {
                     io___10.ciunit = *lout;
                     s_wsfe(&io___10);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                     i__3 = k2;
                     for (j = k1; j <= i__3; ++j)
                     {
-                        do_fio(&c__1, (char *)&a[i__ + j * a_dim1], (ftnlen)sizeof(double));
+                        do_fio(&c__1, (char *)&a[i + j * a_dim1], (ftnlen)sizeof(double));
                     }
                     e_wsfe();
                     /* L30: */
@@ -188,22 +188,22 @@ int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit
                 io___12.ciunit = *lout;
                 s_wsfe(&io___12);
                 i__2 = k2;
-                for (i__ = k1; i__ <= i__2; ++i__)
+                for (i = k1; i <= i__2; ++i)
                 {
                     do_fio(&c__3, icol, (ftnlen)1);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                 }
                 e_wsfe();
                 i__2 = *m;
-                for (i__ = 1; i__ <= i__2; ++i__)
+                for (i = 1; i <= i__2; ++i)
                 {
                     io___13.ciunit = *lout;
                     s_wsfe(&io___13);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                     i__3 = k2;
                     for (j = k1; j <= i__3; ++j)
                     {
-                        do_fio(&c__1, (char *)&a[i__ + j * a_dim1], (ftnlen)sizeof(double));
+                        do_fio(&c__1, (char *)&a[i + j * a_dim1], (ftnlen)sizeof(double));
                     }
                     e_wsfe();
                     /* L50: */
@@ -222,22 +222,22 @@ int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit
                 io___14.ciunit = *lout;
                 s_wsfe(&io___14);
                 i__2 = k2;
-                for (i__ = k1; i__ <= i__2; ++i__)
+                for (i = k1; i <= i__2; ++i)
                 {
                     do_fio(&c__3, icol, (ftnlen)1);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                 }
                 e_wsfe();
                 i__2 = *m;
-                for (i__ = 1; i__ <= i__2; ++i__)
+                for (i = 1; i <= i__2; ++i)
                 {
                     io___15.ciunit = *lout;
                     s_wsfe(&io___15);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                     i__3 = k2;
                     for (j = k1; j <= i__3; ++j)
                     {
-                        do_fio(&c__1, (char *)&a[i__ + j * a_dim1], (ftnlen)sizeof(double));
+                        do_fio(&c__1, (char *)&a[i + j * a_dim1], (ftnlen)sizeof(double));
                     }
                     e_wsfe();
                     /* L70: */
@@ -256,22 +256,22 @@ int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit
                 io___16.ciunit = *lout;
                 s_wsfe(&io___16);
                 i__2 = k2;
-                for (i__ = k1; i__ <= i__2; ++i__)
+                for (i = k1; i <= i__2; ++i)
                 {
                     do_fio(&c__3, icol, (ftnlen)1);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                 }
                 e_wsfe();
                 i__2 = *m;
-                for (i__ = 1; i__ <= i__2; ++i__)
+                for (i = 1; i <= i__2; ++i)
                 {
                     io___17.ciunit = *lout;
                     s_wsfe(&io___17);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                     i__3 = k2;
                     for (j = k1; j <= i__3; ++j)
                     {
-                        do_fio(&c__1, (char *)&a[i__ + j * a_dim1], (ftnlen)sizeof(double));
+                        do_fio(&c__1, (char *)&a[i + j * a_dim1], (ftnlen)sizeof(double));
                     }
                     e_wsfe();
                     /* L90: */
@@ -297,22 +297,22 @@ int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit
                 io___18.ciunit = *lout;
                 s_wsfe(&io___18);
                 i__2 = k2;
-                for (i__ = k1; i__ <= i__2; ++i__)
+                for (i = k1; i <= i__2; ++i)
                 {
                     do_fio(&c__3, icol, (ftnlen)1);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                 }
                 e_wsfe();
                 i__2 = *m;
-                for (i__ = 1; i__ <= i__2; ++i__)
+                for (i = 1; i <= i__2; ++i)
                 {
                     io___19.ciunit = *lout;
                     s_wsfe(&io___19);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                     i__3 = k2;
                     for (j = k1; j <= i__3; ++j)
                     {
-                        do_fio(&c__1, (char *)&a[i__ + j * a_dim1], (ftnlen)sizeof(double));
+                        do_fio(&c__1, (char *)&a[i + j * a_dim1], (ftnlen)sizeof(double));
                     }
                     e_wsfe();
                     /* L110: */
@@ -331,22 +331,22 @@ int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit
                 io___20.ciunit = *lout;
                 s_wsfe(&io___20);
                 i__2 = k2;
-                for (i__ = k1; i__ <= i__2; ++i__)
+                for (i = k1; i <= i__2; ++i)
                 {
                     do_fio(&c__3, icol, (ftnlen)1);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                 }
                 e_wsfe();
                 i__2 = *m;
-                for (i__ = 1; i__ <= i__2; ++i__)
+                for (i = 1; i <= i__2; ++i)
                 {
                     io___21.ciunit = *lout;
                     s_wsfe(&io___21);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                     i__3 = k2;
                     for (j = k1; j <= i__3; ++j)
                     {
-                        do_fio(&c__1, (char *)&a[i__ + j * a_dim1], (ftnlen)sizeof(double));
+                        do_fio(&c__1, (char *)&a[i + j * a_dim1], (ftnlen)sizeof(double));
                     }
                     e_wsfe();
                     /* L130: */
@@ -365,22 +365,22 @@ int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit
                 io___22.ciunit = *lout;
                 s_wsfe(&io___22);
                 i__2 = k2;
-                for (i__ = k1; i__ <= i__2; ++i__)
+                for (i = k1; i <= i__2; ++i)
                 {
                     do_fio(&c__3, icol, (ftnlen)1);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                 }
                 e_wsfe();
                 i__2 = *m;
-                for (i__ = 1; i__ <= i__2; ++i__)
+                for (i = 1; i <= i__2; ++i)
                 {
                     io___23.ciunit = *lout;
                     s_wsfe(&io___23);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                     i__3 = k2;
                     for (j = k1; j <= i__3; ++j)
                     {
-                        do_fio(&c__1, (char *)&a[i__ + j * a_dim1], (ftnlen)sizeof(double));
+                        do_fio(&c__1, (char *)&a[i + j * a_dim1], (ftnlen)sizeof(double));
                     }
                     e_wsfe();
                     /* L150: */
@@ -399,22 +399,22 @@ int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit
                 io___24.ciunit = *lout;
                 s_wsfe(&io___24);
                 i__2 = k2;
-                for (i__ = k1; i__ <= i__2; ++i__)
+                for (i = k1; i <= i__2; ++i)
                 {
                     do_fio(&c__3, icol, (ftnlen)1);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                 }
                 e_wsfe();
                 i__2 = *m;
-                for (i__ = 1; i__ <= i__2; ++i__)
+                for (i = 1; i <= i__2; ++i)
                 {
                     io___25.ciunit = *lout;
                     s_wsfe(&io___25);
-                    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(a_int));
+                    do_fio(&c__1, (char *)&i, (ftnlen)sizeof(a_int));
                     i__3 = k2;
                     for (j = k1; j <= i__3; ++j)
                     {
-                        do_fio(&c__1, (char *)&a[i__ + j * a_dim1], (ftnlen)sizeof(double));
+                        do_fio(&c__1, (char *)&a[i + j * a_dim1], (ftnlen)sizeof(double));
                     }
                     e_wsfe();
                     /* L170: */

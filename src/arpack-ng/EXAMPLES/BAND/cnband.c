@@ -310,7 +310,7 @@ static a_int c__3 = 3;
 
 /* ----------------------------------------------------------------------- */
 
-int cnband_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d__, a_fcomplex *z__, a_int *ldz, a_fcomplex *sigma, a_fcomplex *workev, a_int *n, a_fcomplex *ab, a_fcomplex *mb, a_int *lda, a_fcomplex *fac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, a_fcomplex *resid, a_int *ncv, a_fcomplex *v, a_int *ldv, a_int *iparam, a_fcomplex *workd, a_fcomplex *workl, a_int *lworkl, float *rwork, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
+int cnband_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d, a_fcomplex *z, a_int *ldz, a_fcomplex *sigma, a_fcomplex *workev, a_int *n, a_fcomplex *ab, a_fcomplex *mb, a_int *lda, a_fcomplex *fac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, a_fcomplex *resid, a_int *ncv, a_fcomplex *v, a_int *ldv, a_int *iparam, a_fcomplex *workd, a_fcomplex *workl, a_int *lworkl, float *rwork, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, fac_dim1, fac_offset, i__1, i__2, i__3, i__4, i__5;
@@ -320,7 +320,7 @@ int cnband_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d__, a_fcomp
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
 
     /* Local variables */
-    a_int i__, j, ido, imid, mode, ibot, ierr, itop;
+    a_int i, j, ido, imid, mode, ibot, ierr, itop;
     extern int cgbmv_(char *, a_int *, a_int *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen), ccopy_(a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
     a_int ipntr[14];
     extern int cgbtrf_(a_int *, a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *), cnaupd_(a_int *, char *, a_int *, char *, a_int *, float *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, float *, a_int *, ftnlen, ftnlen), clacpy_(char *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, ftnlen),
@@ -387,10 +387,10 @@ int cnband_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d__, a_fcomp
 
     /* Parameter adjustments */
     --select;
-    --d__;
+    --d;
     z_dim1 = *ldz;
     z_offset = 1 + z_dim1;
-    z__ -= z_offset;
+    z -= z_offset;
     --workev;
     fac_dim1 = *lda;
     fac_offset = 1 + fac_dim1;
@@ -495,11 +495,11 @@ int cnband_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d__, a_fcomp
             for (j = 1; j <= i__1; ++j)
             {
                 i__2 = ibot;
-                for (i__ = itop; i__ <= i__2; ++i__)
+                for (i = itop; i <= i__2; ++i)
                 {
-                    i__3 = i__ + j * fac_dim1;
-                    i__4 = i__ + j * ab_dim1;
-                    i__5 = i__ + j * mb_dim1;
+                    i__3 = i + j * fac_dim1;
+                    i__4 = i + j * ab_dim1;
+                    i__5 = i + j * mb_dim1;
                     q__2.r = sigma->r * mb[i__5].r - sigma->i * mb[i__5].i, q__2.i = sigma->r * mb[i__5].i + sigma->i * mb[i__5].r;
                     q__1.r = ab[i__4].r - q__2.r, q__1.i = ab[i__4].i - q__2.i;
                     fac[i__3].r = q__1.r, fac[i__3].i = q__1.i;
@@ -732,7 +732,7 @@ L40:
         else
         {
 
-            cneupd_(rvec, howmny, &select[1], &d__[1], &z__[z_offset], ldz, sigma, &workev[1], bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, &rwork[1], info, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+            cneupd_(rvec, howmny, &select[1], &d[1], &z[z_offset], ldz, sigma, &workev[1], bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, &rwork[1], info, (ftnlen)1, (ftnlen)1, (ftnlen)2);
 
             if (*info != 0)
             {

@@ -30,7 +30,7 @@ static a_int c_n6 = -6;
     double r_imag(a_fcomplex *);
 
     /* Local variables */
-    a_fcomplex a[50000] /* was [50][1000] */, d__[50], h__;
+    a_fcomplex a[50000] /* was [50][1000] */, d[50], h;
     a_int j;
     a_fcomplex m[50000] /* was [50][1000] */;
     a_int n;
@@ -268,16 +268,16 @@ static a_int c_n6 = -6;
     i__1 = n + 1;
     q__2.r = (float)i__1, q__2.i = 0.f;
     c_div(&q__1, &c_b1, &q__2);
-    h__.r = q__1.r, h__.i = q__1.i;
+    h.r = q__1.r, h.i = q__1.i;
     idiag = kl + ku + 1;
     i__1 = n;
     for (j = 1; j <= i__1; ++j)
     {
         i__2 = idiag + j * 50 - 51;
-        c_div(&q__1, &c_b3, &h__);
+        c_div(&q__1, &c_b3, &h);
         a[i__2].r = q__1.r, a[i__2].i = q__1.i;
         i__2 = idiag + j * 50 - 51;
-        q__2.r = h__.r * 4.f - h__.i * 0.f, q__2.i = h__.i * 4.f + h__.r * 0.f;
+        q__2.r = h.r * 4.f - h.i * 0.f, q__2.i = h.i * 4.f + h.r * 0.f;
         c_div(&q__1, &q__2, &c_b5);
         m[i__2].r = q__1.r, m[i__2].i = q__1.i;
         /* L30: */
@@ -295,22 +295,22 @@ static a_int c_n6 = -6;
     {
         i__2 = isup + (j + 1) * 50 - 51;
         q__3.r = -1.f, q__3.i = -0.f;
-        c_div(&q__2, &q__3, &h__);
+        c_div(&q__2, &q__3, &h);
         c_div(&q__4, &rho, &c_b3);
         q__1.r = q__2.r + q__4.r, q__1.i = q__2.i + q__4.i;
         a[i__2].r = q__1.r, a[i__2].i = q__1.i;
         i__2 = isub + j * 50 - 51;
         q__3.r = -1.f, q__3.i = -0.f;
-        c_div(&q__2, &q__3, &h__);
+        c_div(&q__2, &q__3, &h);
         c_div(&q__4, &rho, &c_b3);
         q__1.r = q__2.r - q__4.r, q__1.i = q__2.i - q__4.i;
         a[i__2].r = q__1.r, a[i__2].i = q__1.i;
         i__2 = isup + (j + 1) * 50 - 51;
-        q__2.r = h__.r * 1.f - h__.i * 0.f, q__2.i = h__.i * 1.f + h__.r * 0.f;
+        q__2.r = h.r * 1.f - h.i * 0.f, q__2.i = h.i * 1.f + h.r * 0.f;
         c_div(&q__1, &q__2, &c_b5);
         m[i__2].r = q__1.r, m[i__2].i = q__1.i;
         i__2 = isub + j * 50 - 51;
-        q__2.r = h__.r * 1.f - h__.i * 0.f, q__2.i = h__.i * 1.f + h__.r * 0.f;
+        q__2.r = h.r * 1.f - h.i * 0.f, q__2.i = h.i * 1.f + h.r * 0.f;
         c_div(&q__1, &q__2, &c_b5);
         m[i__2].r = q__1.r, m[i__2].i = q__1.i;
         /* L40: */
@@ -325,7 +325,7 @@ static a_int c_n6 = -6;
     /*     %-----------------------------------------------% */
 
     rvec = TRUE_;
-    cnband_(&rvec, "A", select, d__, v, &c__1000, &sigma, workev, &n, a, m, &c__50, fac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, rwork, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
+    cnband_(&rvec, "A", select, d, v, &c__1000, &sigma, workev, &n, a, m, &c__50, fac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, rwork, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
 
     if (info == 0)
     {
@@ -398,11 +398,11 @@ static a_int c_n6 = -6;
             cgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, ax, &c__1, (ftnlen)11);
             cgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, mx, &c__1, (ftnlen)11);
             i__2 = j - 1;
-            q__1.r = -d__[i__2].r, q__1.i = -d__[i__2].i;
+            q__1.r = -d[i__2].r, q__1.i = -d[i__2].i;
             caxpy_(&n, &q__1, mx, &c__1, ax, &c__1);
             i__2 = j - 1;
-            rd[j - 1] = d__[i__2].r;
-            rd[j + 49] = r_imag(&d__[j - 1]);
+            rd[j - 1] = d[i__2].r;
+            rd[j + 49] = r_imag(&d[j - 1]);
             rd[j + 99] = scnrm2_(&n, ax, &c__1);
             rd[j + 99] /= slapy2_(&rd[j - 1], &rd[j + 49]);
             /* L90: */

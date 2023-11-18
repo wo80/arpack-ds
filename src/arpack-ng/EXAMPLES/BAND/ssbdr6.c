@@ -27,7 +27,7 @@ static a_int c_n6 = -6;
     int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    float a[50000] /* was [50][1000] */, d__[100] /* was [50][2] */, h__;
+    float a[50000] /* was [50][1000] */, d[100] /* was [50][2] */, h;
     a_int j;
     float m[50000] /* was [50][1000] */;
     a_int n;
@@ -256,14 +256,14 @@ static a_int c_n6 = -6;
     /*     | Main diagonal | */
     /*     %---------------% */
 
-    h__ = 1.f / (float)(n + 1);
+    h = 1.f / (float)(n + 1);
     r1 = .66666666666666663f;
     idiag = kl + ku + 1;
     i__1 = n;
     for (j = 1; j <= i__1; ++j)
     {
-        a[idiag + j * 50 - 51] = 2.f / h__;
-        m[idiag + j * 50 - 51] = r1 * h__;
+        a[idiag + j * 50 - 51] = 2.f / h;
+        m[idiag + j * 50 - 51] = r1 * h;
         /* L30: */
     }
 
@@ -277,10 +277,10 @@ static a_int c_n6 = -6;
     i__1 = n - 1;
     for (j = 1; j <= i__1; ++j)
     {
-        a[isup + (j + 1) * 50 - 51] = -1.f / h__;
-        a[isub + j * 50 - 51] = -1.f / h__;
-        m[isup + (j + 1) * 50 - 51] = r2 * h__;
-        m[isub + j * 50 - 51] = r2 * h__;
+        a[isup + (j + 1) * 50 - 51] = -1.f / h;
+        a[isub + j * 50 - 51] = -1.f / h;
+        m[isup + (j + 1) * 50 - 51] = r2 * h;
+        m[isub + j * 50 - 51] = r2 * h;
         /* L60: */
     }
 
@@ -294,7 +294,7 @@ static a_int c_n6 = -6;
     /*     %-------------------------------------% */
 
     rvec = TRUE_;
-    ssband_(&rvec, "A", select, d__, v, &c__1000, &sigma, &n, a, m, &c__50, rfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
+    ssband_(&rvec, "A", select, d, v, &c__1000, &sigma, &n, a, m, &c__50, rfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
 
     if (info == 0)
     {
@@ -365,14 +365,14 @@ static a_int c_n6 = -6;
         {
             sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
             sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
-            r__1 = -d__[j - 1];
+            r__1 = -d[j - 1];
             saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
-            d__[j + 49] = snrm2_(&n, ax, &c__1);
-            d__[j + 49] /= (r__1 = d__[j - 1], dabs(r__1));
+            d[j + 49] = snrm2_(&n, ax, &c__1);
+            d[j + 49] /= (r__1 = d[j - 1], dabs(r__1));
 
             /* L90: */
         }
-        smout_(&c__6, &nconv, &c__2, d__, &c__50, &c_n6,
+        smout_(&c__6, &nconv, &c__2, d, &c__50, &c_n6,
                "Ritz values and re"
                "lative residuals",
                (ftnlen)34);

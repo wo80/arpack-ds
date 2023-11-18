@@ -75,7 +75,7 @@ int ssconv_(a_int *n, float *ritz, float *bounds, float *tol, a_int *nconv)
     double pow_dd(double *, double *);
 
     /* Local variables */
-    a_int i__;
+    a_int i;
     static float t0, t1;
     float eps23, temp;
     extern double slamch_(char *, ftnlen);
@@ -136,7 +136,7 @@ int ssconv_(a_int *n, float *ritz, float *bounds, float *tol, a_int *nconv)
 
     *nconv = 0;
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
 
         /*        %-----------------------------------------------------% */
@@ -145,9 +145,9 @@ int ssconv_(a_int *n, float *ritz, float *bounds, float *tol, a_int *nconv)
         /*        %-----------------------------------------------------% */
 
         /* Computing MAX */
-        r__2 = eps23, r__3 = (r__1 = ritz[i__], dabs(r__1));
+        r__2 = eps23, r__3 = (r__1 = ritz[i], dabs(r__1));
         temp = dmax(r__2, r__3);
-        if (bounds[i__] <= *tol * temp)
+        if (bounds[i] <= *tol * temp)
         {
             ++(*nconv);
         }

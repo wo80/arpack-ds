@@ -25,7 +25,7 @@ static a_int c__5 = 5;
     int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    double d__[50] /* was [25][2] */, h__;
+    double d[50] /* was [25][2] */, h;
     a_int j, n;
     double v[6400] /* was [256][25] */, r1, r2, ad[256];
     extern int av_(a_int *, double *, double *);
@@ -262,10 +262,10 @@ static a_int c__5 = 5;
     /*     | elements on the interval [0, 1].               | */
     /*     %------------------------------------------------% */
 
-    h__ = 1. / (double)(n + 1);
+    h = 1. / (double)(n + 1);
 
-    r1 = h__ * .66666666666666663;
-    r2 = h__ * .16666666666666666;
+    r1 = h * .66666666666666663;
+    r2 = h * .16666666666666666;
     i__1 = n;
     for (j = 1; j <= i__1; ++j)
     {
@@ -405,7 +405,7 @@ L10:
 
         rvec = TRUE_;
 
-        dseupd_(&rvec, "All", select, d__, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)3, (ftnlen)1, (ftnlen)2);
+        dseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)3, (ftnlen)1, (ftnlen)2);
 
         /*        %----------------------------------------------% */
         /*        | Eigenvalues are returned in the first column | */
@@ -463,10 +463,10 @@ L10:
 
                 av_(&n, &v[(j << 8) - 256], ax);
                 mv_(&n, &v[(j << 8) - 256], mx);
-                d__1 = -d__[j - 1];
+                d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
-                d__[j + 24] = dnrm2_(&n, ax, &c__1);
-                d__[j + 24] /= (d__1 = d__[j - 1], abs(d__1));
+                d[j + 24] = dnrm2_(&n, ax, &c__1);
+                d[j + 24] /= (d__1 = d[j - 1], abs(d__1));
 
                 /* L30: */
             }
@@ -475,7 +475,7 @@ L10:
             /*           | Display computed residuals. | */
             /*           %-----------------------------% */
 
-            dmout_(&c__6, &nconv, &c__2, d__, &c__25, &c_n6,
+            dmout_(&c__6, &nconv, &c__2, d, &c__25, &c_n6,
                    "Ritz values an"
                    "d relative residuals",
                    (ftnlen)34);
@@ -582,7 +582,7 @@ int mv_(a_int *n, double *v, double *w)
     a_int i__1;
 
     /* Local variables */
-    double h__;
+    double h;
     a_int j;
     extern int dscal_(a_int *, double *, double *, a_int *);
 
@@ -603,8 +603,8 @@ int mv_(a_int *n, double *v, double *w)
 
     /*     Scale the vector w by h. */
 
-    h__ = 1. / ((double)(*n + 1) * 6.);
-    dscal_(n, &h__, &w[1], &c__1);
+    h = 1. / ((double)(*n + 1) * 6.);
+    dscal_(n, &h, &w[1], &c__1);
     return 0;
 } /* mv_ */
 
@@ -623,7 +623,7 @@ int av_(a_int *n, double *v, double *w)
     double d__1;
 
     /* Local variables */
-    double h__;
+    double h;
     a_int j;
     extern int dscal_(a_int *, double *, double *, a_int *);
 
@@ -644,8 +644,8 @@ int av_(a_int *n, double *v, double *w)
 
     /*     Scale the vector w by (1 / h). */
 
-    h__ = 1. / (double)(*n + 1);
-    d__1 = 1. / h__;
+    h = 1. / (double)(*n + 1);
+    d__1 = 1. / h;
     dscal_(n, &d__1, &w[1], &c__1);
     return 0;
 } /* av_ */

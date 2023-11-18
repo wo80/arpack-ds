@@ -218,7 +218,7 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int znaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_dcomplex *resid, double *rnorm, a_dcomplex *v, a_int *ldv, a_dcomplex *h__, a_int *ldh, a_int *ipntr, a_dcomplex *workd, a_int *info, ftnlen bmat_len)
+int znaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_dcomplex *resid, double *rnorm, a_dcomplex *v, a_int *ldv, a_dcomplex *h, a_int *ldh, a_int *ipntr, a_dcomplex *workd, a_int *info, ftnlen bmat_len)
 {
     /* Initialized data */
 
@@ -233,7 +233,7 @@ int znaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_
     double d_imag(a_dcomplex *), sqrt(double);
 
     /* Local variables */
-    a_int i__;
+    a_int i;
     static a_int j;
     static float t0, t1, t2, t3, t4, t5;
     a_int jj;
@@ -328,7 +328,7 @@ int znaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_
     v -= v_offset;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     --ipntr;
 
     /* Function Body */
@@ -537,8 +537,8 @@ L40:
         /*            | use LAPACK routine zlascl               | */
         /*            %-----------------------------------------% */
 
-        zlascl_("General", &i__, &i__, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
-        zlascl_("General", &i__, &i__, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol, (ftnlen)7);
+        zlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
+        zlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol, (ftnlen)7);
     }
 
     /*        %------------------------------------------------------% */
@@ -649,7 +649,7 @@ L60:
     /*        | WORKD(IPJ:IPJ+N-1) contains B*OP*v_{j}.  | */
     /*        %------------------------------------------% */
 
-    zgemv_("C", n, &j, &z_one, &v[v_offset], ldv, &workd[ipj], &i_one, &z_zero, &h__[j * h_dim1 + 1], &i_one, (ftnlen)1);
+    zgemv_("C", n, &j, &z_one, &v[v_offset], ldv, &workd[ipj], &i_one, &z_zero, &h[j * h_dim1 + 1], &i_one, (ftnlen)1);
 
     /*        %--------------------------------------% */
     /*        | Orthogonalize r_{j} against V_{j}.   | */
@@ -657,13 +657,13 @@ L60:
     /*        %--------------------------------------% */
 
     z__1.r = -1., z__1.i = -0.;
-    zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &h__[j * h_dim1 + 1], &i_one, &z_one, &resid[1], &i_one, (ftnlen)1);
+    zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &h[j * h_dim1 + 1], &i_one, &z_one, &resid[1], &i_one, (ftnlen)1);
 
     if (j > 1)
     {
         i__1 = j + (j - 1) * h_dim1;
         z__1.r = betaj, z__1.i = 0.;
-        h__[i__1].r = z__1.r, h__[i__1].i = z__1.i;
+        h[i__1].r = z__1.r, h[i__1].i = z__1.i;
     }
 
     arscnd_(&t4);
@@ -764,7 +764,7 @@ L80:
                "_naitr: re-o"
                "rthogonalization; wnorm and rnorm are",
                (ftnlen)49);
-        zvout_(&debug_1.logfil, &j, &h__[j * h_dim1 + 1], &debug_1.ndigit, "_naitr: j-th column of H", (ftnlen)24);
+        zvout_(&debug_1.logfil, &j, &h[j * h_dim1 + 1], &debug_1.ndigit, "_naitr: j-th column of H", (ftnlen)24);
     }
 
     /*        %----------------------------------------------------% */
@@ -783,7 +783,7 @@ L80:
 
     z__1.r = -1., z__1.i = -0.;
     zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &workd[irj], &i_one, &z_one, &resid[1], &i_one, (ftnlen)1);
-    zaxpy_(&j, &z_one, &workd[irj], &i_one, &h__[j * h_dim1 + 1], &i_one);
+    zaxpy_(&j, &z_one, &workd[irj], &i_one, &h[j * h_dim1 + 1], &i_one);
 
     orth2 = TRUE_;
     arscnd_(&t2);
@@ -927,7 +927,7 @@ L100:
         timing_1.tcaitr += t1 - t0;
         *ido = 99;
         i__1 = *k + *np - 1;
-        for (i__ = max(1, *k); i__ <= i__1; ++i__)
+        for (i = max(1, *k); i <= i__1; ++i)
         {
 
             /*              %--------------------------------------------% */
@@ -936,27 +936,27 @@ L100:
             /*              | REFERENCE: LAPACK subroutine zlahqr        | */
             /*              %--------------------------------------------% */
 
-            i__2 = i__ + i__ * h_dim1;
-            d__1 = h__[i__2].r;
-            d__2 = d_imag(&h__[i__ + i__ * h_dim1]);
-            i__3 = i__ + 1 + (i__ + 1) * h_dim1;
-            d__3 = h__[i__3].r;
-            d__4 = d_imag(&h__[i__ + 1 + (i__ + 1) * h_dim1]);
+            i__2 = i + i * h_dim1;
+            d__1 = h[i__2].r;
+            d__2 = d_imag(&h[i + i * h_dim1]);
+            i__3 = i + 1 + (i + 1) * h_dim1;
+            d__3 = h[i__3].r;
+            d__4 = d_imag(&h[i + 1 + (i + 1) * h_dim1]);
             tst1 = dlapy2_(&d__1, &d__2) + dlapy2_(&d__3, &d__4);
             if (tst1 == 0.)
             {
                 i__2 = *k + *np;
-                tst1 = zlanhs_("1", &i__2, &h__[h_offset], ldh, &workd[*n + 1], (ftnlen)1);
+                tst1 = zlanhs_("1", &i__2, &h[h_offset], ldh, &workd[*n + 1], (ftnlen)1);
             }
-            i__2 = i__ + 1 + i__ * h_dim1;
-            d__1 = h__[i__2].r;
-            d__2 = d_imag(&h__[i__ + 1 + i__ * h_dim1]);
+            i__2 = i + 1 + i * h_dim1;
+            d__1 = h[i__2].r;
+            d__2 = d_imag(&h[i + 1 + i * h_dim1]);
             /* Computing MAX */
             d__3 = ulp * tst1;
             if (dlapy2_(&d__1, &d__2) <= max(d__3, smlnum))
             {
-                i__3 = i__ + 1 + i__ * h_dim1;
-                h__[i__3].r = 0., h__[i__3].i = 0.;
+                i__3 = i + 1 + i * h_dim1;
+                h[i__3].r = 0., h[i__3].i = 0.;
             }
             /* L110: */
         }
@@ -965,7 +965,7 @@ L100:
         {
             i__1 = *k + *np;
             i__2 = *k + *np;
-            zmout_(&debug_1.logfil, &i__1, &i__2, &h__[h_offset], ldh, &debug_1.ndigit,
+            zmout_(&debug_1.logfil, &i__1, &i__2, &h[h_offset], ldh, &debug_1.ndigit,
                    "_naitr: Final upper Hessenberg matrix H"
                    " of order K+NP",
                    (ftnlen)53);

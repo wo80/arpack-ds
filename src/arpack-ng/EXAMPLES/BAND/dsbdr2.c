@@ -27,8 +27,8 @@ static a_int c_n6 = -6;
     int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    double a[50000] /* was [50][1000] */, d__[100] /* was [50][2] */;
-    a_int i__, j;
+    double a[50000] /* was [50][1000] */, d[100] /* was [50][2] */;
+    a_int i, j;
     double m[50000] /* was [50][1000] */;
     a_int n;
     double v[50000] /* was [1000][50] */, h2;
@@ -275,9 +275,9 @@ static a_int c_n6 = -6;
     isup = kl + ku;
     isub = kl + ku + 2;
     i__1 = nx;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        lo = (i__ - 1) * nx;
+        lo = (i - 1) * nx;
         i__2 = lo + nx - 1;
         for (j = lo + 1; j <= i__2; ++j)
         {
@@ -296,9 +296,9 @@ static a_int c_n6 = -6;
     isup = kl + 1;
     isub = (kl << 1) + ku + 1;
     i__1 = nx - 1;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        lo = (i__ - 1) * nx;
+        lo = (i - 1) * nx;
         i__2 = lo + nx;
         for (j = lo + 1; j <= i__2; ++j)
         {
@@ -319,7 +319,7 @@ static a_int c_n6 = -6;
     /*     %-------------------------------------% */
 
     rvec = TRUE_;
-    dsband_(&rvec, "A", select, d__, v, &c__1000, &sigma, &n, a, m, &c__50, rfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
+    dsband_(&rvec, "A", select, d, v, &c__1000, &sigma, &n, a, m, &c__50, rfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
 
     if (info == 0)
     {
@@ -389,14 +389,14 @@ static a_int c_n6 = -6;
         for (j = 1; j <= i__1; ++j)
         {
             dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b100, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
-            d__1 = -d__[j - 1];
+            d__1 = -d[j - 1];
             daxpy_(&n, &d__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
-            d__[j + 49] = dnrm2_(&n, ax, &c__1);
-            d__[j + 49] /= (d__1 = d__[j - 1], abs(d__1));
+            d[j + 49] = dnrm2_(&n, ax, &c__1);
+            d[j + 49] /= (d__1 = d[j - 1], abs(d__1));
 
             /* L90: */
         }
-        dmout_(&c__6, &nconv, &c__2, d__, &c__50, &c_n6,
+        dmout_(&c__6, &nconv, &c__2, d, &c__50, &c_n6,
                "Ritz values and re"
                "lative residuals",
                (ftnlen)34);

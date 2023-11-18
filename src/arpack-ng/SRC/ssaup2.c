@@ -189,7 +189,7 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int ssaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np, float *tol, float *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter, float *v, a_int *ldv, float *h__, a_int *ldh, float *ritz, float *bounds, float *q, a_int *ldq, float *workl, a_int *ipntr, float *workd, a_int *info, ftnlen bmat_len, ftnlen which_len)
+int ssaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np, float *tol, float *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter, float *v, a_int *ldv, float *h, a_int *ldh, float *ritz, float *bounds, float *q, a_int *ldq, float *workl, a_int *ipntr, float *workd, a_int *info, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
     a_int h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3;
@@ -292,7 +292,7 @@ int ssaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
     v -= v_offset;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     q_dim1 = *ldq;
     q_offset = 1 + q_dim1;
     q -= q_offset;
@@ -427,7 +427,7 @@ int ssaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
     /*     | Compute the first NEV steps of the Lanczos factorization | */
     /*     %----------------------------------------------------------% */
 
-    ssaitr_(ido, bmat, n, &i_zero, &nev0, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h__[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
+    ssaitr_(ido, bmat, n, &i_zero, &nev0, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
 
     /*     %---------------------------------------------------% */
     /*     | ido .ne. 99 implies use of reverse communication  | */
@@ -493,7 +493,7 @@ L1000:
 L20:
     update = TRUE_;
 
-    ssaitr_(ido, bmat, n, nev, np, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h__[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
+    ssaitr_(ido, bmat, n, nev, np, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
 
     /*        %---------------------------------------------------% */
     /*        | ido .ne. 99 implies use of reverse communication  | */
@@ -534,7 +534,7 @@ L20:
     /*        | of the current symmetric tridiagonal matrix.           | */
     /*        %--------------------------------------------------------% */
 
-    sseigt_(&rnorm, &kplusp, &h__[h_offset], ldh, &ritz[1], &bounds[1], &workl[1], &ierr);
+    sseigt_(&rnorm, &kplusp, &h[h_offset], ldh, &ritz[1], &bounds[1], &workl[1], &ierr);
 
     if (ierr != 0)
     {
@@ -759,7 +759,7 @@ L20:
         /*           |  rnorm to _seupd if needed               | */
         /*           %------------------------------------------% */
 
-        h__[h_dim1 + 1] = rnorm;
+        h[h_dim1 + 1] = rnorm;
 
         if (msglvl > 1)
         {
@@ -906,7 +906,7 @@ L50:
     /*        | factorization of length NEV.                            | */
     /*        %---------------------------------------------------------% */
 
-    ssapps_(n, nev, np, &ritz[1], &v[v_offset], ldv, &h__[h_offset], ldh, &resid[1], &q[q_offset], ldq, &workd[1]);
+    ssapps_(n, nev, np, &ritz[1], &v[v_offset], ldv, &h[h_offset], ldh, &resid[1], &q[q_offset], ldq, &workd[1]);
 
     /*        %---------------------------------------------% */
     /*        | Compute the B-norm of the updated residual. | */
@@ -966,9 +966,9 @@ L100:
                "_saup2: B-n"
                "orm of residual for NEV factorization",
                (ftnlen)48);
-        svout_(&debug_1.logfil, nev, &h__[(h_dim1 << 1) + 1], &debug_1.ndigit, "_saup2: main diagonal of compressed H matrix", (ftnlen)44);
+        svout_(&debug_1.logfil, nev, &h[(h_dim1 << 1) + 1], &debug_1.ndigit, "_saup2: main diagonal of compressed H matrix", (ftnlen)44);
         i__1 = *nev - 1;
-        svout_(&debug_1.logfil, &i__1, &h__[h_dim1 + 2], &debug_1.ndigit, "_saup2: subdiagonal of compressed H matrix", (ftnlen)42);
+        svout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit, "_saup2: subdiagonal of compressed H matrix", (ftnlen)42);
     }
 
     goto L1000;

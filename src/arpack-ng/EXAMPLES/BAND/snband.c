@@ -397,7 +397,7 @@ static a_int c__3 = 3;
 
 /* --------------------------------------------------------------------- */
 
-int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, float *z__, a_int *ldz, float *sigmar, float *sigmai, float *workev, a_int *n, float *ab, float *mb, a_int *lda, float *rfac, a_fcomplex *cfac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, float *workd, float *workl, a_int *lworkl, a_fcomplex *workc, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
+int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, float *z, a_int *ldz, float *sigmar, float *sigmai, float *workev, a_int *n, float *ab, float *mb, a_int *lda, float *rfac, a_fcomplex *cfac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, float *workd, float *workl, a_int *lworkl, a_fcomplex *workc, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, rfac_dim1, rfac_offset, cfac_dim1, cfac_offset, i__1, i__2, i__3, i__4, i__5;
@@ -409,7 +409,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
     double r_imag(a_fcomplex *);
 
     /* Local variables */
-    a_int i__, j, ido;
+    a_int i, j, ido;
     float deni;
     a_int imid;
     float denr;
@@ -548,7 +548,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
     --di;
     z_dim1 = *ldz;
     z_offset = 1 + z_dim1;
-    z__ -= z_offset;
+    z -= z_offset;
     --workev;
     cfac_dim1 = *lda;
     cfac_offset = 1 + cfac_dim1;
@@ -727,10 +727,10 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
             for (j = 1; j <= i__1; ++j)
             {
                 i__2 = ibot;
-                for (i__ = itop; i__ <= i__2; ++i__)
+                for (i = itop; i <= i__2; ++i)
                 {
-                    i__3 = i__ + j * cfac_dim1;
-                    i__4 = i__ + j * ab_dim1;
+                    i__3 = i + j * cfac_dim1;
+                    i__4 = i + j * ab_dim1;
                     q__1.r = ab[i__4], q__1.i = 0.f;
                     cfac[i__3].r = q__1.r, cfac[i__3].i = q__1.i;
                     /* L20: */
@@ -810,9 +810,9 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
             for (j = 1; j <= i__1; ++j)
             {
                 i__2 = ibot;
-                for (i__ = itop; i__ <= i__2; ++i__)
+                for (i = itop; i <= i__2; ++i)
                 {
-                    rfac[i__ + j * rfac_dim1] = ab[i__ + j * ab_dim1] - *sigmar * mb[i__ + j * mb_dim1];
+                    rfac[i + j * rfac_dim1] = ab[i + j * ab_dim1] - *sigmar * mb[i + j * mb_dim1];
                     /* L50: */
                 }
                 /* L60: */
@@ -845,11 +845,11 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
             for (j = 1; j <= i__1; ++j)
             {
                 i__2 = ibot;
-                for (i__ = itop; i__ <= i__2; ++i__)
+                for (i = itop; i <= i__2; ++i)
                 {
-                    i__3 = i__ + j * cfac_dim1;
-                    r__1 = ab[i__ + j * ab_dim1] - *sigmar * mb[i__ + j * mb_dim1];
-                    r__2 = -(*sigmai) * mb[i__ + j * mb_dim1];
+                    i__3 = i + j * cfac_dim1;
+                    r__1 = ab[i + j * ab_dim1] - *sigmar * mb[i + j * mb_dim1];
+                    r__2 = -(*sigmai) * mb[i + j * mb_dim1];
                     q__1.r = r__1, q__1.i = r__2;
                     cfac[i__3].r = q__1.r, cfac[i__3].i = q__1.i;
                     /* L70: */
@@ -1036,10 +1036,10 @@ L90:
                 /*              %--------------------------% */
 
                 i__1 = *n;
-                for (i__ = 1; i__ <= i__1; ++i__)
+                for (i = 1; i <= i__1; ++i)
                 {
-                    i__2 = i__;
-                    i__3 = ipntr[1] + i__ - 1;
+                    i__2 = i;
+                    i__3 = ipntr[1] + i - 1;
                     q__1.r = workd[i__3], q__1.i = 0.f;
                     workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
                     /* L120: */
@@ -1061,10 +1061,10 @@ L90:
                 }
 
                 i__1 = *n;
-                for (i__ = 1; i__ <= i__1; ++i__)
+                for (i = 1; i <= i__1; ++i)
                 {
-                    i__2 = i__;
-                    workd[ipntr[1] + i__ - 1] = workc[i__2].r;
+                    i__2 = i;
+                    workd[ipntr[1] + i - 1] = workc[i__2].r;
                     /* L130: */
                 }
             }
@@ -1124,10 +1124,10 @@ L90:
             sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
 
             i__1 = *n;
-            for (i__ = 1; i__ <= i__1; ++i__)
+            for (i = 1; i <= i__1; ++i)
             {
-                i__2 = i__;
-                i__3 = ipntr[1] + i__ - 1;
+                i__2 = i;
+                i__3 = ipntr[1] + i - 1;
                 q__1.r = workd[i__3], q__1.i = 0.f;
                 workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
                 /* L160: */
@@ -1149,9 +1149,9 @@ L90:
             }
 
             i__1 = *n;
-            for (i__ = 1; i__ <= i__1; ++i__)
+            for (i = 1; i <= i__1; ++i)
             {
-                workd[ipntr[1] + i__ - 1] = r_imag(&workc[i__]);
+                workd[ipntr[1] + i - 1] = r_imag(&workc[i]);
                 /* L170: */
             }
         }
@@ -1290,10 +1290,10 @@ L90:
                 /*              %---------------------------% */
 
                 i__1 = *n;
-                for (i__ = 1; i__ <= i__1; ++i__)
+                for (i = 1; i <= i__1; ++i)
                 {
-                    i__2 = i__;
-                    i__3 = ipntr[2] + i__ - 1;
+                    i__2 = i;
+                    i__3 = ipntr[2] + i - 1;
                     q__1.r = workd[i__3], q__1.i = 0.f;
                     workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
                     /* L200: */
@@ -1315,10 +1315,10 @@ L90:
                 }
 
                 i__1 = *n;
-                for (i__ = 1; i__ <= i__1; ++i__)
+                for (i = 1; i <= i__1; ++i)
                 {
-                    i__2 = i__;
-                    workd[ipntr[1] + i__ - 1] = workc[i__2].r;
+                    i__2 = i;
+                    workd[ipntr[1] + i - 1] = workc[i__2].r;
                     /* L210: */
                 }
             }
@@ -1372,10 +1372,10 @@ L90:
             /*           %-----------------------------------------% */
 
             i__1 = *n;
-            for (i__ = 1; i__ <= i__1; ++i__)
+            for (i = 1; i <= i__1; ++i)
             {
-                i__2 = i__;
-                i__3 = ipntr[2] + i__ - 1;
+                i__2 = i;
+                i__3 = ipntr[2] + i - 1;
                 q__1.r = workd[i__3], q__1.i = 0.f;
                 workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
                 /* L240: */
@@ -1397,9 +1397,9 @@ L90:
             }
 
             i__1 = *n;
-            for (i__ = 1; i__ <= i__1; ++i__)
+            for (i = 1; i <= i__1; ++i)
             {
-                workd[ipntr[1] + i__ - 1] = r_imag(&workc[i__]);
+                workd[ipntr[1] + i - 1] = r_imag(&workc[i]);
                 /* L250: */
             }
         }
@@ -1481,7 +1481,7 @@ L90:
             if (iparam[5] > 0)
             {
 
-                sneupd_(rvec, "A", &select[1], &dr[1], &di[1], &z__[z_offset], ldz, sigmar, sigmai, &workev[1], bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+                sneupd_(rvec, "A", &select[1], &dr[1], &di[1], &z[z_offset], ldz, sigmar, sigmai, &workev[1], bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info, (ftnlen)1, (ftnlen)1, (ftnlen)2);
 
                 if (*info != 0)
                 {
@@ -1530,27 +1530,27 @@ L90:
                                 /*                       | d = (x'*inv[A-sigma*M]*M*x) / (x'*x) | */
                                 /*                       %--------------------------------------% */
 
-                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z__[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1, (ftnlen)12);
+                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1, (ftnlen)12);
                                 i__2 = *n;
-                                for (i__ = 1; i__ <= i__2; ++i__)
+                                for (i = 1; i <= i__2; ++i)
                                 {
-                                    i__3 = i__;
-                                    i__4 = i__;
+                                    i__3 = i;
+                                    i__4 = i;
                                     q__1.r = workd[i__4], q__1.i = 0.f;
                                     workc[i__3].r = q__1.r, workc[i__3].i = q__1.i;
                                 }
                                 cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info, (ftnlen)11);
                                 i__2 = *n;
-                                for (i__ = 1; i__ <= i__2; ++i__)
+                                for (i = 1; i <= i__2; ++i)
                                 {
-                                    i__3 = i__;
-                                    workd[i__] = workc[i__3].r;
-                                    workd[i__ + *n] = r_imag(&workc[i__]);
+                                    i__3 = i;
+                                    workd[i] = workc[i__3].r;
+                                    workd[i + *n] = r_imag(&workc[i]);
                                 }
-                                denr = sdot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                deni = sdot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                denr = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                deni = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
                                 /* Computing 2nd power */
-                                r__1 = snrm2_(n, &z__[j * z_dim1 + 1], &c__1);
+                                r__1 = snrm2_(n, &z[j * z_dim1 + 1], &c__1);
                                 numr = r__1 * r__1;
                                 /* Computing 2nd power */
                                 r__1 = slapy2_(&denr, &deni);
@@ -1585,14 +1585,14 @@ L90:
                                 /*                       | Compute M*x | */
                                 /*                       %-------------% */
 
-                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z__[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1, (ftnlen)12);
-                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z__[(j + 1) * z_dim1 + 1], &c__1, &c_b85, &workd[*n + 1], &c__1, (ftnlen)12);
+                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1, (ftnlen)12);
+                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[(j + 1) * z_dim1 + 1], &c__1, &c_b85, &workd[*n + 1], &c__1, (ftnlen)12);
                                 i__2 = *n;
-                                for (i__ = 1; i__ <= i__2; ++i__)
+                                for (i = 1; i <= i__2; ++i)
                                 {
-                                    i__3 = i__;
-                                    i__4 = i__;
-                                    i__5 = i__ + *n;
+                                    i__3 = i;
+                                    i__4 = i;
+                                    i__5 = i + *n;
                                     q__1.r = workd[i__4], q__1.i = workd[i__5];
                                     workc[i__3].r = q__1.r, workc[i__3].i = q__1.i;
                                 }
@@ -1608,23 +1608,23 @@ L90:
                                 /*                       %-------------------------------% */
 
                                 i__2 = *n;
-                                for (i__ = 1; i__ <= i__2; ++i__)
+                                for (i = 1; i <= i__2; ++i)
                                 {
-                                    i__3 = i__;
-                                    workd[i__] = workc[i__3].r;
-                                    workd[i__ + *n] = r_imag(&workc[i__]);
+                                    i__3 = i;
+                                    workd[i] = workc[i__3].r;
+                                    workd[i + *n] = r_imag(&workc[i]);
                                 }
-                                denr = sdot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                denr += sdot_(n, &z__[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni = sdot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni -= sdot_(n, &z__[(j + 1) * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                denr = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                denr += sdot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                deni = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                deni -= sdot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[1], &c__1);
 
                                 /*                       %----------------% */
                                 /*                       | Compute (x'*x) | */
                                 /*                       %----------------% */
 
-                                r__2 = snrm2_(n, &z__[j * z_dim1 + 1], &c__1);
-                                r__3 = snrm2_(n, &z__[(j + 1) * z_dim1 + 1], &c__1);
+                                r__2 = snrm2_(n, &z[j * z_dim1 + 1], &c__1);
+                                r__3 = snrm2_(n, &z[(j + 1) * z_dim1 + 1], &c__1);
                                 /* Computing 2nd power */
                                 r__1 = slapy2_(&r__2, &r__3);
                                 numr = r__1 * r__1;
@@ -1696,25 +1696,25 @@ L90:
                                 /*                       %-------------------------------------% */
 
                                 i__2 = *n;
-                                for (i__ = 1; i__ <= i__2; ++i__)
+                                for (i = 1; i <= i__2; ++i)
                                 {
-                                    i__3 = i__;
-                                    i__4 = i__ + j * z_dim1;
-                                    q__1.r = z__[i__4], q__1.i = 0.f;
+                                    i__3 = i;
+                                    i__4 = i + j * z_dim1;
+                                    q__1.r = z[i__4], q__1.i = 0.f;
                                     workc[i__3].r = q__1.r, workc[i__3].i = q__1.i;
                                 }
                                 cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info, (ftnlen)11);
                                 i__2 = *n;
-                                for (i__ = 1; i__ <= i__2; ++i__)
+                                for (i = 1; i <= i__2; ++i)
                                 {
-                                    i__3 = i__;
-                                    workd[i__] = workc[i__3].r;
-                                    workd[i__ + *n] = r_imag(&workc[i__]);
+                                    i__3 = i;
+                                    workd[i] = workc[i__3].r;
+                                    workd[i + *n] = r_imag(&workc[i]);
                                 }
-                                denr = sdot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                deni = sdot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                denr = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                deni = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
                                 /* Computing 2nd power */
-                                r__1 = snrm2_(n, &z__[j * z_dim1 + 1], &c__1);
+                                r__1 = snrm2_(n, &z[j * z_dim1 + 1], &c__1);
                                 numr = r__1 * r__1;
                                 /* Computing 2nd power */
                                 r__1 = slapy2_(&denr, &deni);
@@ -1746,12 +1746,12 @@ L90:
                                 /*                       %------------------------% */
 
                                 i__2 = *n;
-                                for (i__ = 1; i__ <= i__2; ++i__)
+                                for (i = 1; i <= i__2; ++i)
                                 {
-                                    i__3 = i__;
-                                    i__4 = i__ + j * z_dim1;
-                                    i__5 = i__ + (j + 1) * z_dim1;
-                                    q__1.r = z__[i__4], q__1.i = z__[i__5];
+                                    i__3 = i;
+                                    i__4 = i + j * z_dim1;
+                                    i__5 = i + (j + 1) * z_dim1;
+                                    q__1.r = z[i__4], q__1.i = z[i__5];
                                     workc[i__3].r = q__1.r, workc[i__3].i = q__1.i;
                                 }
 
@@ -1766,23 +1766,23 @@ L90:
                                 /*                       %-----------------------------% */
 
                                 i__2 = *n;
-                                for (i__ = 1; i__ <= i__2; ++i__)
+                                for (i = 1; i <= i__2; ++i)
                                 {
-                                    i__3 = i__;
-                                    workd[i__] = workc[i__3].r;
-                                    workd[i__ + *n] = r_imag(&workc[i__]);
+                                    i__3 = i;
+                                    workd[i] = workc[i__3].r;
+                                    workd[i + *n] = r_imag(&workc[i]);
                                 }
-                                denr = sdot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                denr += sdot_(n, &z__[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni = sdot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni -= sdot_(n, &z__[(j + 1) * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                denr = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                denr += sdot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                deni = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                deni -= sdot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[1], &c__1);
 
                                 /*                       %----------------% */
                                 /*                       | Compute (x'*x) | */
                                 /*                       %----------------% */
 
-                                r__2 = snrm2_(n, &z__[j * z_dim1 + 1], &c__1);
-                                r__3 = snrm2_(n, &z__[(j + 1) * z_dim1 + 1], &c__1);
+                                r__2 = snrm2_(n, &z[j * z_dim1 + 1], &c__1);
+                                r__3 = snrm2_(n, &z[(j + 1) * z_dim1 + 1], &c__1);
                                 /* Computing 2nd power */
                                 r__1 = slapy2_(&r__2, &r__3);
                                 numr = r__1 * r__1;

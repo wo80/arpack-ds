@@ -12,7 +12,7 @@
     void d_cnjg(a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
-    a_int i__, ix, iy;
+    a_int i, ix, iy;
     a_dcomplex ztemp;
 
     /*     forms the dot product of a vector. */
@@ -49,7 +49,7 @@
         iy = (-(*n) + 1) * *incy + 1;
     }
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
         d_cnjg(&z__3, &zx[ix]);
         i__2 = iy;
@@ -67,10 +67,10 @@
 
 L20:
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        d_cnjg(&z__3, &zx[i__]);
-        i__2 = i__;
+        d_cnjg(&z__3, &zx[i]);
+        i__2 = i;
         z__2.r = z__3.r * zy[i__2].r - z__3.i * zy[i__2].i, z__2.i = z__3.r * zy[i__2].i + z__3.i * zy[i__2].r;
         z__1.r = ztemp.r + z__2.r, z__1.i = ztemp.i + z__2.i;
         ztemp.r = z__1.r, ztemp.i = z__1.i;

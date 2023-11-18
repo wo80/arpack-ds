@@ -33,7 +33,7 @@ static a_int c__5 = 5;
     int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    double d__[75] /* was [25][3] */, h__;
+    double d[75] /* was [25][3] */, h;
     a_int j, n;
     double s, v[6400] /* was [256][25] */, s1, s2, s3, dd[256], dl[256];
     extern int av_(a_int *, double *, double *);
@@ -256,12 +256,12 @@ static a_int c__5 = 5;
     /*     %--------------------------------------------------% */
 
     convct_1.rho = 10.;
-    h__ = 1. / (double)(n + 1);
+    h = 1. / (double)(n + 1);
     s = convct_1.rho / 2.;
 
-    s1 = -1. / h__ - s - sigmar * h__ / 6.;
-    s2 = 2. / h__ - sigmar * 4. * h__ / 6.;
-    s3 = -1. / h__ + s - sigmar * h__ / 6.;
+    s1 = -1. / h - s - sigmar * h / 6.;
+    s2 = 2. / h - sigmar * 4. * h / 6.;
+    s3 = -1. / h + s - sigmar * h / 6.;
 
     i__1 = n - 1;
     for (j = 1; j <= i__1; ++j)
@@ -470,7 +470,7 @@ L20:
         /*        %-------------------------------------------% */
 
         rvec = TRUE_;
-        dneupd_(&rvec, "A", select, d__, &d__[25], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+        dneupd_(&rvec, "A", select, d, &d[25], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
 
         /*        %-----------------------------------------------% */
         /*        | The real part of the eigenvalue is returned   | */
@@ -528,7 +528,7 @@ L20:
                 /*                | tolerance)                | */
                 /*                %---------------------------% */
 
-                if (d__[j + 24] == 0.)
+                if (d[j + 24] == 0.)
                 {
 
                     /*                    %--------------------% */
@@ -537,10 +537,10 @@ L20:
 
                     av_(&n, &v[(j << 8) - 256], ax);
                     mv_(&n, &v[(j << 8) - 256], mx);
-                    d__1 = -d__[j - 1];
+                    d__1 = -d[j - 1];
                     daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
-                    d__[j + 49] = dnrm2_(&n, ax, &c__1);
-                    d__[j + 49] /= (d__1 = d__[j - 1], abs(d__1));
+                    d[j + 49] = dnrm2_(&n, ax, &c__1);
+                    d[j + 49] /= (d__1 = d[j - 1], abs(d__1));
                 }
                 else if (first)
                 {
@@ -554,22 +554,22 @@ L20:
 
                     av_(&n, &v[(j << 8) - 256], ax);
                     mv_(&n, &v[(j << 8) - 256], mx);
-                    d__1 = -d__[j - 1];
+                    d__1 = -d[j - 1];
                     daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
                     mv_(&n, &v[(j + 1 << 8) - 256], mx);
-                    daxpy_(&n, &d__[j + 24], mx, &c__1, ax, &c__1);
-                    d__[j + 49] = dnrm2_(&n, ax, &c__1);
+                    daxpy_(&n, &d[j + 24], mx, &c__1, ax, &c__1);
+                    d[j + 49] = dnrm2_(&n, ax, &c__1);
                     av_(&n, &v[(j + 1 << 8) - 256], ax);
                     mv_(&n, &v[(j + 1 << 8) - 256], mx);
-                    d__1 = -d__[j - 1];
+                    d__1 = -d[j - 1];
                     daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
                     mv_(&n, &v[(j << 8) - 256], mx);
-                    d__1 = -d__[j + 24];
+                    d__1 = -d[j + 24];
                     daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
                     d__1 = dnrm2_(&n, ax, &c__1);
-                    d__[j + 49] = dlapy2_(&d__[j + 49], &d__1);
-                    d__[j + 49] /= dlapy2_(&d__[j - 1], &d__[j + 24]);
-                    d__[j + 50] = d__[j + 49];
+                    d[j + 49] = dlapy2_(&d[j + 49], &d__1);
+                    d[j + 49] /= dlapy2_(&d[j - 1], &d[j + 24]);
+                    d[j + 50] = d[j + 49];
                     first = FALSE_;
                 }
                 else
@@ -584,7 +584,7 @@ L20:
             /*            | Display computed residuals. | */
             /*            %-----------------------------% */
 
-            dmout_(&c__6, &nconv, &c__3, d__, &c__25, &c_n6,
+            dmout_(&c__6, &nconv, &c__3, d, &c__25, &c_n6,
                    "Ritz values (R"
                    "eal,Imag) and relative residuals",
                    (ftnlen)46);
@@ -690,7 +690,7 @@ int mv_(a_int *n, double *v, double *w)
     a_int i__1;
 
     /* Local variables */
-    double h__;
+    double h;
     a_int j;
     extern int dscal_(a_int *, double *, double *, a_int *);
 
@@ -712,8 +712,8 @@ int mv_(a_int *n, double *v, double *w)
     }
     w[*n] = (v[*n - 1] * 1. + v[*n] * 4.) / 6.;
 
-    h__ = 1. / (double)(*n + 1);
-    dscal_(n, &h__, &w[1], &c__1);
+    h = 1. / (double)(*n + 1);
+    dscal_(n, &h, &w[1], &c__1);
     return 0;
 } /* mv_ */
 
@@ -724,7 +724,7 @@ int av_(a_int *n, double *v, double *w)
     a_int i__1;
 
     /* Local variables */
-    double h__;
+    double h;
     a_int j;
     double s, dd, dl, du;
 
@@ -741,11 +741,11 @@ int av_(a_int *n, double *v, double *w)
     --v;
 
     /* Function Body */
-    h__ = 1. / (double)(*n + 1);
+    h = 1. / (double)(*n + 1);
     s = convct_1.rho / 2.;
-    dd = 2. / h__;
-    dl = -1. / h__ - s;
-    du = -1. / h__ + s;
+    dd = 2. / h;
+    dl = -1. / h - s;
+    du = -1. / h + s;
 
     w[1] = dd * v[1] + du * v[2];
     i__1 = *n - 1;

@@ -73,7 +73,7 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y, 
     double d_imag(a_dcomplex *);
 
     /* Local variables */
-    a_int i__, j, igap;
+    a_int i, j, igap;
     a_dcomplex temp;
     double temp1, temp2;
     extern double dlapy2_(double *, double *);
@@ -118,9 +118,9 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y, 
         }
 
         i__1 = *n - 1;
-        for (i__ = igap; i__ <= i__1; ++i__)
+        for (i = igap; i <= i__1; ++i)
         {
-            j = i__ - igap;
+            j = i - igap;
         L20:
 
             if (j < 0)
@@ -183,9 +183,9 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y, 
         }
 
         i__1 = *n - 1;
-        for (i__ = igap; i__ <= i__1; ++i__)
+        for (i = igap; i <= i__1; ++i)
         {
-            j = i__ - igap;
+            j = i - igap;
         L50:
 
             if (j < 0)
@@ -248,9 +248,9 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y, 
         }
 
         i__1 = *n - 1;
-        for (i__ = igap; i__ <= i__1; ++i__)
+        for (i = igap; i <= i__1; ++i)
         {
-            j = i__ - igap;
+            j = i - igap;
         L80:
 
             if (j < 0)
@@ -305,9 +305,9 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y, 
             goto L9000;
         }
         i__1 = *n - 1;
-        for (i__ = igap; i__ <= i__1; ++i__)
+        for (i = igap; i <= i__1; ++i)
         {
-            j = i__ - igap;
+            j = i - igap;
         L110:
 
             if (j < 0)
@@ -362,9 +362,9 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y, 
             goto L9000;
         }
         i__1 = *n - 1;
-        for (i__ = igap; i__ <= i__1; ++i__)
+        for (i = igap; i <= i__1; ++i)
         {
-            j = i__ - igap;
+            j = i - igap;
         L140:
 
             if (j < 0)
@@ -417,9 +417,9 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y, 
             goto L9000;
         }
         i__1 = *n - 1;
-        for (i__ = igap; i__ <= i__1; ++i__)
+        for (i = igap; i <= i__1; ++i)
         {
-            j = i__ - igap;
+            j = i - igap;
         L170:
 
             if (j < 0)

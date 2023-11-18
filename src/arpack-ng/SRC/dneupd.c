@@ -312,7 +312,7 @@ static double d_n1 = -1.;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, double *z__, a_int *ldz, double *sigmar, double *sigmai, double *workev, char *bmat, a_int *n, char *which, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, a_int *ipntr, double *workd, double *workl, a_int *lworkl, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
+int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, double *z, a_int *ldz, double *sigmar, double *sigmai, double *workev, char *bmat, a_int *n, char *which, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, a_int *ipntr, double *workd, double *workl, a_int *lworkl, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, i__1;
@@ -417,7 +417,7 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
     /* Parameter adjustments */
     z_dim1 = *ldz;
     z_offset = 1 + z_dim1;
-    z__ -= z_offset;
+    z -= z_offset;
     --workd;
     --resid;
     --di;
@@ -815,7 +815,7 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
         /*        %---------------------------------------------------------% */
 
         dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
-        dlacpy_("All", n, &nconv, &v[v_offset], ldv, &z__[z_offset], ldz, (ftnlen)3);
+        dlacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz, (ftnlen)3);
 
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
@@ -988,9 +988,9 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
             /*           | in workl(iheigr) and workl(iheigi).          | */
             /*           %----------------------------------------------% */
 
-            dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &z__[z_offset], ldz, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
+            dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &z[z_offset], ldz, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
 
-            dtrmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &d_one, &workl[invsub], &ldq, &z__[z_offset], ldz, (ftnlen)5, (ftnlen)5, (ftnlen)12, (ftnlen)8);
+            dtrmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &d_one, &workl[invsub], &ldq, &z[z_offset], ldz, (ftnlen)5, (ftnlen)5, (ftnlen)12, (ftnlen)8);
         }
     }
     else
@@ -1180,7 +1180,7 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
         /*        | purify all the Ritz vectors together. | */
         /*        %---------------------------------------% */
 
-        dger_(n, &nconv, &d_one, &resid[1], &i_one, &workev[1], &i_one, &z__[z_offset], ldz);
+        dger_(n, &nconv, &d_one, &resid[1], &i_one, &workev[1], &i_one, &z[z_offset], ldz);
     }
 
 L9000:

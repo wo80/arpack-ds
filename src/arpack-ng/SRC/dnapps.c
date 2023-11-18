@@ -151,7 +151,7 @@ static double d_n1 = -1.;
 
 /* ----------------------------------------------------------------------- */
 
-int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, double *v, a_int *ldv, double *h__, a_int *ldh, double *resid, double *q, a_int *ldq, double *workl, double *workd)
+int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, double *v, a_int *ldv, double *h, a_int *ldh, double *resid, double *q, a_int *ldq, double *workl, double *workd)
 {
     /* Initialized data */
 
@@ -162,9 +162,9 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     double d__1, d__2;
 
     /* Local variables */
-    double c__, f, g;
-    a_int i__, j;
-    double r__, s, t, u[3];
+    double c, f, g;
+    a_int i, j;
+    double r, s, t, u[3];
     static float t0, t1;
     double h11, h12, h21, h22, h32;
     a_int jj, ir, nr;
@@ -249,7 +249,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     v -= v_offset;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     q_dim1 = *ldq;
     q_offset = 1 + q_dim1;
     q -= q_offset;
@@ -386,7 +386,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
         /*        %--------------------------------------------------% */
 
         i__2 = kplusp - 1;
-        for (i__ = istart; i__ <= i__2; ++i__)
+        for (i = istart; i <= i__2; ++i)
         {
 
             /*           %----------------------------------------% */
@@ -395,27 +395,27 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
             /*           | REFERENCE: LAPACK subroutine dlahqr    | */
             /*           %----------------------------------------% */
 
-            tst1 = (d__1 = h__[i__ + i__ * h_dim1], abs(d__1)) + (d__2 = h__[i__ + 1 + (i__ + 1) * h_dim1], abs(d__2));
+            tst1 = (d__1 = h[i + i * h_dim1], abs(d__1)) + (d__2 = h[i + 1 + (i + 1) * h_dim1], abs(d__2));
             if (tst1 == 0.)
             {
                 i__3 = kplusp - jj + 1;
-                tst1 = dlanhs_("1", &i__3, &h__[h_offset], ldh, &workl[1], (ftnlen)1);
+                tst1 = dlanhs_("1", &i__3, &h[h_offset], ldh, &workl[1], (ftnlen)1);
             }
             /* Computing MAX */
             d__2 = ulp * tst1;
-            if ((d__1 = h__[i__ + 1 + i__ * h_dim1], abs(d__1)) <= max(d__2, smlnum))
+            if ((d__1 = h[i + 1 + i * h_dim1], abs(d__1)) <= max(d__2, smlnum))
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit, "_napps: matrix splitting at row/column no.", (ftnlen)42);
+                    ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit, "_napps: matrix splitting at row/column no.", (ftnlen)42);
                     ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_napps: matrix splitting with shift number.", (ftnlen)43);
-                    dvout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + i__ * h_dim1], &debug_1.ndigit,
+                    dvout_(&debug_1.logfil, &i_one, &h[i + 1 + i * h_dim1], &debug_1.ndigit,
                            "_napps: off diagonal "
                            "element.",
                            (ftnlen)29);
                 }
-                iend = i__;
-                h__[i__ + 1 + i__ * h_dim1] = 0.;
+                iend = i;
+                h[i + 1 + i * h_dim1] = 0.;
                 goto L40;
             }
             /* L30: */
@@ -454,8 +454,8 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
             goto L100;
         }
 
-        h11 = h__[istart + istart * h_dim1];
-        h21 = h__[istart + 1 + istart * h_dim1];
+        h11 = h[istart + istart * h_dim1];
+        h21 = h[istart + 1 + istart * h_dim1];
         if (abs(sigmai) <= 0.)
         {
 
@@ -467,15 +467,15 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
             g = h21;
 
             i__2 = iend - 1;
-            for (i__ = istart; i__ <= i__2; ++i__)
+            for (i = istart; i <= i__2; ++i)
             {
 
                 /*              %-----------------------------------------------------% */
                 /*              | Construct the plane rotation G to zero out the bulge | */
                 /*              %-----------------------------------------------------% */
 
-                dlartg_(&f, &g, &c__, &s, &r__);
-                if (i__ > istart)
+                dlartg_(&f, &g, &c, &s, &r);
+                if (i > istart)
                 {
 
                     /*                 %-------------------------------------------% */
@@ -484,14 +484,14 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
                     /*                 | H, remain non negative.                   | */
                     /*                 %-------------------------------------------% */
 
-                    if (r__ < 0.)
+                    if (r < 0.)
                     {
-                        r__ = -r__;
-                        c__ = -c__;
+                        r = -r;
+                        c = -c;
                         s = -s;
                     }
-                    h__[i__ + (i__ - 1) * h_dim1] = r__;
-                    h__[i__ + 1 + (i__ - 1) * h_dim1] = 0.;
+                    h[i + (i - 1) * h_dim1] = r;
+                    h[i + 1 + (i - 1) * h_dim1] = 0.;
                 }
 
                 /*              %---------------------------------------------% */
@@ -499,11 +499,11 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
                 /*              %---------------------------------------------% */
 
                 i__3 = kplusp;
-                for (j = i__; j <= i__3; ++j)
+                for (j = i; j <= i__3; ++j)
                 {
-                    t = c__ * h__[i__ + j * h_dim1] + s * h__[i__ + 1 + j * h_dim1];
-                    h__[i__ + 1 + j * h_dim1] = -s * h__[i__ + j * h_dim1] + c__ * h__[i__ + 1 + j * h_dim1];
-                    h__[i__ + j * h_dim1] = t;
+                    t = c * h[i + j * h_dim1] + s * h[i + 1 + j * h_dim1];
+                    h[i + 1 + j * h_dim1] = -s * h[i + j * h_dim1] + c * h[i + 1 + j * h_dim1];
+                    h[i + j * h_dim1] = t;
                     /* L50: */
                 }
 
@@ -512,13 +512,13 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
                 /*              %---------------------------------------------% */
 
                 /* Computing MIN */
-                i__4 = i__ + 2;
+                i__4 = i + 2;
                 i__3 = min(i__4, iend);
                 for (j = 1; j <= i__3; ++j)
                 {
-                    t = c__ * h__[j + i__ * h_dim1] + s * h__[j + (i__ + 1) * h_dim1];
-                    h__[j + (i__ + 1) * h_dim1] = -s * h__[j + i__ * h_dim1] + c__ * h__[j + (i__ + 1) * h_dim1];
-                    h__[j + i__ * h_dim1] = t;
+                    t = c * h[j + i * h_dim1] + s * h[j + (i + 1) * h_dim1];
+                    h[j + (i + 1) * h_dim1] = -s * h[j + i * h_dim1] + c * h[j + (i + 1) * h_dim1];
+                    h[j + i * h_dim1] = t;
                     /* L60: */
                 }
 
@@ -527,13 +527,13 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
                 /*              %----------------------------------------------------% */
 
                 /* Computing MIN */
-                i__4 = i__ + jj;
+                i__4 = i + jj;
                 i__3 = min(i__4, kplusp);
                 for (j = 1; j <= i__3; ++j)
                 {
-                    t = c__ * q[j + i__ * q_dim1] + s * q[j + (i__ + 1) * q_dim1];
-                    q[j + (i__ + 1) * q_dim1] = -s * q[j + i__ * q_dim1] + c__ * q[j + (i__ + 1) * q_dim1];
-                    q[j + i__ * q_dim1] = t;
+                    t = c * q[j + i * q_dim1] + s * q[j + (i + 1) * q_dim1];
+                    q[j + (i + 1) * q_dim1] = -s * q[j + i * q_dim1] + c * q[j + (i + 1) * q_dim1];
+                    q[j + i * q_dim1] = t;
                     /* L70: */
                 }
 
@@ -541,10 +541,10 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
                 /*              | Prepare for next rotation | */
                 /*              %---------------------------% */
 
-                if (i__ < iend - 1)
+                if (i < iend - 1)
                 {
-                    f = h__[i__ + 1 + i__ * h_dim1];
-                    g = h__[i__ + 2 + i__ * h_dim1];
+                    f = h[i + 1 + i * h_dim1];
+                    g = h[i + 2 + i * h_dim1];
                 }
                 /* L80: */
             }
@@ -560,9 +560,9 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
             /*           | Complex conjugate shifts ==> apply double shift QR | */
             /*           %----------------------------------------------------% */
 
-            h12 = h__[istart + (istart + 1) * h_dim1];
-            h22 = h__[istart + 1 + (istart + 1) * h_dim1];
-            h32 = h__[istart + 2 + (istart + 1) * h_dim1];
+            h12 = h[istart + (istart + 1) * h_dim1];
+            h22 = h[istart + 1 + (istart + 1) * h_dim1];
+            h32 = h[istart + 2 + (istart + 1) * h_dim1];
 
             /*           %---------------------------------------------------------% */
             /*           | Compute 1st column of (H - shift*I)*(H - conj(shift)*I) | */
@@ -575,11 +575,11 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
             u[2] = h32;
 
             i__2 = iend - 1;
-            for (i__ = istart; i__ <= i__2; ++i__)
+            for (i = istart; i <= i__2; ++i)
             {
 
                 /* Computing MIN */
-                i__3 = 3, i__4 = iend - i__ + 1;
+                i__3 = 3, i__4 = iend - i + 1;
                 nr = min(i__3, i__4);
 
                 /*              %-----------------------------------------------------% */
@@ -589,13 +589,13 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
 
                 dlarfg_(&nr, u, &u[1], &i_one, &tau);
 
-                if (i__ > istart)
+                if (i > istart)
                 {
-                    h__[i__ + (i__ - 1) * h_dim1] = u[0];
-                    h__[i__ + 1 + (i__ - 1) * h_dim1] = 0.;
-                    if (i__ < iend - 1)
+                    h[i + (i - 1) * h_dim1] = u[0];
+                    h[i + 1 + (i - 1) * h_dim1] = 0.;
+                    if (i < iend - 1)
                     {
-                        h__[i__ + 2 + (i__ - 1) * h_dim1] = 0.;
+                        h[i + 2 + (i - 1) * h_dim1] = 0.;
                     }
                 }
                 u[0] = 1.;
@@ -604,35 +604,35 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
                 /*              | Apply the reflector to the left of H | */
                 /*              %--------------------------------------% */
 
-                i__3 = kplusp - i__ + 1;
-                dlarf_("Left", &nr, &i__3, u, &i_one, &tau, &h__[i__ + i__ * h_dim1], ldh, &workl[1], (ftnlen)4);
+                i__3 = kplusp - i + 1;
+                dlarf_("Left", &nr, &i__3, u, &i_one, &tau, &h[i + i * h_dim1], ldh, &workl[1], (ftnlen)4);
 
                 /*              %---------------------------------------% */
                 /*              | Apply the reflector to the right of H | */
                 /*              %---------------------------------------% */
 
                 /* Computing MIN */
-                i__3 = i__ + 3;
+                i__3 = i + 3;
                 ir = min(i__3, iend);
-                dlarf_("Right", &ir, &nr, u, &i_one, &tau, &h__[i__ * h_dim1 + 1], ldh, &workl[1], (ftnlen)5);
+                dlarf_("Right", &ir, &nr, u, &i_one, &tau, &h[i * h_dim1 + 1], ldh, &workl[1], (ftnlen)5);
 
                 /*              %-----------------------------------------------------% */
                 /*              | Accumulate the reflector in the matrix Q;  Q <- Q*G | */
                 /*              %-----------------------------------------------------% */
 
-                dlarf_("Right", &kplusp, &nr, u, &i_one, &tau, &q[i__ * q_dim1 + 1], ldq, &workl[1], (ftnlen)5);
+                dlarf_("Right", &kplusp, &nr, u, &i_one, &tau, &q[i * q_dim1 + 1], ldq, &workl[1], (ftnlen)5);
 
                 /*              %----------------------------% */
                 /*              | Prepare for next reflector | */
                 /*              %----------------------------% */
 
-                if (i__ < iend - 1)
+                if (i < iend - 1)
                 {
-                    u[0] = h__[i__ + 1 + i__ * h_dim1];
-                    u[1] = h__[i__ + 2 + i__ * h_dim1];
-                    if (i__ < iend - 2)
+                    u[0] = h[i + 1 + i * h_dim1];
+                    u[1] = h[i + 2 + i * h_dim1];
+                    if (i < iend - 2)
                     {
-                        u[2] = h__[i__ + 3 + i__ * h_dim1];
+                        u[2] = h[i + 3 + i * h_dim1];
                     }
                 }
 
@@ -672,14 +672,14 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     i__1 = *kev;
     for (j = 1; j <= i__1; ++j)
     {
-        if (h__[j + 1 + j * h_dim1] < 0.)
+        if (h[j + 1 + j * h_dim1] < 0.)
         {
             i__2 = kplusp - j + 1;
-            dscal_(&i__2, &d_n1, &h__[j + 1 + j * h_dim1], ldh);
+            dscal_(&i__2, &d_n1, &h[j + 1 + j * h_dim1], ldh);
             /* Computing MIN */
             i__3 = j + 2;
             i__2 = min(i__3, kplusp);
-            dscal_(&i__2, &d_n1, &h__[(j + 1) * h_dim1 + 1], &i_one);
+            dscal_(&i__2, &d_n1, &h[(j + 1) * h_dim1 + 1], &i_one);
             /* Computing MIN */
             i__3 = j + *np + 1;
             i__2 = min(i__3, kplusp);
@@ -689,7 +689,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     }
 
     i__1 = *kev;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
 
         /*        %--------------------------------------------% */
@@ -698,16 +698,16 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
         /*        | REFERENCE: LAPACK subroutine dlahqr        | */
         /*        %--------------------------------------------% */
 
-        tst1 = (d__1 = h__[i__ + i__ * h_dim1], abs(d__1)) + (d__2 = h__[i__ + 1 + (i__ + 1) * h_dim1], abs(d__2));
+        tst1 = (d__1 = h[i + i * h_dim1], abs(d__1)) + (d__2 = h[i + 1 + (i + 1) * h_dim1], abs(d__2));
         if (tst1 == 0.)
         {
-            tst1 = dlanhs_("1", kev, &h__[h_offset], ldh, &workl[1], (ftnlen)1);
+            tst1 = dlanhs_("1", kev, &h[h_offset], ldh, &workl[1], (ftnlen)1);
         }
         /* Computing MAX */
         d__1 = ulp * tst1;
-        if (h__[i__ + 1 + i__ * h_dim1] <= max(d__1, smlnum))
+        if (h[i + 1 + i * h_dim1] <= max(d__1, smlnum))
         {
-            h__[i__ + 1 + i__ * h_dim1] = 0.;
+            h[i + 1 + i * h_dim1] = 0.;
         }
         /* L130: */
     }
@@ -720,7 +720,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     /*     | of H would be zero as in exact arithmetic.      | */
     /*     %-------------------------------------------------% */
 
-    if (h__[*kev + 1 + *kev * h_dim1] > 0.)
+    if (h[*kev + 1 + *kev * h_dim1] > 0.)
     {
         dgemv_("N", n, &kplusp, &d_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &d_zero, &workd[*n + 1], &i_one, (ftnlen)1);
     }
@@ -731,11 +731,11 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     /*     %----------------------------------------------------------% */
 
     i__1 = *kev;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        i__2 = kplusp - i__ + 1;
-        dgemv_("N", n, &i__2, &d_one, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &i_one, &d_zero, &workd[1], &i_one, (ftnlen)1);
-        dcopy_(n, &workd[1], &i_one, &v[(kplusp - i__ + 1) * v_dim1 + 1], &i_one);
+        i__2 = kplusp - i + 1;
+        dgemv_("N", n, &i__2, &d_one, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &d_zero, &workd[1], &i_one, (ftnlen)1);
+        dcopy_(n, &workd[1], &i_one, &v[(kplusp - i + 1) * v_dim1 + 1], &i_one);
         /* L140: */
     }
 
@@ -744,9 +744,9 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     /*     %-------------------------------------------------% */
 
     i__1 = *kev;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        dcopy_(n, &v[(kplusp - *kev + i__) * v_dim1 + 1], &i_one, &v[i__ * v_dim1 + 1], &i_one);
+        dcopy_(n, &v[(kplusp - *kev + i) * v_dim1 + 1], &i_one, &v[i * v_dim1 + 1], &i_one);
         /* L150: */
     }
 
@@ -754,7 +754,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     /*     | Copy the (kev+1)-st column of (V*Q) in the appropriate place | */
     /*     %--------------------------------------------------------------% */
 
-    if (h__[*kev + 1 + *kev * h_dim1] > 0.)
+    if (h[*kev + 1 + *kev * h_dim1] > 0.)
     {
         dcopy_(n, &workd[*n + 1], &i_one, &v[(*kev + 1) * v_dim1 + 1], &i_one);
     }
@@ -768,22 +768,22 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     /*     %-------------------------------------% */
 
     dscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &i_one);
-    if (h__[*kev + 1 + *kev * h_dim1] > 0.)
+    if (h[*kev + 1 + *kev * h_dim1] > 0.)
     {
-        daxpy_(n, &h__[*kev + 1 + *kev * h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
+        daxpy_(n, &h[*kev + 1 + *kev * h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
     }
 
     if (msglvl > 1)
     {
         dvout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}", (ftnlen)40);
-        dvout_(&debug_1.logfil, &i_one, &h__[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}", (ftnlen)37);
+        dvout_(&debug_1.logfil, &i_one, &h[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}", (ftnlen)37);
         ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit,
                "_napps: Order "
                "of the final Hessenberg matrix ",
                (ftnlen)45);
         if (msglvl > 2)
         {
-            dmout_(&debug_1.logfil, kev, kev, &h__[h_offset], ldh, &debug_1.ndigit,
+            dmout_(&debug_1.logfil, kev, kev, &h[h_offset], ldh, &debug_1.ndigit,
                    "_napps: updated Hessenberg matrix H for"
                    " next iteration",
                    (ftnlen)54);

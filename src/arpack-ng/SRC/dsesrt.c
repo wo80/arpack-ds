@@ -83,7 +83,7 @@ int dsesrt_(char *which, a_bool *apply, a_int *n, double *x, a_int *na, double *
     a_int s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    a_int i__, j, igap;
+    a_int i, j, igap;
     double temp;
     extern int dswap_(a_int *, double *, a_int *, double *, a_int *);
 
@@ -126,9 +126,9 @@ int dsesrt_(char *which, a_bool *apply, a_int *n, double *x, a_int *na, double *
             goto L9000;
         }
         i__1 = *n - 1;
-        for (i__ = igap; i__ <= i__1; ++i__)
+        for (i = igap; i <= i__1; ++i)
         {
-            j = i__ - igap;
+            j = i - igap;
         L20:
 
             if (j < 0)
@@ -168,9 +168,9 @@ int dsesrt_(char *which, a_bool *apply, a_int *n, double *x, a_int *na, double *
             goto L9000;
         }
         i__1 = *n - 1;
-        for (i__ = igap; i__ <= i__1; ++i__)
+        for (i = igap; i <= i__1; ++i)
         {
-            j = i__ - igap;
+            j = i - igap;
         L50:
 
             if (j < 0)
@@ -210,9 +210,9 @@ int dsesrt_(char *which, a_bool *apply, a_int *n, double *x, a_int *na, double *
             goto L9000;
         }
         i__1 = *n - 1;
-        for (i__ = igap; i__ <= i__1; ++i__)
+        for (i = igap; i <= i__1; ++i)
         {
-            j = i__ - igap;
+            j = i - igap;
         L80:
 
             if (j < 0)
@@ -252,9 +252,9 @@ int dsesrt_(char *which, a_bool *apply, a_int *n, double *x, a_int *na, double *
             goto L9000;
         }
         i__1 = *n - 1;
-        for (i__ = igap; i__ <= i__1; ++i__)
+        for (i = igap; i <= i__1; ++i)
         {
-            j = i__ - igap;
+            j = i - igap;
         L110:
 
             if (j < 0)

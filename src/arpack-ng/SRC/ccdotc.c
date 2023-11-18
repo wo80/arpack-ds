@@ -12,7 +12,7 @@
     void r_cnjg(a_fcomplex *, a_fcomplex *);
 
     /* Local variables */
-    a_int i__, ix, iy;
+    a_int i, ix, iy;
     a_fcomplex ztemp;
 
     /*     forms the dot product of a vector. */
@@ -49,7 +49,7 @@
         iy = (-(*n) + 1) * *incy + 1;
     }
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
         r_cnjg(&q__3, &zx[ix]);
         i__2 = iy;
@@ -67,10 +67,10 @@
 
 L20:
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        r_cnjg(&q__3, &zx[i__]);
-        i__2 = i__;
+        r_cnjg(&q__3, &zx[i]);
+        i__2 = i;
         q__2.r = q__3.r * zy[i__2].r - q__3.i * zy[i__2].i, q__2.i = q__3.r * zy[i__2].i + q__3.i * zy[i__2].r;
         q__1.r = ztemp.r + q__2.r, q__1.i = ztemp.i + q__2.i;
         ztemp.r = q__1.r, ztemp.i = q__1.i;

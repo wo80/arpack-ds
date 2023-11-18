@@ -219,7 +219,7 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int snaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, float *resid, float *rnorm, float *v, a_int *ldv, float *h__, a_int *ldh, a_int *ipntr, float *workd, a_int *info, ftnlen bmat_len)
+int snaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, float *resid, float *rnorm, float *v, a_int *ldv, float *h, a_int *ldh, a_int *ipntr, float *workd, a_int *info, ftnlen bmat_len)
 {
     /* Initialized data */
 
@@ -233,7 +233,7 @@ int snaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, fl
     double sqrt(double);
 
     /* Local variables */
-    a_int i__;
+    a_int i;
     static a_int j;
     static float t0, t1, t2, t3, t4, t5;
     a_int jj;
@@ -326,7 +326,7 @@ int snaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, fl
     v -= v_offset;
     h_dim1 = *ldh;
     h_offset = 1 + h_dim1;
-    h__ -= h_offset;
+    h -= h_offset;
     --ipntr;
 
     /* Function Body */
@@ -534,8 +534,8 @@ L40:
         /*            | use LAPACK routine SLASCL               | */
         /*            %-----------------------------------------% */
 
-        slascl_("General", &i__, &i__, rnorm, &s_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
-        slascl_("General", &i__, &i__, rnorm, &s_one, n, &i_one, &workd[ipj], n, &infol, (ftnlen)7);
+        slascl_("General", &i, &i, rnorm, &s_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
+        slascl_("General", &i, &i, rnorm, &s_one, n, &i_one, &workd[ipj], n, &infol, (ftnlen)7);
     }
 
     /*        %------------------------------------------------------% */
@@ -643,18 +643,18 @@ L60:
     /*        | WORKD(IPJ:IPJ+N-1) contains B*OP*v_{j}.  | */
     /*        %------------------------------------------% */
 
-    sgemv_("T", n, &j, &s_one, &v[v_offset], ldv, &workd[ipj], &i_one, &s_zero, &h__[j * h_dim1 + 1], &i_one, (ftnlen)1);
+    sgemv_("T", n, &j, &s_one, &v[v_offset], ldv, &workd[ipj], &i_one, &s_zero, &h[j * h_dim1 + 1], &i_one, (ftnlen)1);
 
     /*        %--------------------------------------% */
     /*        | Orthogonalize r_{j} against V_{j}.   | */
     /*        | RESID contains OP*v_{j}. See STEP 3. | */
     /*        %--------------------------------------% */
 
-    sgemv_("N", n, &j, &s_n1, &v[v_offset], ldv, &h__[j * h_dim1 + 1], &i_one, &s_one, &resid[1], &i_one, (ftnlen)1);
+    sgemv_("N", n, &j, &s_n1, &v[v_offset], ldv, &h[j * h_dim1 + 1], &i_one, &s_one, &resid[1], &i_one, (ftnlen)1);
 
     if (j > 1)
     {
-        h__[j + (j - 1) * h_dim1] = betaj;
+        h[j + (j - 1) * h_dim1] = betaj;
     }
 
     arscnd_(&t4);
@@ -751,7 +751,7 @@ L80:
                "_naitr: re-o"
                "rthonalization; wnorm and rnorm are",
                (ftnlen)47);
-        svout_(&debug_1.logfil, &j, &h__[j * h_dim1 + 1], &debug_1.ndigit, "_naitr: j-th column of H", (ftnlen)24);
+        svout_(&debug_1.logfil, &j, &h[j * h_dim1 + 1], &debug_1.ndigit, "_naitr: j-th column of H", (ftnlen)24);
     }
 
     /*        %----------------------------------------------------% */
@@ -769,7 +769,7 @@ L80:
     /*        %---------------------------------------------% */
 
     sgemv_("N", n, &j, &s_n1, &v[v_offset], ldv, &workd[irj], &i_one, &s_one, &resid[1], &i_one, (ftnlen)1);
-    saxpy_(&j, &s_one, &workd[irj], &i_one, &h__[j * h_dim1 + 1], &i_one);
+    saxpy_(&j, &s_one, &workd[irj], &i_one, &h[j * h_dim1 + 1], &i_one);
 
     orth2 = TRUE_;
     arscnd_(&t2);
@@ -909,7 +909,7 @@ L100:
         timing_1.tnaitr += t1 - t0;
         *ido = 99;
         i__1 = *k + *np - 1;
-        for (i__ = max(1, *k); i__ <= i__1; ++i__)
+        for (i = max(1, *k); i <= i__1; ++i)
         {
 
             /*              %--------------------------------------------% */
@@ -918,17 +918,17 @@ L100:
             /*              | REFERENCE: LAPACK subroutine slahqr        | */
             /*              %--------------------------------------------% */
 
-            tst1 = (r__1 = h__[i__ + i__ * h_dim1], dabs(r__1)) + (r__2 = h__[i__ + 1 + (i__ + 1) * h_dim1], dabs(r__2));
+            tst1 = (r__1 = h[i + i * h_dim1], dabs(r__1)) + (r__2 = h[i + 1 + (i + 1) * h_dim1], dabs(r__2));
             if (tst1 == 0.f)
             {
                 i__2 = *k + *np;
-                tst1 = slanhs_("1", &i__2, &h__[h_offset], ldh, &workd[*n + 1], (ftnlen)1);
+                tst1 = slanhs_("1", &i__2, &h[h_offset], ldh, &workd[*n + 1], (ftnlen)1);
             }
             /* Computing MAX */
             r__2 = ulp * tst1;
-            if ((r__1 = h__[i__ + 1 + i__ * h_dim1], dabs(r__1)) <= dmax(r__2, smlnum))
+            if ((r__1 = h[i + 1 + i * h_dim1], dabs(r__1)) <= dmax(r__2, smlnum))
             {
-                h__[i__ + 1 + i__ * h_dim1] = 0.f;
+                h[i + 1 + i * h_dim1] = 0.f;
             }
             /* L110: */
         }
@@ -937,7 +937,7 @@ L100:
         {
             i__1 = *k + *np;
             i__2 = *k + *np;
-            smout_(&debug_1.logfil, &i__1, &i__2, &h__[h_offset], ldh, &debug_1.ndigit,
+            smout_(&debug_1.logfil, &i__1, &i__2, &h[h_offset], ldh, &debug_1.ndigit,
                    "_naitr: Final upper Hessenberg matrix H"
                    " of order K+NP",
                    (ftnlen)53);

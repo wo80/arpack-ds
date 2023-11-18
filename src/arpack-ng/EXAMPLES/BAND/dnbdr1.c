@@ -26,8 +26,8 @@ static a_int c_n6 = -6;
     int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    double a[50000] /* was [50][1000] */, d__[150] /* was [50][3] */, h__;
-    a_int i__, j;
+    double a[50000] /* was [50][1000] */, d[150] /* was [50][3] */, h;
+    a_int i, j;
     double m[50000] /* was [50][1000] */;
     a_int n;
     double v[50000] /* was [1000][50] */, h2;
@@ -266,8 +266,8 @@ static a_int c_n6 = -6;
     /*     | Main diagonal | */
     /*     %---------------% */
 
-    h__ = 1. / (double)(nx + 1);
-    h2 = h__ * h__;
+    h = 1. / (double)(nx + 1);
+    h2 = h * h;
 
     idiag = kl + ku + 1;
     i__1 = n;
@@ -285,14 +285,14 @@ static a_int c_n6 = -6;
     isup = kl + ku;
     isub = kl + ku + 2;
     i__1 = nx;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        lo = (i__ - 1) * nx;
+        lo = (i - 1) * nx;
         i__2 = lo + nx - 1;
         for (j = lo + 1; j <= i__2; ++j)
         {
-            a[isup + (j + 1) * 50 - 51] = -1. / h2 + rho / 2. / h__;
-            a[isub + j * 50 - 51] = -1. / h2 - rho / 2. / h__;
+            a[isup + (j + 1) * 50 - 51] = -1. / h2 + rho / 2. / h;
+            a[isub + j * 50 - 51] = -1. / h2 - rho / 2. / h;
             /* L40: */
         }
         /* L50: */
@@ -306,9 +306,9 @@ static a_int c_n6 = -6;
     isup = kl + 1;
     isub = (kl << 1) + ku + 1;
     i__1 = nx - 1;
-    for (i__ = 1; i__ <= i__1; ++i__)
+    for (i = 1; i <= i__1; ++i)
     {
-        lo = (i__ - 1) * nx;
+        lo = (i - 1) * nx;
         i__2 = lo + nx;
         for (j = lo + 1; j <= i__2; ++j)
         {
@@ -329,7 +329,7 @@ static a_int c_n6 = -6;
     /*     %------------------------------------------------% */
 
     rvec = TRUE_;
-    dnband_(&rvec, "A", select, d__, &d__[50], v, &c__1000, &sigmar, &sigmai, workev, &n, a, m, &c__50, rfac, cfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, workc, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
+    dnband_(&rvec, "A", select, d, &d[50], v, &c__1000, &sigmar, &sigmai, workev, &n, a, m, &c__50, rfac, cfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, workc, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
 
     if (info == 0)
     {
@@ -400,7 +400,7 @@ static a_int c_n6 = -6;
         for (j = 1; j <= i__1; ++j)
         {
 
-            if (d__[j + 49] == 0.)
+            if (d[j + 49] == 0.)
             {
 
                 /*              %--------------------% */
@@ -408,10 +408,10 @@ static a_int c_n6 = -6;
                 /*              %--------------------% */
 
                 dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b100, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
-                d__1 = -d__[j - 1];
+                d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
-                d__[j + 99] = dnrm2_(&n, ax, &c__1);
-                d__[j + 99] /= (d__1 = d__[j - 1], abs(d__1));
+                d[j + 99] = dnrm2_(&n, ax, &c__1);
+                d[j + 99] /= (d__1 = d[j - 1], abs(d__1));
             }
             else if (first)
             {
@@ -424,19 +424,19 @@ static a_int c_n6 = -6;
                 /*              %------------------------% */
 
                 dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b100, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
-                d__1 = -d__[j - 1];
+                d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
-                daxpy_(&n, &d__[j + 49], &v[(j + 1) * 1000 - 1000], &c__1, ax, &c__1);
-                d__[j + 99] = dnrm2_(&n, ax, &c__1);
+                daxpy_(&n, &d[j + 49], &v[(j + 1) * 1000 - 1000], &c__1, ax, &c__1);
+                d[j + 99] = dnrm2_(&n, ax, &c__1);
                 dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b100, &a[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
-                d__1 = -d__[j + 49];
+                d__1 = -d[j + 49];
                 daxpy_(&n, &d__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
-                d__1 = -d__[j - 1];
+                d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, &v[(j + 1) * 1000 - 1000], &c__1, ax, &c__1);
                 d__1 = dnrm2_(&n, ax, &c__1);
-                d__[j + 99] = dlapy2_(&d__[j + 99], &d__1);
-                d__[j + 99] /= dlapy2_(&d__[j - 1], &d__[j + 49]);
-                d__[j + 100] = d__[j + 99];
+                d[j + 99] = dlapy2_(&d[j + 99], &d__1);
+                d[j + 99] /= dlapy2_(&d[j - 1], &d[j + 49]);
+                d[j + 100] = d[j + 99];
                 first = FALSE_;
             }
             else
@@ -446,7 +446,7 @@ static a_int c_n6 = -6;
 
             /* L90: */
         }
-        dmout_(&c__6, &nconv, &c__3, d__, &c__50, &c_n6,
+        dmout_(&c__6, &nconv, &c__3, d, &c__50, &c_n6,
                "Ritz values (Real,"
                "Imag) and relative residuals",
                (ftnlen)46);
