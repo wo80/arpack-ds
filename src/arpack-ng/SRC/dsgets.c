@@ -1,33 +1,30 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\SRC\dsgets.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, 
-	    msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, 
-	    mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
+Extern struct
+{
+    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
 } debug_;
 
 #define debug_1 debug_
 
-Extern struct {
+Extern struct
+{
     integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, 
-	    tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, 
-	    tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, 
-	    titref, trvec;
+    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, titref, trvec;
 } timing_;
 
 #define timing_1 timing_
@@ -129,9 +126,7 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-/* Subroutine */ int dsgets_(integer *ishift, char *which, integer *kev, 
-	integer *np, doublereal *ritz, doublereal *bounds, doublereal *shifts,
-	 ftnlen which_len)
+int dsgets_(integer *ishift, char *which, integer *kev, integer *np, doublereal *ritz, doublereal *bounds, doublereal *shifts, ftnlen which_len)
 {
     /* System generated locals */
     integer i__1;
@@ -142,74 +137,60 @@ static integer c__1 = 1;
     /* Local variables */
     static real t0, t1;
     integer kevd2;
-    extern /* Subroutine */ int dswap_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *), dcopy_(integer *, doublereal *, integer 
-	    *, doublereal *, integer *), dvout_(integer *, integer *, 
-	    doublereal *, integer *, char *, ftnlen), ivout_(integer *, 
-	    integer *, integer *, integer *, char *, ftnlen), arscnd_(real *);
+    extern int dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), arscnd_(real *);
     integer msglvl;
-    extern /* Subroutine */ int dsortr_(char *, logical *, integer *, 
-	    doublereal *, doublereal *, ftnlen);
+    extern int dsortr_(char *, logical *, integer *, doublereal *, doublereal *, ftnlen);
 
+    /*     %----------------------------------------------------% */
+    /*     | Include files for debugging and timing information | */
+    /*     %----------------------------------------------------% */
 
-/*     %----------------------------------------------------% */
-/*     | Include files for debugging and timing information | */
-/*     %----------------------------------------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
 
+    /*     %---------------------------------% */
+    /*     | See debug.doc for documentation | */
+    /*     %---------------------------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------------% */
+    /*     | Scalar Arguments | */
+    /*     %------------------% */
 
-/*     %---------------------------------% */
-/*     | See debug.doc for documentation | */
-/*     %---------------------------------% */
+    /*     %--------------------------------% */
+    /*     | See stat.doc for documentation | */
+    /*     %--------------------------------% */
 
-/*     %------------------% */
-/*     | Scalar Arguments | */
-/*     %------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
 
-/*     %--------------------------------% */
-/*     | See stat.doc for documentation | */
-/*     %--------------------------------% */
+    /*     %-----------------% */
+    /*     | Array Arguments | */
+    /*     %-----------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------% */
+    /*     | Parameters | */
+    /*     %------------% */
 
+    /*     %---------------% */
+    /*     | Local Scalars | */
+    /*     %---------------% */
 
+    /*     %----------------------% */
+    /*     | External Subroutines | */
+    /*     %----------------------% */
 
-/*     %-----------------% */
-/*     | Array Arguments | */
-/*     %-----------------% */
+    /*     %---------------------% */
+    /*     | Intrinsic Functions | */
+    /*     %---------------------% */
 
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
-/*     %------------% */
-/*     | Parameters | */
-/*     %------------% */
-
-
-/*     %---------------% */
-/*     | Local Scalars | */
-/*     %---------------% */
-
-
-/*     %----------------------% */
-/*     | External Subroutines | */
-/*     %----------------------% */
-
-
-/*     %---------------------% */
-/*     | Intrinsic Functions | */
-/*     %---------------------% */
-
-
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
-
-/*     %-------------------------------% */
-/*     | Initialize timing statistics  | */
-/*     | & message level for debugging | */
-/*     %-------------------------------% */
+    /*     %-------------------------------% */
+    /*     | Initialize timing statistics  | */
+    /*     | & message level for debugging | */
+    /*     %-------------------------------% */
 
     /* Parameter adjustments */
     --shifts;
@@ -220,77 +201,82 @@ static integer c__1 = 1;
     arscnd_(&t0);
     msglvl = debug_1.msgets;
 
-    if (s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) == 0) {
+    if (s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) == 0)
+    {
 
-/*        %-----------------------------------------------------% */
-/*        | Both ends of the spectrum are requested.            | */
-/*        | Sort the eigenvalues into algebraically increasing  | */
-/*        | order first then swap high end of the spectrum next | */
-/*        | to low end in appropriate locations.                | */
-/*        | NOTE: when np < floor(kev/2) be careful not to swap | */
-/*        | overlapping locations.                              | */
-/*        %-----------------------------------------------------% */
+        /*        %-----------------------------------------------------% */
+        /*        | Both ends of the spectrum are requested.            | */
+        /*        | Sort the eigenvalues into algebraically increasing  | */
+        /*        | order first then swap high end of the spectrum next | */
+        /*        | to low end in appropriate locations.                | */
+        /*        | NOTE: when np < floor(kev/2) be careful not to swap | */
+        /*        | overlapping locations.                              | */
+        /*        %-----------------------------------------------------% */
 
-	i__1 = *kev + *np;
-	dsortr_("LA", &c_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
-	kevd2 = *kev / 2;
-	if (*kev > 1) {
-	    i__1 = min(kevd2,*np);
-	    dswap_(&i__1, &ritz[1], &c__1, &ritz[max(kevd2,*np) + 1], &c__1);
-	    i__1 = min(kevd2,*np);
-	    dswap_(&i__1, &bounds[1], &c__1, &bounds[max(kevd2,*np) + 1], &
-		    c__1);
-	}
+        i__1 = *kev + *np;
+        dsortr_("LA", &c_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
+        kevd2 = *kev / 2;
+        if (*kev > 1)
+        {
+            i__1 = min(kevd2, *np);
+            dswap_(&i__1, &ritz[1], &c__1, &ritz[max(kevd2, *np) + 1], &c__1);
+            i__1 = min(kevd2, *np);
+            dswap_(&i__1, &bounds[1], &c__1, &bounds[max(kevd2, *np) + 1], &c__1);
+        }
+    }
+    else
+    {
 
-    } else {
+        /*        %----------------------------------------------------% */
+        /*        | LM, SM, LA, SA case.                               | */
+        /*        | Sort the eigenvalues of H into the desired order   | */
+        /*        | and apply the resulting order to BOUNDS.           | */
+        /*        | The eigenvalues are sorted so that the wanted part | */
+        /*        | are always in the last KEV locations.               | */
+        /*        %----------------------------------------------------% */
 
-/*        %----------------------------------------------------% */
-/*        | LM, SM, LA, SA case.                               | */
-/*        | Sort the eigenvalues of H into the desired order   | */
-/*        | and apply the resulting order to BOUNDS.           | */
-/*        | The eigenvalues are sorted so that the wanted part | */
-/*        | are always in the last KEV locations.               | */
-/*        %----------------------------------------------------% */
-
-	i__1 = *kev + *np;
-	dsortr_(which, &c_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
+        i__1 = *kev + *np;
+        dsortr_(which, &c_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
     }
 
-    if (*ishift == 1 && *np > 0) {
+    if (*ishift == 1 && *np > 0)
+    {
 
-/*        %-------------------------------------------------------% */
-/*        | Sort the unwanted Ritz values used as shifts so that  | */
-/*        | the ones with largest Ritz estimates are first.       | */
-/*        | This will tend to minimize the effects of the         | */
-/*        | forward instability of the iteration when the shifts  | */
-/*        | are applied in subroutine dsapps.                     | */
-/*        %-------------------------------------------------------% */
+        /*        %-------------------------------------------------------% */
+        /*        | Sort the unwanted Ritz values used as shifts so that  | */
+        /*        | the ones with largest Ritz estimates are first.       | */
+        /*        | This will tend to minimize the effects of the         | */
+        /*        | forward instability of the iteration when the shifts  | */
+        /*        | are applied in subroutine dsapps.                     | */
+        /*        %-------------------------------------------------------% */
 
-	dsortr_("SM", &c_true, np, &bounds[1], &ritz[1], (ftnlen)2);
-	dcopy_(np, &ritz[1], &c__1, &shifts[1], &c__1);
+        dsortr_("SM", &c_true, np, &bounds[1], &ritz[1], (ftnlen)2);
+        dcopy_(np, &ritz[1], &c__1, &shifts[1], &c__1);
     }
 
     arscnd_(&t1);
     timing_1.tsgets += t1 - t0;
 
-    if (msglvl > 0) {
-	ivout_(&debug_1.logfil, &c__1, kev, &debug_1.ndigit, "_sgets: KEV is",
-		 (ftnlen)14);
-	ivout_(&debug_1.logfil, &c__1, np, &debug_1.ndigit, "_sgets: NP is", (
-		ftnlen)13);
-	i__1 = *kev + *np;
-	dvout_(&debug_1.logfil, &i__1, &ritz[1], &debug_1.ndigit, "_sgets: E"
-		"igenvalues of current H matrix", (ftnlen)39);
-	i__1 = *kev + *np;
-	dvout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit, "_sgets:"
-		" Associated Ritz estimates", (ftnlen)33);
+    if (msglvl > 0)
+    {
+        ivout_(&debug_1.logfil, &c__1, kev, &debug_1.ndigit, "_sgets: KEV is", (ftnlen)14);
+        ivout_(&debug_1.logfil, &c__1, np, &debug_1.ndigit, "_sgets: NP is", (ftnlen)13);
+        i__1 = *kev + *np;
+        dvout_(&debug_1.logfil, &i__1, &ritz[1], &debug_1.ndigit,
+               "_sgets: E"
+               "igenvalues of current H matrix",
+               (ftnlen)39);
+        i__1 = *kev + *np;
+        dvout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit,
+               "_sgets:"
+               " Associated Ritz estimates",
+               (ftnlen)33);
     }
 
     return 0;
 
-/*     %---------------% */
-/*     | End of dsgets | */
-/*     %---------------% */
+    /*     %---------------% */
+    /*     | End of dsgets | */
+    /*     %---------------% */
 
 } /* dsgets_ */
-

@@ -1,23 +1,23 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\EXAMPLES\BAND\znbdr4.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
 
 /* Table of constant values */
 
-static doublecomplex c_b1 = {1.,0.};
-static doublecomplex c_b2 = {0.,0.};
-static doublecomplex c_b3 = {2.,0.};
-static doublecomplex c_b5 = {6.,0.};
+static doublecomplex c_b1 = {1., 0.};
+static doublecomplex c_b2 = {0., 0.};
+static doublecomplex c_b3 = {2., 0.};
+static doublecomplex c_b5 = {6., 0.};
 static integer c__9 = 9;
 static integer c__1 = 1;
 static integer c__50 = 50;
@@ -34,23 +34,22 @@ static integer c_n6 = -6;
     doublecomplex z__1, z__2, z__3, z__4;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle(void);
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
+    int s_copy(char *, char *, ftnlen, ftnlen);
     void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
     double d_imag(doublecomplex *);
 
     /* Local variables */
-    doublecomplex a[50000]	/* was [50][1000] */, d__[50], h__;
+    doublecomplex a[50000] /* was [50][1000] */, d__[50], h__;
     integer j;
-    doublecomplex m[50000]	/* was [50][1000] */;
+    doublecomplex m[50000] /* was [50][1000] */;
     integer n;
-    doublecomplex v[50000]	/* was [1000][50] */;
-    doublereal rd[150]	/* was [50][3] */;
+    doublecomplex v[50000] /* was [1000][50] */;
+    doublereal rd[150] /* was [50][3] */;
     integer kl;
     doublecomplex ax[1000];
     integer ku;
-    doublecomplex mx[1000], fac[50000]	/* was [50][1000] */;
+    doublecomplex mx[1000], fac[50000] /* was [50][1000] */;
     integer ncv, nev;
     doublecomplex rho;
     doublereal tol;
@@ -62,207 +61,187 @@ static integer c_n6 = -6;
     char which[2];
     doublecomplex resid[1000];
     integer nconv;
-    extern /* Subroutine */ int zgbmv_(char *, integer *, integer *, integer *
-	    , integer *, doublecomplex *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, ftnlen);
+    extern int zgbmv_(char *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, ftnlen);
     doublecomplex workd[3000];
-    extern /* Subroutine */ int dmout_(integer *, integer *, integer *, 
-	    doublereal *, integer *, integer *, char *, ftnlen);
+    extern int dmout_(integer *, integer *, integer *, doublereal *, integer *, integer *, char *, ftnlen);
     integer iwork[1000];
     doublecomplex workl[7750];
     doublereal rwork[1000];
-    extern /* Subroutine */ int zaxpy_(integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *);
-    extern doublereal dlapy2_(doublereal *, doublereal *), dznrm2_(integer *, 
-	    doublecomplex *, integer *);
+    extern int zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
+    extern doublereal dlapy2_(doublereal *, doublereal *), dznrm2_(integer *, doublecomplex *, integer *);
     integer iparam[11];
-    extern /* Subroutine */ int znband_(logical *, char *, logical *, 
-	    doublecomplex *, doublecomplex *, integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, doublecomplex *, integer *, integer *, char *, char *, 
-	    integer *, doublereal *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, integer *, doublecomplex *, 
-	    doublecomplex *, integer *, doublereal *, integer *, integer *, 
-	    ftnlen, ftnlen, ftnlen);
+    extern int znband_(logical *, char *, logical *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, char *, char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublereal *, integer *, integer *, ftnlen, ftnlen, ftnlen);
     logical select[50];
-    extern /* Subroutine */ int zlaset_(char *, integer *, integer *, 
-	    doublecomplex *, doublecomplex *, doublecomplex *, integer *, 
-	    ftnlen);
+    extern int zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, ftnlen);
     integer maxitr, lworkl;
     doublecomplex workev[100];
 
     /* Fortran I/O blocks */
-    static cilist io___4 = { 0, 6, 0, 0, 0 };
-    static cilist io___5 = { 0, 6, 0, 0, 0 };
-    static cilist io___6 = { 0, 6, 0, 0, 0 };
-    static cilist io___38 = { 0, 6, 0, 0, 0 };
-    static cilist io___39 = { 0, 6, 0, 0, 0 };
-    static cilist io___40 = { 0, 6, 0, 0, 0 };
-    static cilist io___41 = { 0, 6, 0, 0, 0 };
-    static cilist io___42 = { 0, 6, 0, 0, 0 };
-    static cilist io___43 = { 0, 6, 0, 0, 0 };
-    static cilist io___44 = { 0, 6, 0, 0, 0 };
-    static cilist io___45 = { 0, 6, 0, 0, 0 };
-    static cilist io___46 = { 0, 6, 0, 0, 0 };
-    static cilist io___47 = { 0, 6, 0, 0, 0 };
-    static cilist io___48 = { 0, 6, 0, 0, 0 };
-    static cilist io___49 = { 0, 6, 0, 0, 0 };
-    static cilist io___50 = { 0, 6, 0, 0, 0 };
-    static cilist io___54 = { 0, 6, 0, 0, 0 };
-    static cilist io___55 = { 0, 6, 0, 0, 0 };
-    static cilist io___56 = { 0, 6, 0, 0, 0 };
-    static cilist io___57 = { 0, 6, 0, 0, 0 };
+    static cilist io___4 = {0, 6, 0, 0, 0};
+    static cilist io___5 = {0, 6, 0, 0, 0};
+    static cilist io___6 = {0, 6, 0, 0, 0};
+    static cilist io___38 = {0, 6, 0, 0, 0};
+    static cilist io___39 = {0, 6, 0, 0, 0};
+    static cilist io___40 = {0, 6, 0, 0, 0};
+    static cilist io___41 = {0, 6, 0, 0, 0};
+    static cilist io___42 = {0, 6, 0, 0, 0};
+    static cilist io___43 = {0, 6, 0, 0, 0};
+    static cilist io___44 = {0, 6, 0, 0, 0};
+    static cilist io___45 = {0, 6, 0, 0, 0};
+    static cilist io___46 = {0, 6, 0, 0, 0};
+    static cilist io___47 = {0, 6, 0, 0, 0};
+    static cilist io___48 = {0, 6, 0, 0, 0};
+    static cilist io___49 = {0, 6, 0, 0, 0};
+    static cilist io___50 = {0, 6, 0, 0, 0};
+    static cilist io___54 = {0, 6, 0, 0, 0};
+    static cilist io___55 = {0, 6, 0, 0, 0};
+    static cilist io___56 = {0, 6, 0, 0, 0};
+    static cilist io___57 = {0, 6, 0, 0, 0};
 
+    /*     ... Construct matrices A and M in LAPACK-style band form. */
+    /*         Matries A and M are derived from the finite */
+    /*         element discretization of the 1-dimensional */
+    /*         convection-diffusion operator */
+    /*                         (d^2u/dx^2) + rho*(du/dx) */
+    /*         on the interval [0,1] with zero boundary condition using */
+    /*         piecewise linear elements. */
 
+    /*     ... Call ZNBAND  to find eigenvalues LAMBDA such that */
+    /*                    A*x = M*x*LAMBDA. */
 
-/*     ... Construct matrices A and M in LAPACK-style band form. */
-/*         Matries A and M are derived from the finite */
-/*         element discretization of the 1-dimensional */
-/*         convection-diffusion operator */
-/*                         (d^2u/dx^2) + rho*(du/dx) */
-/*         on the interval [0,1] with zero boundary condition using */
-/*         piecewise linear elements. */
+    /*     ... Use mode 3 of ZNAUPD . */
 
-/*     ... Call ZNBAND  to find eigenvalues LAMBDA such that */
-/*                    A*x = M*x*LAMBDA. */
+    /* \BeginLib */
 
-/*     ... Use mode 3 of ZNAUPD . */
+    /* \Routines called: */
+    /*     znband   ARPACK banded eigenproblem solver. */
+    /*     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully. */
+    /*     zlaset   LAPACK routine to initialize a matrix to zero. */
+    /*     zaxpy    Level 1 BLAS that computes y <- alpha*x+y. */
+    /*     dznrm2   Level 1 BLAS that computes the norm of a vector. */
+    /*     zgbmv    Level 2 BLAS that computes the band matrix vector product. */
 
-/* \BeginLib */
+    /* \Author */
+    /*     Richard Lehoucq */
+    /*     Danny Sorensen */
+    /*     Chao Yang */
+    /*     Dept. of Computational & */
+    /*     Applied Mathematics */
+    /*     Rice University */
+    /*     Houston, Texas */
 
-/* \Routines called: */
-/*     znband   ARPACK banded eigenproblem solver. */
-/*     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-/*     zlaset   LAPACK routine to initialize a matrix to zero. */
-/*     zaxpy    Level 1 BLAS that computes y <- alpha*x+y. */
-/*     dznrm2   Level 1 BLAS that computes the norm of a vector. */
-/*     zgbmv    Level 2 BLAS that computes the band matrix vector product. */
+    /* \SCCS Information: @(#) */
+    /* FILE: nbdr4.F   SID: 2.5   DATE OF SID: 10/17/00   RELEASE: 2 */
 
-/* \Author */
-/*     Richard Lehoucq */
-/*     Danny Sorensen */
-/*     Chao Yang */
-/*     Dept. of Computational & */
-/*     Applied Mathematics */
-/*     Rice University */
-/*     Houston, Texas */
+    /* \Remarks */
+    /*     1. None */
 
-/* \SCCS Information: @(#) */
-/* FILE: nbdr4.F   SID: 2.5   DATE OF SID: 10/17/00   RELEASE: 2 */
+    /* \EndLib */
 
-/* \Remarks */
-/*     1. None */
+    /* ------------------------------------------------------------------------- */
 
-/* \EndLib */
+    /*     %-------------------------------------% */
+    /*     | Define leading dimensions for all   | */
+    /*     | arrays.                             | */
+    /*     | MAXN   - Maximum size of the matrix | */
+    /*     | MAXNEV - Maximum number of          | */
+    /*     |          eigenvalues to be computed | */
+    /*     | MAXNCV - Maximum number of Arnoldi  | */
+    /*     |          vectors stored             | */
+    /*     | MAXBDW - Maximum bandwidth          | */
+    /*     %-------------------------------------% */
 
-/* ------------------------------------------------------------------------- */
+    /*     %--------------% */
+    /*     | Local Arrays | */
+    /*     %--------------% */
 
-/*     %-------------------------------------% */
-/*     | Define leading dimensions for all   | */
-/*     | arrays.                             | */
-/*     | MAXN   - Maximum size of the matrix | */
-/*     | MAXNEV - Maximum number of          | */
-/*     |          eigenvalues to be computed | */
-/*     | MAXNCV - Maximum number of Arnoldi  | */
-/*     |          vectors stored             | */
-/*     | MAXBDW - Maximum bandwidth          | */
-/*     %-------------------------------------% */
+    /*     %---------------% */
+    /*     | Local Scalars | */
+    /*     %---------------% */
 
+    /*     %------------% */
+    /*     | Parameters | */
+    /*     %------------% */
 
-/*     %--------------% */
-/*     | Local Arrays | */
-/*     %--------------% */
+    /*     %-----------------------------% */
+    /*     | BLAS & LAPACK routines used | */
+    /*     %-----------------------------% */
 
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
-/*     %---------------% */
-/*     | Local Scalars | */
-/*     %---------------% */
-
-
-/*     %------------% */
-/*     | Parameters | */
-/*     %------------% */
-
-
-/*     %-----------------------------% */
-/*     | BLAS & LAPACK routines used | */
-/*     %-----------------------------% */
-
-
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
-
-/*     %-------------------------------------------------% */
-/*     | The number NX is the number of interior points  | */
-/*     | in the discretization of the 2-dimensional      | */
-/*     | convection-diffusion operator on the unit       | */
-/*     | square with zero Dirichlet boundary condition.  | */
-/*     | The number N(=NX*NX) is the dimension of the    | */
-/*     | matrix.  A generalized eigenvalue problem is    | */
-/*     | solved (BMAT = 'G').  NEV is the number of      | */
-/*     | eigenvalues (closest to the shift SIGMA) to be  | */
-/*     | approximated.  Since the shift and invert mode  | */
-/*     | is used, WHICH is set to 'LM'.  The user can    | */
-/*     | modify NX, NEV and NCV to solve problems of     | */
-/*     | different sizes, and to get different parts the | */
-/*     | spectrum.  However, the following conditions    | */
-/*     | must be satisfied:                              | */
-/*     |                   N <= MAXN                     | */
-/*     |                 NEV <= MAXNEV                   | */
-/*     |           NEV + 2 <= NCV <= MAXNCV              | */
-/*     %-------------------------------------------------% */
+    /*     %-------------------------------------------------% */
+    /*     | The number NX is the number of interior points  | */
+    /*     | in the discretization of the 2-dimensional      | */
+    /*     | convection-diffusion operator on the unit       | */
+    /*     | square with zero Dirichlet boundary condition.  | */
+    /*     | The number N(=NX*NX) is the dimension of the    | */
+    /*     | matrix.  A generalized eigenvalue problem is    | */
+    /*     | solved (BMAT = 'G').  NEV is the number of      | */
+    /*     | eigenvalues (closest to the shift SIGMA) to be  | */
+    /*     | approximated.  Since the shift and invert mode  | */
+    /*     | is used, WHICH is set to 'LM'.  The user can    | */
+    /*     | modify NX, NEV and NCV to solve problems of     | */
+    /*     | different sizes, and to get different parts the | */
+    /*     | spectrum.  However, the following conditions    | */
+    /*     | must be satisfied:                              | */
+    /*     |                   N <= MAXN                     | */
+    /*     |                 NEV <= MAXNEV                   | */
+    /*     |           NEV + 2 <= NCV <= MAXNCV              | */
+    /*     %-------------------------------------------------% */
 
     n = 100;
     nev = 4;
     ncv = 10;
-    if (n > 1000) {
-	s_wsle(&io___4);
-	do_lio(&c__9, &c__1, " ERROR with _NBDR4: N is greater than MAXN ", (
-		ftnlen)43);
-	e_wsle();
-	goto L9000;
-    } else if (nev > 25) {
-	s_wsle(&io___5);
-	do_lio(&c__9, &c__1, " ERROR with _NBDR4: NEV is greater than MAXNEV "
-		, (ftnlen)47);
-	e_wsle();
-	goto L9000;
-    } else if (ncv > 50) {
-	s_wsle(&io___6);
-	do_lio(&c__9, &c__1, " ERROR with _NBDR4: NCV is greater than MAXNCV "
-		, (ftnlen)47);
-	e_wsle();
-	goto L9000;
+    if (n > 1000)
+    {
+        s_wsle(&io___4);
+        do_lio(&c__9, &c__1, " ERROR with _NBDR4: N is greater than MAXN ", (ftnlen)43);
+        e_wsle();
+        goto L9000;
+    }
+    else if (nev > 25)
+    {
+        s_wsle(&io___5);
+        do_lio(&c__9, &c__1, " ERROR with _NBDR4: NEV is greater than MAXNEV ", (ftnlen)47);
+        e_wsle();
+        goto L9000;
+    }
+    else if (ncv > 50)
+    {
+        s_wsle(&io___6);
+        do_lio(&c__9, &c__1, " ERROR with _NBDR4: NCV is greater than MAXNCV ", (ftnlen)47);
+        e_wsle();
+        goto L9000;
     }
     *(unsigned char *)bmat = 'G';
     s_copy(which, "LM", (ftnlen)2, (ftnlen)2);
     sigma.r = 10., sigma.i = 0.;
 
-/*     %----------------------------------------------------% */
-/*     | The work array WORKL is used in ZNAUPD  as          | */
-/*     | workspace.  Its dimension LWORKL has to be set as  | */
-/*     | illustrated below.  The parameter TOL determines   | */
-/*     | the stopping criterion. If TOL<=0, machine machine | */
-/*     | precision is used.  Setting INFO=0 indicates that  | */
-/*     | we using a randomly generated vector to start the  | */
-/*     | the ARNOLDI process.                               | */
-/*     %----------------------------------------------------% */
+    /*     %----------------------------------------------------% */
+    /*     | The work array WORKL is used in ZNAUPD  as          | */
+    /*     | workspace.  Its dimension LWORKL has to be set as  | */
+    /*     | illustrated below.  The parameter TOL determines   | */
+    /*     | the stopping criterion. If TOL<=0, machine machine | */
+    /*     | precision is used.  Setting INFO=0 indicates that  | */
+    /*     | we using a randomly generated vector to start the  | */
+    /*     | the ARNOLDI process.                               | */
+    /*     %----------------------------------------------------% */
 
-/* Computing 2nd power */
+    /* Computing 2nd power */
     i__1 = ncv;
     lworkl = i__1 * i__1 * 3 + ncv * 5;
     info = 0;
     tol = 0.f;
 
-/*     %---------------------------------------------------% */
-/*     | IPARAm(3) specifies the maximum number of Arnoldi | */
-/*     | iterations allowed.  Mode 3 of ZNAUPD  is used     | */
-/*     | (IPARAm(7) = 3). All these options can be changed | */
-/*     | by the user. For details, see the documentation   | */
-/*     | in znband .                                        | */
-/*     %---------------------------------------------------% */
+    /*     %---------------------------------------------------% */
+    /*     | IPARAm(3) specifies the maximum number of Arnoldi | */
+    /*     | iterations allowed.  Mode 3 of ZNAUPD  is used     | */
+    /*     | (IPARAm(7) = 3). All these options can be changed | */
+    /*     | by the user. For details, see the documentation   | */
+    /*     | in znband .                                        | */
+    /*     %---------------------------------------------------% */
 
     maxitr = 300;
     mode = 3;
@@ -270,207 +249,209 @@ static integer c_n6 = -6;
     iparam[2] = maxitr;
     iparam[6] = mode;
 
-/*     %--------------------------------------------% */
-/*     | Construct matrices A and M in LAPACK-style | */
-/*     | banded form.                               | */
-/*     %--------------------------------------------% */
+    /*     %--------------------------------------------% */
+    /*     | Construct matrices A and M in LAPACK-style | */
+    /*     | banded form.                               | */
+    /*     %--------------------------------------------% */
 
-/*     %---------------------------------------------% */
-/*     | Zero out the workspace for banded matrices. | */
-/*     %---------------------------------------------% */
+    /*     %---------------------------------------------% */
+    /*     | Zero out the workspace for banded matrices. | */
+    /*     %---------------------------------------------% */
 
     zlaset_("A", &c__50, &n, &c_b2, &c_b2, a, &c__50, (ftnlen)1);
     zlaset_("A", &c__50, &n, &c_b2, &c_b2, m, &c__50, (ftnlen)1);
     zlaset_("A", &c__50, &n, &c_b2, &c_b2, fac, &c__50, (ftnlen)1);
 
-/*     %-------------------------------------% */
-/*     | KU, KL are number of superdiagonals | */
-/*     | and subdiagonals within the band of | */
-/*     | matrices A and M.                   | */
-/*     %-------------------------------------% */
+    /*     %-------------------------------------% */
+    /*     | KU, KL are number of superdiagonals | */
+    /*     | and subdiagonals within the band of | */
+    /*     | matrices A and M.                   | */
+    /*     %-------------------------------------% */
 
     kl = 1;
     ku = 1;
 
-/*     %---------------% */
-/*     | Main diagonal | */
-/*     %---------------% */
+    /*     %---------------% */
+    /*     | Main diagonal | */
+    /*     %---------------% */
 
     i__1 = n + 1;
-    z__2.r = (doublereal) i__1, z__2.i = 0.;
+    z__2.r = (doublereal)i__1, z__2.i = 0.;
     z_div(&z__1, &c_b1, &z__2);
     h__.r = z__1.r, h__.i = z__1.i;
     idiag = kl + ku + 1;
     i__1 = n;
-    for (j = 1; j <= i__1; ++j) {
-	i__2 = idiag + j * 50 - 51;
-	z_div(&z__1, &c_b3, &h__);
-	a[i__2].r = z__1.r, a[i__2].i = z__1.i;
-	i__2 = idiag + j * 50 - 51;
-	z__2.r = h__.r * 4. - h__.i * 0., z__2.i = h__.i * 4. + h__.r * 0.;
-	z_div(&z__1, &z__2, &c_b5);
-	m[i__2].r = z__1.r, m[i__2].i = z__1.i;
-/* L30: */
+    for (j = 1; j <= i__1; ++j)
+    {
+        i__2 = idiag + j * 50 - 51;
+        z_div(&z__1, &c_b3, &h__);
+        a[i__2].r = z__1.r, a[i__2].i = z__1.i;
+        i__2 = idiag + j * 50 - 51;
+        z__2.r = h__.r * 4. - h__.i * 0., z__2.i = h__.i * 4. + h__.r * 0.;
+        z_div(&z__1, &z__2, &c_b5);
+        m[i__2].r = z__1.r, m[i__2].i = z__1.i;
+        /* L30: */
     }
 
-/*     %-------------------------------------% */
-/*     | First subdiagonal and superdiagonal | */
-/*     %-------------------------------------% */
+    /*     %-------------------------------------% */
+    /*     | First subdiagonal and superdiagonal | */
+    /*     %-------------------------------------% */
 
     isup = kl + ku;
     isub = kl + ku + 2;
     rho.r = 10., rho.i = 0.;
     i__1 = n - 1;
-    for (j = 1; j <= i__1; ++j) {
-	i__2 = isup + (j + 1) * 50 - 51;
-	z__3.r = -1., z__3.i = -0.;
-	z_div(&z__2, &z__3, &h__);
-	z_div(&z__4, &rho, &c_b3);
-	z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
-	a[i__2].r = z__1.r, a[i__2].i = z__1.i;
-	i__2 = isub + j * 50 - 51;
-	z__3.r = -1., z__3.i = -0.;
-	z_div(&z__2, &z__3, &h__);
-	z_div(&z__4, &rho, &c_b3);
-	z__1.r = z__2.r - z__4.r, z__1.i = z__2.i - z__4.i;
-	a[i__2].r = z__1.r, a[i__2].i = z__1.i;
-	i__2 = isup + (j + 1) * 50 - 51;
-	z__2.r = h__.r * 1. - h__.i * 0., z__2.i = h__.i * 1. + h__.r * 0.;
-	z_div(&z__1, &z__2, &c_b5);
-	m[i__2].r = z__1.r, m[i__2].i = z__1.i;
-	i__2 = isub + j * 50 - 51;
-	z__2.r = h__.r * 1. - h__.i * 0., z__2.i = h__.i * 1. + h__.r * 0.;
-	z_div(&z__1, &z__2, &c_b5);
-	m[i__2].r = z__1.r, m[i__2].i = z__1.i;
-/* L40: */
+    for (j = 1; j <= i__1; ++j)
+    {
+        i__2 = isup + (j + 1) * 50 - 51;
+        z__3.r = -1., z__3.i = -0.;
+        z_div(&z__2, &z__3, &h__);
+        z_div(&z__4, &rho, &c_b3);
+        z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
+        a[i__2].r = z__1.r, a[i__2].i = z__1.i;
+        i__2 = isub + j * 50 - 51;
+        z__3.r = -1., z__3.i = -0.;
+        z_div(&z__2, &z__3, &h__);
+        z_div(&z__4, &rho, &c_b3);
+        z__1.r = z__2.r - z__4.r, z__1.i = z__2.i - z__4.i;
+        a[i__2].r = z__1.r, a[i__2].i = z__1.i;
+        i__2 = isup + (j + 1) * 50 - 51;
+        z__2.r = h__.r * 1. - h__.i * 0., z__2.i = h__.i * 1. + h__.r * 0.;
+        z_div(&z__1, &z__2, &c_b5);
+        m[i__2].r = z__1.r, m[i__2].i = z__1.i;
+        i__2 = isub + j * 50 - 51;
+        z__2.r = h__.r * 1. - h__.i * 0., z__2.i = h__.i * 1. + h__.r * 0.;
+        z_div(&z__1, &z__2, &c_b5);
+        m[i__2].r = z__1.r, m[i__2].i = z__1.i;
+        /* L40: */
     }
 
-/*     %-----------------------------------------------% */
-/*     | Call ARPACK banded solver to find eigenvalues | */
-/*     | and eigenvectors. Eigenvalues are returned in | */
-/*     | the one dimensional array D.  Eigenvectors    | */
-/*     | are returned in the first NCONV (=IPARAM(5))  | */
-/*     | columns of V.                                 | */
-/*     %-----------------------------------------------% */
+    /*     %-----------------------------------------------% */
+    /*     | Call ARPACK banded solver to find eigenvalues | */
+    /*     | and eigenvectors. Eigenvalues are returned in | */
+    /*     | the one dimensional array D.  Eigenvectors    | */
+    /*     | are returned in the first NCONV (=IPARAM(5))  | */
+    /*     | columns of V.                                 | */
+    /*     %-----------------------------------------------% */
 
     rvec = TRUE_;
-    znband_(&rvec, "A", select, d__, v, &c__1000, &sigma, workev, &n, a, m, &
-	    c__50, fac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &
-	    c__1000, iparam, workd, workl, &lworkl, rwork, iwork, &info, (
-	    ftnlen)1, (ftnlen)2, (ftnlen)1);
+    znband_(&rvec, "A", select, d__, v, &c__1000, &sigma, workev, &n, a, m, &c__50, fac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, rwork, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
 
-    if (info == 0) {
+    if (info == 0)
+    {
 
-	nconv = iparam[4];
+        nconv = iparam[4];
 
-/*        %-----------------------------------% */
-/*        | Print out convergence information | */
-/*        %-----------------------------------% */
+        /*        %-----------------------------------% */
+        /*        | Print out convergence information | */
+        /*        %-----------------------------------% */
 
-	s_wsle(&io___38);
-	do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	e_wsle();
-	s_wsle(&io___39);
-	do_lio(&c__9, &c__1, "_NBDR4 ", (ftnlen)7);
-	e_wsle();
-	s_wsle(&io___40);
-	do_lio(&c__9, &c__1, "====== ", (ftnlen)7);
-	e_wsle();
-	s_wsle(&io___41);
-	do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	e_wsle();
-	s_wsle(&io___42);
-	do_lio(&c__9, &c__1, " The size of the matrix is ", (ftnlen)27);
-	do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(integer));
-	e_wsle();
-	s_wsle(&io___43);
-	do_lio(&c__9, &c__1, " Number of eigenvalue requested is ", (ftnlen)
-		35);
-	do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(integer));
-	e_wsle();
-	s_wsle(&io___44);
-	do_lio(&c__9, &c__1, " The number of Arnoldi vectors generated", (
-		ftnlen)40);
-	do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
-	do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(integer));
-	e_wsle();
-	s_wsle(&io___45);
-	do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (
-		ftnlen)40);
-	do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(integer));
-	e_wsle();
-	s_wsle(&io___46);
-	do_lio(&c__9, &c__1, " What portion of the spectrum ", (ftnlen)30);
-	do_lio(&c__9, &c__1, which, (ftnlen)2);
-	e_wsle();
-	s_wsle(&io___47);
-	do_lio(&c__9, &c__1, " The number of Implicit Arnoldi ", (ftnlen)32);
-	do_lio(&c__9, &c__1, " update taken is ", (ftnlen)17);
-	do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(integer));
-	e_wsle();
-	s_wsle(&io___48);
-	do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
-	do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(integer));
-	e_wsle();
-	s_wsle(&io___49);
-	do_lio(&c__9, &c__1, " The convergence tolerance is ", (ftnlen)30);
-	do_lio(&c__5, &c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
-	e_wsle();
-	s_wsle(&io___50);
-	do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	e_wsle();
+        s_wsle(&io___38);
+        do_lio(&c__9, &c__1, " ", (ftnlen)1);
+        e_wsle();
+        s_wsle(&io___39);
+        do_lio(&c__9, &c__1, "_NBDR4 ", (ftnlen)7);
+        e_wsle();
+        s_wsle(&io___40);
+        do_lio(&c__9, &c__1, "====== ", (ftnlen)7);
+        e_wsle();
+        s_wsle(&io___41);
+        do_lio(&c__9, &c__1, " ", (ftnlen)1);
+        e_wsle();
+        s_wsle(&io___42);
+        do_lio(&c__9, &c__1, " The size of the matrix is ", (ftnlen)27);
+        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(integer));
+        e_wsle();
+        s_wsle(&io___43);
+        do_lio(&c__9, &c__1, " Number of eigenvalue requested is ", (ftnlen)35);
+        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(integer));
+        e_wsle();
+        s_wsle(&io___44);
+        do_lio(&c__9, &c__1, " The number of Arnoldi vectors generated", (ftnlen)40);
+        do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
+        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(integer));
+        e_wsle();
+        s_wsle(&io___45);
+        do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (ftnlen)40);
+        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(integer));
+        e_wsle();
+        s_wsle(&io___46);
+        do_lio(&c__9, &c__1, " What portion of the spectrum ", (ftnlen)30);
+        do_lio(&c__9, &c__1, which, (ftnlen)2);
+        e_wsle();
+        s_wsle(&io___47);
+        do_lio(&c__9, &c__1, " The number of Implicit Arnoldi ", (ftnlen)32);
+        do_lio(&c__9, &c__1, " update taken is ", (ftnlen)17);
+        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(integer));
+        e_wsle();
+        s_wsle(&io___48);
+        do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
+        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(integer));
+        e_wsle();
+        s_wsle(&io___49);
+        do_lio(&c__9, &c__1, " The convergence tolerance is ", (ftnlen)30);
+        do_lio(&c__5, &c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
+        e_wsle();
+        s_wsle(&io___50);
+        do_lio(&c__9, &c__1, " ", (ftnlen)1);
+        e_wsle();
 
-	i__1 = nconv;
-	for (j = 1; j <= i__1; ++j) {
+        i__1 = nconv;
+        for (j = 1; j <= i__1; ++j)
+        {
 
-/*           %----------------------------% */
-/*           | Compute the residual norm. | */
-/*           |    ||  A*x - lambda*x ||   | */
-/*           %----------------------------% */
+            /*           %----------------------------% */
+            /*           | Compute the residual norm. | */
+            /*           |    ||  A*x - lambda*x ||   | */
+            /*           %----------------------------% */
 
-	    zgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[
-		    j * 1000 - 1000], &c__1, &c_b2, ax, &c__1, (ftnlen)11);
-	    zgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &m[kl], &c__50, &v[
-		    j * 1000 - 1000], &c__1, &c_b2, mx, &c__1, (ftnlen)11);
-	    i__2 = j - 1;
-	    z__1.r = -d__[i__2].r, z__1.i = -d__[i__2].i;
-	    zaxpy_(&n, &z__1, mx, &c__1, ax, &c__1);
-	    i__2 = j - 1;
-	    rd[j - 1] = d__[i__2].r;
-	    rd[j + 49] = d_imag(&d__[j - 1]);
-	    rd[j + 99] = dznrm2_(&n, ax, &c__1);
-	    rd[j + 99] /= dlapy2_(&rd[j - 1], &rd[j + 49]);
-/* L90: */
-	}
-	dmout_(&c__6, &nconv, &c__3, rd, &c__50, &c_n6, "Ritz values (Real,I"
-		"mag) and relative residuals", (ftnlen)46);
-    } else {
+            zgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, ax, &c__1, (ftnlen)11);
+            zgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, mx, &c__1, (ftnlen)11);
+            i__2 = j - 1;
+            z__1.r = -d__[i__2].r, z__1.i = -d__[i__2].i;
+            zaxpy_(&n, &z__1, mx, &c__1, ax, &c__1);
+            i__2 = j - 1;
+            rd[j - 1] = d__[i__2].r;
+            rd[j + 49] = d_imag(&d__[j - 1]);
+            rd[j + 99] = dznrm2_(&n, ax, &c__1);
+            rd[j + 99] /= dlapy2_(&rd[j - 1], &rd[j + 49]);
+            /* L90: */
+        }
+        dmout_(&c__6, &nconv, &c__3, rd, &c__50, &c_n6,
+               "Ritz values (Real,I"
+               "mag) and relative residuals",
+               (ftnlen)46);
+    }
+    else
+    {
 
-/*        %-------------------------------------% */
-/*        | Either convergence failed, or there | */
-/*        | is error.  Check the documentation  | */
-/*        | for znband .                         | */
-/*        %-------------------------------------% */
+        /*        %-------------------------------------% */
+        /*        | Either convergence failed, or there | */
+        /*        | is error.  Check the documentation  | */
+        /*        | for znband .                         | */
+        /*        %-------------------------------------% */
 
-	s_wsle(&io___54);
-	do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	e_wsle();
-	s_wsle(&io___55);
-	do_lio(&c__9, &c__1, " Error with _band, info= ", (ftnlen)25);
-	do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(integer));
-	e_wsle();
-	s_wsle(&io___56);
-	do_lio(&c__9, &c__1, " Check the documentation of _band ", (ftnlen)34)
-		;
-	e_wsle();
-	s_wsle(&io___57);
-	do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	e_wsle();
-
+        s_wsle(&io___54);
+        do_lio(&c__9, &c__1, " ", (ftnlen)1);
+        e_wsle();
+        s_wsle(&io___55);
+        do_lio(&c__9, &c__1, " Error with _band, info= ", (ftnlen)25);
+        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(integer));
+        e_wsle();
+        s_wsle(&io___56);
+        do_lio(&c__9, &c__1, " Check the documentation of _band ", (ftnlen)34);
+        e_wsle();
+        s_wsle(&io___57);
+        do_lio(&c__9, &c__1, " ", (ftnlen)1);
+        e_wsle();
     }
 
 L9000:
     return 0;
 } /* MAIN__ */
 
-/* Main program alias */ int zndrv4_ () { MAIN__ (); return 0; }
+/* Main program alias */ int zndrv4_()
+{
+    MAIN__();
+    return 0;
+}

@@ -1,13 +1,13 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\EXAMPLES\BAND\dnband.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
@@ -70,7 +70,6 @@ static integer c__3 = 3;
 /*           ===> shift-and-invert mode (in real arithmetic) */
 /*           If OP*z = amu*z, then */
 /*           amu = 1/2i * [ 1/(lambda-sigma) - 1/(lambda-conjg(sigma)) ]. */
-
 
 /*  The choice of mode must be specified in IPARAM(7) defined below. */
 
@@ -408,27 +407,15 @@ static integer c__3 = 3;
 
 /* --------------------------------------------------------------------- */
 
-/* Subroutine */ int dnband_(logical *rvec, char *howmny, logical *select, 
-	doublereal *dr, doublereal *di, doublereal *z__, integer *ldz, 
-	doublereal *sigmar, doublereal *sigmai, doublereal *workev, integer *
-	n, doublereal *ab, doublereal *mb, integer *lda, doublereal *rfac, 
-	doublecomplex *cfac, integer *kl, integer *ku, char *which, char *
-	bmat, integer *nev, doublereal *tol, doublereal *resid, integer *ncv, 
-	doublereal *v, integer *ldv, integer *iparam, doublereal *workd, 
-	doublereal *workl, integer *lworkl, doublecomplex *workc, integer *
-	iwork, integer *info, ftnlen howmny_len, ftnlen which_len, ftnlen 
-	bmat_len)
+int dnband_(logical *rvec, char *howmny, logical *select, doublereal *dr, doublereal *di, doublereal *z__, integer *ldz, doublereal *sigmar, doublereal *sigmai, doublereal *workev, integer *n, doublereal *ab, doublereal *mb, integer *lda, doublereal *rfac, doublecomplex *cfac, integer *kl, integer *ku, char *which, char *bmat, integer *nev, doublereal *tol, doublereal *resid, integer *ncv, doublereal *v, integer *ldv, integer *iparam, doublereal *workd, doublereal *workl, integer *lworkl, doublecomplex *workc, integer *iwork, integer *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
 {
     /* System generated locals */
-    integer v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, 
-	    mb_offset, rfac_dim1, rfac_offset, cfac_dim1, cfac_offset, i__1, 
-	    i__2, i__3, i__4, i__5;
+    integer v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, rfac_dim1, rfac_offset, cfac_dim1, cfac_offset, i__1, i__2, i__3, i__4, i__5;
     doublereal d__1, d__2, d__3;
     doublecomplex z__1, z__2;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
     double d_imag(doublecomplex *);
 
     /* Local variables */
@@ -436,164 +423,133 @@ static integer c__3 = 3;
     doublereal deni;
     integer imid;
     doublereal denr;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, 
-	    integer *);
+    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
     integer ibot, ierr, itop, type__;
     doublereal numr;
     extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern /* Subroutine */ int dgbmv_(char *, integer *, integer *, integer *
-	    , integer *, doublereal *, doublereal *, integer *, doublereal *, 
-	    integer *, doublereal *, doublereal *, integer *, ftnlen);
+    extern int dgbmv_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, ftnlen);
     doublereal dmdul;
-    extern /* Subroutine */ int dcopy_(integer *, doublereal *, integer *, 
-	    doublereal *, integer *);
+    extern int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
     logical first;
     integer ipntr[14];
-    extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *, 
-	    ftnlen);
-    extern /* Subroutine */ int dgbtrf_(integer *, integer *, integer *, 
-	    integer *, doublereal *, integer *, integer *, integer *), 
-	    dnaupd_(integer *, char *, integer *, char *, integer *, 
-	    doublereal *, doublereal *, integer *, doublereal *, integer *, 
-	    integer *, integer *, doublereal *, doublereal *, integer *, 
-	    integer *, ftnlen, ftnlen), dlacpy_(char *, integer *, integer *, 
-	    doublereal *, integer *, doublereal *, integer *, ftnlen);
+    extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *, ftnlen);
+    extern int dgbtrf_(integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *), dnaupd_(integer *, char *, integer *, char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, ftnlen, ftnlen), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, ftnlen);
     doublereal safmin;
-    extern /* Subroutine */ int dneupd_(logical *, char *, logical *, 
-	    doublereal *, doublereal *, doublereal *, integer *, doublereal *,
-	     doublereal *, doublereal *, char *, integer *, char *, integer *,
-	     doublereal *, doublereal *, integer *, doublereal *, integer *, 
-	    integer *, integer *, doublereal *, doublereal *, integer *, 
-	    integer *, ftnlen, ftnlen, ftnlen), dgbtrs_(char *, integer *, 
-	    integer *, integer *, integer *, doublereal *, integer *, integer 
-	    *, doublereal *, integer *, integer *, ftnlen), zgbtrf_(integer *,
-	     integer *, integer *, integer *, doublecomplex *, integer *, 
-	    integer *, integer *), zgbtrs_(char *, integer *, integer *, 
-	    integer *, integer *, doublecomplex *, integer *, integer *, 
-	    doublecomplex *, integer *, integer *, ftnlen);
+    extern int dneupd_(logical *, char *, logical *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, char *, integer *, char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, ftnlen, ftnlen, ftnlen), dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, ftnlen), zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *),
+        zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *, ftnlen);
 
     /* Fortran I/O blocks */
-    static cilist io___3 = { 0, 6, 0, 0, 0 };
-    static cilist io___4 = { 0, 6, 0, 0, 0 };
-    static cilist io___5 = { 0, 6, 0, 0, 0 };
-    static cilist io___6 = { 0, 6, 0, 0, 0 };
-    static cilist io___7 = { 0, 6, 0, 0, 0 };
-    static cilist io___8 = { 0, 6, 0, 0, 0 };
-    static cilist io___15 = { 0, 6, 0, 0, 0 };
-    static cilist io___16 = { 0, 6, 0, 0, 0 };
-    static cilist io___17 = { 0, 6, 0, 0, 0 };
-    static cilist io___19 = { 0, 6, 0, 0, 0 };
-    static cilist io___20 = { 0, 6, 0, 0, 0 };
-    static cilist io___21 = { 0, 6, 0, 0, 0 };
-    static cilist io___22 = { 0, 6, 0, 0, 0 };
-    static cilist io___23 = { 0, 6, 0, 0, 0 };
-    static cilist io___24 = { 0, 6, 0, 0, 0 };
-    static cilist io___25 = { 0, 6, 0, 0, 0 };
-    static cilist io___26 = { 0, 6, 0, 0, 0 };
-    static cilist io___27 = { 0, 6, 0, 0, 0 };
-    static cilist io___28 = { 0, 6, 0, 0, 0 };
-    static cilist io___29 = { 0, 6, 0, 0, 0 };
-    static cilist io___30 = { 0, 6, 0, 0, 0 };
-    static cilist io___32 = { 0, 6, 0, 0, 0 };
-    static cilist io___33 = { 0, 6, 0, 0, 0 };
-    static cilist io___34 = { 0, 6, 0, 0, 0 };
-    static cilist io___35 = { 0, 6, 0, 0, 0 };
-    static cilist io___36 = { 0, 6, 0, 0, 0 };
-    static cilist io___37 = { 0, 6, 0, 0, 0 };
-    static cilist io___38 = { 0, 6, 0, 0, 0 };
-    static cilist io___39 = { 0, 6, 0, 0, 0 };
-    static cilist io___40 = { 0, 6, 0, 0, 0 };
-    static cilist io___41 = { 0, 6, 0, 0, 0 };
-    static cilist io___42 = { 0, 6, 0, 0, 0 };
-    static cilist io___43 = { 0, 6, 0, 0, 0 };
-    static cilist io___44 = { 0, 6, 0, 0, 0 };
-    static cilist io___45 = { 0, 6, 0, 0, 0 };
-    static cilist io___46 = { 0, 6, 0, 0, 0 };
-    static cilist io___47 = { 0, 6, 0, 0, 0 };
-    static cilist io___48 = { 0, 6, 0, 0, 0 };
-    static cilist io___49 = { 0, 6, 0, 0, 0 };
-    static cilist io___50 = { 0, 6, 0, 0, 0 };
-    static cilist io___51 = { 0, 6, 0, 0, 0 };
-    static cilist io___52 = { 0, 6, 0, 0, 0 };
-    static cilist io___53 = { 0, 6, 0, 0, 0 };
-    static cilist io___54 = { 0, 6, 0, 0, 0 };
-    static cilist io___55 = { 0, 6, 0, 0, 0 };
-    static cilist io___56 = { 0, 6, 0, 0, 0 };
-    static cilist io___57 = { 0, 6, 0, 0, 0 };
-    static cilist io___58 = { 0, 6, 0, 0, 0 };
-    static cilist io___59 = { 0, 6, 0, 0, 0 };
-    static cilist io___60 = { 0, 6, 0, 0, 0 };
-    static cilist io___61 = { 0, 6, 0, 0, 0 };
-    static cilist io___62 = { 0, 6, 0, 0, 0 };
-    static cilist io___63 = { 0, 6, 0, 0, 0 };
-    static cilist io___64 = { 0, 6, 0, 0, 0 };
-    static cilist io___65 = { 0, 6, 0, 0, 0 };
-    static cilist io___66 = { 0, 6, 0, 0, 0 };
-    static cilist io___67 = { 0, 6, 0, 0, 0 };
-    static cilist io___68 = { 0, 6, 0, 0, 0 };
-    static cilist io___69 = { 0, 6, 0, 0, 0 };
-    static cilist io___70 = { 0, 6, 0, 0, 0 };
-    static cilist io___71 = { 0, 6, 0, 0, 0 };
-    static cilist io___72 = { 0, 6, 0, 0, 0 };
-    static cilist io___73 = { 0, 6, 0, 0, 0 };
-    static cilist io___74 = { 0, 6, 0, 0, 0 };
-    static cilist io___75 = { 0, 6, 0, 0, 0 };
-    static cilist io___76 = { 0, 6, 0, 0, 0 };
-    static cilist io___77 = { 0, 6, 0, 0, 0 };
-    static cilist io___78 = { 0, 6, 0, 0, 0 };
-    static cilist io___79 = { 0, 6, 0, 0, 0 };
-    static cilist io___80 = { 0, 6, 0, 0, 0 };
-    static cilist io___81 = { 0, 6, 0, 0, 0 };
-    static cilist io___82 = { 0, 6, 0, 0, 0 };
-    static cilist io___83 = { 0, 6, 0, 0, 0 };
-    static cilist io___84 = { 0, 6, 0, 0, 0 };
+    static cilist io___3 = {0, 6, 0, 0, 0};
+    static cilist io___4 = {0, 6, 0, 0, 0};
+    static cilist io___5 = {0, 6, 0, 0, 0};
+    static cilist io___6 = {0, 6, 0, 0, 0};
+    static cilist io___7 = {0, 6, 0, 0, 0};
+    static cilist io___8 = {0, 6, 0, 0, 0};
+    static cilist io___15 = {0, 6, 0, 0, 0};
+    static cilist io___16 = {0, 6, 0, 0, 0};
+    static cilist io___17 = {0, 6, 0, 0, 0};
+    static cilist io___19 = {0, 6, 0, 0, 0};
+    static cilist io___20 = {0, 6, 0, 0, 0};
+    static cilist io___21 = {0, 6, 0, 0, 0};
+    static cilist io___22 = {0, 6, 0, 0, 0};
+    static cilist io___23 = {0, 6, 0, 0, 0};
+    static cilist io___24 = {0, 6, 0, 0, 0};
+    static cilist io___25 = {0, 6, 0, 0, 0};
+    static cilist io___26 = {0, 6, 0, 0, 0};
+    static cilist io___27 = {0, 6, 0, 0, 0};
+    static cilist io___28 = {0, 6, 0, 0, 0};
+    static cilist io___29 = {0, 6, 0, 0, 0};
+    static cilist io___30 = {0, 6, 0, 0, 0};
+    static cilist io___32 = {0, 6, 0, 0, 0};
+    static cilist io___33 = {0, 6, 0, 0, 0};
+    static cilist io___34 = {0, 6, 0, 0, 0};
+    static cilist io___35 = {0, 6, 0, 0, 0};
+    static cilist io___36 = {0, 6, 0, 0, 0};
+    static cilist io___37 = {0, 6, 0, 0, 0};
+    static cilist io___38 = {0, 6, 0, 0, 0};
+    static cilist io___39 = {0, 6, 0, 0, 0};
+    static cilist io___40 = {0, 6, 0, 0, 0};
+    static cilist io___41 = {0, 6, 0, 0, 0};
+    static cilist io___42 = {0, 6, 0, 0, 0};
+    static cilist io___43 = {0, 6, 0, 0, 0};
+    static cilist io___44 = {0, 6, 0, 0, 0};
+    static cilist io___45 = {0, 6, 0, 0, 0};
+    static cilist io___46 = {0, 6, 0, 0, 0};
+    static cilist io___47 = {0, 6, 0, 0, 0};
+    static cilist io___48 = {0, 6, 0, 0, 0};
+    static cilist io___49 = {0, 6, 0, 0, 0};
+    static cilist io___50 = {0, 6, 0, 0, 0};
+    static cilist io___51 = {0, 6, 0, 0, 0};
+    static cilist io___52 = {0, 6, 0, 0, 0};
+    static cilist io___53 = {0, 6, 0, 0, 0};
+    static cilist io___54 = {0, 6, 0, 0, 0};
+    static cilist io___55 = {0, 6, 0, 0, 0};
+    static cilist io___56 = {0, 6, 0, 0, 0};
+    static cilist io___57 = {0, 6, 0, 0, 0};
+    static cilist io___58 = {0, 6, 0, 0, 0};
+    static cilist io___59 = {0, 6, 0, 0, 0};
+    static cilist io___60 = {0, 6, 0, 0, 0};
+    static cilist io___61 = {0, 6, 0, 0, 0};
+    static cilist io___62 = {0, 6, 0, 0, 0};
+    static cilist io___63 = {0, 6, 0, 0, 0};
+    static cilist io___64 = {0, 6, 0, 0, 0};
+    static cilist io___65 = {0, 6, 0, 0, 0};
+    static cilist io___66 = {0, 6, 0, 0, 0};
+    static cilist io___67 = {0, 6, 0, 0, 0};
+    static cilist io___68 = {0, 6, 0, 0, 0};
+    static cilist io___69 = {0, 6, 0, 0, 0};
+    static cilist io___70 = {0, 6, 0, 0, 0};
+    static cilist io___71 = {0, 6, 0, 0, 0};
+    static cilist io___72 = {0, 6, 0, 0, 0};
+    static cilist io___73 = {0, 6, 0, 0, 0};
+    static cilist io___74 = {0, 6, 0, 0, 0};
+    static cilist io___75 = {0, 6, 0, 0, 0};
+    static cilist io___76 = {0, 6, 0, 0, 0};
+    static cilist io___77 = {0, 6, 0, 0, 0};
+    static cilist io___78 = {0, 6, 0, 0, 0};
+    static cilist io___79 = {0, 6, 0, 0, 0};
+    static cilist io___80 = {0, 6, 0, 0, 0};
+    static cilist io___81 = {0, 6, 0, 0, 0};
+    static cilist io___82 = {0, 6, 0, 0, 0};
+    static cilist io___83 = {0, 6, 0, 0, 0};
+    static cilist io___84 = {0, 6, 0, 0, 0};
 
+    /*     %------------------% */
+    /*     | Scalar Arguments | */
+    /*     %------------------% */
 
+    /*     %-----------------% */
+    /*     | Array Arguments | */
+    /*     %-----------------% */
 
-/*     %------------------% */
-/*     | Scalar Arguments | */
-/*     %------------------% */
+    /*     %--------------% */
+    /*     | Local Arrays | */
+    /*     %--------------% */
 
+    /*     %---------------% */
+    /*     | Local Scalars | */
+    /*     %---------------% */
 
-/*     %-----------------% */
-/*     | Array Arguments | */
-/*     %-----------------% */
+    /*     %------------% */
+    /*     | Parameters | */
+    /*     %------------% */
 
+    /*     %-----------------------------% */
+    /*     | LAPACK & BLAS routines used | */
+    /*     %-----------------------------% */
 
-/*     %--------------% */
-/*     | Local Arrays | */
-/*     %--------------% */
+    /*     %---------------------% */
+    /*     | Intrinsic Functions | */
+    /*     %---------------------% */
 
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
-/*     %---------------% */
-/*     | Local Scalars | */
-/*     %---------------% */
-
-
-/*     %------------% */
-/*     | Parameters | */
-/*     %------------% */
-
-
-
-/*     %-----------------------------% */
-/*     | LAPACK & BLAS routines used | */
-/*     %-----------------------------% */
-
-
-/*     %---------------------% */
-/*     | Intrinsic Functions | */
-/*     %---------------------% */
-
-
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
-
-/*     %--------------------------------% */
-/*     | safmin = safe minimum is such  | */
-/*     | that 1/sfmin does not overflow | */
-/*     %--------------------------------% */
+    /*     %--------------------------------% */
+    /*     | safmin = safe minimum is such  | */
+    /*     | that 1/sfmin does not overflow | */
+    /*     %--------------------------------% */
 
     /* Parameter adjustments */
     --select;
@@ -628,1260 +584,1272 @@ static integer c__3 = 3;
     /* Function Body */
     safmin = dlamch_("safmin", (ftnlen)6);
 
-/*     %----------------------------------------------------------------% */
-/*     | Set type of the problem to be solved. Check consistency        | */
-/*     | between BMAT and IPARAM(7).                                    | */
-/*     | type = 1 --> Solving standard problem in regular mode.         | */
-/*     | type = 2 --> Solving standard problem in shift-invert mode.    | */
-/*     | type = 3 --> Solving generalized problem in regular mode.      | */
-/*     | type = 4 --> Solving generalized problem in shift-invert mode. | */
-/*     | type = 5 --> Solving standard problem in shift-invert mode     | */
-/*     |              using iparam(7) = 4 in DNAUPD.                    | */
-/*     | type = 6 --> Solving generalized problem in shift-invert mode. | */
-/*     |              using iparam(7) = 4 in DNAUPD.                    | */
-/*     %----------------------------------------------------------------% */
+    /*     %----------------------------------------------------------------% */
+    /*     | Set type of the problem to be solved. Check consistency        | */
+    /*     | between BMAT and IPARAM(7).                                    | */
+    /*     | type = 1 --> Solving standard problem in regular mode.         | */
+    /*     | type = 2 --> Solving standard problem in shift-invert mode.    | */
+    /*     | type = 3 --> Solving generalized problem in regular mode.      | */
+    /*     | type = 4 --> Solving generalized problem in shift-invert mode. | */
+    /*     | type = 5 --> Solving standard problem in shift-invert mode     | */
+    /*     |              using iparam(7) = 4 in DNAUPD.                    | */
+    /*     | type = 6 --> Solving generalized problem in shift-invert mode. | */
+    /*     |              using iparam(7) = 4 in DNAUPD.                    | */
+    /*     %----------------------------------------------------------------% */
 
-    if (iparam[7] == 1) {
-	type__ = 1;
-    } else if (iparam[7] == 3 && *(unsigned char *)bmat == 'I') {
-	type__ = 2;
-    } else if (iparam[7] == 2) {
-	type__ = 3;
-    } else if (iparam[7] == 3 && *(unsigned char *)bmat == 'G') {
-	type__ = 4;
-    } else if (iparam[7] == 4 && *(unsigned char *)bmat == 'I') {
-	type__ = 5;
-    } else if (iparam[7] == 4 && *(unsigned char *)bmat == 'G') {
-	type__ = 6;
-    } else {
-	s_wsle(&io___3);
-	do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	e_wsle();
-	s_wsle(&io___4);
-	do_lio(&c__9, &c__1, "BMAT is inconsistent with IPARAM(7).", (ftnlen)
-		36);
-	e_wsle();
-	s_wsle(&io___5);
-	do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	e_wsle();
-	goto L9000;
+    if (iparam[7] == 1)
+    {
+        type__ = 1;
+    }
+    else if (iparam[7] == 3 && *(unsigned char *)bmat == 'I')
+    {
+        type__ = 2;
+    }
+    else if (iparam[7] == 2)
+    {
+        type__ = 3;
+    }
+    else if (iparam[7] == 3 && *(unsigned char *)bmat == 'G')
+    {
+        type__ = 4;
+    }
+    else if (iparam[7] == 4 && *(unsigned char *)bmat == 'I')
+    {
+        type__ = 5;
+    }
+    else if (iparam[7] == 4 && *(unsigned char *)bmat == 'G')
+    {
+        type__ = 6;
+    }
+    else
+    {
+        s_wsle(&io___3);
+        do_lio(&c__9, &c__1, " ", (ftnlen)1);
+        e_wsle();
+        s_wsle(&io___4);
+        do_lio(&c__9, &c__1, "BMAT is inconsistent with IPARAM(7).", (ftnlen)36);
+        e_wsle();
+        s_wsle(&io___5);
+        do_lio(&c__9, &c__1, " ", (ftnlen)1);
+        e_wsle();
+        goto L9000;
     }
 
-/*     %----------------------------------% */
-/*     | When type = 5,6 are used, sigmai | */
-/*     | must be nonzero.                 | */
-/*     %----------------------------------% */
+    /*     %----------------------------------% */
+    /*     | When type = 5,6 are used, sigmai | */
+    /*     | must be nonzero.                 | */
+    /*     %----------------------------------% */
 
-    if (type__ == 5 || type__ == 6) {
-	if (*sigmai == 0.) {
-	    s_wsle(&io___6);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    s_wsle(&io___7);
-	    do_lio(&c__9, &c__1, "_NBAND: sigmai must be nonzero when type 5"
-		    " or 6                   is used. ", (ftnlen)75);
-	    e_wsle();
-	    s_wsle(&io___8);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    goto L9000;
-	}
+    if (type__ == 5 || type__ == 6)
+    {
+        if (*sigmai == 0.)
+        {
+            s_wsle(&io___6);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+            s_wsle(&io___7);
+            do_lio(&c__9, &c__1,
+                   "_NBAND: sigmai must be nonzero when type 5"
+                   " or 6                   is used. ",
+                   (ftnlen)75);
+            e_wsle();
+            s_wsle(&io___8);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+            goto L9000;
+        }
     }
 
-/*     %------------------------% */
-/*     | Initialize the reverse | */
-/*     | communication flag.    | */
-/*     %------------------------% */
+    /*     %------------------------% */
+    /*     | Initialize the reverse | */
+    /*     | communication flag.    | */
+    /*     %------------------------% */
 
     ido = 0;
 
-/*     %----------------% */
-/*     | Exact shift is | */
-/*     | used.          | */
-/*     %----------------% */
+    /*     %----------------% */
+    /*     | Exact shift is | */
+    /*     | used.          | */
+    /*     %----------------% */
 
     iparam[1] = 1;
 
-/*     %-----------------------------------% */
-/*     | Both matrices A and M are stored  | */
-/*     | between rows itop and ibot.  Imid | */
-/*     | is the index of the row that      | */
-/*     | stores the diagonal elements.     | */
-/*     %-----------------------------------% */
+    /*     %-----------------------------------% */
+    /*     | Both matrices A and M are stored  | */
+    /*     | between rows itop and ibot.  Imid | */
+    /*     | is the index of the row that      | */
+    /*     | stores the diagonal elements.     | */
+    /*     %-----------------------------------% */
 
     itop = *kl + 1;
     imid = *kl + *ku + 1;
     ibot = (*kl << 1) + *ku + 1;
 
-    if (type__ == 2 || type__ == 5) {
+    if (type__ == 2 || type__ == 5)
+    {
 
-/*         %-------------------------------% */
-/*         | Solving a standard eigenvalue | */
-/*         | problem in shift-invert mode. | */
-/*         | Factor (A-sigma*I).           | */
-/*         %-------------------------------% */
+        /*         %-------------------------------% */
+        /*         | Solving a standard eigenvalue | */
+        /*         | problem in shift-invert mode. | */
+        /*         | Factor (A-sigma*I).           | */
+        /*         %-------------------------------% */
 
-	if (*sigmai == 0.) {
+        if (*sigmai == 0.)
+        {
 
-/*            %-----------------------------------% */
-/*            | Construct (A-sigmar*I) and factor | */
-/*            | in real arithmetic.               | */
-/*            %-----------------------------------% */
+            /*            %-----------------------------------% */
+            /*            | Construct (A-sigmar*I) and factor | */
+            /*            | in real arithmetic.               | */
+            /*            %-----------------------------------% */
 
-	    dlacpy_("A", &ibot, n, &ab[ab_offset], lda, &rfac[rfac_offset], 
-		    lda, (ftnlen)1);
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
-		rfac[imid + j * rfac_dim1] = ab[imid + j * ab_dim1] - *sigmar;
-/* L10: */
-	    }
-	    dgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
-	    if (ierr != 0) {
-		s_wsle(&io___15);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___16);
-		do_lio(&c__9, &c__1, " _NBAND: Error with _gbtrf. ", (ftnlen)
-			28);
-		e_wsle();
-		s_wsle(&io___17);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
+            dlacpy_("A", &ibot, n, &ab[ab_offset], lda, &rfac[rfac_offset], lda, (ftnlen)1);
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j)
+            {
+                rfac[imid + j * rfac_dim1] = ab[imid + j * ab_dim1] - *sigmar;
+                /* L10: */
+            }
+            dgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
+            if (ierr != 0)
+            {
+                s_wsle(&io___15);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___16);
+                do_lio(&c__9, &c__1, " _NBAND: Error with _gbtrf. ", (ftnlen)28);
+                e_wsle();
+                s_wsle(&io___17);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+        }
+        else
+        {
 
-	} else {
+            /*            %-----------------------------------% */
+            /*            | Construct (A-sigmar*I) and factor | */
+            /*            | in COMPLEX arithmetic.            | */
+            /*            %-----------------------------------% */
 
-/*            %-----------------------------------% */
-/*            | Construct (A-sigmar*I) and factor | */
-/*            | in COMPLEX arithmetic.            | */
-/*            %-----------------------------------% */
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j)
+            {
+                i__2 = ibot;
+                for (i__ = itop; i__ <= i__2; ++i__)
+                {
+                    i__3 = i__ + j * cfac_dim1;
+                    i__4 = i__ + j * ab_dim1;
+                    z__1.r = ab[i__4], z__1.i = 0.;
+                    cfac[i__3].r = z__1.r, cfac[i__3].i = z__1.i;
+                    /* L20: */
+                }
+                /* L30: */
+            }
 
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
-		i__2 = ibot;
-		for (i__ = itop; i__ <= i__2; ++i__) {
-		    i__3 = i__ + j * cfac_dim1;
-		    i__4 = i__ + j * ab_dim1;
-		    z__1.r = ab[i__4], z__1.i = 0.;
-		    cfac[i__3].r = z__1.r, cfac[i__3].i = z__1.i;
-/* L20: */
-		}
-/* L30: */
-	    }
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j)
+            {
+                i__2 = imid + j * cfac_dim1;
+                i__3 = imid + j * cfac_dim1;
+                z__2.r = *sigmar, z__2.i = *sigmai;
+                z__1.r = cfac[i__3].r - z__2.r, z__1.i = cfac[i__3].i - z__2.i;
+                cfac[i__2].r = z__1.r, cfac[i__2].i = z__1.i;
+                /* L40: */
+            }
 
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
-		i__2 = imid + j * cfac_dim1;
-		i__3 = imid + j * cfac_dim1;
-		z__2.r = *sigmar, z__2.i = *sigmai;
-		z__1.r = cfac[i__3].r - z__2.r, z__1.i = cfac[i__3].i - 
-			z__2.i;
-		cfac[i__2].r = z__1.r, cfac[i__2].i = z__1.i;
-/* L40: */
-	    }
+            zgbtrf_(n, n, kl, ku, &cfac[cfac_offset], lda, &iwork[1], &ierr);
+            if (ierr != 0)
+            {
+                s_wsle(&io___19);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___20);
+                do_lio(&c__9, &c__1, " _NBAND: Error with _gbtrf. ", (ftnlen)28);
+                e_wsle();
+                s_wsle(&io___21);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+        }
+    }
+    else if (type__ == 3)
+    {
 
-	    zgbtrf_(n, n, kl, ku, &cfac[cfac_offset], lda, &iwork[1], &ierr);
-	    if (ierr != 0) {
-		s_wsle(&io___19);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___20);
-		do_lio(&c__9, &c__1, " _NBAND: Error with _gbtrf. ", (ftnlen)
-			28);
-		e_wsle();
-		s_wsle(&io___21);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
+        /*        %-----------------------------------------------% */
+        /*        | Solving generalized eigenvalue problem in     | */
+        /*        | regular mode. Copy M to rfac, and call LAPACK | */
+        /*        | routine dgbtrf to factor M.                   | */
+        /*        %-----------------------------------------------% */
 
-	}
-    } else if (type__ == 3) {
+        dlacpy_("A", &ibot, n, &mb[mb_offset], lda, &rfac[rfac_offset], lda, (ftnlen)1);
+        dgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
+        if (ierr != 0)
+        {
+            s_wsle(&io___22);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+            s_wsle(&io___23);
+            do_lio(&c__9, &c__1, "_NBAND:  Error with _gbtrf.", (ftnlen)27);
+            e_wsle();
+            s_wsle(&io___24);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+            goto L9000;
+        }
+    }
+    else if (type__ == 4 || type__ == 6)
+    {
 
-/*        %-----------------------------------------------% */
-/*        | Solving generalized eigenvalue problem in     | */
-/*        | regular mode. Copy M to rfac, and call LAPACK | */
-/*        | routine dgbtrf to factor M.                   | */
-/*        %-----------------------------------------------% */
+        /*        %-------------------------------------------% */
+        /*        | Solving generalized eigenvalue problem in | */
+        /*        | shift-invert mode.                        | */
+        /*        %-------------------------------------------% */
 
-	dlacpy_("A", &ibot, n, &mb[mb_offset], lda, &rfac[rfac_offset], lda, (
-		ftnlen)1);
-	dgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
-	if (ierr != 0) {
-	    s_wsle(&io___22);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    s_wsle(&io___23);
-	    do_lio(&c__9, &c__1, "_NBAND:  Error with _gbtrf.", (ftnlen)27);
-	    e_wsle();
-	    s_wsle(&io___24);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    goto L9000;
-	}
+        if (*sigmai == 0.)
+        {
 
-    } else if (type__ == 4 || type__ == 6) {
+            /*            %--------------------------------------------% */
+            /*            | Construct (A - sigma*M) and factor in real | */
+            /*            | arithmetic.                                | */
+            /*            %--------------------------------------------% */
 
-/*        %-------------------------------------------% */
-/*        | Solving generalized eigenvalue problem in | */
-/*        | shift-invert mode.                        | */
-/*        %-------------------------------------------% */
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j)
+            {
+                i__2 = ibot;
+                for (i__ = itop; i__ <= i__2; ++i__)
+                {
+                    rfac[i__ + j * rfac_dim1] = ab[i__ + j * ab_dim1] - *sigmar * mb[i__ + j * mb_dim1];
+                    /* L50: */
+                }
+                /* L60: */
+            }
 
-	if (*sigmai == 0.) {
+            dgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
+            if (ierr != 0)
+            {
+                s_wsle(&io___25);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___26);
+                do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrf.", (ftnlen)26);
+                e_wsle();
+                s_wsle(&io___27);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+        }
+        else
+        {
 
-/*            %--------------------------------------------% */
-/*            | Construct (A - sigma*M) and factor in real | */
-/*            | arithmetic.                                | */
-/*            %--------------------------------------------% */
+            /*            %-----------------------------------------------% */
+            /*            | Construct (A - sigma*M) and factor in complex | */
+            /*            | arithmetic.                                   | */
+            /*            %-----------------------------------------------% */
 
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
-		i__2 = ibot;
-		for (i__ = itop; i__ <= i__2; ++i__) {
-		    rfac[i__ + j * rfac_dim1] = ab[i__ + j * ab_dim1] - *
-			    sigmar * mb[i__ + j * mb_dim1];
-/* L50: */
-		}
-/* L60: */
-	    }
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j)
+            {
+                i__2 = ibot;
+                for (i__ = itop; i__ <= i__2; ++i__)
+                {
+                    i__3 = i__ + j * cfac_dim1;
+                    d__1 = ab[i__ + j * ab_dim1] - *sigmar * mb[i__ + j * mb_dim1];
+                    d__2 = -(*sigmai) * mb[i__ + j * mb_dim1];
+                    z__1.r = d__1, z__1.i = d__2;
+                    cfac[i__3].r = z__1.r, cfac[i__3].i = z__1.i;
+                    /* L70: */
+                }
+                /* L80: */
+            }
 
-	    dgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
-	    if (ierr != 0) {
-		s_wsle(&io___25);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___26);
-		do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrf.", (ftnlen)26)
-			;
-		e_wsle();
-		s_wsle(&io___27);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
-
-	} else {
-
-/*            %-----------------------------------------------% */
-/*            | Construct (A - sigma*M) and factor in complex | */
-/*            | arithmetic.                                   | */
-/*            %-----------------------------------------------% */
-
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
-		i__2 = ibot;
-		for (i__ = itop; i__ <= i__2; ++i__) {
-		    i__3 = i__ + j * cfac_dim1;
-		    d__1 = ab[i__ + j * ab_dim1] - *sigmar * mb[i__ + j * 
-			    mb_dim1];
-		    d__2 = -(*sigmai) * mb[i__ + j * mb_dim1];
-		    z__1.r = d__1, z__1.i = d__2;
-		    cfac[i__3].r = z__1.r, cfac[i__3].i = z__1.i;
-/* L70: */
-		}
-/* L80: */
-	    }
-
-	    zgbtrf_(n, n, kl, ku, &cfac[cfac_offset], lda, &iwork[1], &ierr);
-	    if (ierr != 0) {
-		s_wsle(&io___28);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___29);
-		do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrf.", (ftnlen)26)
-			;
-		e_wsle();
-		s_wsle(&io___30);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
-
-	}
-
+            zgbtrf_(n, n, kl, ku, &cfac[cfac_offset], lda, &iwork[1], &ierr);
+            if (ierr != 0)
+            {
+                s_wsle(&io___28);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___29);
+                do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrf.", (ftnlen)26);
+                e_wsle();
+                s_wsle(&io___30);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+        }
     }
 
-/*     %--------------------------------------------% */
-/*     |  M A I N   L O O P (reverse communication) | */
-/*     %--------------------------------------------% */
+    /*     %--------------------------------------------% */
+    /*     |  M A I N   L O O P (reverse communication) | */
+    /*     %--------------------------------------------% */
 
 L90:
 
-    dnaupd_(&ido, bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv,
-	     &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info, (ftnlen)1,
-	     (ftnlen)2);
-
-    if (ido == -1) {
-
-	if (type__ == 1) {
-
-/*           %----------------------------% */
-/*           | Perform  y <--- OP*x = A*x | */
-/*           %----------------------------% */
-
-	    dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], 
-		    lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &
-		    c__1, (ftnlen)11);
-
-	} else if (type__ == 2) {
-
-	    if (*sigmai == 0.) {
-
-/*              %----------------------------------% */
-/*              | Shift is real.  Perform          | */
-/*              | y <--- OP*x = inv[A-sigmar*I]*x  | */
-/*              | to force the starting vector     | */
-/*              | into the range of OP.            | */
-/*              %----------------------------------% */
-
-		dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-		dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], 
-			lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)
-			11);
-		if (ierr != 0) {
-		    s_wsle(&io___32);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    s_wsle(&io___33);
-		    do_lio(&c__9, &c__1, " _NBAND: Error with _bgtrs. ", (
-			    ftnlen)28);
-		    e_wsle();
-		    s_wsle(&io___34);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    goto L9000;
-		}
-
-	    } else {
-
-/*              %--------------------------------------------% */
-/*              | Shift is COMPLEX. Perform                  | */
-/*              | y <--- OP*x = Real_Part{inv[A-sigma*I]*x}  | */
-/*              | to force the starting vector into the      | */
-/*              | range of OP.                               | */
-/*              %--------------------------------------------% */
-
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
-		    i__2 = j;
-		    i__3 = ipntr[0] + j - 1;
-		    z__1.r = workd[i__3], z__1.i = 0.;
-		    workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
-/* L100: */
-		}
-
-		zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], 
-			lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
-		if (ierr != 0) {
-		    s_wsle(&io___35);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    s_wsle(&io___36);
-		    do_lio(&c__9, &c__1, " _NBAND: Error with _gbtrs. ", (
-			    ftnlen)28);
-		    e_wsle();
-		    s_wsle(&io___37);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    goto L9000;
-		}
-
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
-		    i__2 = j;
-		    workd[ipntr[1] + j - 1] = workc[i__2].r;
-/* L110: */
-		}
-
-	    }
-
-	} else if (type__ == 3) {
-
-/*           %-----------------------------------% */
-/*           | Perform  y <--- OP*x = inv[M]*A*x | */
-/*           | to force the starting vector into | */
-/*           | the range of OP.                  | */
-/*           %-----------------------------------% */
-
-	    dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], 
-		    lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &
-		    c__1, (ftnlen)11);
-
-	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
-		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
-	    if (ierr != 0) {
-		s_wsle(&io___38);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___39);
-		do_lio(&c__9, &c__1, "_NBAND: Error with _bgtrs.", (ftnlen)26)
-			;
-		e_wsle();
-		s_wsle(&io___40);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
-
-	} else if (type__ == 4) {
-
-/*           %-----------------------------------------% */
-/*           | Perform y <-- OP*x                      | */
-/*           |         = Real_part{inv[A-SIGMA*M]*M}*x | */
-/*           | to force the starting vector into the   | */
-/*           | range of OP.                            | */
-/*           %-----------------------------------------% */
-
-	    dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], 
-		    lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &
-		    c__1, (ftnlen)11);
-
-	    if (*sigmai == 0.) {
-
-/*              %---------------------% */
-/*              | Shift is real, stay | */
-/*              | in real arithmetic. | */
-/*              %---------------------% */
-
-		dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], 
-			lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)
-			11);
-		if (ierr != 0) {
-		    s_wsle(&io___41);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    s_wsle(&io___42);
-		    do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (
-			    ftnlen)26);
-		    e_wsle();
-		    s_wsle(&io___43);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    goto L9000;
-		}
-
-	    } else {
-
-/*              %--------------------------% */
-/*              | Goto complex arithmetic. | */
-/*              %--------------------------% */
-
-		i__1 = *n;
-		for (i__ = 1; i__ <= i__1; ++i__) {
-		    i__2 = i__;
-		    i__3 = ipntr[1] + i__ - 1;
-		    z__1.r = workd[i__3], z__1.i = 0.;
-		    workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
-/* L120: */
-		}
-
-		zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], 
-			lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
-		if (ierr != 0) {
-		    s_wsle(&io___44);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    s_wsle(&io___45);
-		    do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (
-			    ftnlen)26);
-		    e_wsle();
-		    s_wsle(&io___46);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    goto L9000;
-		}
-
-		i__1 = *n;
-		for (i__ = 1; i__ <= i__1; ++i__) {
-		    i__2 = i__;
-		    workd[ipntr[1] + i__ - 1] = workc[i__2].r;
-/* L130: */
-		}
-
-	    }
-
-	} else if (type__ == 5) {
-
-/*           %---------------------------------------% */
-/*           | Perform y <-- OP*x                    | */
-/*           |    = Imaginary_part{inv[A-SIGMA*I]}*x | */
-/*           | to force the starting vector into the | */
-/*           | range of OP.                          | */
-/*           %---------------------------------------% */
-
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
-		i__2 = j;
-		i__3 = ipntr[0] + j - 1;
-		z__1.r = workd[i__3], z__1.i = 0.;
-		workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
-/* L140: */
-	    }
-
-	    zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, 
-		    &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
-	    if (ierr != 0) {
-		s_wsle(&io___47);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___48);
-		do_lio(&c__9, &c__1, " _NBAND: Error with _gbtrs. ", (ftnlen)
-			28);
-		e_wsle();
-		s_wsle(&io___49);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
-
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
-		workd[ipntr[1] + j - 1] = d_imag(&workc[j]);
-/* L150: */
-	    }
-
-	} else if (type__ == 6) {
-
-/*           %----------------------------------------% */
-/*           | Perform y <-- OP*x                     | */
-/*           |       Imaginary_part{inv[A-SIGMA*M]*M} | */
-/*           | to force the starting vector into the  | */
-/*           | range of OP.                           | */
-/*           %----------------------------------------% */
-
-	    dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], 
-		    lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &
-		    c__1, (ftnlen)11);
-
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		i__2 = i__;
-		i__3 = ipntr[1] + i__ - 1;
-		z__1.r = workd[i__3], z__1.i = 0.;
-		workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
-/* L160: */
-	    }
-
-	    zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, 
-		    &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
-	    if (ierr != 0) {
-		s_wsle(&io___50);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___51);
-		do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (ftnlen)26)
-			;
-		e_wsle();
-		s_wsle(&io___52);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
-
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		workd[ipntr[1] + i__ - 1] = d_imag(&workc[i__]);
-/* L170: */
-	    }
-
-	}
-
-    } else if (ido == 1) {
-
-	if (type__ == 1) {
-
-/*           %----------------------------% */
-/*           | Perform  y <--- OP*x = A*x | */
-/*           %----------------------------% */
-
-	    dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], 
-		    lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &
-		    c__1, (ftnlen)11);
-
-	} else if (type__ == 2) {
-
-	    if (*sigmai == 0.) {
-
-/*              %----------------------------------% */
-/*              | Shift is real.  Perform          | */
-/*              | y <--- OP*x = inv[A-sigmar*I]*x. | */
-/*              %----------------------------------% */
-
-		dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-		dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], 
-			lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)
-			11);
-	    } else {
-
-/*              %------------------------------------------% */
-/*              | Shift is COMPLEX. Perform                | */
-/*              | y <-- OP*x = Real_Part{inv[A-sigma*I]*x} | */
-/*              | in COMPLEX arithmetic.                   | */
-/*              %------------------------------------------% */
-
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
-		    i__2 = j;
-		    i__3 = ipntr[0] + j - 1;
-		    z__1.r = workd[i__3], z__1.i = 0.;
-		    workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
-/* L180: */
-		}
-
-		zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], 
-			lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
-		if (ierr != 0) {
-		    s_wsle(&io___53);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    s_wsle(&io___54);
-		    do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (
-			    ftnlen)26);
-		    e_wsle();
-		    s_wsle(&io___55);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    goto L9000;
-		}
-
-		i__1 = *n;
-		for (j = 1; j <= i__1; ++j) {
-		    i__2 = j;
-		    workd[ipntr[1] + j - 1] = workc[i__2].r;
-/* L190: */
-		}
-
-	    }
-
-	} else if (type__ == 3) {
-
-/*           %-----------------------------------% */
-/*           | Perform  y <--- OP*x = inv[M]*A*x | */
-/*           %-----------------------------------% */
-
-	    dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], 
-		    lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &
-		    c__1, (ftnlen)11);
-
-	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
-		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
-	    if (ierr != 0) {
-		s_wsle(&io___56);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___57);
-		do_lio(&c__9, &c__1, "_NBAND: Error with _bgtrs.", (ftnlen)26)
-			;
-		e_wsle();
-		s_wsle(&io___58);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
-
-	} else if (type__ == 4) {
-
-/*           %--------------------------------------% */
-/*           | Perform  y <-- inv(A-sigma*M)*(M*x). | */
-/*           | (M*x) has been computed and stored   | */
-/*           | in workd(ipntr(3)).                  | */
-/*           %--------------------------------------% */
-
-	    if (*sigmai == 0.) {
-
-/*              %------------------------% */
-/*              | Shift is real, stay in | */
-/*              | real arithmetic.       | */
-/*              %------------------------% */
-
-		dcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-		dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], 
-			lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)
-			11);
-		if (ierr != 0) {
-		    s_wsle(&io___59);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    s_wsle(&io___60);
-		    do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (
-			    ftnlen)26);
-		    e_wsle();
-		    s_wsle(&io___61);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    goto L9000;
-		}
-
-	    } else {
-
-/*              %---------------------------% */
-/*              | Go to COMPLEX arithmetic. | */
-/*              %---------------------------% */
-
-		i__1 = *n;
-		for (i__ = 1; i__ <= i__1; ++i__) {
-		    i__2 = i__;
-		    i__3 = ipntr[2] + i__ - 1;
-		    z__1.r = workd[i__3], z__1.i = 0.;
-		    workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
-/* L200: */
-		}
-
-		zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], 
-			lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
-		if (ierr != 0) {
-		    s_wsle(&io___62);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    s_wsle(&io___63);
-		    do_lio(&c__9, &c__1, "_NBAND: Error in _gbtrs.", (ftnlen)
-			    24);
-		    e_wsle();
-		    s_wsle(&io___64);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    goto L9000;
-		}
-
-		i__1 = *n;
-		for (i__ = 1; i__ <= i__1; ++i__) {
-		    i__2 = i__;
-		    workd[ipntr[1] + i__ - 1] = workc[i__2].r;
-/* L210: */
-		}
-
-	    }
-
-	} else if (type__ == 5) {
-
-/*           %---------------------------------------% */
-/*           | Perform y <-- OP*x                    | */
-/*           |    = Imaginary_part{inv[A-SIGMA*I]*x} | */
-/*           %---------------------------------------% */
-
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
-		i__2 = j;
-		i__3 = ipntr[0] + j - 1;
-		z__1.r = workd[i__3], z__1.i = 0.;
-		workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
-/* L220: */
-	    }
-
-	    zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, 
-		    &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
-	    if (ierr != 0) {
-		s_wsle(&io___65);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___66);
-		do_lio(&c__9, &c__1, " _NBAND: Error with _gbtrs. ", (ftnlen)
-			28);
-		e_wsle();
-		s_wsle(&io___67);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
-
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
-		workd[ipntr[1] + j - 1] = d_imag(&workc[j]);
-/* L230: */
-	    }
-
-	} else if (type__ == 6) {
-
-/*           %-----------------------------------------% */
-/*           | Perform y <-- OP*x                      | */
-/*           |   = Imaginary_part{inv[A-SIGMA*M]*M}*x. | */
-/*           %-----------------------------------------% */
-
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		i__2 = i__;
-		i__3 = ipntr[2] + i__ - 1;
-		z__1.r = workd[i__3], z__1.i = 0.;
-		workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
-/* L240: */
-	    }
-
-	    zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, 
-		    &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
-	    if (ierr != 0) {
-		s_wsle(&io___68);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___69);
-		do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (ftnlen)26)
-			;
-		e_wsle();
-		s_wsle(&io___70);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
-
-	    i__1 = *n;
-	    for (i__ = 1; i__ <= i__1; ++i__) {
-		workd[ipntr[1] + i__ - 1] = d_imag(&workc[i__]);
-/* L250: */
-	    }
-
-	}
-
-    } else if (ido == 2) {
-
-/*        %--------------------% */
-/*        | Perform y <-- M*x  | */
-/*        | Not used when      | */
-/*        | type = 1,2.        | */
-/*        %--------------------% */
-
-	dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, 
-		&workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (
-		ftnlen)11);
-
-    } else {
-
-/*        %-----------------------------------------% */
-/*        | Either we have convergence, or there is | */
-/*        | error.                                  | */
-/*        %-----------------------------------------% */
-
-	if (*info < 0) {
-
-/*           %--------------------------% */
-/*           | Error message, check the | */
-/*           | documentation in DNAUPD  | */
-/*           %--------------------------% */
-
-	    s_wsle(&io___71);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    s_wsle(&io___72);
-	    do_lio(&c__9, &c__1, " Error with _naupd info = ", (ftnlen)26);
-	    do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
-	    e_wsle();
-	    s_wsle(&io___73);
-	    do_lio(&c__9, &c__1, " Check the documentation of _naupd ", (
-		    ftnlen)35);
-	    e_wsle();
-	    s_wsle(&io___74);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    goto L9000;
-
-	} else {
-
-	    if (*info == 1) {
-		s_wsle(&io___75);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___76);
-		do_lio(&c__9, &c__1, " Maximum number of iterations reached.",
-			 (ftnlen)38);
-		e_wsle();
-		s_wsle(&io___77);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-	    } else if (*info == 3) {
-		s_wsle(&io___78);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___79);
-		do_lio(&c__9, &c__1, " No shifts could be applied during imp"
-			"licit", (ftnlen)43);
-		do_lio(&c__9, &c__1, " Arnoldi update, try increasing NCV.", (
-			ftnlen)36);
-		e_wsle();
-		s_wsle(&io___80);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-	    }
-
-	    if (iparam[5] > 0) {
-
-		dneupd_(rvec, "A", &select[1], &dr[1], &di[1], &z__[z_offset],
-			 ldz, sigmar, sigmai, &workev[1], bmat, n, which, nev,
-			 tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], 
-			ipntr, &workd[1], &workl[1], lworkl, info, (ftnlen)1, 
-			(ftnlen)1, (ftnlen)2);
-
-		if (*info != 0) {
-
-/*                 %------------------------------------% */
-/*                 | Check the documentation of DNEUPD. | */
-/*                 %------------------------------------% */
-
-		    s_wsle(&io___81);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    s_wsle(&io___82);
-		    do_lio(&c__9, &c__1, " Error with _neupd = ", (ftnlen)21);
-		    do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(
-			    integer));
-		    e_wsle();
-		    s_wsle(&io___83);
-		    do_lio(&c__9, &c__1, " Check the documentation of _neupd "
-			    , (ftnlen)35);
-		    e_wsle();
-		    s_wsle(&io___84);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    goto L9000;
-
-		} else if (*sigmai != 0.) {
-
-		    if (type__ == 4 || type__ == 6) {
-
-			first = TRUE_;
-			i__1 = iparam[5];
-			for (j = 1; j <= i__1; ++j) {
-
-/*                    %----------------------------------% */
-/*                    | Use Rayleigh Quotient to recover | */
-/*                    | eigenvalues of the original      | */
-/*                    | generalized eigenvalue problem.  | */
-/*                    %----------------------------------% */
-
-			    if (di[j] == 0.) {
-
-/*                       %--------------------------------------% */
-/*                       | Eigenvalue is real. Compute          | */
-/*                       | d = (x'*inv[A-sigma*M]*M*x) / (x'*x) | */
-/*                       %--------------------------------------% */
-
-				dgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &
-					mb[itop + mb_dim1], lda, &z__[j * 
-					z_dim1 + 1], &c__1, &c_b85, &workd[1],
-					 &c__1, (ftnlen)12);
-				i__2 = *n;
-				for (i__ = 1; i__ <= i__2; ++i__) {
-				    i__3 = i__;
-				    i__4 = i__;
-				    z__1.r = workd[i__4], z__1.i = 0.;
-				    workc[i__3].r = z__1.r, workc[i__3].i = 
-					    z__1.i;
-				}
-				zgbtrs_("Notranspose", n, kl, ku, &c__1, &
-					cfac[cfac_offset], lda, &iwork[1], &
-					workc[1], n, info, (ftnlen)11);
-				i__2 = *n;
-				for (i__ = 1; i__ <= i__2; ++i__) {
-				    i__3 = i__;
-				    workd[i__] = workc[i__3].r;
-				    workd[i__ + *n] = d_imag(&workc[i__]);
-				}
-				denr = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &
-					workd[1], &c__1);
-				deni = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &
-					workd[*n + 1], &c__1);
-/* Computing 2nd power */
-				d__1 = dnrm2_(n, &z__[j * z_dim1 + 1], &c__1);
-				numr = d__1 * d__1;
-/* Computing 2nd power */
-				d__1 = dlapy2_(&denr, &deni);
-				dmdul = d__1 * d__1;
-				if (dmdul >= safmin) {
-				    dr[j] = *sigmar + numr * denr / dmdul;
-				} else {
-
-/*                          %---------------------% */
-/*                          | dmdul is too small. | */
-/*                          | Exit to avoid       | */
-/*                          | overflow.           | */
-/*                          %---------------------% */
-
-				    *info = -15;
-				    goto L9000;
-				}
-
-			    } else if (first) {
-
-/*                       %------------------------% */
-/*                       | Eigenvalue is complex. | */
-/*                       | Compute the first one  | */
-/*                       | of the conjugate pair. | */
-/*                       %------------------------% */
-
-/*                       %-------------% */
-/*                       | Compute M*x | */
-/*                       %-------------% */
-
-				dgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &
-					mb[itop + mb_dim1], lda, &z__[j * 
-					z_dim1 + 1], &c__1, &c_b85, &workd[1],
-					 &c__1, (ftnlen)12);
-				dgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &
-					mb[itop + mb_dim1], lda, &z__[(j + 1) 
-					* z_dim1 + 1], &c__1, &c_b85, &workd[*
-					n + 1], &c__1, (ftnlen)12);
-				i__2 = *n;
-				for (i__ = 1; i__ <= i__2; ++i__) {
-				    i__3 = i__;
-				    i__4 = i__;
-				    i__5 = i__ + *n;
-				    z__1.r = workd[i__4], z__1.i = workd[i__5]
-					    ;
-				    workc[i__3].r = z__1.r, workc[i__3].i = 
-					    z__1.i;
-				}
-
-/*                       %----------------------------% */
-/*                       | Compute inv(A-sigma*M)*M*x | */
-/*                       %----------------------------% */
-
-				zgbtrs_("Notranspose", n, kl, ku, &c__1, &
-					cfac[cfac_offset], lda, &iwork[1], &
-					workc[1], n, info, (ftnlen)11);
-
-/*                       %-------------------------------% */
-/*                       | Compute x'*inv(A-sigma*M)*M*x | */
-/*                       %-------------------------------% */
-
-				i__2 = *n;
-				for (i__ = 1; i__ <= i__2; ++i__) {
-				    i__3 = i__;
-				    workd[i__] = workc[i__3].r;
-				    workd[i__ + *n] = d_imag(&workc[i__]);
-				}
-				denr = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &
-					workd[1], &c__1);
-				denr += ddot_(n, &z__[(j + 1) * z_dim1 + 1], &
-					c__1, &workd[*n + 1], &c__1);
-				deni = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &
-					workd[*n + 1], &c__1);
-				deni -= ddot_(n, &z__[(j + 1) * z_dim1 + 1], &
-					c__1, &workd[1], &c__1);
-
-/*                       %----------------% */
-/*                       | Compute (x'*x) | */
-/*                       %----------------% */
-
-				d__2 = dnrm2_(n, &z__[j * z_dim1 + 1], &c__1);
-				d__3 = dnrm2_(n, &z__[(j + 1) * z_dim1 + 1], &
-					c__1);
-/* Computing 2nd power */
-				d__1 = dlapy2_(&d__2, &d__3);
-				numr = d__1 * d__1;
-
-/*                       %----------------------------------------% */
-/*                       | Compute (x'x) / (x'*inv(A-sigma*M)*Mx) | */
-/*                       %----------------------------------------% */
-
-/* Computing 2nd power */
-				d__1 = dlapy2_(&denr, &deni);
-				dmdul = d__1 * d__1;
-				if (dmdul >= safmin) {
-				    dr[j] = *sigmar + numr * denr / dmdul;
-				    di[j] = *sigmai - numr * deni / dmdul;
-				    first = FALSE_;
-				} else {
-
-/*                          %---------------------% */
-/*                          | dmdul is too small. | */
-/*                          | Exit to avoid       | */
-/*                          | overflow.           | */
-/*                          %---------------------% */
-
-				    *info = -15;
-				    goto L9000;
-
-				}
-
-			    } else {
-
-/*                       %---------------------------% */
-/*                       | Get the second eigenvalue | */
-/*                       | of the conjugate pair by  | */
-/*                       | taking the conjugate of   | */
-/*                       | previous one.             | */
-/*                       %---------------------------% */
-
-				dr[j] = dr[j - 1];
-				di[j] = -di[j - 1];
-				first = TRUE_;
-
-			    }
-
-/* L270: */
-			}
-
-		    } else if (type__ == 2 || type__ == 5) {
-
-			first = TRUE_;
-			i__1 = iparam[5];
-			for (j = 1; j <= i__1; ++j) {
-
-/*                    %----------------------------------% */
-/*                    | Use Rayleigh Quotient to recover | */
-/*                    | eigenvalues of the original      | */
-/*                    | standard eigenvalue problem.     | */
-/*                    %----------------------------------% */
-
-			    if (di[j] == 0.) {
-
-/*                       %-------------------------------------% */
-/*                       | Eigenvalue is real. Compute         | */
-/*                       | d = (x'*inv[A-sigma*I]*x) / (x'*x). | */
-/*                       %-------------------------------------% */
-
-				i__2 = *n;
-				for (i__ = 1; i__ <= i__2; ++i__) {
-				    i__3 = i__;
-				    i__4 = i__ + j * z_dim1;
-				    z__1.r = z__[i__4], z__1.i = 0.;
-				    workc[i__3].r = z__1.r, workc[i__3].i = 
-					    z__1.i;
-				}
-				zgbtrs_("Notranspose", n, kl, ku, &c__1, &
-					cfac[cfac_offset], lda, &iwork[1], &
-					workc[1], n, info, (ftnlen)11);
-				i__2 = *n;
-				for (i__ = 1; i__ <= i__2; ++i__) {
-				    i__3 = i__;
-				    workd[i__] = workc[i__3].r;
-				    workd[i__ + *n] = d_imag(&workc[i__]);
-				}
-				denr = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &
-					workd[1], &c__1);
-				deni = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &
-					workd[*n + 1], &c__1);
-/* Computing 2nd power */
-				d__1 = dnrm2_(n, &z__[j * z_dim1 + 1], &c__1);
-				numr = d__1 * d__1;
-/* Computing 2nd power */
-				d__1 = dlapy2_(&denr, &deni);
-				dmdul = d__1 * d__1;
-				if (dmdul >= safmin) {
-				    dr[j] = *sigmar + numr * denr / dmdul;
-				} else {
-
-/*                          %---------------------% */
-/*                          | dmdul is too small. | */
-/*                          | Exit to avoid       | */
-/*                          | overflow.           | */
-/*                          %---------------------% */
-
-				    *info = -15;
-				    goto L9000;
-
-				}
-
-			    } else if (first) {
-
-/*                       %------------------------% */
-/*                       | Eigenvalue is complex. | */
-/*                       | Compute the first one  | */
-/*                       | of the conjugate pair. | */
-/*                       %------------------------% */
-
-				i__2 = *n;
-				for (i__ = 1; i__ <= i__2; ++i__) {
-				    i__3 = i__;
-				    i__4 = i__ + j * z_dim1;
-				    i__5 = i__ + (j + 1) * z_dim1;
-				    z__1.r = z__[i__4], z__1.i = z__[i__5];
-				    workc[i__3].r = z__1.r, workc[i__3].i = 
-					    z__1.i;
-				}
-
-/*                       %---------------------------% */
-/*                       | Compute inv[A-sigma*I]*x. | */
-/*                       %---------------------------% */
-
-				zgbtrs_("Notranspose", n, kl, ku, &c__1, &
-					cfac[cfac_offset], lda, &iwork[1], &
-					workc[1], n, info, (ftnlen)11);
-
-/*                       %-----------------------------% */
-/*                       | Compute x'*inv(A-sigma*I)*x | */
-/*                       %-----------------------------% */
-
-				i__2 = *n;
-				for (i__ = 1; i__ <= i__2; ++i__) {
-				    i__3 = i__;
-				    workd[i__] = workc[i__3].r;
-				    workd[i__ + *n] = d_imag(&workc[i__]);
-				}
-				denr = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &
-					workd[1], &c__1);
-				denr += ddot_(n, &z__[(j + 1) * z_dim1 + 1], &
-					c__1, &workd[*n + 1], &c__1);
-				deni = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &
-					workd[*n + 1], &c__1);
-				deni -= ddot_(n, &z__[(j + 1) * z_dim1 + 1], &
-					c__1, &workd[1], &c__1);
-
-/*                       %----------------% */
-/*                       | Compute (x'*x) | */
-/*                       %----------------% */
-
-				d__2 = dnrm2_(n, &z__[j * z_dim1 + 1], &c__1);
-				d__3 = dnrm2_(n, &z__[(j + 1) * z_dim1 + 1], &
-					c__1);
-/* Computing 2nd power */
-				d__1 = dlapy2_(&d__2, &d__3);
-				numr = d__1 * d__1;
-
-/*                       %----------------------------------------% */
-/*                       | Compute (x'x) / (x'*inv(A-sigma*I)*x). | */
-/*                       %----------------------------------------% */
-
-/* Computing 2nd power */
-				d__1 = dlapy2_(&denr, &deni);
-				dmdul = d__1 * d__1;
-				if (dmdul >= safmin) {
-				    dr[j] = *sigmar + numr * denr / dmdul;
-				    di[j] = *sigmai - numr * deni / dmdul;
-				    first = FALSE_;
-				} else {
-
-/*                          %---------------------% */
-/*                          | dmdul is too small. | */
-/*                          | Exit to avoid       | */
-/*                          | overflow.           | */
-/*                          %---------------------% */
-
-				    *info = -15;
-				    goto L9000;
-				}
-
-			    } else {
-
-/*                       %---------------------------% */
-/*                       | Get the second eigenvalue | */
-/*                       | of the conjugate pair by  | */
-/*                       | taking the conjugate of   | */
-/*                       | previous one.             | */
-/*                       %---------------------------% */
-
-				dr[j] = dr[j - 1];
-				di[j] = -di[j - 1];
-				first = TRUE_;
-
-			    }
-
-/* L280: */
-			}
-
-		    }
-
-		}
-
-	    }
-
-	}
-
-	goto L9000;
-
+    dnaupd_(&ido, bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info, (ftnlen)1, (ftnlen)2);
+
+    if (ido == -1)
+    {
+
+        if (type__ == 1)
+        {
+
+            /*           %----------------------------% */
+            /*           | Perform  y <--- OP*x = A*x | */
+            /*           %----------------------------% */
+
+            dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+        }
+        else if (type__ == 2)
+        {
+
+            if (*sigmai == 0.)
+            {
+
+                /*              %----------------------------------% */
+                /*              | Shift is real.  Perform          | */
+                /*              | y <--- OP*x = inv[A-sigmar*I]*x  | */
+                /*              | to force the starting vector     | */
+                /*              | into the range of OP.            | */
+                /*              %----------------------------------% */
+
+                dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
+                dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+                if (ierr != 0)
+                {
+                    s_wsle(&io___32);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    s_wsle(&io___33);
+                    do_lio(&c__9, &c__1, " _NBAND: Error with _bgtrs. ", (ftnlen)28);
+                    e_wsle();
+                    s_wsle(&io___34);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    goto L9000;
+                }
+            }
+            else
+            {
+
+                /*              %--------------------------------------------% */
+                /*              | Shift is COMPLEX. Perform                  | */
+                /*              | y <--- OP*x = Real_Part{inv[A-sigma*I]*x}  | */
+                /*              | to force the starting vector into the      | */
+                /*              | range of OP.                               | */
+                /*              %--------------------------------------------% */
+
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j)
+                {
+                    i__2 = j;
+                    i__3 = ipntr[0] + j - 1;
+                    z__1.r = workd[i__3], z__1.i = 0.;
+                    workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
+                    /* L100: */
+                }
+
+                zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+                if (ierr != 0)
+                {
+                    s_wsle(&io___35);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    s_wsle(&io___36);
+                    do_lio(&c__9, &c__1, " _NBAND: Error with _gbtrs. ", (ftnlen)28);
+                    e_wsle();
+                    s_wsle(&io___37);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    goto L9000;
+                }
+
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j)
+                {
+                    i__2 = j;
+                    workd[ipntr[1] + j - 1] = workc[i__2].r;
+                    /* L110: */
+                }
+            }
+        }
+        else if (type__ == 3)
+        {
+
+            /*           %-----------------------------------% */
+            /*           | Perform  y <--- OP*x = inv[M]*A*x | */
+            /*           | to force the starting vector into | */
+            /*           | the range of OP.                  | */
+            /*           %-----------------------------------% */
+
+            dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+
+            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+            if (ierr != 0)
+            {
+                s_wsle(&io___38);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___39);
+                do_lio(&c__9, &c__1, "_NBAND: Error with _bgtrs.", (ftnlen)26);
+                e_wsle();
+                s_wsle(&io___40);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+        }
+        else if (type__ == 4)
+        {
+
+            /*           %-----------------------------------------% */
+            /*           | Perform y <-- OP*x                      | */
+            /*           |         = Real_part{inv[A-SIGMA*M]*M}*x | */
+            /*           | to force the starting vector into the   | */
+            /*           | range of OP.                            | */
+            /*           %-----------------------------------------% */
+
+            dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+
+            if (*sigmai == 0.)
+            {
+
+                /*              %---------------------% */
+                /*              | Shift is real, stay | */
+                /*              | in real arithmetic. | */
+                /*              %---------------------% */
+
+                dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+                if (ierr != 0)
+                {
+                    s_wsle(&io___41);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    s_wsle(&io___42);
+                    do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (ftnlen)26);
+                    e_wsle();
+                    s_wsle(&io___43);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    goto L9000;
+                }
+            }
+            else
+            {
+
+                /*              %--------------------------% */
+                /*              | Goto complex arithmetic. | */
+                /*              %--------------------------% */
+
+                i__1 = *n;
+                for (i__ = 1; i__ <= i__1; ++i__)
+                {
+                    i__2 = i__;
+                    i__3 = ipntr[1] + i__ - 1;
+                    z__1.r = workd[i__3], z__1.i = 0.;
+                    workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
+                    /* L120: */
+                }
+
+                zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+                if (ierr != 0)
+                {
+                    s_wsle(&io___44);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    s_wsle(&io___45);
+                    do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (ftnlen)26);
+                    e_wsle();
+                    s_wsle(&io___46);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    goto L9000;
+                }
+
+                i__1 = *n;
+                for (i__ = 1; i__ <= i__1; ++i__)
+                {
+                    i__2 = i__;
+                    workd[ipntr[1] + i__ - 1] = workc[i__2].r;
+                    /* L130: */
+                }
+            }
+        }
+        else if (type__ == 5)
+        {
+
+            /*           %---------------------------------------% */
+            /*           | Perform y <-- OP*x                    | */
+            /*           |    = Imaginary_part{inv[A-SIGMA*I]}*x | */
+            /*           | to force the starting vector into the | */
+            /*           | range of OP.                          | */
+            /*           %---------------------------------------% */
+
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j)
+            {
+                i__2 = j;
+                i__3 = ipntr[0] + j - 1;
+                z__1.r = workd[i__3], z__1.i = 0.;
+                workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
+                /* L140: */
+            }
+
+            zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+            if (ierr != 0)
+            {
+                s_wsle(&io___47);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___48);
+                do_lio(&c__9, &c__1, " _NBAND: Error with _gbtrs. ", (ftnlen)28);
+                e_wsle();
+                s_wsle(&io___49);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j)
+            {
+                workd[ipntr[1] + j - 1] = d_imag(&workc[j]);
+                /* L150: */
+            }
+        }
+        else if (type__ == 6)
+        {
+
+            /*           %----------------------------------------% */
+            /*           | Perform y <-- OP*x                     | */
+            /*           |       Imaginary_part{inv[A-SIGMA*M]*M} | */
+            /*           | to force the starting vector into the  | */
+            /*           | range of OP.                           | */
+            /*           %----------------------------------------% */
+
+            dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+
+            i__1 = *n;
+            for (i__ = 1; i__ <= i__1; ++i__)
+            {
+                i__2 = i__;
+                i__3 = ipntr[1] + i__ - 1;
+                z__1.r = workd[i__3], z__1.i = 0.;
+                workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
+                /* L160: */
+            }
+
+            zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+            if (ierr != 0)
+            {
+                s_wsle(&io___50);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___51);
+                do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (ftnlen)26);
+                e_wsle();
+                s_wsle(&io___52);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+
+            i__1 = *n;
+            for (i__ = 1; i__ <= i__1; ++i__)
+            {
+                workd[ipntr[1] + i__ - 1] = d_imag(&workc[i__]);
+                /* L170: */
+            }
+        }
+    }
+    else if (ido == 1)
+    {
+
+        if (type__ == 1)
+        {
+
+            /*           %----------------------------% */
+            /*           | Perform  y <--- OP*x = A*x | */
+            /*           %----------------------------% */
+
+            dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+        }
+        else if (type__ == 2)
+        {
+
+            if (*sigmai == 0.)
+            {
+
+                /*              %----------------------------------% */
+                /*              | Shift is real.  Perform          | */
+                /*              | y <--- OP*x = inv[A-sigmar*I]*x. | */
+                /*              %----------------------------------% */
+
+                dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
+                dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+            }
+            else
+            {
+
+                /*              %------------------------------------------% */
+                /*              | Shift is COMPLEX. Perform                | */
+                /*              | y <-- OP*x = Real_Part{inv[A-sigma*I]*x} | */
+                /*              | in COMPLEX arithmetic.                   | */
+                /*              %------------------------------------------% */
+
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j)
+                {
+                    i__2 = j;
+                    i__3 = ipntr[0] + j - 1;
+                    z__1.r = workd[i__3], z__1.i = 0.;
+                    workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
+                    /* L180: */
+                }
+
+                zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+                if (ierr != 0)
+                {
+                    s_wsle(&io___53);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    s_wsle(&io___54);
+                    do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (ftnlen)26);
+                    e_wsle();
+                    s_wsle(&io___55);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    goto L9000;
+                }
+
+                i__1 = *n;
+                for (j = 1; j <= i__1; ++j)
+                {
+                    i__2 = j;
+                    workd[ipntr[1] + j - 1] = workc[i__2].r;
+                    /* L190: */
+                }
+            }
+        }
+        else if (type__ == 3)
+        {
+
+            /*           %-----------------------------------% */
+            /*           | Perform  y <--- OP*x = inv[M]*A*x | */
+            /*           %-----------------------------------% */
+
+            dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+
+            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+            if (ierr != 0)
+            {
+                s_wsle(&io___56);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___57);
+                do_lio(&c__9, &c__1, "_NBAND: Error with _bgtrs.", (ftnlen)26);
+                e_wsle();
+                s_wsle(&io___58);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+        }
+        else if (type__ == 4)
+        {
+
+            /*           %--------------------------------------% */
+            /*           | Perform  y <-- inv(A-sigma*M)*(M*x). | */
+            /*           | (M*x) has been computed and stored   | */
+            /*           | in workd(ipntr(3)).                  | */
+            /*           %--------------------------------------% */
+
+            if (*sigmai == 0.)
+            {
+
+                /*              %------------------------% */
+                /*              | Shift is real, stay in | */
+                /*              | real arithmetic.       | */
+                /*              %------------------------% */
+
+                dcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
+                dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+                if (ierr != 0)
+                {
+                    s_wsle(&io___59);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    s_wsle(&io___60);
+                    do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (ftnlen)26);
+                    e_wsle();
+                    s_wsle(&io___61);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    goto L9000;
+                }
+            }
+            else
+            {
+
+                /*              %---------------------------% */
+                /*              | Go to COMPLEX arithmetic. | */
+                /*              %---------------------------% */
+
+                i__1 = *n;
+                for (i__ = 1; i__ <= i__1; ++i__)
+                {
+                    i__2 = i__;
+                    i__3 = ipntr[2] + i__ - 1;
+                    z__1.r = workd[i__3], z__1.i = 0.;
+                    workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
+                    /* L200: */
+                }
+
+                zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+                if (ierr != 0)
+                {
+                    s_wsle(&io___62);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    s_wsle(&io___63);
+                    do_lio(&c__9, &c__1, "_NBAND: Error in _gbtrs.", (ftnlen)24);
+                    e_wsle();
+                    s_wsle(&io___64);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    goto L9000;
+                }
+
+                i__1 = *n;
+                for (i__ = 1; i__ <= i__1; ++i__)
+                {
+                    i__2 = i__;
+                    workd[ipntr[1] + i__ - 1] = workc[i__2].r;
+                    /* L210: */
+                }
+            }
+        }
+        else if (type__ == 5)
+        {
+
+            /*           %---------------------------------------% */
+            /*           | Perform y <-- OP*x                    | */
+            /*           |    = Imaginary_part{inv[A-SIGMA*I]*x} | */
+            /*           %---------------------------------------% */
+
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j)
+            {
+                i__2 = j;
+                i__3 = ipntr[0] + j - 1;
+                z__1.r = workd[i__3], z__1.i = 0.;
+                workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
+                /* L220: */
+            }
+
+            zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+            if (ierr != 0)
+            {
+                s_wsle(&io___65);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___66);
+                do_lio(&c__9, &c__1, " _NBAND: Error with _gbtrs. ", (ftnlen)28);
+                e_wsle();
+                s_wsle(&io___67);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j)
+            {
+                workd[ipntr[1] + j - 1] = d_imag(&workc[j]);
+                /* L230: */
+            }
+        }
+        else if (type__ == 6)
+        {
+
+            /*           %-----------------------------------------% */
+            /*           | Perform y <-- OP*x                      | */
+            /*           |   = Imaginary_part{inv[A-SIGMA*M]*M}*x. | */
+            /*           %-----------------------------------------% */
+
+            i__1 = *n;
+            for (i__ = 1; i__ <= i__1; ++i__)
+            {
+                i__2 = i__;
+                i__3 = ipntr[2] + i__ - 1;
+                z__1.r = workd[i__3], z__1.i = 0.;
+                workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
+                /* L240: */
+            }
+
+            zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+            if (ierr != 0)
+            {
+                s_wsle(&io___68);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___69);
+                do_lio(&c__9, &c__1, "_NBAND: Error with _gbtrs.", (ftnlen)26);
+                e_wsle();
+                s_wsle(&io___70);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+
+            i__1 = *n;
+            for (i__ = 1; i__ <= i__1; ++i__)
+            {
+                workd[ipntr[1] + i__ - 1] = d_imag(&workc[i__]);
+                /* L250: */
+            }
+        }
+    }
+    else if (ido == 2)
+    {
+
+        /*        %--------------------% */
+        /*        | Perform y <-- M*x  | */
+        /*        | Not used when      | */
+        /*        | type = 1,2.        | */
+        /*        %--------------------% */
+
+        dgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+    }
+    else
+    {
+
+        /*        %-----------------------------------------% */
+        /*        | Either we have convergence, or there is | */
+        /*        | error.                                  | */
+        /*        %-----------------------------------------% */
+
+        if (*info < 0)
+        {
+
+            /*           %--------------------------% */
+            /*           | Error message, check the | */
+            /*           | documentation in DNAUPD  | */
+            /*           %--------------------------% */
+
+            s_wsle(&io___71);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+            s_wsle(&io___72);
+            do_lio(&c__9, &c__1, " Error with _naupd info = ", (ftnlen)26);
+            do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
+            e_wsle();
+            s_wsle(&io___73);
+            do_lio(&c__9, &c__1, " Check the documentation of _naupd ", (ftnlen)35);
+            e_wsle();
+            s_wsle(&io___74);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+            goto L9000;
+        }
+        else
+        {
+
+            if (*info == 1)
+            {
+                s_wsle(&io___75);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___76);
+                do_lio(&c__9, &c__1, " Maximum number of iterations reached.", (ftnlen)38);
+                e_wsle();
+                s_wsle(&io___77);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+            }
+            else if (*info == 3)
+            {
+                s_wsle(&io___78);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___79);
+                do_lio(&c__9, &c__1,
+                       " No shifts could be applied during imp"
+                       "licit",
+                       (ftnlen)43);
+                do_lio(&c__9, &c__1, " Arnoldi update, try increasing NCV.", (ftnlen)36);
+                e_wsle();
+                s_wsle(&io___80);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+            }
+
+            if (iparam[5] > 0)
+            {
+
+                dneupd_(rvec, "A", &select[1], &dr[1], &di[1], &z__[z_offset], ldz, sigmar, sigmai, &workev[1], bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+
+                if (*info != 0)
+                {
+
+                    /*                 %------------------------------------% */
+                    /*                 | Check the documentation of DNEUPD. | */
+                    /*                 %------------------------------------% */
+
+                    s_wsle(&io___81);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    s_wsle(&io___82);
+                    do_lio(&c__9, &c__1, " Error with _neupd = ", (ftnlen)21);
+                    do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
+                    e_wsle();
+                    s_wsle(&io___83);
+                    do_lio(&c__9, &c__1, " Check the documentation of _neupd ", (ftnlen)35);
+                    e_wsle();
+                    s_wsle(&io___84);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    goto L9000;
+                }
+                else if (*sigmai != 0.)
+                {
+
+                    if (type__ == 4 || type__ == 6)
+                    {
+
+                        first = TRUE_;
+                        i__1 = iparam[5];
+                        for (j = 1; j <= i__1; ++j)
+                        {
+
+                            /*                    %----------------------------------% */
+                            /*                    | Use Rayleigh Quotient to recover | */
+                            /*                    | eigenvalues of the original      | */
+                            /*                    | generalized eigenvalue problem.  | */
+                            /*                    %----------------------------------% */
+
+                            if (di[j] == 0.)
+                            {
+
+                                /*                       %--------------------------------------% */
+                                /*                       | Eigenvalue is real. Compute          | */
+                                /*                       | d = (x'*inv[A-sigma*M]*M*x) / (x'*x) | */
+                                /*                       %--------------------------------------% */
+
+                                dgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z__[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1, (ftnlen)12);
+                                i__2 = *n;
+                                for (i__ = 1; i__ <= i__2; ++i__)
+                                {
+                                    i__3 = i__;
+                                    i__4 = i__;
+                                    z__1.r = workd[i__4], z__1.i = 0.;
+                                    workc[i__3].r = z__1.r, workc[i__3].i = z__1.i;
+                                }
+                                zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info, (ftnlen)11);
+                                i__2 = *n;
+                                for (i__ = 1; i__ <= i__2; ++i__)
+                                {
+                                    i__3 = i__;
+                                    workd[i__] = workc[i__3].r;
+                                    workd[i__ + *n] = d_imag(&workc[i__]);
+                                }
+                                denr = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                deni = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                /* Computing 2nd power */
+                                d__1 = dnrm2_(n, &z__[j * z_dim1 + 1], &c__1);
+                                numr = d__1 * d__1;
+                                /* Computing 2nd power */
+                                d__1 = dlapy2_(&denr, &deni);
+                                dmdul = d__1 * d__1;
+                                if (dmdul >= safmin)
+                                {
+                                    dr[j] = *sigmar + numr * denr / dmdul;
+                                }
+                                else
+                                {
+
+                                    /*                          %---------------------% */
+                                    /*                          | dmdul is too small. | */
+                                    /*                          | Exit to avoid       | */
+                                    /*                          | overflow.           | */
+                                    /*                          %---------------------% */
+
+                                    *info = -15;
+                                    goto L9000;
+                                }
+                            }
+                            else if (first)
+                            {
+
+                                /*                       %------------------------% */
+                                /*                       | Eigenvalue is complex. | */
+                                /*                       | Compute the first one  | */
+                                /*                       | of the conjugate pair. | */
+                                /*                       %------------------------% */
+
+                                /*                       %-------------% */
+                                /*                       | Compute M*x | */
+                                /*                       %-------------% */
+
+                                dgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z__[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1, (ftnlen)12);
+                                dgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z__[(j + 1) * z_dim1 + 1], &c__1, &c_b85, &workd[*n + 1], &c__1, (ftnlen)12);
+                                i__2 = *n;
+                                for (i__ = 1; i__ <= i__2; ++i__)
+                                {
+                                    i__3 = i__;
+                                    i__4 = i__;
+                                    i__5 = i__ + *n;
+                                    z__1.r = workd[i__4], z__1.i = workd[i__5];
+                                    workc[i__3].r = z__1.r, workc[i__3].i = z__1.i;
+                                }
+
+                                /*                       %----------------------------% */
+                                /*                       | Compute inv(A-sigma*M)*M*x | */
+                                /*                       %----------------------------% */
+
+                                zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info, (ftnlen)11);
+
+                                /*                       %-------------------------------% */
+                                /*                       | Compute x'*inv(A-sigma*M)*M*x | */
+                                /*                       %-------------------------------% */
+
+                                i__2 = *n;
+                                for (i__ = 1; i__ <= i__2; ++i__)
+                                {
+                                    i__3 = i__;
+                                    workd[i__] = workc[i__3].r;
+                                    workd[i__ + *n] = d_imag(&workc[i__]);
+                                }
+                                denr = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                denr += ddot_(n, &z__[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                deni = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                deni -= ddot_(n, &z__[(j + 1) * z_dim1 + 1], &c__1, &workd[1], &c__1);
+
+                                /*                       %----------------% */
+                                /*                       | Compute (x'*x) | */
+                                /*                       %----------------% */
+
+                                d__2 = dnrm2_(n, &z__[j * z_dim1 + 1], &c__1);
+                                d__3 = dnrm2_(n, &z__[(j + 1) * z_dim1 + 1], &c__1);
+                                /* Computing 2nd power */
+                                d__1 = dlapy2_(&d__2, &d__3);
+                                numr = d__1 * d__1;
+
+                                /*                       %----------------------------------------% */
+                                /*                       | Compute (x'x) / (x'*inv(A-sigma*M)*Mx) | */
+                                /*                       %----------------------------------------% */
+
+                                /* Computing 2nd power */
+                                d__1 = dlapy2_(&denr, &deni);
+                                dmdul = d__1 * d__1;
+                                if (dmdul >= safmin)
+                                {
+                                    dr[j] = *sigmar + numr * denr / dmdul;
+                                    di[j] = *sigmai - numr * deni / dmdul;
+                                    first = FALSE_;
+                                }
+                                else
+                                {
+
+                                    /*                          %---------------------% */
+                                    /*                          | dmdul is too small. | */
+                                    /*                          | Exit to avoid       | */
+                                    /*                          | overflow.           | */
+                                    /*                          %---------------------% */
+
+                                    *info = -15;
+                                    goto L9000;
+                                }
+                            }
+                            else
+                            {
+
+                                /*                       %---------------------------% */
+                                /*                       | Get the second eigenvalue | */
+                                /*                       | of the conjugate pair by  | */
+                                /*                       | taking the conjugate of   | */
+                                /*                       | previous one.             | */
+                                /*                       %---------------------------% */
+
+                                dr[j] = dr[j - 1];
+                                di[j] = -di[j - 1];
+                                first = TRUE_;
+                            }
+
+                            /* L270: */
+                        }
+                    }
+                    else if (type__ == 2 || type__ == 5)
+                    {
+
+                        first = TRUE_;
+                        i__1 = iparam[5];
+                        for (j = 1; j <= i__1; ++j)
+                        {
+
+                            /*                    %----------------------------------% */
+                            /*                    | Use Rayleigh Quotient to recover | */
+                            /*                    | eigenvalues of the original      | */
+                            /*                    | standard eigenvalue problem.     | */
+                            /*                    %----------------------------------% */
+
+                            if (di[j] == 0.)
+                            {
+
+                                /*                       %-------------------------------------% */
+                                /*                       | Eigenvalue is real. Compute         | */
+                                /*                       | d = (x'*inv[A-sigma*I]*x) / (x'*x). | */
+                                /*                       %-------------------------------------% */
+
+                                i__2 = *n;
+                                for (i__ = 1; i__ <= i__2; ++i__)
+                                {
+                                    i__3 = i__;
+                                    i__4 = i__ + j * z_dim1;
+                                    z__1.r = z__[i__4], z__1.i = 0.;
+                                    workc[i__3].r = z__1.r, workc[i__3].i = z__1.i;
+                                }
+                                zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info, (ftnlen)11);
+                                i__2 = *n;
+                                for (i__ = 1; i__ <= i__2; ++i__)
+                                {
+                                    i__3 = i__;
+                                    workd[i__] = workc[i__3].r;
+                                    workd[i__ + *n] = d_imag(&workc[i__]);
+                                }
+                                denr = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                deni = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                /* Computing 2nd power */
+                                d__1 = dnrm2_(n, &z__[j * z_dim1 + 1], &c__1);
+                                numr = d__1 * d__1;
+                                /* Computing 2nd power */
+                                d__1 = dlapy2_(&denr, &deni);
+                                dmdul = d__1 * d__1;
+                                if (dmdul >= safmin)
+                                {
+                                    dr[j] = *sigmar + numr * denr / dmdul;
+                                }
+                                else
+                                {
+
+                                    /*                          %---------------------% */
+                                    /*                          | dmdul is too small. | */
+                                    /*                          | Exit to avoid       | */
+                                    /*                          | overflow.           | */
+                                    /*                          %---------------------% */
+
+                                    *info = -15;
+                                    goto L9000;
+                                }
+                            }
+                            else if (first)
+                            {
+
+                                /*                       %------------------------% */
+                                /*                       | Eigenvalue is complex. | */
+                                /*                       | Compute the first one  | */
+                                /*                       | of the conjugate pair. | */
+                                /*                       %------------------------% */
+
+                                i__2 = *n;
+                                for (i__ = 1; i__ <= i__2; ++i__)
+                                {
+                                    i__3 = i__;
+                                    i__4 = i__ + j * z_dim1;
+                                    i__5 = i__ + (j + 1) * z_dim1;
+                                    z__1.r = z__[i__4], z__1.i = z__[i__5];
+                                    workc[i__3].r = z__1.r, workc[i__3].i = z__1.i;
+                                }
+
+                                /*                       %---------------------------% */
+                                /*                       | Compute inv[A-sigma*I]*x. | */
+                                /*                       %---------------------------% */
+
+                                zgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info, (ftnlen)11);
+
+                                /*                       %-----------------------------% */
+                                /*                       | Compute x'*inv(A-sigma*I)*x | */
+                                /*                       %-----------------------------% */
+
+                                i__2 = *n;
+                                for (i__ = 1; i__ <= i__2; ++i__)
+                                {
+                                    i__3 = i__;
+                                    workd[i__] = workc[i__3].r;
+                                    workd[i__ + *n] = d_imag(&workc[i__]);
+                                }
+                                denr = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                denr += ddot_(n, &z__[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                deni = ddot_(n, &z__[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                deni -= ddot_(n, &z__[(j + 1) * z_dim1 + 1], &c__1, &workd[1], &c__1);
+
+                                /*                       %----------------% */
+                                /*                       | Compute (x'*x) | */
+                                /*                       %----------------% */
+
+                                d__2 = dnrm2_(n, &z__[j * z_dim1 + 1], &c__1);
+                                d__3 = dnrm2_(n, &z__[(j + 1) * z_dim1 + 1], &c__1);
+                                /* Computing 2nd power */
+                                d__1 = dlapy2_(&d__2, &d__3);
+                                numr = d__1 * d__1;
+
+                                /*                       %----------------------------------------% */
+                                /*                       | Compute (x'x) / (x'*inv(A-sigma*I)*x). | */
+                                /*                       %----------------------------------------% */
+
+                                /* Computing 2nd power */
+                                d__1 = dlapy2_(&denr, &deni);
+                                dmdul = d__1 * d__1;
+                                if (dmdul >= safmin)
+                                {
+                                    dr[j] = *sigmar + numr * denr / dmdul;
+                                    di[j] = *sigmai - numr * deni / dmdul;
+                                    first = FALSE_;
+                                }
+                                else
+                                {
+
+                                    /*                          %---------------------% */
+                                    /*                          | dmdul is too small. | */
+                                    /*                          | Exit to avoid       | */
+                                    /*                          | overflow.           | */
+                                    /*                          %---------------------% */
+
+                                    *info = -15;
+                                    goto L9000;
+                                }
+                            }
+                            else
+                            {
+
+                                /*                       %---------------------------% */
+                                /*                       | Get the second eigenvalue | */
+                                /*                       | of the conjugate pair by  | */
+                                /*                       | taking the conjugate of   | */
+                                /*                       | previous one.             | */
+                                /*                       %---------------------------% */
+
+                                dr[j] = dr[j - 1];
+                                di[j] = -di[j - 1];
+                                first = TRUE_;
+                            }
+
+                            /* L280: */
+                        }
+                    }
+                }
+            }
+        }
+
+        goto L9000;
     }
 
-/*     %----------------------------------------% */
-/*     | L O O P  B A C K to call DNAUPD again. | */
-/*     %----------------------------------------% */
+    /*     %----------------------------------------% */
+    /*     | L O O P  B A C K to call DNAUPD again. | */
+    /*     %----------------------------------------% */
 
     goto L90;
 
@@ -1889,4 +1857,3 @@ L9000:
 
     return 0;
 } /* dnband_ */
-

@@ -1,33 +1,30 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\SRC\dsconv.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, 
-	    msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, 
-	    mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
+Extern struct
+{
+    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
 } debug_;
 
 #define debug_1 debug_
 
-Extern struct {
+Extern struct
+{
     integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, 
-	    tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, 
-	    tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, 
-	    titref, trvec;
+    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, titref, trvec;
 } timing_;
 
 #define timing_1 timing_
@@ -94,8 +91,7 @@ static doublereal c_b3 = .66666666666666663;
 
 /* ----------------------------------------------------------------------- */
 
-/* Subroutine */ int dsconv_(integer *n, doublereal *ritz, doublereal *bounds,
-	 doublereal *tol, integer *nconv)
+int dsconv_(integer *n, doublereal *ritz, doublereal *bounds, doublereal *tol, integer *nconv)
 {
     /* System generated locals */
     integer i__1;
@@ -109,56 +105,49 @@ static doublereal c_b3 = .66666666666666663;
     static real t0, t1;
     doublereal eps23, temp;
     extern doublereal dlamch_(char *, ftnlen);
-    extern /* Subroutine */ int arscnd_(real *);
+    extern int arscnd_(real *);
 
+    /*     %----------------------------------------------------% */
+    /*     | Include files for debugging and timing information | */
+    /*     %----------------------------------------------------% */
 
-/*     %----------------------------------------------------% */
-/*     | Include files for debugging and timing information | */
-/*     %----------------------------------------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
 
+    /*     %---------------------------------% */
+    /*     | See debug.doc for documentation | */
+    /*     %---------------------------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------------% */
+    /*     | Scalar Arguments | */
+    /*     %------------------% */
 
-/*     %---------------------------------% */
-/*     | See debug.doc for documentation | */
-/*     %---------------------------------% */
+    /*     %--------------------------------% */
+    /*     | See stat.doc for documentation | */
+    /*     %--------------------------------% */
 
-/*     %------------------% */
-/*     | Scalar Arguments | */
-/*     %------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
 
-/*     %--------------------------------% */
-/*     | See stat.doc for documentation | */
-/*     %--------------------------------% */
+    /*     %-----------------% */
+    /*     | Array Arguments | */
+    /*     %-----------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %---------------% */
+    /*     | Local Scalars | */
+    /*     %---------------% */
 
+    /*     %-------------------% */
+    /*     | External routines | */
+    /*     %-------------------% */
 
+    /*     %---------------------% */
+    /*     | Intrinsic Functions | */
+    /*     %---------------------% */
 
-/*     %-----------------% */
-/*     | Array Arguments | */
-/*     %-----------------% */
-
-
-/*     %---------------% */
-/*     | Local Scalars | */
-/*     %---------------% */
-
-
-/*     %-------------------% */
-/*     | External routines | */
-/*     %-------------------% */
-
-/*     %---------------------% */
-/*     | Intrinsic Functions | */
-/*     %---------------------% */
-
-
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
     /* Parameter adjustments */
     --bounds;
@@ -172,21 +161,23 @@ static doublereal c_b3 = .66666666666666663;
 
     *nconv = 0;
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
+    for (i__ = 1; i__ <= i__1; ++i__)
+    {
 
-/*        %-----------------------------------------------------% */
-/*        | The i-th Ritz value is considered "converged"       | */
-/*        | when: bounds(i) .le. TOL*max(eps23, abs(ritz(i)))   | */
-/*        %-----------------------------------------------------% */
+        /*        %-----------------------------------------------------% */
+        /*        | The i-th Ritz value is considered "converged"       | */
+        /*        | when: bounds(i) .le. TOL*max(eps23, abs(ritz(i)))   | */
+        /*        %-----------------------------------------------------% */
 
-/* Computing MAX */
-	d__2 = eps23, d__3 = (d__1 = ritz[i__], abs(d__1));
-	temp = max(d__2,d__3);
-	if (bounds[i__] <= *tol * temp) {
-	    ++(*nconv);
-	}
+        /* Computing MAX */
+        d__2 = eps23, d__3 = (d__1 = ritz[i__], abs(d__1));
+        temp = max(d__2, d__3);
+        if (bounds[i__] <= *tol * temp)
+        {
+            ++(*nconv);
+        }
 
-/* L10: */
+        /* L10: */
     }
 
     arscnd_(&t1);
@@ -194,9 +185,8 @@ static doublereal c_b3 = .66666666666666663;
 
     return 0;
 
-/*     %---------------% */
-/*     | End of dsconv | */
-/*     %---------------% */
+    /*     %---------------% */
+    /*     | End of dsconv | */
+    /*     %---------------% */
 
 } /* dsconv_ */
-

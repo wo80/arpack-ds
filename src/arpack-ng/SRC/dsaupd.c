@@ -1,33 +1,30 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\SRC\dsaupd.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, 
-	    msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, 
-	    mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
+Extern struct
+{
+    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
 } debug_;
 
 #define debug_1 debug_
 
-Extern struct {
+Extern struct
+{
     integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, 
-	    tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, 
-	    tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, 
-	    titref, trvec;
+    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, titref, trvec;
 } timing_;
 
 #define timing_1 timing_
@@ -313,7 +310,6 @@ static integer c__1 = 1;
 /*                   factorization. The user is advised to check that */
 /*                   enough workspace and array storage has been allocated. */
 
-
 /* \Remarks */
 /*  1. The converged Ritz values are always returned in ascending */
 /*     algebraic order.  The computed Ritz values are approximate */
@@ -386,7 +382,6 @@ static integer c__1 = 1;
 /*  SHARED     RESID(BLOCK), V(BLOCK,:), WORKD(BLOCK,:) */
 /*  REPLICATED WORKL(LWORKL) */
 
-
 /* \BeginLib */
 
 /* \References: */
@@ -443,123 +438,100 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-/* Subroutine */ int dsaupd_(integer *ido, char *bmat, integer *n, char *
-	which, integer *nev, doublereal *tol, doublereal *resid, integer *ncv,
-	 doublereal *v, integer *ldv, integer *iparam, integer *ipntr, 
-	doublereal *workd, doublereal *workl, integer *lworkl, integer *info, 
-	ftnlen bmat_len, ftnlen which_len)
+int dsaupd_(integer *ido, char *bmat, integer *n, char *which, integer *nev, doublereal *tol, doublereal *resid, integer *ncv, doublereal *v, integer *ldv, integer *iparam, integer *ipntr, doublereal *workd, doublereal *workl, integer *lworkl, integer *info, ftnlen bmat_len, ftnlen which_len)
 {
     /* Format strings */
     static char fmt_1000[] = "(//,5x,\002==================================="
-	    "=======\002,/5x,\002= Symmetric implicit Arnoldi update code "
-	    "=\002,/5x,\002= Version Number:\002,\002 2.4\002,19x,\002 =\002,"
-	    "/5x,\002= Version Date:  \002,\002 07/31/96\002,14x,\002 =\002,/"
-	    "5x,\002==========================================\002,/5x,\002= "
-	    "Summary of timing statistics           =\002,/5x,\002==========="
-	    "===============================\002,//)";
+                             "=======\002,/5x,\002= Symmetric implicit Arnoldi update code "
+                             "=\002,/5x,\002= Version Number:\002,\002 2.4\002,19x,\002 =\002,"
+                             "/5x,\002= Version Date:  \002,\002 07/31/96\002,14x,\002 =\002,/"
+                             "5x,\002==========================================\002,/5x,\002= "
+                             "Summary of timing statistics           =\002,/5x,\002==========="
+                             "===============================\002,//)";
     static char fmt_1100[] = "(5x,\002Total number update iterations        "
-	    "     = \002,i5,/5x,\002Total number of OP*x operations          "
-	    "  = \002,i5,/5x,\002Total number of B*x operations             = "
-	    "\002,i5,/5x,\002Total number of reorthogonalization steps  = "
-	    "\002,i5,/5x,\002Total number of iterative refinement steps = "
-	    "\002,i5,/5x,\002Total number of restart steps              = "
-	    "\002,i5,/5x,\002Total time in user OP*x operation          = "
-	    "\002,f12.6,/5x,\002Total time in user B*x operation           ="
-	    " \002,f12.6,/5x,\002Total time in Arnoldi update routine       = "
-	    "\002,f12.6,/5x,\002Total time in saup2 routine                ="
-	    " \002,f12.6,/5x,\002Total time in basic Arnoldi iteration loop = "
-	    "\002,f12.6,/5x,\002Total time in reorthogonalization phase    ="
-	    " \002,f12.6,/5x,\002Total time in (re)start vector generation  = "
-	    "\002,f12.6,/5x,\002Total time in trid eigenvalue subproblem   ="
-	    " \002,f12.6,/5x,\002Total time in getting the shifts           = "
-	    "\002,f12.6,/5x,\002Total time in applying the shifts          ="
-	    " \002,f12.6,/5x,\002Total time in convergence testing          = "
-	    "\002,f12.6)";
+                             "     = \002,i5,/5x,\002Total number of OP*x operations          "
+                             "  = \002,i5,/5x,\002Total number of B*x operations             = "
+                             "\002,i5,/5x,\002Total number of reorthogonalization steps  = "
+                             "\002,i5,/5x,\002Total number of iterative refinement steps = "
+                             "\002,i5,/5x,\002Total number of restart steps              = "
+                             "\002,i5,/5x,\002Total time in user OP*x operation          = "
+                             "\002,f12.6,/5x,\002Total time in user B*x operation           ="
+                             " \002,f12.6,/5x,\002Total time in Arnoldi update routine       = "
+                             "\002,f12.6,/5x,\002Total time in saup2 routine                ="
+                             " \002,f12.6,/5x,\002Total time in basic Arnoldi iteration loop = "
+                             "\002,f12.6,/5x,\002Total time in reorthogonalization phase    ="
+                             " \002,f12.6,/5x,\002Total time in (re)start vector generation  = "
+                             "\002,f12.6,/5x,\002Total time in trid eigenvalue subproblem   ="
+                             " \002,f12.6,/5x,\002Total time in getting the shifts           = "
+                             "\002,f12.6,/5x,\002Total time in applying the shifts          ="
+                             " \002,f12.6,/5x,\002Total time in convergence testing          = "
+                             "\002,f12.6)";
 
     /* System generated locals */
     integer v_dim1, v_offset, i__1, i__2;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_wsfe(cilist *), e_wsfe(
-	    void), do_fio(integer *, char *, ftnlen);
+    integer s_cmp(char *, char *, ftnlen, ftnlen), s_wsfe(cilist *), e_wsfe(void), do_fio(integer *, char *, ftnlen);
 
     /* Local variables */
     integer j;
     static real t0, t1;
-    static integer nb, ih, iq, np, iw, ldh, ldq, nev0, mode, ierr, iupd, next,
-	     ritz;
-    extern /* Subroutine */ int dvout_(integer *, integer *, doublereal *, 
-	    integer *, char *, ftnlen), ivout_(integer *, integer *, integer *
-	    , integer *, char *, ftnlen), dsaup2_(integer *, char *, integer *
-	    , char *, integer *, integer *, doublereal *, doublereal *, 
-	    integer *, integer *, integer *, integer *, doublereal *, integer 
-	    *, doublereal *, integer *, doublereal *, doublereal *, 
-	    doublereal *, integer *, doublereal *, integer *, doublereal *, 
-	    integer *, ftnlen, ftnlen);
+    static integer nb, ih, iq, np, iw, ldh, ldq, nev0, mode, ierr, iupd, next, ritz;
+    extern int dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), dsaup2_(integer *, char *, integer *, char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, ftnlen, ftnlen);
     extern doublereal dlamch_(char *, ftnlen);
-    extern /* Subroutine */ int arscnd_(real *);
+    extern int arscnd_(real *);
     static integer bounds, ishift, msglvl, mxiter;
-    extern /* Subroutine */ int dstats_(void);
+    extern int dstats_(void);
 
     /* Fortran I/O blocks */
-    static cilist io___21 = { 0, 6, 0, fmt_1000, 0 };
-    static cilist io___22 = { 0, 6, 0, fmt_1100, 0 };
+    static cilist io___21 = {0, 6, 0, fmt_1000, 0};
+    static cilist io___22 = {0, 6, 0, fmt_1100, 0};
 
+    /*     %----------------------------------------------------% */
+    /*     | Include files for debugging and timing information | */
+    /*     %----------------------------------------------------% */
 
+    /* \SCCS Information: @(#) */
+    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
 
-/*     %----------------------------------------------------% */
-/*     | Include files for debugging and timing information | */
-/*     %----------------------------------------------------% */
+    /*     %---------------------------------% */
+    /*     | See debug.doc for documentation | */
+    /*     %---------------------------------% */
 
+    /*     %------------------% */
+    /*     | Scalar Arguments | */
+    /*     %------------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %--------------------------------% */
+    /*     | See stat.doc for documentation | */
+    /*     %--------------------------------% */
 
-/*     %---------------------------------% */
-/*     | See debug.doc for documentation | */
-/*     %---------------------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
 
-/*     %------------------% */
-/*     | Scalar Arguments | */
-/*     %------------------% */
+    /*     %-----------------% */
+    /*     | Array Arguments | */
+    /*     %-----------------% */
 
-/*     %--------------------------------% */
-/*     | See stat.doc for documentation | */
-/*     %--------------------------------% */
+    /*     %------------% */
+    /*     | Parameters | */
+    /*     %------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %---------------% */
+    /*     | Local Scalars | */
+    /*     %---------------% */
 
+    /*     %----------------------% */
+    /*     | External Subroutines | */
+    /*     %----------------------% */
 
+    /*     %--------------------% */
+    /*     | External Functions | */
+    /*     %--------------------% */
 
-/*     %-----------------% */
-/*     | Array Arguments | */
-/*     %-----------------% */
-
-
-/*     %------------% */
-/*     | Parameters | */
-/*     %------------% */
-
-
-/*     %---------------% */
-/*     | Local Scalars | */
-/*     %---------------% */
-
-
-/*     %----------------------% */
-/*     | External Subroutines | */
-/*     %----------------------% */
-
-
-/*     %--------------------% */
-/*     | External Functions | */
-/*     %--------------------% */
-
-
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
     /* Parameter adjustments */
     --workd;
@@ -572,171 +544,186 @@ static integer c__1 = 1;
     --workl;
 
     /* Function Body */
-    if (*ido == 0) {
+    if (*ido == 0)
+    {
 
-/*        %-------------------------------% */
-/*        | Initialize timing statistics  | */
-/*        | & message level for debugging | */
-/*        %-------------------------------% */
+        /*        %-------------------------------% */
+        /*        | Initialize timing statistics  | */
+        /*        | & message level for debugging | */
+        /*        %-------------------------------% */
 
-	dstats_();
-	arscnd_(&t0);
-	msglvl = debug_1.msaupd;
+        dstats_();
+        arscnd_(&t0);
+        msglvl = debug_1.msaupd;
 
-	ierr = 0;
-	ishift = iparam[1];
-	mxiter = iparam[3];
-/*         nb     = iparam(4) */
-	nb = 1;
+        ierr = 0;
+        ishift = iparam[1];
+        mxiter = iparam[3];
+        /*         nb     = iparam(4) */
+        nb = 1;
 
-/*        %--------------------------------------------% */
-/*        | Revision 2 performs only implicit restart. | */
-/*        %--------------------------------------------% */
+        /*        %--------------------------------------------% */
+        /*        | Revision 2 performs only implicit restart. | */
+        /*        %--------------------------------------------% */
 
-	iupd = 1;
-	mode = iparam[7];
+        iupd = 1;
+        mode = iparam[7];
 
-/*        %----------------% */
-/*        | Error checking | */
-/*        %----------------% */
+        /*        %----------------% */
+        /*        | Error checking | */
+        /*        %----------------% */
 
-	if (*n <= 0) {
-	    ierr = -1;
-	} else if (*nev <= 0) {
-	    ierr = -2;
-	} else if (*ncv <= *nev || *ncv > *n) {
-	    ierr = -3;
-	}
+        if (*n <= 0)
+        {
+            ierr = -1;
+        }
+        else if (*nev <= 0)
+        {
+            ierr = -2;
+        }
+        else if (*ncv <= *nev || *ncv > *n)
+        {
+            ierr = -3;
+        }
 
-/*        %----------------------------------------------% */
-/*        | NP is the number of additional steps to      | */
-/*        | extend the length NEV Lanczos factorization. | */
-/*        %----------------------------------------------% */
+        /*        %----------------------------------------------% */
+        /*        | NP is the number of additional steps to      | */
+        /*        | extend the length NEV Lanczos factorization. | */
+        /*        %----------------------------------------------% */
 
-	np = *ncv - *nev;
+        np = *ncv - *nev;
 
-	if (mxiter <= 0) {
-	    ierr = -4;
-	}
-	if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, 
-		"SM", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "LA", (
-		ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "SA", (ftnlen)2, (
-		ftnlen)2) != 0 && s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) != 
-		0) {
-	    ierr = -5;
-	}
-	if (*(unsigned char *)bmat != 'I' && *(unsigned char *)bmat != 'G') {
-	    ierr = -6;
-	}
+        if (mxiter <= 0)
+        {
+            ierr = -4;
+        }
+        if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "LA", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "SA", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) != 0)
+        {
+            ierr = -5;
+        }
+        if (*(unsigned char *)bmat != 'I' && *(unsigned char *)bmat != 'G')
+        {
+            ierr = -6;
+        }
 
-/* Computing 2nd power */
-	i__1 = *ncv;
-	if (*lworkl < i__1 * i__1 + (*ncv << 3)) {
-	    ierr = -7;
-	}
-	if (mode < 1 || mode > 5) {
-	    ierr = -10;
-	} else if (mode == 1 && *(unsigned char *)bmat == 'G') {
-	    ierr = -11;
-	} else if (ishift < 0 || ishift > 1) {
-	    ierr = -12;
-	} else if (*nev == 1 && s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) == 0)
-		 {
-	    ierr = -13;
-	}
+        /* Computing 2nd power */
+        i__1 = *ncv;
+        if (*lworkl < i__1 * i__1 + (*ncv << 3))
+        {
+            ierr = -7;
+        }
+        if (mode < 1 || mode > 5)
+        {
+            ierr = -10;
+        }
+        else if (mode == 1 && *(unsigned char *)bmat == 'G')
+        {
+            ierr = -11;
+        }
+        else if (ishift < 0 || ishift > 1)
+        {
+            ierr = -12;
+        }
+        else if (*nev == 1 && s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) == 0)
+        {
+            ierr = -13;
+        }
 
-/*        %------------% */
-/*        | Error Exit | */
-/*        %------------% */
+        /*        %------------% */
+        /*        | Error Exit | */
+        /*        %------------% */
 
-	if (ierr != 0) {
-	    *info = ierr;
-	    *ido = 99;
-	    goto L9000;
-	}
+        if (ierr != 0)
+        {
+            *info = ierr;
+            *ido = 99;
+            goto L9000;
+        }
 
-/*        %------------------------% */
-/*        | Set default parameters | */
-/*        %------------------------% */
+        /*        %------------------------% */
+        /*        | Set default parameters | */
+        /*        %------------------------% */
 
-	if (nb <= 0) {
-	    nb = 1;
-	}
-	if (*tol <= 0.) {
-	    *tol = dlamch_("EpsMach", (ftnlen)7);
-	}
+        if (nb <= 0)
+        {
+            nb = 1;
+        }
+        if (*tol <= 0.)
+        {
+            *tol = dlamch_("EpsMach", (ftnlen)7);
+        }
 
-/*        %----------------------------------------------% */
-/*        | NP is the number of additional steps to      | */
-/*        | extend the length NEV Lanczos factorization. | */
-/*        | NEV0 is the local variable designating the   | */
-/*        | size of the invariant subspace desired.      | */
-/*        %----------------------------------------------% */
+        /*        %----------------------------------------------% */
+        /*        | NP is the number of additional steps to      | */
+        /*        | extend the length NEV Lanczos factorization. | */
+        /*        | NEV0 is the local variable designating the   | */
+        /*        | size of the invariant subspace desired.      | */
+        /*        %----------------------------------------------% */
 
-	np = *ncv - *nev;
-	nev0 = *nev;
+        np = *ncv - *nev;
+        nev0 = *nev;
 
-/*        %-----------------------------% */
-/*        | Zero out internal workspace | */
-/*        %-----------------------------% */
+        /*        %-----------------------------% */
+        /*        | Zero out internal workspace | */
+        /*        %-----------------------------% */
 
-/* Computing 2nd power */
-	i__2 = *ncv;
-	i__1 = i__2 * i__2 + (*ncv << 3);
-	for (j = 1; j <= i__1; ++j) {
-	    workl[j] = 0.;
-/* L10: */
-	}
+        /* Computing 2nd power */
+        i__2 = *ncv;
+        i__1 = i__2 * i__2 + (*ncv << 3);
+        for (j = 1; j <= i__1; ++j)
+        {
+            workl[j] = 0.;
+            /* L10: */
+        }
 
-/*        %-------------------------------------------------------% */
-/*        | Pointer into WORKL for address of H, RITZ, BOUNDS, Q  | */
-/*        | etc... and the remaining workspace.                   | */
-/*        | Also update pointer to be used on output.             | */
-/*        | Memory is laid out as follows:                        | */
-/*        | workl(1:2*ncv) := generated tridiagonal matrix        | */
-/*        | workl(2*ncv+1:2*ncv+ncv) := ritz values               | */
-/*        | workl(3*ncv+1:3*ncv+ncv) := computed error bounds     | */
-/*        | workl(4*ncv+1:4*ncv+ncv*ncv) := rotation matrix Q     | */
-/*        | workl(4*ncv+ncv*ncv+1:7*ncv+ncv*ncv) := workspace     | */
-/*        %-------------------------------------------------------% */
+        /*        %-------------------------------------------------------% */
+        /*        | Pointer into WORKL for address of H, RITZ, BOUNDS, Q  | */
+        /*        | etc... and the remaining workspace.                   | */
+        /*        | Also update pointer to be used on output.             | */
+        /*        | Memory is laid out as follows:                        | */
+        /*        | workl(1:2*ncv) := generated tridiagonal matrix        | */
+        /*        | workl(2*ncv+1:2*ncv+ncv) := ritz values               | */
+        /*        | workl(3*ncv+1:3*ncv+ncv) := computed error bounds     | */
+        /*        | workl(4*ncv+1:4*ncv+ncv*ncv) := rotation matrix Q     | */
+        /*        | workl(4*ncv+ncv*ncv+1:7*ncv+ncv*ncv) := workspace     | */
+        /*        %-------------------------------------------------------% */
 
-	ldh = *ncv;
-	ldq = *ncv;
-	ih = 1;
-	ritz = ih + (ldh << 1);
-	bounds = ritz + *ncv;
-	iq = bounds + *ncv;
-/* Computing 2nd power */
-	i__1 = *ncv;
-	iw = iq + i__1 * i__1;
-	next = iw + *ncv * 3;
+        ldh = *ncv;
+        ldq = *ncv;
+        ih = 1;
+        ritz = ih + (ldh << 1);
+        bounds = ritz + *ncv;
+        iq = bounds + *ncv;
+        /* Computing 2nd power */
+        i__1 = *ncv;
+        iw = iq + i__1 * i__1;
+        next = iw + *ncv * 3;
 
-	ipntr[4] = next;
-	ipntr[5] = ih;
-	ipntr[6] = ritz;
-	ipntr[7] = bounds;
-	ipntr[11] = iw;
+        ipntr[4] = next;
+        ipntr[5] = ih;
+        ipntr[6] = ritz;
+        ipntr[7] = bounds;
+        ipntr[11] = iw;
     }
 
-/*     %-------------------------------------------------------% */
-/*     | Carry out the Implicitly restarted Lanczos Iteration. | */
-/*     %-------------------------------------------------------% */
+    /*     %-------------------------------------------------------% */
+    /*     | Carry out the Implicitly restarted Lanczos Iteration. | */
+    /*     %-------------------------------------------------------% */
 
-    dsaup2_(ido, bmat, n, which, &nev0, &np, tol, &resid[1], &mode, &iupd, &
-	    ishift, &mxiter, &v[v_offset], ldv, &workl[ih], &ldh, &workl[ritz]
-	    , &workl[bounds], &workl[iq], &ldq, &workl[iw], &ipntr[1], &workd[
-	    1], info, (ftnlen)1, (ftnlen)2);
+    dsaup2_(ido, bmat, n, which, &nev0, &np, tol, &resid[1], &mode, &iupd, &ishift, &mxiter, &v[v_offset], ldv, &workl[ih], &ldh, &workl[ritz], &workl[bounds], &workl[iq], &ldq, &workl[iw], &ipntr[1], &workd[1], info, (ftnlen)1, (ftnlen)2);
 
-/*     %--------------------------------------------------% */
-/*     | ido .ne. 99 implies use of reverse communication | */
-/*     | to compute operations involving OP or shifts.    | */
-/*     %--------------------------------------------------% */
+    /*     %--------------------------------------------------% */
+    /*     | ido .ne. 99 implies use of reverse communication | */
+    /*     | to compute operations involving OP or shifts.    | */
+    /*     %--------------------------------------------------% */
 
-    if (*ido == 3) {
-	iparam[8] = np;
+    if (*ido == 3)
+    {
+        iparam[8] = np;
     }
-    if (*ido != 99) {
-	goto L9000;
+    if (*ido != 99)
+    {
+        goto L9000;
     }
 
     iparam[3] = mxiter;
@@ -745,68 +732,79 @@ static integer c__1 = 1;
     iparam[10] = timing_1.nbx;
     iparam[11] = timing_1.nrorth;
 
-/*     %------------------------------------% */
-/*     | Exit if there was an informational | */
-/*     | error within dsaup2 .               | */
-/*     %------------------------------------% */
+    /*     %------------------------------------% */
+    /*     | Exit if there was an informational | */
+    /*     | error within dsaup2 .               | */
+    /*     %------------------------------------% */
 
-    if (*info < 0) {
-	goto L9000;
+    if (*info < 0)
+    {
+        goto L9000;
     }
-    if (*info == 2) {
-	*info = 3;
+    if (*info == 2)
+    {
+        *info = 3;
     }
 
-    if (msglvl > 0) {
-	ivout_(&debug_1.logfil, &c__1, &mxiter, &debug_1.ndigit, "_saupd: nu"
-		"mber of update iterations taken", (ftnlen)41);
-	ivout_(&debug_1.logfil, &c__1, &np, &debug_1.ndigit, "_saupd: number"
-		" of \"converged\" Ritz values", (ftnlen)41);
-	dvout_(&debug_1.logfil, &np, &workl[ritz], &debug_1.ndigit, "_saupd:"
-		" final Ritz values", (ftnlen)25);
-	dvout_(&debug_1.logfil, &np, &workl[bounds], &debug_1.ndigit, "_saup"
-		"d: corresponding error bounds", (ftnlen)34);
+    if (msglvl > 0)
+    {
+        ivout_(&debug_1.logfil, &c__1, &mxiter, &debug_1.ndigit,
+               "_saupd: nu"
+               "mber of update iterations taken",
+               (ftnlen)41);
+        ivout_(&debug_1.logfil, &c__1, &np, &debug_1.ndigit,
+               "_saupd: number"
+               " of \"converged\" Ritz values",
+               (ftnlen)41);
+        dvout_(&debug_1.logfil, &np, &workl[ritz], &debug_1.ndigit,
+               "_saupd:"
+               " final Ritz values",
+               (ftnlen)25);
+        dvout_(&debug_1.logfil, &np, &workl[bounds], &debug_1.ndigit,
+               "_saup"
+               "d: corresponding error bounds",
+               (ftnlen)34);
     }
 
     arscnd_(&t1);
     timing_1.tsaupd = t1 - t0;
 
-    if (msglvl > 0) {
+    if (msglvl > 0)
+    {
 
-/*        %--------------------------------------------------------% */
-/*        | Version Number & Version Date are defined in version.h | */
-/*        %--------------------------------------------------------% */
+        /*        %--------------------------------------------------------% */
+        /*        | Version Number & Version Date are defined in version.h | */
+        /*        %--------------------------------------------------------% */
 
-	s_wsfe(&io___21);
-	e_wsfe();
-	s_wsfe(&io___22);
-	do_fio(&c__1, (char *)&mxiter, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&timing_1.nopx, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&timing_1.nbx, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&timing_1.nrorth, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&timing_1.nitref, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&timing_1.nrstrt, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&timing_1.tmvopx, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&timing_1.tmvbx, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&timing_1.tsaupd, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&timing_1.tsaup2, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&timing_1.tsaitr, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&timing_1.titref, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&timing_1.tgetv0, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&timing_1.tseigt, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&timing_1.tsgets, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&timing_1.tsapps, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&timing_1.tsconv, (ftnlen)sizeof(real));
-	e_wsfe();
+        s_wsfe(&io___21);
+        e_wsfe();
+        s_wsfe(&io___22);
+        do_fio(&c__1, (char *)&mxiter, (ftnlen)sizeof(integer));
+        do_fio(&c__1, (char *)&timing_1.nopx, (ftnlen)sizeof(integer));
+        do_fio(&c__1, (char *)&timing_1.nbx, (ftnlen)sizeof(integer));
+        do_fio(&c__1, (char *)&timing_1.nrorth, (ftnlen)sizeof(integer));
+        do_fio(&c__1, (char *)&timing_1.nitref, (ftnlen)sizeof(integer));
+        do_fio(&c__1, (char *)&timing_1.nrstrt, (ftnlen)sizeof(integer));
+        do_fio(&c__1, (char *)&timing_1.tmvopx, (ftnlen)sizeof(real));
+        do_fio(&c__1, (char *)&timing_1.tmvbx, (ftnlen)sizeof(real));
+        do_fio(&c__1, (char *)&timing_1.tsaupd, (ftnlen)sizeof(real));
+        do_fio(&c__1, (char *)&timing_1.tsaup2, (ftnlen)sizeof(real));
+        do_fio(&c__1, (char *)&timing_1.tsaitr, (ftnlen)sizeof(real));
+        do_fio(&c__1, (char *)&timing_1.titref, (ftnlen)sizeof(real));
+        do_fio(&c__1, (char *)&timing_1.tgetv0, (ftnlen)sizeof(real));
+        do_fio(&c__1, (char *)&timing_1.tseigt, (ftnlen)sizeof(real));
+        do_fio(&c__1, (char *)&timing_1.tsgets, (ftnlen)sizeof(real));
+        do_fio(&c__1, (char *)&timing_1.tsapps, (ftnlen)sizeof(real));
+        do_fio(&c__1, (char *)&timing_1.tsconv, (ftnlen)sizeof(real));
+        e_wsfe();
     }
 
 L9000:
 
     return 0;
 
-/*     %---------------% */
-/*     | End of dsaupd  | */
-/*     %---------------% */
+    /*     %---------------% */
+    /*     | End of dsaupd  | */
+    /*     %---------------% */
 
 } /* dsaupd_ */
-

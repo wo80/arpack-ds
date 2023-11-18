@@ -1,33 +1,30 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\SRC\sneigh.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, 
-	    msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, 
-	    mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
+Extern struct
+{
+    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
 } debug_;
 
 #define debug_1 debug_
 
-Extern struct {
+Extern struct
+{
     integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, 
-	    tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, 
-	    tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, 
-	    titref, trvec;
+    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, titref, trvec;
 } timing_;
 
 #define timing_1 timing_
@@ -116,7 +113,6 @@ static real c_b25 = 0.f;
 /*     snrm2   Level 1 BLAS that computes the norm of a vector. */
 /*     sscal   Level 1 BLAS that scales a vector. */
 
-
 /* \Author */
 /*     Danny Sorensen               Phuong Vu */
 /*     Richard Lehoucq              CRPC / Rice University */
@@ -138,9 +134,7 @@ static real c_b25 = 0.f;
 
 /* ----------------------------------------------------------------------- */
 
-/* Subroutine */ int sneigh_(real *rnorm, integer *n, real *h__, integer *ldh,
-	 real *ritzr, real *ritzi, real *bounds, real *q, integer *ldq, real *
-	workl, integer *ierr)
+int sneigh_(real *rnorm, integer *n, real *h__, integer *ldh, real *ritzr, real *ritzi, real *bounds, real *q, integer *ldq, real *workl, integer *ierr)
 {
     /* System generated locals */
     integer h_dim1, h_offset, q_dim1, q_offset, i__1;
@@ -152,89 +146,67 @@ static real c_b25 = 0.f;
     real vl[1], temp;
     extern doublereal snrm2_(integer *, real *, integer *);
     integer iconj;
-    extern /* Subroutine */ int sscal_(integer *, real *, real *, integer *), 
-	    sgemv_(char *, integer *, integer *, real *, real *, integer *, 
-	    real *, integer *, real *, real *, integer *, ftnlen), smout_(
-	    integer *, integer *, integer *, real *, integer *, integer *, 
-	    char *, ftnlen), svout_(integer *, integer *, real *, integer *, 
-	    char *, ftnlen);
+    extern int sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, ftnlen), smout_(integer *, integer *, integer *, real *, integer *, integer *, char *, ftnlen), svout_(integer *, integer *, real *, integer *, char *, ftnlen);
     extern doublereal slapy2_(real *, real *);
-    extern /* Subroutine */ int arscnd_(real *);
+    extern int arscnd_(real *);
     logical select[1];
     integer msglvl;
-    extern /* Subroutine */ int slacpy_(char *, integer *, integer *, real *, 
-	    integer *, real *, integer *, ftnlen), slahqr_(logical *, logical 
-	    *, integer *, integer *, integer *, real *, integer *, real *, 
-	    real *, integer *, integer *, real *, integer *, integer *), 
-	    strevc_(char *, char *, logical *, integer *, real *, integer *, 
-	    real *, integer *, real *, integer *, integer *, integer *, real *
-	    , integer *, ftnlen, ftnlen);
+    extern int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *, ftnlen), slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), strevc_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, ftnlen, ftnlen);
 
+    /*     %----------------------------------------------------% */
+    /*     | Include files for debugging and timing information | */
+    /*     %----------------------------------------------------% */
 
-/*     %----------------------------------------------------% */
-/*     | Include files for debugging and timing information | */
-/*     %----------------------------------------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
 
+    /*     %---------------------------------% */
+    /*     | See debug.doc for documentation | */
+    /*     %---------------------------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------------% */
+    /*     | Scalar Arguments | */
+    /*     %------------------% */
 
-/*     %---------------------------------% */
-/*     | See debug.doc for documentation | */
-/*     %---------------------------------% */
+    /*     %--------------------------------% */
+    /*     | See stat.doc for documentation | */
+    /*     %--------------------------------% */
 
-/*     %------------------% */
-/*     | Scalar Arguments | */
-/*     %------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
 
-/*     %--------------------------------% */
-/*     | See stat.doc for documentation | */
-/*     %--------------------------------% */
+    /*     %-----------------% */
+    /*     | Array Arguments | */
+    /*     %-----------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------% */
+    /*     | Parameters | */
+    /*     %------------% */
 
+    /*     %------------------------% */
+    /*     | Local Scalars & Arrays | */
+    /*     %------------------------% */
 
+    /*     %----------------------% */
+    /*     | External Subroutines | */
+    /*     %----------------------% */
 
-/*     %-----------------% */
-/*     | Array Arguments | */
-/*     %-----------------% */
+    /*     %--------------------% */
+    /*     | External Functions | */
+    /*     %--------------------% */
 
+    /*     %---------------------% */
+    /*     | Intrinsic Functions | */
+    /*     %---------------------% */
 
-/*     %------------% */
-/*     | Parameters | */
-/*     %------------% */
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
-
-/*     %------------------------% */
-/*     | Local Scalars & Arrays | */
-/*     %------------------------% */
-
-
-/*     %----------------------% */
-/*     | External Subroutines | */
-/*     %----------------------% */
-
-
-/*     %--------------------% */
-/*     | External Functions | */
-/*     %--------------------% */
-
-
-/*     %---------------------% */
-/*     | Intrinsic Functions | */
-/*     %---------------------% */
-
-
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
-
-
-/*     %-------------------------------% */
-/*     | Initialize timing statistics  | */
-/*     | & message level for debugging | */
-/*     %-------------------------------% */
+    /*     %-------------------------------% */
+    /*     | Initialize timing statistics  | */
+    /*     | & message level for debugging | */
+    /*     %-------------------------------% */
 
     /* Parameter adjustments */
     --workl;
@@ -252,151 +224,178 @@ static real c_b25 = 0.f;
     arscnd_(&t0);
     msglvl = debug_1.mneigh;
 
-    if (msglvl > 2) {
-	smout_(&debug_1.logfil, n, n, &h__[h_offset], ldh, &debug_1.ndigit, 
-		"_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
+    if (msglvl > 2)
+    {
+        smout_(&debug_1.logfil, n, n, &h__[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
     }
 
-/*     %-----------------------------------------------------------% */
-/*     | 1. Compute the eigenvalues, the last components of the    | */
-/*     |    corresponding Schur vectors and the full Schur form T  | */
-/*     |    of the current upper Hessenberg matrix H.              | */
-/*     | slahqr returns the full Schur form of H in WORKL(1:N**2)  | */
-/*     | and the last components of the Schur vectors in BOUNDS.   | */
-/*     %-----------------------------------------------------------% */
+    /*     %-----------------------------------------------------------% */
+    /*     | 1. Compute the eigenvalues, the last components of the    | */
+    /*     |    corresponding Schur vectors and the full Schur form T  | */
+    /*     |    of the current upper Hessenberg matrix H.              | */
+    /*     | slahqr returns the full Schur form of H in WORKL(1:N**2)  | */
+    /*     | and the last components of the Schur vectors in BOUNDS.   | */
+    /*     %-----------------------------------------------------------% */
 
     slacpy_("All", n, n, &h__[h_offset], ldh, &workl[1], n, (ftnlen)3);
     i__1 = *n - 1;
-    for (j = 1; j <= i__1; ++j) {
-	bounds[j] = 0.f;
-/* L5: */
+    for (j = 1; j <= i__1; ++j)
+    {
+        bounds[j] = 0.f;
+        /* L5: */
     }
     bounds[*n] = 1.f;
-    slahqr_(&c_true, &c_true, n, &c__1, n, &workl[1], n, &ritzr[1], &ritzi[1],
-	     &c__1, &c__1, &bounds[1], &c__1, ierr);
-    if (*ierr != 0) {
-	goto L9000;
+    slahqr_(&c_true, &c_true, n, &c__1, n, &workl[1], n, &ritzr[1], &ritzi[1], &c__1, &c__1, &bounds[1], &c__1, ierr);
+    if (*ierr != 0)
+    {
+        goto L9000;
     }
 
-    if (msglvl > 1) {
-	svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit, "_neigh: las"
-		"t row of the Schur matrix for H", (ftnlen)42);
+    if (msglvl > 1)
+    {
+        svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
+               "_neigh: las"
+               "t row of the Schur matrix for H",
+               (ftnlen)42);
     }
 
-/*     %-----------------------------------------------------------% */
-/*     | 2. Compute the eigenvectors of the full Schur form T and  | */
-/*     |    apply the last components of the Schur vectors to get  | */
-/*     |    the last components of the corresponding eigenvectors. | */
-/*     | Remember that if the i-th and (i+1)-st eigenvalues are    | */
-/*     | complex conjugate pairs, then the real & imaginary part   | */
-/*     | of the eigenvector components are split across adjacent   | */
-/*     | columns of Q.                                             | */
-/*     %-----------------------------------------------------------% */
+    /*     %-----------------------------------------------------------% */
+    /*     | 2. Compute the eigenvectors of the full Schur form T and  | */
+    /*     |    apply the last components of the Schur vectors to get  | */
+    /*     |    the last components of the corresponding eigenvectors. | */
+    /*     | Remember that if the i-th and (i+1)-st eigenvalues are    | */
+    /*     | complex conjugate pairs, then the real & imaginary part   | */
+    /*     | of the eigenvector components are split across adjacent   | */
+    /*     | columns of Q.                                             | */
+    /*     %-----------------------------------------------------------% */
 
-    strevc_("R", "A", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n,
-	     &workl[*n * *n + 1], ierr, (ftnlen)1, (ftnlen)1);
+    strevc_("R", "A", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], ierr, (ftnlen)1, (ftnlen)1);
 
-    if (*ierr != 0) {
-	goto L9000;
+    if (*ierr != 0)
+    {
+        goto L9000;
     }
 
-/*     %------------------------------------------------% */
-/*     | Scale the returning eigenvectors so that their | */
-/*     | euclidean norms are all one. LAPACK subroutine | */
-/*     | strevc returns each eigenvector normalized so  | */
-/*     | that the element of largest magnitude has      | */
-/*     | magnitude 1; here the magnitude of a complex   | */
-/*     | number (x,y) is taken to be |x| + |y|.         | */
-/*     %------------------------------------------------% */
+    /*     %------------------------------------------------% */
+    /*     | Scale the returning eigenvectors so that their | */
+    /*     | euclidean norms are all one. LAPACK subroutine | */
+    /*     | strevc returns each eigenvector normalized so  | */
+    /*     | that the element of largest magnitude has      | */
+    /*     | magnitude 1; here the magnitude of a complex   | */
+    /*     | number (x,y) is taken to be |x| + |y|.         | */
+    /*     %------------------------------------------------% */
 
     iconj = 0;
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	if ((r__1 = ritzi[i__], dabs(r__1)) <= 0.f) {
+    for (i__ = 1; i__ <= i__1; ++i__)
+    {
+        if ((r__1 = ritzi[i__], dabs(r__1)) <= 0.f)
+        {
 
-/*           %----------------------% */
-/*           | Real eigenvalue case | */
-/*           %----------------------% */
+            /*           %----------------------% */
+            /*           | Real eigenvalue case | */
+            /*           %----------------------% */
 
-	    temp = snrm2_(n, &q[i__ * q_dim1 + 1], &c__1);
-	    r__1 = 1.f / temp;
-	    sscal_(n, &r__1, &q[i__ * q_dim1 + 1], &c__1);
-	} else {
+            temp = snrm2_(n, &q[i__ * q_dim1 + 1], &c__1);
+            r__1 = 1.f / temp;
+            sscal_(n, &r__1, &q[i__ * q_dim1 + 1], &c__1);
+        }
+        else
+        {
 
-/*           %-------------------------------------------% */
-/*           | Complex conjugate pair case. Note that    | */
-/*           | since the real and imaginary part of      | */
-/*           | the eigenvector are stored in consecutive | */
-/*           | columns, we further normalize by the      | */
-/*           | square root of two.                       | */
-/*           %-------------------------------------------% */
+            /*           %-------------------------------------------% */
+            /*           | Complex conjugate pair case. Note that    | */
+            /*           | since the real and imaginary part of      | */
+            /*           | the eigenvector are stored in consecutive | */
+            /*           | columns, we further normalize by the      | */
+            /*           | square root of two.                       | */
+            /*           %-------------------------------------------% */
 
-	    if (iconj == 0) {
-		r__1 = snrm2_(n, &q[i__ * q_dim1 + 1], &c__1);
-		r__2 = snrm2_(n, &q[(i__ + 1) * q_dim1 + 1], &c__1);
-		temp = slapy2_(&r__1, &r__2);
-		r__1 = 1.f / temp;
-		sscal_(n, &r__1, &q[i__ * q_dim1 + 1], &c__1);
-		r__1 = 1.f / temp;
-		sscal_(n, &r__1, &q[(i__ + 1) * q_dim1 + 1], &c__1);
-		iconj = 1;
-	    } else {
-		iconj = 0;
-	    }
-	}
-/* L10: */
+            if (iconj == 0)
+            {
+                r__1 = snrm2_(n, &q[i__ * q_dim1 + 1], &c__1);
+                r__2 = snrm2_(n, &q[(i__ + 1) * q_dim1 + 1], &c__1);
+                temp = slapy2_(&r__1, &r__2);
+                r__1 = 1.f / temp;
+                sscal_(n, &r__1, &q[i__ * q_dim1 + 1], &c__1);
+                r__1 = 1.f / temp;
+                sscal_(n, &r__1, &q[(i__ + 1) * q_dim1 + 1], &c__1);
+                iconj = 1;
+            }
+            else
+            {
+                iconj = 0;
+            }
+        }
+        /* L10: */
     }
 
-    sgemv_("T", n, n, &c_b23, &q[q_offset], ldq, &bounds[1], &c__1, &c_b25, &
-	    workl[1], &c__1, (ftnlen)1);
+    sgemv_("T", n, n, &c_b23, &q[q_offset], ldq, &bounds[1], &c__1, &c_b25, &workl[1], &c__1, (ftnlen)1);
 
-    if (msglvl > 1) {
-	svout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit, "_neigh: Last"
-		" row of the eigenvector matrix for H", (ftnlen)48);
+    if (msglvl > 1)
+    {
+        svout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,
+               "_neigh: Last"
+               " row of the eigenvector matrix for H",
+               (ftnlen)48);
     }
 
-/*     %----------------------------% */
-/*     | Compute the Ritz estimates | */
-/*     %----------------------------% */
+    /*     %----------------------------% */
+    /*     | Compute the Ritz estimates | */
+    /*     %----------------------------% */
 
     iconj = 0;
     i__1 = *n;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	if ((r__1 = ritzi[i__], dabs(r__1)) <= 0.f) {
+    for (i__ = 1; i__ <= i__1; ++i__)
+    {
+        if ((r__1 = ritzi[i__], dabs(r__1)) <= 0.f)
+        {
 
-/*           %----------------------% */
-/*           | Real eigenvalue case | */
-/*           %----------------------% */
+            /*           %----------------------% */
+            /*           | Real eigenvalue case | */
+            /*           %----------------------% */
 
-	    bounds[i__] = *rnorm * (r__1 = workl[i__], dabs(r__1));
-	} else {
+            bounds[i__] = *rnorm * (r__1 = workl[i__], dabs(r__1));
+        }
+        else
+        {
 
-/*           %-------------------------------------------% */
-/*           | Complex conjugate pair case. Note that    | */
-/*           | since the real and imaginary part of      | */
-/*           | the eigenvector are stored in consecutive | */
-/*           | columns, we need to take the magnitude    | */
-/*           | of the last components of the two vectors | */
-/*           %-------------------------------------------% */
+            /*           %-------------------------------------------% */
+            /*           | Complex conjugate pair case. Note that    | */
+            /*           | since the real and imaginary part of      | */
+            /*           | the eigenvector are stored in consecutive | */
+            /*           | columns, we need to take the magnitude    | */
+            /*           | of the last components of the two vectors | */
+            /*           %-------------------------------------------% */
 
-	    if (iconj == 0) {
-		bounds[i__] = *rnorm * slapy2_(&workl[i__], &workl[i__ + 1]);
-		bounds[i__ + 1] = bounds[i__];
-		iconj = 1;
-	    } else {
-		iconj = 0;
-	    }
-	}
-/* L20: */
+            if (iconj == 0)
+            {
+                bounds[i__] = *rnorm * slapy2_(&workl[i__], &workl[i__ + 1]);
+                bounds[i__ + 1] = bounds[i__];
+                iconj = 1;
+            }
+            else
+            {
+                iconj = 0;
+            }
+        }
+        /* L20: */
     }
 
-    if (msglvl > 2) {
-	svout_(&debug_1.logfil, n, &ritzr[1], &debug_1.ndigit, "_neigh: Real"
-		" part of the eigenvalues of H", (ftnlen)41);
-	svout_(&debug_1.logfil, n, &ritzi[1], &debug_1.ndigit, "_neigh: Imag"
-		"inary part of the eigenvalues of H", (ftnlen)46);
-	svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit, "_neigh: Rit"
-		"z estimates for the eigenvalues of H", (ftnlen)47);
+    if (msglvl > 2)
+    {
+        svout_(&debug_1.logfil, n, &ritzr[1], &debug_1.ndigit,
+               "_neigh: Real"
+               " part of the eigenvalues of H",
+               (ftnlen)41);
+        svout_(&debug_1.logfil, n, &ritzi[1], &debug_1.ndigit,
+               "_neigh: Imag"
+               "inary part of the eigenvalues of H",
+               (ftnlen)46);
+        svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
+               "_neigh: Rit"
+               "z estimates for the eigenvalues of H",
+               (ftnlen)47);
     }
 
     arscnd_(&t1);
@@ -405,9 +404,8 @@ static real c_b25 = 0.f;
 L9000:
     return 0;
 
-/*     %---------------% */
-/*     | End of sneigh | */
-/*     %---------------% */
+    /*     %---------------% */
+    /*     | End of sneigh | */
+    /*     %---------------% */
 
 } /* sneigh_ */
-

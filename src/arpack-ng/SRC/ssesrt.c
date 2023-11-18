@@ -1,13 +1,13 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\SRC\ssesrt.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
@@ -83,8 +83,7 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-/* Subroutine */ int ssesrt_(char *which, logical *apply, integer *n, real *x,
-	 integer *na, real *a, integer *lda, ftnlen which_len)
+int ssesrt_(char *which, logical *apply, integer *n, real *x, integer *na, real *a, integer *lda, ftnlen which_len)
 {
     /* System generated locals */
     integer a_dim1, a_offset, i__1;
@@ -96,33 +95,27 @@ static integer c__1 = 1;
     /* Local variables */
     integer i__, j, igap;
     real temp;
-    extern /* Subroutine */ int sswap_(integer *, real *, integer *, real *, 
-	    integer *);
+    extern int sswap_(integer *, real *, integer *, real *, integer *);
 
+    /*     %------------------% */
+    /*     | Scalar Arguments | */
+    /*     %------------------% */
 
-/*     %------------------% */
-/*     | Scalar Arguments | */
-/*     %------------------% */
+    /*     %-----------------% */
+    /*     | Array Arguments | */
+    /*     %-----------------% */
 
+    /*     %---------------% */
+    /*     | Local Scalars | */
+    /*     %---------------% */
 
-/*     %-----------------% */
-/*     | Array Arguments | */
-/*     %-----------------% */
+    /*     %----------------------% */
+    /*     | External Subroutines | */
+    /*     %----------------------% */
 
-
-/*     %---------------% */
-/*     | Local Scalars | */
-/*     %---------------% */
-
-
-/*     %----------------------% */
-/*     | External Subroutines | */
-/*     %----------------------% */
-
-
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
     /* Parameter adjustments */
     a_dim1 = *lda;
@@ -132,159 +125,180 @@ static integer c__1 = 1;
     /* Function Body */
     igap = *n / 2;
 
-    if (s_cmp(which, "SA", (ftnlen)2, (ftnlen)2) == 0) {
+    if (s_cmp(which, "SA", (ftnlen)2, (ftnlen)2) == 0)
+    {
 
-/*        X is sorted into decreasing order of algebraic. */
+        /*        X is sorted into decreasing order of algebraic. */
 
-L10:
-	if (igap == 0) {
-	    goto L9000;
-	}
-	i__1 = *n - 1;
-	for (i__ = igap; i__ <= i__1; ++i__) {
-	    j = i__ - igap;
-L20:
+    L10:
+        if (igap == 0)
+        {
+            goto L9000;
+        }
+        i__1 = *n - 1;
+        for (i__ = igap; i__ <= i__1; ++i__)
+        {
+            j = i__ - igap;
+        L20:
 
-	    if (j < 0) {
-		goto L30;
-	    }
+            if (j < 0)
+            {
+                goto L30;
+            }
 
-	    if (x[j] < x[j + igap]) {
-		temp = x[j];
-		x[j] = x[j + igap];
-		x[j + igap] = temp;
-		if (*apply) {
-		    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * 
-			    a_dim1 + 1], &c__1);
-		}
-	    } else {
-		goto L30;
-	    }
-	    j -= igap;
-	    goto L20;
-L30:
-	    ;
-	}
-	igap /= 2;
-	goto L10;
+            if (x[j] < x[j + igap])
+            {
+                temp = x[j];
+                x[j] = x[j + igap];
+                x[j + igap] = temp;
+                if (*apply)
+                {
+                    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * a_dim1 + 1], &c__1);
+                }
+            }
+            else
+            {
+                goto L30;
+            }
+            j -= igap;
+            goto L20;
+        L30:;
+        }
+        igap /= 2;
+        goto L10;
+    }
+    else if (s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) == 0)
+    {
 
-    } else if (s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) == 0) {
+        /*        X is sorted into decreasing order of magnitude. */
 
-/*        X is sorted into decreasing order of magnitude. */
+    L40:
+        if (igap == 0)
+        {
+            goto L9000;
+        }
+        i__1 = *n - 1;
+        for (i__ = igap; i__ <= i__1; ++i__)
+        {
+            j = i__ - igap;
+        L50:
 
-L40:
-	if (igap == 0) {
-	    goto L9000;
-	}
-	i__1 = *n - 1;
-	for (i__ = igap; i__ <= i__1; ++i__) {
-	    j = i__ - igap;
-L50:
+            if (j < 0)
+            {
+                goto L60;
+            }
 
-	    if (j < 0) {
-		goto L60;
-	    }
+            if ((r__1 = x[j], dabs(r__1)) < (r__2 = x[j + igap], dabs(r__2)))
+            {
+                temp = x[j];
+                x[j] = x[j + igap];
+                x[j + igap] = temp;
+                if (*apply)
+                {
+                    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * a_dim1 + 1], &c__1);
+                }
+            }
+            else
+            {
+                goto L60;
+            }
+            j -= igap;
+            goto L50;
+        L60:;
+        }
+        igap /= 2;
+        goto L40;
+    }
+    else if (s_cmp(which, "LA", (ftnlen)2, (ftnlen)2) == 0)
+    {
 
-	    if ((r__1 = x[j], dabs(r__1)) < (r__2 = x[j + igap], dabs(r__2))) 
-		    {
-		temp = x[j];
-		x[j] = x[j + igap];
-		x[j + igap] = temp;
-		if (*apply) {
-		    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * 
-			    a_dim1 + 1], &c__1);
-		}
-	    } else {
-		goto L60;
-	    }
-	    j -= igap;
-	    goto L50;
-L60:
-	    ;
-	}
-	igap /= 2;
-	goto L40;
+        /*        X is sorted into increasing order of algebraic. */
 
-    } else if (s_cmp(which, "LA", (ftnlen)2, (ftnlen)2) == 0) {
+    L70:
+        if (igap == 0)
+        {
+            goto L9000;
+        }
+        i__1 = *n - 1;
+        for (i__ = igap; i__ <= i__1; ++i__)
+        {
+            j = i__ - igap;
+        L80:
 
-/*        X is sorted into increasing order of algebraic. */
+            if (j < 0)
+            {
+                goto L90;
+            }
 
-L70:
-	if (igap == 0) {
-	    goto L9000;
-	}
-	i__1 = *n - 1;
-	for (i__ = igap; i__ <= i__1; ++i__) {
-	    j = i__ - igap;
-L80:
+            if (x[j] > x[j + igap])
+            {
+                temp = x[j];
+                x[j] = x[j + igap];
+                x[j + igap] = temp;
+                if (*apply)
+                {
+                    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * a_dim1 + 1], &c__1);
+                }
+            }
+            else
+            {
+                goto L90;
+            }
+            j -= igap;
+            goto L80;
+        L90:;
+        }
+        igap /= 2;
+        goto L70;
+    }
+    else if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) == 0)
+    {
 
-	    if (j < 0) {
-		goto L90;
-	    }
+        /*        X is sorted into increasing order of magnitude. */
 
-	    if (x[j] > x[j + igap]) {
-		temp = x[j];
-		x[j] = x[j + igap];
-		x[j + igap] = temp;
-		if (*apply) {
-		    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * 
-			    a_dim1 + 1], &c__1);
-		}
-	    } else {
-		goto L90;
-	    }
-	    j -= igap;
-	    goto L80;
-L90:
-	    ;
-	}
-	igap /= 2;
-	goto L70;
+    L100:
+        if (igap == 0)
+        {
+            goto L9000;
+        }
+        i__1 = *n - 1;
+        for (i__ = igap; i__ <= i__1; ++i__)
+        {
+            j = i__ - igap;
+        L110:
 
-    } else if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) == 0) {
+            if (j < 0)
+            {
+                goto L120;
+            }
 
-/*        X is sorted into increasing order of magnitude. */
-
-L100:
-	if (igap == 0) {
-	    goto L9000;
-	}
-	i__1 = *n - 1;
-	for (i__ = igap; i__ <= i__1; ++i__) {
-	    j = i__ - igap;
-L110:
-
-	    if (j < 0) {
-		goto L120;
-	    }
-
-	    if ((r__1 = x[j], dabs(r__1)) > (r__2 = x[j + igap], dabs(r__2))) 
-		    {
-		temp = x[j];
-		x[j] = x[j + igap];
-		x[j + igap] = temp;
-		if (*apply) {
-		    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * 
-			    a_dim1 + 1], &c__1);
-		}
-	    } else {
-		goto L120;
-	    }
-	    j -= igap;
-	    goto L110;
-L120:
-	    ;
-	}
-	igap /= 2;
-	goto L100;
+            if ((r__1 = x[j], dabs(r__1)) > (r__2 = x[j + igap], dabs(r__2)))
+            {
+                temp = x[j];
+                x[j] = x[j + igap];
+                x[j + igap] = temp;
+                if (*apply)
+                {
+                    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * a_dim1 + 1], &c__1);
+                }
+            }
+            else
+            {
+                goto L120;
+            }
+            j -= igap;
+            goto L110;
+        L120:;
+        }
+        igap /= 2;
+        goto L100;
     }
 
 L9000:
     return 0;
 
-/*     %---------------% */
-/*     | End of ssesrt | */
-/*     %---------------% */
+    /*     %---------------% */
+    /*     | End of ssesrt | */
+    /*     %---------------% */
 
 } /* ssesrt_ */
-

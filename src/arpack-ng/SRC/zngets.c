@@ -1,33 +1,30 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\SRC\zngets.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, 
-	    msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, 
-	    mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
+Extern struct
+{
+    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
 } debug_;
 
 #define debug_1 debug_
 
-Extern struct {
+Extern struct
+{
     integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, 
-	    tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, 
-	    tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, 
-	    titref, trvec;
+    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, titref, trvec;
 } timing_;
 
 #define timing_1 timing_
@@ -88,8 +85,6 @@ static integer c__1 = 1;
 /*  BOUNDS  Complex*16 array of length KEV+NP.  (INPUT/OUTPUT) */
 /*          Error bounds corresponding to the ordering in RITZ. */
 
-
-
 /* \EndDoc */
 
 /* ----------------------------------------------------------------------- */
@@ -124,76 +119,63 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-/* Subroutine */ int zngets_(integer *ishift, char *which, integer *kev, 
-	integer *np, doublecomplex *ritz, doublecomplex *bounds, ftnlen 
-	which_len)
+int zngets_(integer *ishift, char *which, integer *kev, integer *np, doublecomplex *ritz, doublecomplex *bounds, ftnlen which_len)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     static real t0, t1;
-    extern /* Subroutine */ int ivout_(integer *, integer *, integer *, 
-	    integer *, char *, ftnlen), zvout_(integer *, integer *, 
-	    doublecomplex *, integer *, char *, ftnlen), arscnd_(real *);
+    extern int ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), zvout_(integer *, integer *, doublecomplex *, integer *, char *, ftnlen), arscnd_(real *);
     integer msglvl;
-    extern /* Subroutine */ int zsortc_(char *, logical *, integer *, 
-	    doublecomplex *, doublecomplex *, ftnlen);
+    extern int zsortc_(char *, logical *, integer *, doublecomplex *, doublecomplex *, ftnlen);
 
+    /*     %----------------------------------------------------% */
+    /*     | Include files for debugging and timing information | */
+    /*     %----------------------------------------------------% */
 
-/*     %----------------------------------------------------% */
-/*     | Include files for debugging and timing information | */
-/*     %----------------------------------------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
 
+    /*     %---------------------------------% */
+    /*     | See debug.doc for documentation | */
+    /*     %---------------------------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------------% */
+    /*     | Scalar Arguments | */
+    /*     %------------------% */
 
-/*     %---------------------------------% */
-/*     | See debug.doc for documentation | */
-/*     %---------------------------------% */
+    /*     %--------------------------------% */
+    /*     | See stat.doc for documentation | */
+    /*     %--------------------------------% */
 
-/*     %------------------% */
-/*     | Scalar Arguments | */
-/*     %------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
 
-/*     %--------------------------------% */
-/*     | See stat.doc for documentation | */
-/*     %--------------------------------% */
+    /*     %-----------------% */
+    /*     | Array Arguments | */
+    /*     %-----------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------% */
+    /*     | Parameters | */
+    /*     %------------% */
 
+    /*     %---------------% */
+    /*     | Local Scalars | */
+    /*     %---------------% */
 
+    /*     %----------------------% */
+    /*     | External Subroutines | */
+    /*     %----------------------% */
 
-/*     %-----------------% */
-/*     | Array Arguments | */
-/*     %-----------------% */
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
-
-/*     %------------% */
-/*     | Parameters | */
-/*     %------------% */
-
-
-/*     %---------------% */
-/*     | Local Scalars | */
-/*     %---------------% */
-
-
-/*     %----------------------% */
-/*     | External Subroutines | */
-/*     %----------------------% */
-
-
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
-
-/*     %-------------------------------% */
-/*     | Initialize timing statistics  | */
-/*     | & message level for debugging | */
-/*     %-------------------------------% */
+    /*     %-------------------------------% */
+    /*     | Initialize timing statistics  | */
+    /*     | & message level for debugging | */
+    /*     %-------------------------------% */
 
     /* Parameter adjustments */
     --bounds;
@@ -206,43 +188,44 @@ static integer c__1 = 1;
     i__1 = *kev + *np;
     zsortc_(which, &c_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
 
-    if (*ishift == 1) {
+    if (*ishift == 1)
+    {
 
-/*        %-------------------------------------------------------% */
-/*        | Sort the unwanted Ritz values used as shifts so that  | */
-/*        | the ones with largest Ritz estimates are first        | */
-/*        | This will tend to minimize the effects of the         | */
-/*        | forward instability of the iteration when the shifts  | */
-/*        | are applied in subroutine znapps.                     | */
-/*        | Be careful and use 'SM' since we want to sort BOUNDS! | */
-/*        %-------------------------------------------------------% */
+        /*        %-------------------------------------------------------% */
+        /*        | Sort the unwanted Ritz values used as shifts so that  | */
+        /*        | the ones with largest Ritz estimates are first        | */
+        /*        | This will tend to minimize the effects of the         | */
+        /*        | forward instability of the iteration when the shifts  | */
+        /*        | are applied in subroutine znapps.                     | */
+        /*        | Be careful and use 'SM' since we want to sort BOUNDS! | */
+        /*        %-------------------------------------------------------% */
 
-	zsortc_("SM", &c_true, np, &bounds[1], &ritz[1], (ftnlen)2);
-
+        zsortc_("SM", &c_true, np, &bounds[1], &ritz[1], (ftnlen)2);
     }
 
     arscnd_(&t1);
     timing_1.tcgets += t1 - t0;
 
-    if (msglvl > 0) {
-	ivout_(&debug_1.logfil, &c__1, kev, &debug_1.ndigit, "_ngets: KEV is",
-		 (ftnlen)14);
-	ivout_(&debug_1.logfil, &c__1, np, &debug_1.ndigit, "_ngets: NP is", (
-		ftnlen)13);
-	i__1 = *kev + *np;
-	zvout_(&debug_1.logfil, &i__1, &ritz[1], &debug_1.ndigit, "_ngets: E"
-		"igenvalues of current H matrix ", (ftnlen)40);
-	i__1 = *kev + *np;
-	zvout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit, "_ngets:"
-		" Ritz estimates of the current KEV+NP Ritz values", (ftnlen)
-		56);
+    if (msglvl > 0)
+    {
+        ivout_(&debug_1.logfil, &c__1, kev, &debug_1.ndigit, "_ngets: KEV is", (ftnlen)14);
+        ivout_(&debug_1.logfil, &c__1, np, &debug_1.ndigit, "_ngets: NP is", (ftnlen)13);
+        i__1 = *kev + *np;
+        zvout_(&debug_1.logfil, &i__1, &ritz[1], &debug_1.ndigit,
+               "_ngets: E"
+               "igenvalues of current H matrix ",
+               (ftnlen)40);
+        i__1 = *kev + *np;
+        zvout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit,
+               "_ngets:"
+               " Ritz estimates of the current KEV+NP Ritz values",
+               (ftnlen)56);
     }
 
     return 0;
 
-/*     %---------------% */
-/*     | End of zngets | */
-/*     %---------------% */
+    /*     %---------------% */
+    /*     | End of zngets | */
+    /*     %---------------% */
 
 } /* zngets_ */
-

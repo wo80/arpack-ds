@@ -1,41 +1,38 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\SRC\zneigh.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, 
-	    msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, 
-	    mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
+Extern struct
+{
+    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
 } debug_;
 
 #define debug_1 debug_
 
-Extern struct {
+Extern struct
+{
     integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, 
-	    tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, 
-	    tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, 
-	    titref, trvec;
+    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, titref, trvec;
 } timing_;
 
 #define timing_1 timing_
 
 /* Table of constant values */
 
-static doublecomplex c_b1 = {1.,0.};
-static doublecomplex c_b2 = {0.,0.};
+static doublecomplex c_b1 = {1., 0.};
+static doublecomplex c_b2 = {0., 0.};
 static logical c_true = TRUE_;
 static integer c__1 = 1;
 
@@ -119,7 +116,6 @@ static integer c__1 = 1;
 /*     zdscal  Level 1 BLAS that scales a complex vector by a real number. */
 /*     dznrm2  Level 1 BLAS that computes the norm of a vector. */
 
-
 /* \Author */
 /*     Danny Sorensen               Phuong Vu */
 /*     Richard Lehoucq              CRPC / Rice University */
@@ -138,10 +134,7 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-/* Subroutine */ int zneigh_(doublereal *rnorm, integer *n, doublecomplex *
-	h__, integer *ldh, doublecomplex *ritz, doublecomplex *bounds, 
-	doublecomplex *q, integer *ldq, doublecomplex *workl, doublereal *
-	rwork, integer *ierr)
+int zneigh_(doublereal *rnorm, integer *n, doublecomplex *h__, integer *ldh, doublecomplex *ritz, doublecomplex *bounds, doublecomplex *q, integer *ldq, doublecomplex *workl, doublereal *rwork, integer *ierr)
 {
     /* System generated locals */
     integer h_dim1, h_offset, q_dim1, q_offset, i__1;
@@ -152,85 +145,64 @@ static integer c__1 = 1;
     static real t0, t1;
     doublecomplex vl[1];
     doublereal temp;
-    extern /* Subroutine */ int zcopy_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *), zmout_(integer *, integer *, integer 
-	    *, doublecomplex *, integer *, integer *, char *, ftnlen), zvout_(
-	    integer *, integer *, doublecomplex *, integer *, char *, ftnlen);
+    extern int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zmout_(integer *, integer *, integer *, doublecomplex *, integer *, integer *, char *, ftnlen), zvout_(integer *, integer *, doublecomplex *, integer *, char *, ftnlen);
     extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
-    extern /* Subroutine */ int arscnd_(real *);
+    extern int arscnd_(real *);
     logical select[1];
     integer msglvl;
-    extern /* Subroutine */ int zlacpy_(char *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, ftnlen), 
-	    zlahqr_(logical *, logical *, integer *, integer *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, integer *, integer *,
-	     doublecomplex *, integer *, integer *), ztrevc_(char *, char *, 
-	    logical *, integer *, doublecomplex *, integer *, doublecomplex *,
-	     integer *, doublecomplex *, integer *, integer *, integer *, 
-	    doublecomplex *, doublereal *, integer *, ftnlen, ftnlen), 
-	    zdscal_(integer *, doublereal *, doublecomplex *, integer *), 
-	    zlaset_(char *, integer *, integer *, doublecomplex *, 
-	    doublecomplex *, doublecomplex *, integer *, ftnlen);
+    extern int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, ftnlen), zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), ztrevc_(char *, char *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublereal *, integer *, ftnlen, ftnlen), zdscal_(integer *, doublereal *, doublecomplex *, integer *),
+        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, ftnlen);
 
+    /*     %----------------------------------------------------% */
+    /*     | Include files for debugging and timing information | */
+    /*     %----------------------------------------------------% */
 
-/*     %----------------------------------------------------% */
-/*     | Include files for debugging and timing information | */
-/*     %----------------------------------------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
 
+    /*     %---------------------------------% */
+    /*     | See debug.doc for documentation | */
+    /*     %---------------------------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------------% */
+    /*     | Scalar Arguments | */
+    /*     %------------------% */
 
-/*     %---------------------------------% */
-/*     | See debug.doc for documentation | */
-/*     %---------------------------------% */
+    /*     %--------------------------------% */
+    /*     | See stat.doc for documentation | */
+    /*     %--------------------------------% */
 
-/*     %------------------% */
-/*     | Scalar Arguments | */
-/*     %------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
 
-/*     %--------------------------------% */
-/*     | See stat.doc for documentation | */
-/*     %--------------------------------% */
+    /*     %-----------------% */
+    /*     | Array Arguments | */
+    /*     %-----------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------% */
+    /*     | Parameters | */
+    /*     %------------% */
 
+    /*     %------------------------% */
+    /*     | Local Scalars & Arrays | */
+    /*     %------------------------% */
 
+    /*     %----------------------% */
+    /*     | External Subroutines | */
+    /*     %----------------------% */
 
-/*     %-----------------% */
-/*     | Array Arguments | */
-/*     %-----------------% */
+    /*     %--------------------% */
+    /*     | External Functions | */
+    /*     %--------------------% */
 
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
-/*     %------------% */
-/*     | Parameters | */
-/*     %------------% */
-
-
-/*     %------------------------% */
-/*     | Local Scalars & Arrays | */
-/*     %------------------------% */
-
-
-/*     %----------------------% */
-/*     | External Subroutines | */
-/*     %----------------------% */
-
-
-/*     %--------------------% */
-/*     | External Functions | */
-/*     %--------------------% */
-
-
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
-
-/*     %-------------------------------% */
-/*     | Initialize timing statistics  | */
-/*     | & message level for debugging | */
-/*     %-------------------------------% */
+    /*     %-------------------------------% */
+    /*     | Initialize timing statistics  | */
+    /*     | & message level for debugging | */
+    /*     %-------------------------------% */
 
     /* Parameter adjustments */
     --rwork;
@@ -248,82 +220,93 @@ static integer c__1 = 1;
     arscnd_(&t0);
     msglvl = debug_1.mceigh;
 
-    if (msglvl > 2) {
-	zmout_(&debug_1.logfil, n, n, &h__[h_offset], ldh, &debug_1.ndigit, 
-		"_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
+    if (msglvl > 2)
+    {
+        zmout_(&debug_1.logfil, n, n, &h__[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
     }
 
-/*     %----------------------------------------------------------% */
-/*     | 1. Compute the eigenvalues, the last components of the   | */
-/*     |    corresponding Schur vectors and the full Schur form T | */
-/*     |    of the current upper Hessenberg matrix H.             | */
-/*     |    zlahqr returns the full Schur form of H               | */
-/*     |    in WORKL(1:N**2), and the Schur vectors in q.         | */
-/*     %----------------------------------------------------------% */
+    /*     %----------------------------------------------------------% */
+    /*     | 1. Compute the eigenvalues, the last components of the   | */
+    /*     |    corresponding Schur vectors and the full Schur form T | */
+    /*     |    of the current upper Hessenberg matrix H.             | */
+    /*     |    zlahqr returns the full Schur form of H               | */
+    /*     |    in WORKL(1:N**2), and the Schur vectors in q.         | */
+    /*     %----------------------------------------------------------% */
 
     zlacpy_("All", n, n, &h__[h_offset], ldh, &workl[1], n, (ftnlen)3);
     zlaset_("All", n, n, &c_b2, &c_b1, &q[q_offset], ldq, (ftnlen)3);
-    zlahqr_(&c_true, &c_true, n, &c__1, n, &workl[1], ldh, &ritz[1], &c__1, n,
-	     &q[q_offset], ldq, ierr);
-    if (*ierr != 0) {
-	goto L9000;
+    zlahqr_(&c_true, &c_true, n, &c__1, n, &workl[1], ldh, &ritz[1], &c__1, n, &q[q_offset], ldq, ierr);
+    if (*ierr != 0)
+    {
+        goto L9000;
     }
 
     zcopy_(n, &q[*n - 1 + q_dim1], ldq, &bounds[1], &c__1);
-    if (msglvl > 1) {
-	zvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit, "_neigh: las"
-		"t row of the Schur matrix for H", (ftnlen)42);
+    if (msglvl > 1)
+    {
+        zvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
+               "_neigh: las"
+               "t row of the Schur matrix for H",
+               (ftnlen)42);
     }
 
-/*     %----------------------------------------------------------% */
-/*     | 2. Compute the eigenvectors of the full Schur form T and | */
-/*     |    apply the Schur vectors to get the corresponding      | */
-/*     |    eigenvectors.                                         | */
-/*     %----------------------------------------------------------% */
+    /*     %----------------------------------------------------------% */
+    /*     | 2. Compute the eigenvectors of the full Schur form T and | */
+    /*     |    apply the Schur vectors to get the corresponding      | */
+    /*     |    eigenvectors.                                         | */
+    /*     %----------------------------------------------------------% */
 
-    ztrevc_("Right", "Back", select, n, &workl[1], n, vl, n, &q[q_offset], 
-	    ldq, n, n, &workl[*n * *n + 1], &rwork[1], ierr, (ftnlen)5, (
-	    ftnlen)4);
+    ztrevc_("Right", "Back", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], &rwork[1], ierr, (ftnlen)5, (ftnlen)4);
 
-    if (*ierr != 0) {
-	goto L9000;
+    if (*ierr != 0)
+    {
+        goto L9000;
     }
 
-/*     %------------------------------------------------% */
-/*     | Scale the returning eigenvectors so that their | */
-/*     | Euclidean norms are all one. LAPACK subroutine | */
-/*     | ztrevc returns each eigenvector normalized so  | */
-/*     | that the element of largest magnitude has      | */
-/*     | magnitude 1; here the magnitude of a complex   | */
-/*     | number (x,y) is taken to be |x| + |y|.         | */
-/*     %------------------------------------------------% */
+    /*     %------------------------------------------------% */
+    /*     | Scale the returning eigenvectors so that their | */
+    /*     | Euclidean norms are all one. LAPACK subroutine | */
+    /*     | ztrevc returns each eigenvector normalized so  | */
+    /*     | that the element of largest magnitude has      | */
+    /*     | magnitude 1; here the magnitude of a complex   | */
+    /*     | number (x,y) is taken to be |x| + |y|.         | */
+    /*     %------------------------------------------------% */
 
     i__1 = *n;
-    for (j = 1; j <= i__1; ++j) {
-	temp = dznrm2_(n, &q[j * q_dim1 + 1], &c__1);
-	d__1 = 1. / temp;
-	zdscal_(n, &d__1, &q[j * q_dim1 + 1], &c__1);
-/* L10: */
+    for (j = 1; j <= i__1; ++j)
+    {
+        temp = dznrm2_(n, &q[j * q_dim1 + 1], &c__1);
+        d__1 = 1. / temp;
+        zdscal_(n, &d__1, &q[j * q_dim1 + 1], &c__1);
+        /* L10: */
     }
 
-    if (msglvl > 1) {
-	zcopy_(n, &q[*n + q_dim1], ldq, &workl[1], &c__1);
-	zvout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit, "_neigh: Last"
-		" row of the eigenvector matrix for H", (ftnlen)48);
+    if (msglvl > 1)
+    {
+        zcopy_(n, &q[*n + q_dim1], ldq, &workl[1], &c__1);
+        zvout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,
+               "_neigh: Last"
+               " row of the eigenvector matrix for H",
+               (ftnlen)48);
     }
 
-/*     %----------------------------% */
-/*     | Compute the Ritz estimates | */
-/*     %----------------------------% */
+    /*     %----------------------------% */
+    /*     | Compute the Ritz estimates | */
+    /*     %----------------------------% */
 
     zcopy_(n, &q[*n + q_dim1], n, &bounds[1], &c__1);
     zdscal_(n, rnorm, &bounds[1], &c__1);
 
-    if (msglvl > 2) {
-	zvout_(&debug_1.logfil, n, &ritz[1], &debug_1.ndigit, "_neigh: The e"
-		"igenvalues of H", (ftnlen)28);
-	zvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit, "_neigh: Rit"
-		"z estimates for the eigenvalues of H", (ftnlen)47);
+    if (msglvl > 2)
+    {
+        zvout_(&debug_1.logfil, n, &ritz[1], &debug_1.ndigit,
+               "_neigh: The e"
+               "igenvalues of H",
+               (ftnlen)28);
+        zvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
+               "_neigh: Rit"
+               "z estimates for the eigenvalues of H",
+               (ftnlen)47);
     }
 
     arscnd_(&t1);
@@ -332,9 +315,8 @@ static integer c__1 = 1;
 L9000:
     return 0;
 
-/*     %---------------% */
-/*     | End of zneigh | */
-/*     %---------------% */
+    /*     %---------------% */
+    /*     | End of zneigh | */
+    /*     %---------------% */
 
 } /* zneigh_ */
-

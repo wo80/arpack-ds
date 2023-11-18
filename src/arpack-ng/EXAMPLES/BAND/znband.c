@@ -1,21 +1,21 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\EXAMPLES\BAND\znband.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
 
 /* Table of constant values */
 
-static doublecomplex c_b1 = {1.,0.};
-static doublecomplex c_b2 = {0.,0.};
+static doublecomplex c_b1 = {1., 0.};
+static doublecomplex c_b2 = {0., 0.};
 static integer c__9 = 9;
 static integer c__1 = 1;
 static integer c__3 = 3;
@@ -320,116 +320,80 @@ static integer c__3 = 3;
 
 /* ----------------------------------------------------------------------- */
 
-/* Subroutine */ int znband_(logical *rvec, char *howmny, logical *select, 
-	doublecomplex *d__, doublecomplex *z__, integer *ldz, doublecomplex *
-	sigma, doublecomplex *workev, integer *n, doublecomplex *ab, 
-	doublecomplex *mb, integer *lda, doublecomplex *fac, integer *kl, 
-	integer *ku, char *which, char *bmat, integer *nev, doublereal *tol, 
-	doublecomplex *resid, integer *ncv, doublecomplex *v, integer *ldv, 
-	integer *iparam, doublecomplex *workd, doublecomplex *workl, integer *
-	lworkl, doublereal *rwork, integer *iwork, integer *info, ftnlen 
-	howmny_len, ftnlen which_len, ftnlen bmat_len)
+int znband_(logical *rvec, char *howmny, logical *select, doublecomplex *d__, doublecomplex *z__, integer *ldz, doublecomplex *sigma, doublecomplex *workev, integer *n, doublecomplex *ab, doublecomplex *mb, integer *lda, doublecomplex *fac, integer *kl, integer *ku, char *which, char *bmat, integer *nev, doublereal *tol, doublecomplex *resid, integer *ncv, doublecomplex *v, integer *ldv, integer *iparam, doublecomplex *workd, doublecomplex *workl, integer *lworkl, doublereal *rwork, integer *iwork, integer *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
 {
     /* System generated locals */
-    integer v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, 
-	    mb_offset, fac_dim1, fac_offset, i__1, i__2, i__3, i__4, i__5;
+    integer v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, fac_dim1, fac_offset, i__1, i__2, i__3, i__4, i__5;
     doublecomplex z__1, z__2;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
-	    e_wsle(void);
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
 
     /* Local variables */
     integer i__, j, ido, imid, mode, ibot, ierr, itop;
-    extern /* Subroutine */ int zgbmv_(char *, integer *, integer *, integer *
-	    , integer *, doublecomplex *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, doublecomplex *, doublecomplex *, 
-	    integer *, ftnlen);
+    extern int zgbmv_(char *, integer *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, ftnlen);
     integer ipntr[14];
-    extern /* Subroutine */ int zcopy_(integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *), zgbtrf_(integer *, integer *, 
-	    integer *, integer *, doublecomplex *, integer *, integer *, 
-	    integer *), znaupd_(integer *, char *, integer *, char *, integer 
-	    *, doublereal *, doublecomplex *, integer *, doublecomplex *, 
-	    integer *, integer *, integer *, doublecomplex *, doublecomplex *,
-	     integer *, doublereal *, integer *, ftnlen, ftnlen), zlacpy_(
-	    char *, integer *, integer *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, ftnlen), zneupd_(logical *, char *, 
-	    logical *, doublecomplex *, doublecomplex *, integer *, 
-	    doublecomplex *, doublecomplex *, char *, integer *, char *, 
-	    integer *, doublereal *, doublecomplex *, integer *, 
-	    doublecomplex *, integer *, integer *, integer *, doublecomplex *,
-	     doublecomplex *, integer *, doublereal *, integer *, ftnlen, 
-	    ftnlen, ftnlen), zgbtrs_(char *, integer *, integer *, integer *, 
-	    integer *, doublecomplex *, integer *, integer *, doublecomplex *,
-	     integer *, integer *, ftnlen);
+    extern int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zgbtrf_(integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, integer *), znaupd_(integer *, char *, integer *, char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublereal *, integer *, ftnlen, ftnlen), zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, ftnlen),
+        zneupd_(logical *, char *, logical *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, char *, integer *, char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublereal *, integer *, ftnlen, ftnlen, ftnlen), zgbtrs_(char *, integer *, integer *, integer *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *, ftnlen);
 
     /* Fortran I/O blocks */
-    static cilist io___7 = { 0, 6, 0, 0, 0 };
-    static cilist io___8 = { 0, 6, 0, 0, 0 };
-    static cilist io___9 = { 0, 6, 0, 0, 0 };
-    static cilist io___12 = { 0, 6, 0, 0, 0 };
-    static cilist io___13 = { 0, 6, 0, 0, 0 };
-    static cilist io___14 = { 0, 6, 0, 0, 0 };
-    static cilist io___16 = { 0, 6, 0, 0, 0 };
-    static cilist io___17 = { 0, 6, 0, 0, 0 };
-    static cilist io___18 = { 0, 6, 0, 0, 0 };
-    static cilist io___19 = { 0, 6, 0, 0, 0 };
-    static cilist io___20 = { 0, 6, 0, 0, 0 };
-    static cilist io___21 = { 0, 6, 0, 0, 0 };
-    static cilist io___22 = { 0, 6, 0, 0, 0 };
-    static cilist io___23 = { 0, 6, 0, 0, 0 };
-    static cilist io___24 = { 0, 6, 0, 0, 0 };
-    static cilist io___25 = { 0, 6, 0, 0, 0 };
-    static cilist io___26 = { 0, 6, 0, 0, 0 };
-    static cilist io___27 = { 0, 6, 0, 0, 0 };
-    static cilist io___28 = { 0, 6, 0, 0, 0 };
-    static cilist io___29 = { 0, 6, 0, 0, 0 };
-    static cilist io___30 = { 0, 6, 0, 0, 0 };
-    static cilist io___31 = { 0, 6, 0, 0, 0 };
-    static cilist io___32 = { 0, 6, 0, 0, 0 };
-    static cilist io___33 = { 0, 6, 0, 0, 0 };
-    static cilist io___34 = { 0, 6, 0, 0, 0 };
-    static cilist io___35 = { 0, 6, 0, 0, 0 };
-    static cilist io___36 = { 0, 6, 0, 0, 0 };
-    static cilist io___37 = { 0, 6, 0, 0, 0 };
-    static cilist io___38 = { 0, 6, 0, 0, 0 };
+    static cilist io___7 = {0, 6, 0, 0, 0};
+    static cilist io___8 = {0, 6, 0, 0, 0};
+    static cilist io___9 = {0, 6, 0, 0, 0};
+    static cilist io___12 = {0, 6, 0, 0, 0};
+    static cilist io___13 = {0, 6, 0, 0, 0};
+    static cilist io___14 = {0, 6, 0, 0, 0};
+    static cilist io___16 = {0, 6, 0, 0, 0};
+    static cilist io___17 = {0, 6, 0, 0, 0};
+    static cilist io___18 = {0, 6, 0, 0, 0};
+    static cilist io___19 = {0, 6, 0, 0, 0};
+    static cilist io___20 = {0, 6, 0, 0, 0};
+    static cilist io___21 = {0, 6, 0, 0, 0};
+    static cilist io___22 = {0, 6, 0, 0, 0};
+    static cilist io___23 = {0, 6, 0, 0, 0};
+    static cilist io___24 = {0, 6, 0, 0, 0};
+    static cilist io___25 = {0, 6, 0, 0, 0};
+    static cilist io___26 = {0, 6, 0, 0, 0};
+    static cilist io___27 = {0, 6, 0, 0, 0};
+    static cilist io___28 = {0, 6, 0, 0, 0};
+    static cilist io___29 = {0, 6, 0, 0, 0};
+    static cilist io___30 = {0, 6, 0, 0, 0};
+    static cilist io___31 = {0, 6, 0, 0, 0};
+    static cilist io___32 = {0, 6, 0, 0, 0};
+    static cilist io___33 = {0, 6, 0, 0, 0};
+    static cilist io___34 = {0, 6, 0, 0, 0};
+    static cilist io___35 = {0, 6, 0, 0, 0};
+    static cilist io___36 = {0, 6, 0, 0, 0};
+    static cilist io___37 = {0, 6, 0, 0, 0};
+    static cilist io___38 = {0, 6, 0, 0, 0};
 
+    /*     %------------------% */
+    /*     | Scalar Arguments | */
+    /*     %------------------% */
 
+    /*     %-----------------% */
+    /*     | Array Arguments | */
+    /*     %-----------------% */
 
-/*     %------------------% */
-/*     | Scalar Arguments | */
-/*     %------------------% */
+    /*     %--------------% */
+    /*     | Local Arrays | */
+    /*     %--------------% */
 
+    /*     %---------------% */
+    /*     | Local Scalars | */
+    /*     %---------------% */
 
-/*     %-----------------% */
-/*     | Array Arguments | */
-/*     %-----------------% */
+    /*     %------------% */
+    /*     | Parameters | */
+    /*     %------------% */
 
+    /*     %-----------------------------% */
+    /*     | LAPACK & BLAS routines used | */
+    /*     %-----------------------------% */
 
-/*     %--------------% */
-/*     | Local Arrays | */
-/*     %--------------% */
-
-
-/*     %---------------% */
-/*     | Local Scalars | */
-/*     %---------------% */
-
-
-/*     %------------% */
-/*     | Parameters | */
-/*     %------------% */
-
-
-/*     %-----------------------------% */
-/*     | LAPACK & BLAS routines used | */
-/*     %-----------------------------% */
-
-
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
     /* Parameter adjustments */
     --select;
@@ -460,370 +424,355 @@ static integer c__3 = 3;
     /* Function Body */
     mode = iparam[7];
 
-/*     %------------------------% */
-/*     | Initialize the reverse | */
-/*     | communication flag.    | */
-/*     %------------------------% */
+    /*     %------------------------% */
+    /*     | Initialize the reverse | */
+    /*     | communication flag.    | */
+    /*     %------------------------% */
 
     ido = 0;
 
-/*     %----------------% */
-/*     | Exact shift is | */
-/*     | used.          | */
-/*     %----------------% */
+    /*     %----------------% */
+    /*     | Exact shift is | */
+    /*     | used.          | */
+    /*     %----------------% */
 
     iparam[1] = 1;
 
-/*     %-----------------------------------% */
-/*     | Both matrices A and M are stored  | */
-/*     | between rows itop and ibot.  Imid | */
-/*     | is the index of the row that      | */
-/*     | stores the diagonal elements.     | */
-/*     %-----------------------------------% */
+    /*     %-----------------------------------% */
+    /*     | Both matrices A and M are stored  | */
+    /*     | between rows itop and ibot.  Imid | */
+    /*     | is the index of the row that      | */
+    /*     | stores the diagonal elements.     | */
+    /*     %-----------------------------------% */
 
     itop = *kl + 1;
     imid = *kl + *ku + 1;
     ibot = (*kl << 1) + *ku + 1;
 
-    if (mode == 2) {
+    if (mode == 2)
+    {
 
-/*         %-----------------------------------------------% */
-/*         | Copy M to fac and Call LAPACK routine zgbtrf   | */
-/*         | to factor M.                                  | */
-/*         %-----------------------------------------------% */
+        /*         %-----------------------------------------------% */
+        /*         | Copy M to fac and Call LAPACK routine zgbtrf   | */
+        /*         | to factor M.                                  | */
+        /*         %-----------------------------------------------% */
 
-	zlacpy_("A", &ibot, n, &mb[mb_offset], lda, &fac[fac_offset], lda, (
-		ftnlen)1);
-	zgbtrf_(n, n, kl, ku, &fac[fac_offset], lda, &iwork[1], &ierr);
-	if (ierr != 0) {
-	    s_wsle(&io___7);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    s_wsle(&io___8);
-	    do_lio(&c__9, &c__1, "_band:  error in _gbtrf", (ftnlen)23);
-	    e_wsle();
-	    s_wsle(&io___9);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    goto L9000;
-	}
+        zlacpy_("A", &ibot, n, &mb[mb_offset], lda, &fac[fac_offset], lda, (ftnlen)1);
+        zgbtrf_(n, n, kl, ku, &fac[fac_offset], lda, &iwork[1], &ierr);
+        if (ierr != 0)
+        {
+            s_wsle(&io___7);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+            s_wsle(&io___8);
+            do_lio(&c__9, &c__1, "_band:  error in _gbtrf", (ftnlen)23);
+            e_wsle();
+            s_wsle(&io___9);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+            goto L9000;
+        }
+    }
+    else if (mode == 3)
+    {
 
-    } else if (mode == 3) {
+        if (*(unsigned char *)bmat == 'I')
+        {
 
-	if (*(unsigned char *)bmat == 'I') {
+            /*            %-------------------------% */
+            /*            | Construct (A - sigma*I) | */
+            /*            %-------------------------% */
 
-/*            %-------------------------% */
-/*            | Construct (A - sigma*I) | */
-/*            %-------------------------% */
+            zlacpy_("A", &ibot, n, &ab[ab_offset], lda, &fac[fac_offset], lda, (ftnlen)1);
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j)
+            {
+                i__2 = imid + j * fac_dim1;
+                i__3 = imid + j * ab_dim1;
+                z__1.r = ab[i__3].r - sigma->r, z__1.i = ab[i__3].i - sigma->i;
+                fac[i__2].r = z__1.r, fac[i__2].i = z__1.i;
+                /* L10: */
+            }
+        }
+        else
+        {
 
-	    zlacpy_("A", &ibot, n, &ab[ab_offset], lda, &fac[fac_offset], lda,
-		     (ftnlen)1);
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
-		i__2 = imid + j * fac_dim1;
-		i__3 = imid + j * ab_dim1;
-		z__1.r = ab[i__3].r - sigma->r, z__1.i = ab[i__3].i - 
-			sigma->i;
-		fac[i__2].r = z__1.r, fac[i__2].i = z__1.i;
-/* L10: */
-	    }
+            /*            %---------------------------% */
+            /*            | Construct (A - sigma*M)   | */
+            /*            %---------------------------% */
 
-	} else {
+            i__1 = *n;
+            for (j = 1; j <= i__1; ++j)
+            {
+                i__2 = ibot;
+                for (i__ = itop; i__ <= i__2; ++i__)
+                {
+                    i__3 = i__ + j * fac_dim1;
+                    i__4 = i__ + j * ab_dim1;
+                    i__5 = i__ + j * mb_dim1;
+                    z__2.r = sigma->r * mb[i__5].r - sigma->i * mb[i__5].i, z__2.i = sigma->r * mb[i__5].i + sigma->i * mb[i__5].r;
+                    z__1.r = ab[i__4].r - z__2.r, z__1.i = ab[i__4].i - z__2.i;
+                    fac[i__3].r = z__1.r, fac[i__3].i = z__1.i;
+                    /* L20: */
+                }
+                /* L30: */
+            }
+        }
 
-/*            %---------------------------% */
-/*            | Construct (A - sigma*M)   | */
-/*            %---------------------------% */
+        /*         %------------------------% */
+        /*         | Factor (A - sigma*M)   | */
+        /*         %------------------------% */
 
-	    i__1 = *n;
-	    for (j = 1; j <= i__1; ++j) {
-		i__2 = ibot;
-		for (i__ = itop; i__ <= i__2; ++i__) {
-		    i__3 = i__ + j * fac_dim1;
-		    i__4 = i__ + j * ab_dim1;
-		    i__5 = i__ + j * mb_dim1;
-		    z__2.r = sigma->r * mb[i__5].r - sigma->i * mb[i__5].i, 
-			    z__2.i = sigma->r * mb[i__5].i + sigma->i * mb[
-			    i__5].r;
-		    z__1.r = ab[i__4].r - z__2.r, z__1.i = ab[i__4].i - 
-			    z__2.i;
-		    fac[i__3].r = z__1.r, fac[i__3].i = z__1.i;
-/* L20: */
-		}
-/* L30: */
-	    }
-
-	}
-
-/*         %------------------------% */
-/*         | Factor (A - sigma*M)   | */
-/*         %------------------------% */
-
-	zgbtrf_(n, n, kl, ku, &fac[fac_offset], lda, &iwork[1], &ierr);
-	if (ierr != 0) {
-	    s_wsle(&io___12);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    s_wsle(&io___13);
-	    do_lio(&c__9, &c__1, "_band: error in _gbtrf.", (ftnlen)23);
-	    e_wsle();
-	    s_wsle(&io___14);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    goto L9000;
-	}
-
+        zgbtrf_(n, n, kl, ku, &fac[fac_offset], lda, &iwork[1], &ierr);
+        if (ierr != 0)
+        {
+            s_wsle(&io___12);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+            s_wsle(&io___13);
+            do_lio(&c__9, &c__1, "_band: error in _gbtrf.", (ftnlen)23);
+            e_wsle();
+            s_wsle(&io___14);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+            goto L9000;
+        }
     }
 
-/*     %--------------------------------------------% */
-/*     |  M A I N   L O O P (reverse communication) | */
-/*     %--------------------------------------------% */
+    /*     %--------------------------------------------% */
+    /*     |  M A I N   L O O P (reverse communication) | */
+    /*     %--------------------------------------------% */
 
 L40:
 
-    znaupd_(&ido, bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv,
-	     &iparam[1], ipntr, &workd[1], &workl[1], lworkl, &rwork[1], info,
-	     (ftnlen)1, (ftnlen)2);
+    znaupd_(&ido, bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, &rwork[1], info, (ftnlen)1, (ftnlen)2);
 
-    if (ido == -1) {
+    if (ido == -1)
+    {
 
-	if (mode == 1) {
+        if (mode == 1)
+        {
 
-/*           %----------------------------% */
-/*           | Perform  y <--- OP*x = A*x | */
-/*           %----------------------------% */
+            /*           %----------------------------% */
+            /*           | Perform  y <--- OP*x = A*x | */
+            /*           %----------------------------% */
 
-	    zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], 
-		    lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &
-		    c__1, (ftnlen)11);
+            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
+        }
+        else if (mode == 2)
+        {
 
-	} else if (mode == 2) {
+            /*           %-----------------------------------% */
+            /*           | Perform  y <--- OP*x = inv[M]*A*x | */
+            /*           %-----------------------------------% */
 
-/*           %-----------------------------------% */
-/*           | Perform  y <--- OP*x = inv[M]*A*x | */
-/*           %-----------------------------------% */
+            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
 
-	    zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], 
-		    lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &
-		    c__1, (ftnlen)11);
+            zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+            if (ierr != 0)
+            {
+                s_wsle(&io___16);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___17);
+                do_lio(&c__9, &c__1, "_band: error in sbgtrs.", (ftnlen)23);
+                e_wsle();
+                s_wsle(&io___18);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+        }
+        else if (mode == 3)
+        {
 
-	    zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &
-		    iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
-	    if (ierr != 0) {
-		s_wsle(&io___16);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___17);
-		do_lio(&c__9, &c__1, "_band: error in sbgtrs.", (ftnlen)23);
-		e_wsle();
-		s_wsle(&io___18);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
+            /*           %-----------------------------------------% */
+            /*           | Perform y <-- OP*x                      | */
+            /*           |           = inv[A-SIGMA*M]*M* x */
+            /*           | to force the starting vector into the   | */
+            /*           | range of OP.                            | */
+            /*           %-----------------------------------------% */
 
-	} else if (mode == 3) {
+            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
 
-/*           %-----------------------------------------% */
-/*           | Perform y <-- OP*x                      | */
-/*           |           = inv[A-SIGMA*M]*M* x */
-/*           | to force the starting vector into the   | */
-/*           | range of OP.                            | */
-/*           %-----------------------------------------% */
+            zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+            if (ierr != 0)
+            {
+                s_wsle(&io___19);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___20);
+                do_lio(&c__9, &c__1, "_band: error in _gbtrs.", (ftnlen)23);
+                e_wsle();
+                s_wsle(&io___21);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+        }
+    }
+    else if (ido == 1)
+    {
 
-	    zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], 
-		    lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &
-		    c__1, (ftnlen)11);
+        if (mode == 1)
+        {
 
-	    zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &
-		    iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
-	    if (ierr != 0) {
-		s_wsle(&io___19);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___20);
-		do_lio(&c__9, &c__1, "_band: error in _gbtrs.", (ftnlen)23);
-		e_wsle();
-		s_wsle(&io___21);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
+            /*           %----------------------------% */
+            /*           | Perform  y <--- OP*x = A*x | */
+            /*           %----------------------------% */
 
-	}
+            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
+        }
+        else if (mode == 2)
+        {
 
-    } else if (ido == 1) {
+            /*           %-----------------------------------% */
+            /*           | Perform  y <--- OP*x = inv[M]*A*x | */
+            /*           %-----------------------------------% */
 
-	if (mode == 1) {
+            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
 
-/*           %----------------------------% */
-/*           | Perform  y <--- OP*x = A*x | */
-/*           %----------------------------% */
+            zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], ldv, &ierr, (ftnlen)11);
+            if (ierr != 0)
+            {
+                s_wsle(&io___22);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___23);
+                do_lio(&c__9, &c__1, "_band: error in sbgtrs.", (ftnlen)23);
+                e_wsle();
+                s_wsle(&io___24);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                goto L9000;
+            }
+        }
+        else if (mode == 3)
+        {
 
-	    zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], 
-		    lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &
-		    c__1, (ftnlen)11);
+            if (*(unsigned char *)bmat == 'I')
+            {
 
-	} else if (mode == 2) {
+                /*              %----------------------------------% */
+                /*              | Perform  y <-- inv(A-sigma*I)*x. | */
+                /*              %----------------------------------% */
 
-/*           %-----------------------------------% */
-/*           | Perform  y <--- OP*x = inv[M]*A*x | */
-/*           %-----------------------------------% */
+                zcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
+                zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+                if (ierr != 0)
+                {
+                    s_wsle(&io___25);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    s_wsle(&io___26);
+                    do_lio(&c__9, &c__1, "_band: error in _gbtrs.", (ftnlen)23);
+                    e_wsle();
+                    s_wsle(&io___27);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    goto L9000;
+                }
+            }
+            else
+            {
 
-	    zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], 
-		    lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &
-		    c__1, (ftnlen)11);
+                /*              %--------------------------------------% */
+                /*              | Perform  y <-- inv(A-sigma*M)*(M*x). | */
+                /*              | (M*x) has been computed and stored   | */
+                /*              | in workd(ipntr(3)).                  | */
+                /*              %--------------------------------------% */
 
-	    zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &
-		    iwork[1], &workd[ipntr[1]], ldv, &ierr, (ftnlen)11);
-	    if (ierr != 0) {
-		s_wsle(&io___22);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___23);
-		do_lio(&c__9, &c__1, "_band: error in sbgtrs.", (ftnlen)23);
-		e_wsle();
-		s_wsle(&io___24);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		goto L9000;
-	    }
+                zcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
+                zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+                if (ierr != 0)
+                {
+                    s_wsle(&io___28);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    s_wsle(&io___29);
+                    do_lio(&c__9, &c__1, "_band: error in _gbtrs.", (ftnlen)23);
+                    e_wsle();
+                    s_wsle(&io___30);
+                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                    e_wsle();
+                    goto L9000;
+                }
+            }
+        }
+    }
+    else if (ido == 2)
+    {
 
-	} else if (mode == 3) {
+        /*        %--------------------% */
+        /*        | Perform y <-- M*x  | */
+        /*        %--------------------% */
 
-	    if (*(unsigned char *)bmat == 'I') {
+        zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
+    }
+    else
+    {
 
-/*              %----------------------------------% */
-/*              | Perform  y <-- inv(A-sigma*I)*x. | */
-/*              %----------------------------------% */
+        /*        %-------------------------------------------% */
+        /*        |   Either we have convergence, or there is | */
+        /*        |   error.                                  | */
+        /*        %-------------------------------------------% */
 
-		zcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-		zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], 
-			lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)
-			11);
-		if (ierr != 0) {
-		    s_wsle(&io___25);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    s_wsle(&io___26);
-		    do_lio(&c__9, &c__1, "_band: error in _gbtrs.", (ftnlen)
-			    23);
-		    e_wsle();
-		    s_wsle(&io___27);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    goto L9000;
-		}
+        if (*info != 0)
+        {
 
-	    } else {
+            /*           %--------------------------% */
+            /*           | Error message, check the | */
+            /*           | documentation in dnaupd  | */
+            /*           %--------------------------% */
 
-/*              %--------------------------------------% */
-/*              | Perform  y <-- inv(A-sigma*M)*(M*x). | */
-/*              | (M*x) has been computed and stored   | */
-/*              | in workd(ipntr(3)).                  | */
-/*              %--------------------------------------% */
+            s_wsle(&io___31);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+            s_wsle(&io___32);
+            do_lio(&c__9, &c__1, " Error with _naupd info = ", (ftnlen)26);
+            do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
+            e_wsle();
+            s_wsle(&io___33);
+            do_lio(&c__9, &c__1, " Check the documentation of _naupd ", (ftnlen)35);
+            e_wsle();
+            s_wsle(&io___34);
+            do_lio(&c__9, &c__1, " ", (ftnlen)1);
+            e_wsle();
+        }
+        else
+        {
 
-		zcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-		zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], 
-			lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)
-			11);
-		if (ierr != 0) {
-		    s_wsle(&io___28);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    s_wsle(&io___29);
-		    do_lio(&c__9, &c__1, "_band: error in _gbtrs.", (ftnlen)
-			    23);
-		    e_wsle();
-		    s_wsle(&io___30);
-		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		    e_wsle();
-		    goto L9000;
-		}
+            zneupd_(rvec, howmny, &select[1], &d__[1], &z__[z_offset], ldz, sigma, &workev[1], bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, &rwork[1], info, (ftnlen)1, (ftnlen)1, (ftnlen)2);
 
-	    }
+            if (*info != 0)
+            {
 
-	}
+                /*              %------------------------------------% */
+                /*              | Check the documentation of zneupd . | */
+                /*              %------------------------------------% */
 
-    } else if (ido == 2) {
+                s_wsle(&io___35);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+                s_wsle(&io___36);
+                do_lio(&c__9, &c__1, " Error with _neupd = ", (ftnlen)21);
+                do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
+                e_wsle();
+                s_wsle(&io___37);
+                do_lio(&c__9, &c__1, " Check the documentation of _neupd ", (ftnlen)35);
+                e_wsle();
+                s_wsle(&io___38);
+                do_lio(&c__9, &c__1, " ", (ftnlen)1);
+                e_wsle();
+            }
+        }
 
-/*        %--------------------% */
-/*        | Perform y <-- M*x  | */
-/*        %--------------------% */
-
-	zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], lda, &
-		workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (
-		ftnlen)11);
-
-    } else {
-
-/*        %-------------------------------------------% */
-/*        |   Either we have convergence, or there is | */
-/*        |   error.                                  | */
-/*        %-------------------------------------------% */
-
-	if (*info != 0) {
-
-/*           %--------------------------% */
-/*           | Error message, check the | */
-/*           | documentation in dnaupd  | */
-/*           %--------------------------% */
-
-	    s_wsle(&io___31);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-	    s_wsle(&io___32);
-	    do_lio(&c__9, &c__1, " Error with _naupd info = ", (ftnlen)26);
-	    do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
-	    e_wsle();
-	    s_wsle(&io___33);
-	    do_lio(&c__9, &c__1, " Check the documentation of _naupd ", (
-		    ftnlen)35);
-	    e_wsle();
-	    s_wsle(&io___34);
-	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-	    e_wsle();
-
-	} else {
-
-	    zneupd_(rvec, howmny, &select[1], &d__[1], &z__[z_offset], ldz, 
-		    sigma, &workev[1], bmat, n, which, nev, tol, &resid[1], 
-		    ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &
-		    workl[1], lworkl, &rwork[1], info, (ftnlen)1, (ftnlen)1, (
-		    ftnlen)2);
-
-	    if (*info != 0) {
-
-/*              %------------------------------------% */
-/*              | Check the documentation of zneupd . | */
-/*              %------------------------------------% */
-
-		s_wsle(&io___35);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-		s_wsle(&io___36);
-		do_lio(&c__9, &c__1, " Error with _neupd = ", (ftnlen)21);
-		do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer)
-			);
-		e_wsle();
-		s_wsle(&io___37);
-		do_lio(&c__9, &c__1, " Check the documentation of _neupd ", (
-			ftnlen)35);
-		e_wsle();
-		s_wsle(&io___38);
-		do_lio(&c__9, &c__1, " ", (ftnlen)1);
-		e_wsle();
-
-	    }
-
-	}
-
-	goto L9000;
-
+        goto L9000;
     }
 
-/*     %----------------------------------------% */
-/*     | L O O P  B A C K to call znaupd  again. | */
-/*     %----------------------------------------% */
+    /*     %----------------------------------------% */
+    /*     | L O O P  B A C K to call znaupd  again. | */
+    /*     %----------------------------------------% */
 
     goto L40;
 
@@ -831,4 +780,3 @@ L9000:
 
     return 0;
 } /* znband_ */
-

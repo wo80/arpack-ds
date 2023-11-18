@@ -1,33 +1,30 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\SRC\dsapps.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, 
-	    msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, 
-	    mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
+Extern struct
+{
+    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
 } debug_;
 
 #define debug_1 debug_
 
-Extern struct {
+Extern struct
+{
     integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, 
-	    tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, 
-	    tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, 
-	    titref, trvec;
+    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, titref, trvec;
 } timing_;
 
 #define timing_1 timing_
@@ -169,18 +166,14 @@ static doublereal c_b20 = -1.;
 
 /* ----------------------------------------------------------------------- */
 
-/* Subroutine */ int dsapps_(integer *n, integer *kev, integer *np, 
-	doublereal *shift, doublereal *v, integer *ldv, doublereal *h__, 
-	integer *ldh, doublereal *resid, doublereal *q, integer *ldq, 
-	doublereal *workd)
+int dsapps_(integer *n, integer *kev, integer *np, doublereal *shift, doublereal *v, integer *ldv, doublereal *h__, integer *ldh, doublereal *resid, doublereal *q, integer *ldq, doublereal *workd)
 {
     /* Initialized data */
 
     static logical first = TRUE_;
 
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, 
-	    i__3, i__4;
+    integer h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4;
     doublereal d__1, d__2;
 
     /* Local variables */
@@ -191,84 +184,62 @@ static doublereal c_b20 = -1.;
     integer jj;
     doublereal big;
     integer iend, itop;
-    extern /* Subroutine */ int dscal_(integer *, doublereal *, doublereal *, 
-	    integer *), dgemv_(char *, integer *, integer *, doublereal *, 
-	    doublereal *, integer *, doublereal *, integer *, doublereal *, 
-	    doublereal *, integer *, ftnlen), dcopy_(integer *, doublereal *, 
-	    integer *, doublereal *, integer *), daxpy_(integer *, doublereal 
-	    *, doublereal *, integer *, doublereal *, integer *), dvout_(
-	    integer *, integer *, doublereal *, integer *, char *, ftnlen), 
-	    ivout_(integer *, integer *, integer *, integer *, char *, ftnlen)
-	    ;
+    extern int dscal_(integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, ftnlen), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen);
     extern doublereal dlamch_(char *, ftnlen);
-    extern /* Subroutine */ int arscnd_(real *);
+    extern int arscnd_(real *);
     static doublereal epsmch;
     integer istart, kplusp, msglvl;
-    extern /* Subroutine */ int dlartg_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *), dlaset_(char *, 
-	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
-	    integer *, ftnlen);
+    extern int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, ftnlen);
 
+    /*     %----------------------------------------------------% */
+    /*     | Include files for debugging and timing information | */
+    /*     %----------------------------------------------------% */
 
-/*     %----------------------------------------------------% */
-/*     | Include files for debugging and timing information | */
-/*     %----------------------------------------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
 
+    /*     %---------------------------------% */
+    /*     | See debug.doc for documentation | */
+    /*     %---------------------------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------------% */
+    /*     | Scalar Arguments | */
+    /*     %------------------% */
 
-/*     %---------------------------------% */
-/*     | See debug.doc for documentation | */
-/*     %---------------------------------% */
+    /*     %--------------------------------% */
+    /*     | See stat.doc for documentation | */
+    /*     %--------------------------------% */
 
-/*     %------------------% */
-/*     | Scalar Arguments | */
-/*     %------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
 
-/*     %--------------------------------% */
-/*     | See stat.doc for documentation | */
-/*     %--------------------------------% */
+    /*     %-----------------% */
+    /*     | Array Arguments | */
+    /*     %-----------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------% */
+    /*     | Parameters | */
+    /*     %------------% */
 
+    /*     %---------------% */
+    /*     | Local Scalars | */
+    /*     %---------------% */
 
+    /*     %----------------------% */
+    /*     | External Subroutines | */
+    /*     %----------------------% */
 
-/*     %-----------------% */
-/*     | Array Arguments | */
-/*     %-----------------% */
+    /*     %--------------------% */
+    /*     | External Functions | */
+    /*     %--------------------% */
 
+    /*     %----------------------% */
+    /*     | Intrinsics Functions | */
+    /*     %----------------------% */
 
-/*     %------------% */
-/*     | Parameters | */
-/*     %------------% */
-
-
-/*     %---------------% */
-/*     | Local Scalars | */
-/*     %---------------% */
-
-
-
-/*     %----------------------% */
-/*     | External Subroutines | */
-/*     %----------------------% */
-
-
-/*     %--------------------% */
-/*     | External Functions | */
-/*     %--------------------% */
-
-
-/*     %----------------------% */
-/*     | Intrinsics Functions | */
-/*     %----------------------% */
-
-
-/*     %----------------% */
-/*     | Data statements | */
-/*     %----------------% */
+    /*     %----------------% */
+    /*     | Data statements | */
+    /*     %----------------% */
 
     /* Parameter adjustments */
     --workd;
@@ -286,371 +257,368 @@ static doublereal c_b20 = -1.;
 
     /* Function Body */
 
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
-    if (first) {
-	epsmch = dlamch_("Epsilon-Machine", (ftnlen)15);
-	first = FALSE_;
+    if (first)
+    {
+        epsmch = dlamch_("Epsilon-Machine", (ftnlen)15);
+        first = FALSE_;
     }
     itop = 1;
 
-/*     %-------------------------------% */
-/*     | Initialize timing statistics  | */
-/*     | & message level for debugging | */
-/*     %-------------------------------% */
+    /*     %-------------------------------% */
+    /*     | Initialize timing statistics  | */
+    /*     | & message level for debugging | */
+    /*     %-------------------------------% */
 
     arscnd_(&t0);
     msglvl = debug_1.msapps;
 
     kplusp = *kev + *np;
 
-/*     %----------------------------------------------% */
-/*     | Initialize Q to the identity matrix of order | */
-/*     | kplusp used to accumulate the rotations.     | */
-/*     %----------------------------------------------% */
+    /*     %----------------------------------------------% */
+    /*     | Initialize Q to the identity matrix of order | */
+    /*     | kplusp used to accumulate the rotations.     | */
+    /*     %----------------------------------------------% */
 
-    dlaset_("All", &kplusp, &kplusp, &c_b4, &c_b5, &q[q_offset], ldq, (ftnlen)
-	    3);
+    dlaset_("All", &kplusp, &kplusp, &c_b4, &c_b5, &q[q_offset], ldq, (ftnlen)3);
 
-/*     %----------------------------------------------% */
-/*     | Quick return if there are no shifts to apply | */
-/*     %----------------------------------------------% */
+    /*     %----------------------------------------------% */
+    /*     | Quick return if there are no shifts to apply | */
+    /*     %----------------------------------------------% */
 
-    if (*np == 0) {
-	goto L9000;
+    if (*np == 0)
+    {
+        goto L9000;
     }
 
-/*     %----------------------------------------------------------% */
-/*     | Apply the np shifts implicitly. Apply each shift to the  | */
-/*     | whole matrix and not just to the submatrix from which it | */
-/*     | comes.                                                   | */
-/*     %----------------------------------------------------------% */
+    /*     %----------------------------------------------------------% */
+    /*     | Apply the np shifts implicitly. Apply each shift to the  | */
+    /*     | whole matrix and not just to the submatrix from which it | */
+    /*     | comes.                                                   | */
+    /*     %----------------------------------------------------------% */
 
     i__1 = *np;
-    for (jj = 1; jj <= i__1; ++jj) {
+    for (jj = 1; jj <= i__1; ++jj)
+    {
 
-	istart = itop;
+        istart = itop;
 
-/*        %----------------------------------------------------------% */
-/*        | Check for splitting and deflation. Currently we consider | */
-/*        | an off-diagonal element h(i+1,1) negligible if           | */
-/*        |         h(i+1,1) .le. epsmch*( |h(i,2)| + |h(i+1,2)| )   | */
-/*        | for i=1:KEV+NP-1.                                        | */
-/*        | If above condition tests true then we set h(i+1,1) = 0.  | */
-/*        | Note that h(1:KEV+NP,1) are assumed to be non negative.  | */
-/*        %----------------------------------------------------------% */
+        /*        %----------------------------------------------------------% */
+        /*        | Check for splitting and deflation. Currently we consider | */
+        /*        | an off-diagonal element h(i+1,1) negligible if           | */
+        /*        |         h(i+1,1) .le. epsmch*( |h(i,2)| + |h(i+1,2)| )   | */
+        /*        | for i=1:KEV+NP-1.                                        | */
+        /*        | If above condition tests true then we set h(i+1,1) = 0.  | */
+        /*        | Note that h(1:KEV+NP,1) are assumed to be non negative.  | */
+        /*        %----------------------------------------------------------% */
 
-L20:
+    L20:
 
-/*        %------------------------------------------------% */
-/*        | The following loop exits early if we encounter | */
-/*        | a negligible off diagonal element.             | */
-/*        %------------------------------------------------% */
+        /*        %------------------------------------------------% */
+        /*        | The following loop exits early if we encounter | */
+        /*        | a negligible off diagonal element.             | */
+        /*        %------------------------------------------------% */
 
-	i__2 = kplusp - 1;
-	for (i__ = istart; i__ <= i__2; ++i__) {
-	    big = (d__1 = h__[i__ + (h_dim1 << 1)], abs(d__1)) + (d__2 = h__[
-		    i__ + 1 + (h_dim1 << 1)], abs(d__2));
-	    if (h__[i__ + 1 + h_dim1] <= epsmch * big) {
-		if (msglvl > 0) {
-		    ivout_(&debug_1.logfil, &c__1, &i__, &debug_1.ndigit, 
-			    "_sapps: deflation at row/column no.", (ftnlen)35)
-			    ;
-		    ivout_(&debug_1.logfil, &c__1, &jj, &debug_1.ndigit, 
-			    "_sapps: occurred before shift number.", (ftnlen)
-			    37);
-		    dvout_(&debug_1.logfil, &c__1, &h__[i__ + 1 + h_dim1], &
-			    debug_1.ndigit, "_sapps: the corresponding off d"
-			    "iagonal element", (ftnlen)46);
-		}
-		h__[i__ + 1 + h_dim1] = 0.;
-		iend = i__;
-		goto L40;
-	    }
-/* L30: */
-	}
-	iend = kplusp;
-L40:
+        i__2 = kplusp - 1;
+        for (i__ = istart; i__ <= i__2; ++i__)
+        {
+            big = (d__1 = h__[i__ + (h_dim1 << 1)], abs(d__1)) + (d__2 = h__[i__ + 1 + (h_dim1 << 1)], abs(d__2));
+            if (h__[i__ + 1 + h_dim1] <= epsmch * big)
+            {
+                if (msglvl > 0)
+                {
+                    ivout_(&debug_1.logfil, &c__1, &i__, &debug_1.ndigit, "_sapps: deflation at row/column no.", (ftnlen)35);
+                    ivout_(&debug_1.logfil, &c__1, &jj, &debug_1.ndigit, "_sapps: occurred before shift number.", (ftnlen)37);
+                    dvout_(&debug_1.logfil, &c__1, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
+                           "_sapps: the corresponding off d"
+                           "iagonal element",
+                           (ftnlen)46);
+                }
+                h__[i__ + 1 + h_dim1] = 0.;
+                iend = i__;
+                goto L40;
+            }
+            /* L30: */
+        }
+        iend = kplusp;
+    L40:
 
-	if (istart < iend) {
+        if (istart < iend)
+        {
 
-/*           %--------------------------------------------------------% */
-/*           | Construct the plane rotation G'(istart,istart+1,theta) | */
-/*           | that attempts to drive h(istart+1,1) to zero.          | */
-/*           %--------------------------------------------------------% */
+            /*           %--------------------------------------------------------% */
+            /*           | Construct the plane rotation G'(istart,istart+1,theta) | */
+            /*           | that attempts to drive h(istart+1,1) to zero.          | */
+            /*           %--------------------------------------------------------% */
 
-	    f = h__[istart + (h_dim1 << 1)] - shift[jj];
-	    g = h__[istart + 1 + h_dim1];
-	    dlartg_(&f, &g, &c__, &s, &r__);
+            f = h__[istart + (h_dim1 << 1)] - shift[jj];
+            g = h__[istart + 1 + h_dim1];
+            dlartg_(&f, &g, &c__, &s, &r__);
 
-/*            %-------------------------------------------------------% */
-/*            | Apply rotation to the left and right of H;            | */
-/*            | H <- G' * H * G,  where G = G(istart,istart+1,theta). | */
-/*            | This will create a "bulge".                           | */
-/*            %-------------------------------------------------------% */
+            /*            %-------------------------------------------------------% */
+            /*            | Apply rotation to the left and right of H;            | */
+            /*            | H <- G' * H * G,  where G = G(istart,istart+1,theta). | */
+            /*            | This will create a "bulge".                           | */
+            /*            %-------------------------------------------------------% */
 
-	    a1 = c__ * h__[istart + (h_dim1 << 1)] + s * h__[istart + 1 + 
-		    h_dim1];
-	    a2 = c__ * h__[istart + 1 + h_dim1] + s * h__[istart + 1 + (
-		    h_dim1 << 1)];
-	    a4 = c__ * h__[istart + 1 + (h_dim1 << 1)] - s * h__[istart + 1 + 
-		    h_dim1];
-	    a3 = c__ * h__[istart + 1 + h_dim1] - s * h__[istart + (h_dim1 << 
-		    1)];
-	    h__[istart + (h_dim1 << 1)] = c__ * a1 + s * a2;
-	    h__[istart + 1 + (h_dim1 << 1)] = c__ * a4 - s * a3;
-	    h__[istart + 1 + h_dim1] = c__ * a3 + s * a4;
+            a1 = c__ * h__[istart + (h_dim1 << 1)] + s * h__[istart + 1 + h_dim1];
+            a2 = c__ * h__[istart + 1 + h_dim1] + s * h__[istart + 1 + (h_dim1 << 1)];
+            a4 = c__ * h__[istart + 1 + (h_dim1 << 1)] - s * h__[istart + 1 + h_dim1];
+            a3 = c__ * h__[istart + 1 + h_dim1] - s * h__[istart + (h_dim1 << 1)];
+            h__[istart + (h_dim1 << 1)] = c__ * a1 + s * a2;
+            h__[istart + 1 + (h_dim1 << 1)] = c__ * a4 - s * a3;
+            h__[istart + 1 + h_dim1] = c__ * a3 + s * a4;
 
-/*            %----------------------------------------------------% */
-/*            | Accumulate the rotation in the matrix Q;  Q <- Q*G | */
-/*            %----------------------------------------------------% */
+            /*            %----------------------------------------------------% */
+            /*            | Accumulate the rotation in the matrix Q;  Q <- Q*G | */
+            /*            %----------------------------------------------------% */
 
-/* Computing MIN */
-	    i__3 = istart + jj;
-	    i__2 = min(i__3,kplusp);
-	    for (j = 1; j <= i__2; ++j) {
-		a1 = c__ * q[j + istart * q_dim1] + s * q[j + (istart + 1) * 
-			q_dim1];
-		q[j + (istart + 1) * q_dim1] = -s * q[j + istart * q_dim1] + 
-			c__ * q[j + (istart + 1) * q_dim1];
-		q[j + istart * q_dim1] = a1;
-/* L60: */
-	    }
+            /* Computing MIN */
+            i__3 = istart + jj;
+            i__2 = min(i__3, kplusp);
+            for (j = 1; j <= i__2; ++j)
+            {
+                a1 = c__ * q[j + istart * q_dim1] + s * q[j + (istart + 1) * q_dim1];
+                q[j + (istart + 1) * q_dim1] = -s * q[j + istart * q_dim1] + c__ * q[j + (istart + 1) * q_dim1];
+                q[j + istart * q_dim1] = a1;
+                /* L60: */
+            }
 
+            /*            %----------------------------------------------% */
+            /*            | The following loop chases the bulge created. | */
+            /*            | Note that the previous rotation may also be  | */
+            /*            | done within the following loop. But it is    | */
+            /*            | kept separate to make the distinction among  | */
+            /*            | the bulge chasing sweeps and the first plane | */
+            /*            | rotation designed to drive h(istart+1,1) to  | */
+            /*            | zero.                                        | */
+            /*            %----------------------------------------------% */
 
-/*            %----------------------------------------------% */
-/*            | The following loop chases the bulge created. | */
-/*            | Note that the previous rotation may also be  | */
-/*            | done within the following loop. But it is    | */
-/*            | kept separate to make the distinction among  | */
-/*            | the bulge chasing sweeps and the first plane | */
-/*            | rotation designed to drive h(istart+1,1) to  | */
-/*            | zero.                                        | */
-/*            %----------------------------------------------% */
+            i__2 = iend - 1;
+            for (i__ = istart + 1; i__ <= i__2; ++i__)
+            {
 
-	    i__2 = iend - 1;
-	    for (i__ = istart + 1; i__ <= i__2; ++i__) {
+                /*               %----------------------------------------------% */
+                /*               | Construct the plane rotation G'(i,i+1,theta) | */
+                /*               | that zeros the i-th bulge that was created   | */
+                /*               | by G(i-1,i,theta). g represents the bulge.   | */
+                /*               %----------------------------------------------% */
 
-/*               %----------------------------------------------% */
-/*               | Construct the plane rotation G'(i,i+1,theta) | */
-/*               | that zeros the i-th bulge that was created   | */
-/*               | by G(i-1,i,theta). g represents the bulge.   | */
-/*               %----------------------------------------------% */
+                f = h__[i__ + h_dim1];
+                g = s * h__[i__ + 1 + h_dim1];
 
-		f = h__[i__ + h_dim1];
-		g = s * h__[i__ + 1 + h_dim1];
+                /*               %----------------------------------% */
+                /*               | Final update with G(i-1,i,theta) | */
+                /*               %----------------------------------% */
 
-/*               %----------------------------------% */
-/*               | Final update with G(i-1,i,theta) | */
-/*               %----------------------------------% */
+                h__[i__ + 1 + h_dim1] = c__ * h__[i__ + 1 + h_dim1];
+                dlartg_(&f, &g, &c__, &s, &r__);
 
-		h__[i__ + 1 + h_dim1] = c__ * h__[i__ + 1 + h_dim1];
-		dlartg_(&f, &g, &c__, &s, &r__);
+                /*               %-------------------------------------------% */
+                /*               | The following ensures that h(1:iend-1,1), | */
+                /*               | the first iend-2 off diagonal of elements | */
+                /*               | H, remain non negative.                   | */
+                /*               %-------------------------------------------% */
 
-/*               %-------------------------------------------% */
-/*               | The following ensures that h(1:iend-1,1), | */
-/*               | the first iend-2 off diagonal of elements | */
-/*               | H, remain non negative.                   | */
-/*               %-------------------------------------------% */
+                if (r__ < 0.)
+                {
+                    r__ = -r__;
+                    c__ = -c__;
+                    s = -s;
+                }
 
-		if (r__ < 0.) {
-		    r__ = -r__;
-		    c__ = -c__;
-		    s = -s;
-		}
+                /*               %--------------------------------------------% */
+                /*               | Apply rotation to the left and right of H; | */
+                /*               | H <- G * H * G',  where G = G(i,i+1,theta) | */
+                /*               %--------------------------------------------% */
 
-/*               %--------------------------------------------% */
-/*               | Apply rotation to the left and right of H; | */
-/*               | H <- G * H * G',  where G = G(i,i+1,theta) | */
-/*               %--------------------------------------------% */
+                h__[i__ + h_dim1] = r__;
 
-		h__[i__ + h_dim1] = r__;
+                a1 = c__ * h__[i__ + (h_dim1 << 1)] + s * h__[i__ + 1 + h_dim1];
+                a2 = c__ * h__[i__ + 1 + h_dim1] + s * h__[i__ + 1 + (h_dim1 << 1)];
+                a3 = c__ * h__[i__ + 1 + h_dim1] - s * h__[i__ + (h_dim1 << 1)];
+                a4 = c__ * h__[i__ + 1 + (h_dim1 << 1)] - s * h__[i__ + 1 + h_dim1];
 
-		a1 = c__ * h__[i__ + (h_dim1 << 1)] + s * h__[i__ + 1 + 
-			h_dim1];
-		a2 = c__ * h__[i__ + 1 + h_dim1] + s * h__[i__ + 1 + (h_dim1 
-			<< 1)];
-		a3 = c__ * h__[i__ + 1 + h_dim1] - s * h__[i__ + (h_dim1 << 1)
-			];
-		a4 = c__ * h__[i__ + 1 + (h_dim1 << 1)] - s * h__[i__ + 1 + 
-			h_dim1];
+                h__[i__ + (h_dim1 << 1)] = c__ * a1 + s * a2;
+                h__[i__ + 1 + (h_dim1 << 1)] = c__ * a4 - s * a3;
+                h__[i__ + 1 + h_dim1] = c__ * a3 + s * a4;
 
-		h__[i__ + (h_dim1 << 1)] = c__ * a1 + s * a2;
-		h__[i__ + 1 + (h_dim1 << 1)] = c__ * a4 - s * a3;
-		h__[i__ + 1 + h_dim1] = c__ * a3 + s * a4;
+                /*               %----------------------------------------------------% */
+                /*               | Accumulate the rotation in the matrix Q;  Q <- Q*G | */
+                /*               %----------------------------------------------------% */
 
-/*               %----------------------------------------------------% */
-/*               | Accumulate the rotation in the matrix Q;  Q <- Q*G | */
-/*               %----------------------------------------------------% */
+                /* Computing MIN */
+                i__4 = i__ + jj;
+                i__3 = min(i__4, kplusp);
+                for (j = 1; j <= i__3; ++j)
+                {
+                    a1 = c__ * q[j + i__ * q_dim1] + s * q[j + (i__ + 1) * q_dim1];
+                    q[j + (i__ + 1) * q_dim1] = -s * q[j + i__ * q_dim1] + c__ * q[j + (i__ + 1) * q_dim1];
+                    q[j + i__ * q_dim1] = a1;
+                    /* L50: */
+                }
 
-/* Computing MIN */
-		i__4 = i__ + jj;
-		i__3 = min(i__4,kplusp);
-		for (j = 1; j <= i__3; ++j) {
-		    a1 = c__ * q[j + i__ * q_dim1] + s * q[j + (i__ + 1) * 
-			    q_dim1];
-		    q[j + (i__ + 1) * q_dim1] = -s * q[j + i__ * q_dim1] + 
-			    c__ * q[j + (i__ + 1) * q_dim1];
-		    q[j + i__ * q_dim1] = a1;
-/* L50: */
-		}
+                /* L70: */
+            }
+        }
 
-/* L70: */
-	    }
+        /*        %--------------------------% */
+        /*        | Update the block pointer | */
+        /*        %--------------------------% */
 
-	}
+        istart = iend + 1;
 
-/*        %--------------------------% */
-/*        | Update the block pointer | */
-/*        %--------------------------% */
+        /*        %------------------------------------------% */
+        /*        | Make sure that h(iend,1) is non-negative | */
+        /*        | If not then set h(iend,1) <-- -h(iend,1) | */
+        /*        | and negate the last column of Q.         | */
+        /*        | We have effectively carried out a        | */
+        /*        | similarity on transformation H           | */
+        /*        %------------------------------------------% */
 
-	istart = iend + 1;
+        if (h__[iend + h_dim1] < 0.)
+        {
+            h__[iend + h_dim1] = -h__[iend + h_dim1];
+            dscal_(&kplusp, &c_b20, &q[iend * q_dim1 + 1], &c__1);
+        }
 
-/*        %------------------------------------------% */
-/*        | Make sure that h(iend,1) is non-negative | */
-/*        | If not then set h(iend,1) <-- -h(iend,1) | */
-/*        | and negate the last column of Q.         | */
-/*        | We have effectively carried out a        | */
-/*        | similarity on transformation H           | */
-/*        %------------------------------------------% */
+        /*        %--------------------------------------------------------% */
+        /*        | Apply the same shift to the next block if there is any | */
+        /*        %--------------------------------------------------------% */
 
-	if (h__[iend + h_dim1] < 0.) {
-	    h__[iend + h_dim1] = -h__[iend + h_dim1];
-	    dscal_(&kplusp, &c_b20, &q[iend * q_dim1 + 1], &c__1);
-	}
+        if (iend < kplusp)
+        {
+            goto L20;
+        }
 
-/*        %--------------------------------------------------------% */
-/*        | Apply the same shift to the next block if there is any | */
-/*        %--------------------------------------------------------% */
+        /*        %-----------------------------------------------------% */
+        /*        | Check if we can increase the the start of the block | */
+        /*        %-----------------------------------------------------% */
 
-	if (iend < kplusp) {
-	    goto L20;
-	}
+        i__2 = kplusp - 1;
+        for (i__ = itop; i__ <= i__2; ++i__)
+        {
+            if (h__[i__ + 1 + h_dim1] > 0.)
+            {
+                goto L90;
+            }
+            ++itop;
+            /* L80: */
+        }
 
-/*        %-----------------------------------------------------% */
-/*        | Check if we can increase the the start of the block | */
-/*        %-----------------------------------------------------% */
+        /*        %-----------------------------------% */
+        /*        | Finished applying the jj-th shift | */
+        /*        %-----------------------------------% */
 
-	i__2 = kplusp - 1;
-	for (i__ = itop; i__ <= i__2; ++i__) {
-	    if (h__[i__ + 1 + h_dim1] > 0.) {
-		goto L90;
-	    }
-	    ++itop;
-/* L80: */
-	}
-
-/*        %-----------------------------------% */
-/*        | Finished applying the jj-th shift | */
-/*        %-----------------------------------% */
-
-L90:
-	;
+    L90:;
     }
 
-/*     %------------------------------------------% */
-/*     | All shifts have been applied. Check for  | */
-/*     | more possible deflation that might occur | */
-/*     | after the last shift is applied.         | */
-/*     %------------------------------------------% */
+    /*     %------------------------------------------% */
+    /*     | All shifts have been applied. Check for  | */
+    /*     | more possible deflation that might occur | */
+    /*     | after the last shift is applied.         | */
+    /*     %------------------------------------------% */
 
     i__1 = kplusp - 1;
-    for (i__ = itop; i__ <= i__1; ++i__) {
-	big = (d__1 = h__[i__ + (h_dim1 << 1)], abs(d__1)) + (d__2 = h__[i__ 
-		+ 1 + (h_dim1 << 1)], abs(d__2));
-	if (h__[i__ + 1 + h_dim1] <= epsmch * big) {
-	    if (msglvl > 0) {
-		ivout_(&debug_1.logfil, &c__1, &i__, &debug_1.ndigit, "_sapp"
-			"s: deflation at row/column no.", (ftnlen)35);
-		dvout_(&debug_1.logfil, &c__1, &h__[i__ + 1 + h_dim1], &
-			debug_1.ndigit, "_sapps: the corresponding off diago"
-			"nal element", (ftnlen)46);
-	    }
-	    h__[i__ + 1 + h_dim1] = 0.;
-	}
-/* L100: */
+    for (i__ = itop; i__ <= i__1; ++i__)
+    {
+        big = (d__1 = h__[i__ + (h_dim1 << 1)], abs(d__1)) + (d__2 = h__[i__ + 1 + (h_dim1 << 1)], abs(d__2));
+        if (h__[i__ + 1 + h_dim1] <= epsmch * big)
+        {
+            if (msglvl > 0)
+            {
+                ivout_(&debug_1.logfil, &c__1, &i__, &debug_1.ndigit,
+                       "_sapp"
+                       "s: deflation at row/column no.",
+                       (ftnlen)35);
+                dvout_(&debug_1.logfil, &c__1, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
+                       "_sapps: the corresponding off diago"
+                       "nal element",
+                       (ftnlen)46);
+            }
+            h__[i__ + 1 + h_dim1] = 0.;
+        }
+        /* L100: */
     }
 
-/*     %-------------------------------------------------% */
-/*     | Compute the (kev+1)-st column of (V*Q) and      | */
-/*     | temporarily store the result in WORKD(N+1:2*N). | */
-/*     | This is not necessary if h(kev+1,1) = 0.         | */
-/*     %-------------------------------------------------% */
+    /*     %-------------------------------------------------% */
+    /*     | Compute the (kev+1)-st column of (V*Q) and      | */
+    /*     | temporarily store the result in WORKD(N+1:2*N). | */
+    /*     | This is not necessary if h(kev+1,1) = 0.         | */
+    /*     %-------------------------------------------------% */
 
-    if (h__[*kev + 1 + h_dim1] > 0.) {
-	dgemv_("N", n, &kplusp, &c_b5, &v[v_offset], ldv, &q[(*kev + 1) * 
-		q_dim1 + 1], &c__1, &c_b4, &workd[*n + 1], &c__1, (ftnlen)1);
+    if (h__[*kev + 1 + h_dim1] > 0.)
+    {
+        dgemv_("N", n, &kplusp, &c_b5, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &c__1, &c_b4, &workd[*n + 1], &c__1, (ftnlen)1);
     }
 
-/*     %-------------------------------------------------------% */
-/*     | Compute column 1 to kev of (V*Q) in backward order    | */
-/*     | taking advantage that Q is an upper triangular matrix | */
-/*     | with lower bandwidth np.                              | */
-/*     | Place results in v(:,kplusp-kev:kplusp) temporarily.  | */
-/*     %-------------------------------------------------------% */
+    /*     %-------------------------------------------------------% */
+    /*     | Compute column 1 to kev of (V*Q) in backward order    | */
+    /*     | taking advantage that Q is an upper triangular matrix | */
+    /*     | with lower bandwidth np.                              | */
+    /*     | Place results in v(:,kplusp-kev:kplusp) temporarily.  | */
+    /*     %-------------------------------------------------------% */
 
     i__1 = *kev;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	i__2 = kplusp - i__ + 1;
-	dgemv_("N", n, &i__2, &c_b5, &v[v_offset], ldv, &q[(*kev - i__ + 1) * 
-		q_dim1 + 1], &c__1, &c_b4, &workd[1], &c__1, (ftnlen)1);
-	dcopy_(n, &workd[1], &c__1, &v[(kplusp - i__ + 1) * v_dim1 + 1], &
-		c__1);
-/* L130: */
+    for (i__ = 1; i__ <= i__1; ++i__)
+    {
+        i__2 = kplusp - i__ + 1;
+        dgemv_("N", n, &i__2, &c_b5, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &c__1, &c_b4, &workd[1], &c__1, (ftnlen)1);
+        dcopy_(n, &workd[1], &c__1, &v[(kplusp - i__ + 1) * v_dim1 + 1], &c__1);
+        /* L130: */
     }
 
-/*     %-------------------------------------------------% */
-/*     |  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). | */
-/*     %-------------------------------------------------% */
+    /*     %-------------------------------------------------% */
+    /*     |  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). | */
+    /*     %-------------------------------------------------% */
 
     i__1 = *kev;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	dcopy_(n, &v[(*np + i__) * v_dim1 + 1], &c__1, &v[i__ * v_dim1 + 1], &
-		c__1);
-/* L140: */
+    for (i__ = 1; i__ <= i__1; ++i__)
+    {
+        dcopy_(n, &v[(*np + i__) * v_dim1 + 1], &c__1, &v[i__ * v_dim1 + 1], &c__1);
+        /* L140: */
     }
 
-/*     %--------------------------------------------% */
-/*     | Copy the (kev+1)-st column of (V*Q) in the | */
-/*     | appropriate place if h(kev+1,1) .ne. zero. | */
-/*     %--------------------------------------------% */
+    /*     %--------------------------------------------% */
+    /*     | Copy the (kev+1)-st column of (V*Q) in the | */
+    /*     | appropriate place if h(kev+1,1) .ne. zero. | */
+    /*     %--------------------------------------------% */
 
-    if (h__[*kev + 1 + h_dim1] > 0.) {
-	dcopy_(n, &workd[*n + 1], &c__1, &v[(*kev + 1) * v_dim1 + 1], &c__1);
+    if (h__[*kev + 1 + h_dim1] > 0.)
+    {
+        dcopy_(n, &workd[*n + 1], &c__1, &v[(*kev + 1) * v_dim1 + 1], &c__1);
     }
 
-/*     %-------------------------------------% */
-/*     | Update the residual vector:         | */
-/*     |    r <- sigmak*r + betak*v(:,kev+1) | */
-/*     | where                               | */
-/*     |    sigmak = (e_{kev+p}'*Q)*e_{kev}  | */
-/*     |    betak = e_{kev+1}'*H*e_{kev}     | */
-/*     %-------------------------------------% */
+    /*     %-------------------------------------% */
+    /*     | Update the residual vector:         | */
+    /*     |    r <- sigmak*r + betak*v(:,kev+1) | */
+    /*     | where                               | */
+    /*     |    sigmak = (e_{kev+p}'*Q)*e_{kev}  | */
+    /*     |    betak = e_{kev+1}'*H*e_{kev}     | */
+    /*     %-------------------------------------% */
 
     dscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &c__1);
-    if (h__[*kev + 1 + h_dim1] > 0.) {
-	daxpy_(n, &h__[*kev + 1 + h_dim1], &v[(*kev + 1) * v_dim1 + 1], &c__1,
-		 &resid[1], &c__1);
+    if (h__[*kev + 1 + h_dim1] > 0.)
+    {
+        daxpy_(n, &h__[*kev + 1 + h_dim1], &v[(*kev + 1) * v_dim1 + 1], &c__1, &resid[1], &c__1);
     }
 
-    if (msglvl > 1) {
-	dvout_(&debug_1.logfil, &c__1, &q[kplusp + *kev * q_dim1], &
-		debug_1.ndigit, "_sapps: sigmak of the updated residual vect"
-		"or", (ftnlen)45);
-	dvout_(&debug_1.logfil, &c__1, &h__[*kev + 1 + h_dim1], &
-		debug_1.ndigit, "_sapps: betak of the updated residual vector"
-		, (ftnlen)44);
-	dvout_(&debug_1.logfil, kev, &h__[(h_dim1 << 1) + 1], &debug_1.ndigit,
-		 "_sapps: updated main diagonal of H for next iteration", (
-		ftnlen)53);
-	if (*kev > 1) {
-	    i__1 = *kev - 1;
-	    dvout_(&debug_1.logfil, &i__1, &h__[h_dim1 + 2], &debug_1.ndigit, 
-		    "_sapps: updated sub diagonal of H for next iteration", (
-		    ftnlen)52);
-	}
+    if (msglvl > 1)
+    {
+        dvout_(&debug_1.logfil, &c__1, &q[kplusp + *kev * q_dim1], &debug_1.ndigit,
+               "_sapps: sigmak of the updated residual vect"
+               "or",
+               (ftnlen)45);
+        dvout_(&debug_1.logfil, &c__1, &h__[*kev + 1 + h_dim1], &debug_1.ndigit, "_sapps: betak of the updated residual vector", (ftnlen)44);
+        dvout_(&debug_1.logfil, kev, &h__[(h_dim1 << 1) + 1], &debug_1.ndigit, "_sapps: updated main diagonal of H for next iteration", (ftnlen)53);
+        if (*kev > 1)
+        {
+            i__1 = *kev - 1;
+            dvout_(&debug_1.logfil, &i__1, &h__[h_dim1 + 2], &debug_1.ndigit, "_sapps: updated sub diagonal of H for next iteration", (ftnlen)52);
+        }
     }
 
     arscnd_(&t1);
@@ -659,9 +627,8 @@ L90:
 L9000:
     return 0;
 
-/*     %---------------% */
-/*     | End of dsapps | */
-/*     %---------------% */
+    /*     %---------------% */
+    /*     | End of dsapps | */
+    /*     %---------------% */
 
 } /* dsapps_ */
-

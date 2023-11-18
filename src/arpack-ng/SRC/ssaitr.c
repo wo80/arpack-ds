@@ -1,33 +1,30 @@
 /* D:\projects\Fortran\arpack-ng-3.9.1-patched\SRC\ssaitr.f -- translated by f2c (version 20230428).
    You must link the resulting object file with libf2c:
-	on Microsoft Windows system, link with libf2c.lib;
-	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
-	or, if you install libf2c.a in a standard place, with -lf2c -lm
-	-- in that order, at the end of the command line, as in
-		cc *.o -lf2c -lm
-	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+    on Microsoft Windows system, link with libf2c.lib;
+    on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+    or, if you install libf2c.a in a standard place, with -lf2c -lm
+    -- in that order, at the end of the command line, as in
+        cc *.o -lf2c -lm
+    Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
 
-		http://www.netlib.org/f2c/libf2c.zip
+        http://www.netlib.org/f2c/libf2c.zip
 */
 
 #include "f2c.h"
 
 /* Common Block Declarations */
 
-Extern struct {
-    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, 
-	    msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, 
-	    mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
+Extern struct
+{
+    integer logfil, ndigit, mgetv0, msaupd, msaup2, msaitr, mseigt, msapps, msgets, mseupd, mnaupd, mnaup2, mnaitr, mneigh, mnapps, mngets, mneupd, mcaupd, mcaup2, mcaitr, mceigh, mcapps, mcgets, mceupd;
 } debug_;
 
 #define debug_1 debug_
 
-Extern struct {
+Extern struct
+{
     integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, 
-	    tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, 
-	    tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, 
-	    titref, trvec;
+    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, titref, trvec;
 } timing_;
 
 #define timing_1 timing_
@@ -244,10 +241,7 @@ static integer c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 
-/* Subroutine */ int ssaitr_(integer *ido, char *bmat, integer *n, integer *k,
-	 integer *np, integer *mode, real *resid, real *rnorm, real *v, 
-	integer *ldv, real *h__, integer *ldh, integer *ipntr, real *workd, 
-	integer *info, ftnlen bmat_len)
+int ssaitr_(integer *ido, char *bmat, integer *n, integer *k, integer *np, integer *mode, real *resid, real *rnorm, real *v, integer *ldv, real *h__, integer *ldh, integer *ipntr, real *workd, integer *info, ftnlen bmat_len)
 {
     /* Initialized data */
 
@@ -270,89 +264,70 @@ static integer c__2 = 2;
     real temp1;
     static logical orth1, orth2, step3, step4;
     extern doublereal snrm2_(integer *, real *, integer *);
-    extern /* Subroutine */ int sscal_(integer *, real *, real *, integer *);
+    extern int sscal_(integer *, real *, real *, integer *);
     integer infol;
-    extern /* Subroutine */ int sgemv_(char *, integer *, integer *, real *, 
-	    real *, integer *, real *, integer *, real *, real *, integer *, 
-	    ftnlen);
+    extern int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, ftnlen);
     real xtemp[2];
-    extern /* Subroutine */ int scopy_(integer *, real *, integer *, real *, 
-	    integer *);
+    extern int scopy_(integer *, real *, integer *, real *, integer *);
     static real wnorm;
-    extern /* Subroutine */ int ivout_(integer *, integer *, integer *, 
-	    integer *, char *, ftnlen), svout_(integer *, integer *, real *, 
-	    integer *, char *, ftnlen), sgetv0_(integer *, char *, integer *, 
-	    logical *, integer *, integer *, real *, integer *, real *, real *
-	    , integer *, real *, integer *, ftnlen);
+    extern int ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), svout_(integer *, integer *, real *, integer *, char *, ftnlen), sgetv0_(integer *, char *, integer *, logical *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, ftnlen);
     static real rnorm1;
     extern doublereal slamch_(char *, ftnlen);
-    extern /* Subroutine */ int arscnd_(real *);
+    extern int arscnd_(real *);
     static real safmin;
     static logical rstart;
     static integer msglvl;
-    extern /* Subroutine */ int slascl_(char *, integer *, integer *, real *, 
-	    real *, integer *, integer *, real *, integer *, integer *, 
-	    ftnlen);
+    extern int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *, ftnlen);
 
+    /*     %----------------------------------------------------% */
+    /*     | Include files for debugging and timing information | */
+    /*     %----------------------------------------------------% */
 
-/*     %----------------------------------------------------% */
-/*     | Include files for debugging and timing information | */
-/*     %----------------------------------------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
 
+    /*     %---------------------------------% */
+    /*     | See debug.doc for documentation | */
+    /*     %---------------------------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------------% */
+    /*     | Scalar Arguments | */
+    /*     %------------------% */
 
-/*     %---------------------------------% */
-/*     | See debug.doc for documentation | */
-/*     %---------------------------------% */
+    /*     %--------------------------------% */
+    /*     | See stat.doc for documentation | */
+    /*     %--------------------------------% */
 
-/*     %------------------% */
-/*     | Scalar Arguments | */
-/*     %------------------% */
+    /* \SCCS Information: @(#) */
+    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
 
-/*     %--------------------------------% */
-/*     | See stat.doc for documentation | */
-/*     %--------------------------------% */
+    /*     %-----------------% */
+    /*     | Array Arguments | */
+    /*     %-----------------% */
 
-/* \SCCS Information: @(#) */
-/* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
+    /*     %------------% */
+    /*     | Parameters | */
+    /*     %------------% */
 
+    /*     %---------------% */
+    /*     | Local Scalars | */
+    /*     %---------------% */
 
+    /*     %-----------------------% */
+    /*     | Local Array Arguments | */
+    /*     %-----------------------% */
 
-/*     %-----------------% */
-/*     | Array Arguments | */
-/*     %-----------------% */
+    /*     %----------------------% */
+    /*     | External Subroutines | */
+    /*     %----------------------% */
 
+    /*     %--------------------% */
+    /*     | External Functions | */
+    /*     %--------------------% */
 
-/*     %------------% */
-/*     | Parameters | */
-/*     %------------% */
-
-
-/*     %---------------% */
-/*     | Local Scalars | */
-/*     %---------------% */
-
-
-/*     %-----------------------% */
-/*     | Local Array Arguments | */
-/*     %-----------------------% */
-
-
-/*     %----------------------% */
-/*     | External Subroutines | */
-/*     %----------------------% */
-
-
-/*     %--------------------% */
-/*     | External Functions | */
-/*     %--------------------% */
-
-
-/*     %-----------------% */
-/*     | Data statements | */
-/*     %-----------------% */
+    /*     %-----------------% */
+    /*     | Data statements | */
+    /*     %-----------------% */
 
     /* Parameter adjustments */
     --workd;
@@ -367,133 +342,149 @@ static integer c__2 = 2;
 
     /* Function Body */
 
-/*     %-----------------------% */
-/*     | Executable Statements | */
-/*     %-----------------------% */
+    /*     %-----------------------% */
+    /*     | Executable Statements | */
+    /*     %-----------------------% */
 
-    if (first) {
-	first = FALSE_;
+    if (first)
+    {
+        first = FALSE_;
 
-/*        %--------------------------------% */
-/*        | safmin = safe minimum is such  | */
-/*        | that 1/sfmin does not overflow | */
-/*        %--------------------------------% */
+        /*        %--------------------------------% */
+        /*        | safmin = safe minimum is such  | */
+        /*        | that 1/sfmin does not overflow | */
+        /*        %--------------------------------% */
 
-	safmin = slamch_("safmin", (ftnlen)6);
+        safmin = slamch_("safmin", (ftnlen)6);
     }
 
-    if (*ido == 0) {
+    if (*ido == 0)
+    {
 
-/*        %-------------------------------% */
-/*        | Initialize timing statistics  | */
-/*        | & message level for debugging | */
-/*        %-------------------------------% */
+        /*        %-------------------------------% */
+        /*        | Initialize timing statistics  | */
+        /*        | & message level for debugging | */
+        /*        %-------------------------------% */
 
-	arscnd_(&t0);
-	msglvl = debug_1.msaitr;
+        arscnd_(&t0);
+        msglvl = debug_1.msaitr;
 
-/*        %------------------------------% */
-/*        | Initial call to this routine | */
-/*        %------------------------------% */
+        /*        %------------------------------% */
+        /*        | Initial call to this routine | */
+        /*        %------------------------------% */
 
-	*info = 0;
-	step3 = FALSE_;
-	step4 = FALSE_;
-	rstart = FALSE_;
-	orth1 = FALSE_;
-	orth2 = FALSE_;
+        *info = 0;
+        step3 = FALSE_;
+        step4 = FALSE_;
+        rstart = FALSE_;
+        orth1 = FALSE_;
+        orth2 = FALSE_;
 
-/*        %--------------------------------% */
-/*        | Pointer to the current step of | */
-/*        | the factorization to build     | */
-/*        %--------------------------------% */
+        /*        %--------------------------------% */
+        /*        | Pointer to the current step of | */
+        /*        | the factorization to build     | */
+        /*        %--------------------------------% */
 
-	j = *k + 1;
+        j = *k + 1;
 
-/*        %------------------------------------------% */
-/*        | Pointers used for reverse communication  | */
-/*        | when using WORKD.                        | */
-/*        %------------------------------------------% */
+        /*        %------------------------------------------% */
+        /*        | Pointers used for reverse communication  | */
+        /*        | when using WORKD.                        | */
+        /*        %------------------------------------------% */
 
-	ipj = 1;
-	irj = ipj + *n;
-	ivj = irj + *n;
+        ipj = 1;
+        irj = ipj + *n;
+        ivj = irj + *n;
     }
 
-/*     %-------------------------------------------------% */
-/*     | When in reverse communication mode one of:      | */
-/*     | STEP3, STEP4, ORTH1, ORTH2, RSTART              | */
-/*     | will be .true.                                  | */
-/*     | STEP3: return from computing OP*v_{j}.          | */
-/*     | STEP4: return from computing B-norm of OP*v_{j} | */
-/*     | ORTH1: return from computing B-norm of r_{j+1}  | */
-/*     | ORTH2: return from computing B-norm of          | */
-/*     |        correction to the residual vector.       | */
-/*     | RSTART: return from OP computations needed by   | */
-/*     |         sgetv0.                                 | */
-/*     %-------------------------------------------------% */
+    /*     %-------------------------------------------------% */
+    /*     | When in reverse communication mode one of:      | */
+    /*     | STEP3, STEP4, ORTH1, ORTH2, RSTART              | */
+    /*     | will be .true.                                  | */
+    /*     | STEP3: return from computing OP*v_{j}.          | */
+    /*     | STEP4: return from computing B-norm of OP*v_{j} | */
+    /*     | ORTH1: return from computing B-norm of r_{j+1}  | */
+    /*     | ORTH2: return from computing B-norm of          | */
+    /*     |        correction to the residual vector.       | */
+    /*     | RSTART: return from OP computations needed by   | */
+    /*     |         sgetv0.                                 | */
+    /*     %-------------------------------------------------% */
 
-    if (step3) {
-	goto L50;
+    if (step3)
+    {
+        goto L50;
     }
-    if (step4) {
-	goto L60;
+    if (step4)
+    {
+        goto L60;
     }
-    if (orth1) {
-	goto L70;
+    if (orth1)
+    {
+        goto L70;
     }
-    if (orth2) {
-	goto L90;
+    if (orth2)
+    {
+        goto L90;
     }
-    if (rstart) {
-	goto L30;
+    if (rstart)
+    {
+        goto L30;
     }
 
-/*     %------------------------------% */
-/*     | Else this is the first step. | */
-/*     %------------------------------% */
+    /*     %------------------------------% */
+    /*     | Else this is the first step. | */
+    /*     %------------------------------% */
 
-/*     %--------------------------------------------------------------% */
-/*     |                                                              | */
-/*     |        A R N O L D I     I T E R A T I O N     L O O P       | */
-/*     |                                                              | */
-/*     | Note:  B*r_{j-1} is already in WORKD(1:N)=WORKD(IPJ:IPJ+N-1) | */
-/*     %--------------------------------------------------------------% */
+    /*     %--------------------------------------------------------------% */
+    /*     |                                                              | */
+    /*     |        A R N O L D I     I T E R A T I O N     L O O P       | */
+    /*     |                                                              | */
+    /*     | Note:  B*r_{j-1} is already in WORKD(1:N)=WORKD(IPJ:IPJ+N-1) | */
+    /*     %--------------------------------------------------------------% */
 
 L1000:
 
-    if (msglvl > 2) {
-	ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit, "_saitr: generat"
-		"ing Arnoldi vector no.", (ftnlen)37);
-	svout_(&debug_1.logfil, &c__1, rnorm, &debug_1.ndigit, "_saitr: B-no"
-		"rm of the current residual =", (ftnlen)40);
+    if (msglvl > 2)
+    {
+        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+               "_saitr: generat"
+               "ing Arnoldi vector no.",
+               (ftnlen)37);
+        svout_(&debug_1.logfil, &c__1, rnorm, &debug_1.ndigit,
+               "_saitr: B-no"
+               "rm of the current residual =",
+               (ftnlen)40);
     }
 
-/*        %---------------------------------------------------------% */
-/*        | Check for exact zero. Equivalent to determining whether | */
-/*        | a j-step Arnoldi factorization is present.              | */
-/*        %---------------------------------------------------------% */
+    /*        %---------------------------------------------------------% */
+    /*        | Check for exact zero. Equivalent to determining whether | */
+    /*        | a j-step Arnoldi factorization is present.              | */
+    /*        %---------------------------------------------------------% */
 
-    if (*rnorm > 0.f) {
-	goto L40;
+    if (*rnorm > 0.f)
+    {
+        goto L40;
     }
 
-/*           %---------------------------------------------------% */
-/*           | Invariant subspace found, generate a new starting | */
-/*           | vector which is orthogonal to the current Arnoldi | */
-/*           | basis and continue the iteration.                 | */
-/*           %---------------------------------------------------% */
+    /*           %---------------------------------------------------% */
+    /*           | Invariant subspace found, generate a new starting | */
+    /*           | vector which is orthogonal to the current Arnoldi | */
+    /*           | basis and continue the iteration.                 | */
+    /*           %---------------------------------------------------% */
 
-    if (msglvl > 0) {
-	ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit, "_saitr: ****** "
-		"restart at step ******", (ftnlen)37);
+    if (msglvl > 0)
+    {
+        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+               "_saitr: ****** "
+               "restart at step ******",
+               (ftnlen)37);
     }
 
-/*           %---------------------------------------------% */
-/*           | ITRY is the loop variable that controls the | */
-/*           | maximum amount of times that a restart is   | */
-/*           | attempted. NRSTRT is used by stat.h         | */
-/*           %---------------------------------------------% */
+    /*           %---------------------------------------------% */
+    /*           | ITRY is the loop variable that controls the | */
+    /*           | maximum amount of times that a restart is   | */
+    /*           | attempted. NRSTRT is used by stat.h         | */
+    /*           %---------------------------------------------% */
 
     ++timing_1.nrstrt;
     itry = 1;
@@ -502,66 +493,69 @@ L20:
     *ido = 0;
 L30:
 
-/*           %--------------------------------------% */
-/*           | If in reverse communication mode and | */
-/*           | RSTART = .true. flow returns here.   | */
-/*           %--------------------------------------% */
+    /*           %--------------------------------------% */
+    /*           | If in reverse communication mode and | */
+    /*           | RSTART = .true. flow returns here.   | */
+    /*           %--------------------------------------% */
 
-    sgetv0_(ido, bmat, &itry, &c_false, n, &j, &v[v_offset], ldv, &resid[1], 
-	    rnorm, &ipntr[1], &workd[1], &ierr, (ftnlen)1);
-    if (*ido != 99) {
-	goto L9000;
+    sgetv0_(ido, bmat, &itry, &c_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr, (ftnlen)1);
+    if (*ido != 99)
+    {
+        goto L9000;
     }
-    if (ierr < 0) {
-	++itry;
-	if (itry <= 3) {
-	    goto L20;
-	}
+    if (ierr < 0)
+    {
+        ++itry;
+        if (itry <= 3)
+        {
+            goto L20;
+        }
 
-/*              %------------------------------------------------% */
-/*              | Give up after several restart attempts.        | */
-/*              | Set INFO to the size of the invariant subspace | */
-/*              | which spans OP and exit.                       | */
-/*              %------------------------------------------------% */
+        /*              %------------------------------------------------% */
+        /*              | Give up after several restart attempts.        | */
+        /*              | Set INFO to the size of the invariant subspace | */
+        /*              | which spans OP and exit.                       | */
+        /*              %------------------------------------------------% */
 
-	*info = j - 1;
-	arscnd_(&t1);
-	timing_1.tsaitr += t1 - t0;
-	*ido = 99;
-	goto L9000;
+        *info = j - 1;
+        arscnd_(&t1);
+        timing_1.tsaitr += t1 - t0;
+        *ido = 99;
+        goto L9000;
     }
 
 L40:
 
-/*        %---------------------------------------------------------% */
-/*        | STEP 2:  v_{j} = r_{j-1}/rnorm and p_{j} = p_{j}/rnorm  | */
-/*        | Note that p_{j} = B*r_{j-1}. In order to avoid overflow | */
-/*        | when reciprocating a small RNORM, test against lower    | */
-/*        | machine bound.                                          | */
-/*        %---------------------------------------------------------% */
+    /*        %---------------------------------------------------------% */
+    /*        | STEP 2:  v_{j} = r_{j-1}/rnorm and p_{j} = p_{j}/rnorm  | */
+    /*        | Note that p_{j} = B*r_{j-1}. In order to avoid overflow | */
+    /*        | when reciprocating a small RNORM, test against lower    | */
+    /*        | machine bound.                                          | */
+    /*        %---------------------------------------------------------% */
 
     scopy_(n, &resid[1], &c__1, &v[j * v_dim1 + 1], &c__1);
-    if (*rnorm >= safmin) {
-	temp1 = 1.f / *rnorm;
-	sscal_(n, &temp1, &v[j * v_dim1 + 1], &c__1);
-	sscal_(n, &temp1, &workd[ipj], &c__1);
-    } else {
+    if (*rnorm >= safmin)
+    {
+        temp1 = 1.f / *rnorm;
+        sscal_(n, &temp1, &v[j * v_dim1 + 1], &c__1);
+        sscal_(n, &temp1, &workd[ipj], &c__1);
+    }
+    else
+    {
 
-/*            %-----------------------------------------% */
-/*            | To scale both v_{j} and p_{j} carefully | */
-/*            | use LAPACK routine SLASCL               | */
-/*            %-----------------------------------------% */
+        /*            %-----------------------------------------% */
+        /*            | To scale both v_{j} and p_{j} carefully | */
+        /*            | use LAPACK routine SLASCL               | */
+        /*            %-----------------------------------------% */
 
-	slascl_("General", &i__, &i__, rnorm, &c_b24, n, &c__1, &v[j * v_dim1 
-		+ 1], n, &infol, (ftnlen)7);
-	slascl_("General", &i__, &i__, rnorm, &c_b24, n, &c__1, &workd[ipj], 
-		n, &infol, (ftnlen)7);
+        slascl_("General", &i__, &i__, rnorm, &c_b24, n, &c__1, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
+        slascl_("General", &i__, &i__, rnorm, &c_b24, n, &c__1, &workd[ipj], n, &infol, (ftnlen)7);
     }
 
-/*        %------------------------------------------------------% */
-/*        | STEP 3:  r_{j} = OP*v_{j}; Note that p_{j} = B*v_{j} | */
-/*        | Note that this is not quite yet r_{j}. See STEP 4    | */
-/*        %------------------------------------------------------% */
+    /*        %------------------------------------------------------% */
+    /*        | STEP 3:  r_{j} = OP*v_{j}; Note that p_{j} = B*v_{j} | */
+    /*        | Note that this is not quite yet r_{j}. See STEP 4    | */
+    /*        %------------------------------------------------------% */
 
     step3 = TRUE_;
     ++timing_1.nopx;
@@ -572,132 +566,144 @@ L40:
     ipntr[3] = ipj;
     *ido = 1;
 
-/*        %-----------------------------------% */
-/*        | Exit in order to compute OP*v_{j} | */
-/*        %-----------------------------------% */
+    /*        %-----------------------------------% */
+    /*        | Exit in order to compute OP*v_{j} | */
+    /*        %-----------------------------------% */
 
     goto L9000;
 L50:
 
-/*        %-----------------------------------% */
-/*        | Back from reverse communication;  | */
-/*        | WORKD(IRJ:IRJ+N-1) := OP*v_{j}.   | */
-/*        %-----------------------------------% */
+    /*        %-----------------------------------% */
+    /*        | Back from reverse communication;  | */
+    /*        | WORKD(IRJ:IRJ+N-1) := OP*v_{j}.   | */
+    /*        %-----------------------------------% */
 
     arscnd_(&t3);
     timing_1.tmvopx += t3 - t2;
 
     step3 = FALSE_;
 
-/*        %------------------------------------------% */
-/*        | Put another copy of OP*v_{j} into RESID. | */
-/*        %------------------------------------------% */
+    /*        %------------------------------------------% */
+    /*        | Put another copy of OP*v_{j} into RESID. | */
+    /*        %------------------------------------------% */
 
     scopy_(n, &workd[irj], &c__1, &resid[1], &c__1);
 
-/*        %-------------------------------------------% */
-/*        | STEP 4:  Finish extending the symmetric   | */
-/*        |          Arnoldi to length j. If MODE = 2 | */
-/*        |          then B*OP = B*inv(B)*A = A and   | */
-/*        |          we don't need to compute B*OP.   | */
-/*        | NOTE: If MODE = 2 WORKD(IVJ:IVJ+N-1) is   | */
-/*        | assumed to have A*v_{j}.                  | */
-/*        %-------------------------------------------% */
+    /*        %-------------------------------------------% */
+    /*        | STEP 4:  Finish extending the symmetric   | */
+    /*        |          Arnoldi to length j. If MODE = 2 | */
+    /*        |          then B*OP = B*inv(B)*A = A and   | */
+    /*        |          we don't need to compute B*OP.   | */
+    /*        | NOTE: If MODE = 2 WORKD(IVJ:IVJ+N-1) is   | */
+    /*        | assumed to have A*v_{j}.                  | */
+    /*        %-------------------------------------------% */
 
-    if (*mode == 2) {
-	goto L65;
+    if (*mode == 2)
+    {
+        goto L65;
     }
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G') {
-	++timing_1.nbx;
-	step4 = TRUE_;
-	ipntr[1] = irj;
-	ipntr[2] = ipj;
-	*ido = 2;
+    if (*(unsigned char *)bmat == 'G')
+    {
+        ++timing_1.nbx;
+        step4 = TRUE_;
+        ipntr[1] = irj;
+        ipntr[2] = ipj;
+        *ido = 2;
 
-/*           %-------------------------------------% */
-/*           | Exit in order to compute B*OP*v_{j} | */
-/*           %-------------------------------------% */
+        /*           %-------------------------------------% */
+        /*           | Exit in order to compute B*OP*v_{j} | */
+        /*           %-------------------------------------% */
 
-	goto L9000;
-    } else if (*(unsigned char *)bmat == 'I') {
-	scopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        goto L9000;
+    }
+    else if (*(unsigned char *)bmat == 'I')
+    {
+        scopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
     }
 L60:
 
-/*        %-----------------------------------% */
-/*        | Back from reverse communication;  | */
-/*        | WORKD(IPJ:IPJ+N-1) := B*OP*v_{j}. | */
-/*        %-----------------------------------% */
+    /*        %-----------------------------------% */
+    /*        | Back from reverse communication;  | */
+    /*        | WORKD(IPJ:IPJ+N-1) := B*OP*v_{j}. | */
+    /*        %-----------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G') {
-	arscnd_(&t3);
-	timing_1.tmvbx += t3 - t2;
+    if (*(unsigned char *)bmat == 'G')
+    {
+        arscnd_(&t3);
+        timing_1.tmvbx += t3 - t2;
     }
 
     step4 = FALSE_;
 
-/*        %-------------------------------------% */
-/*        | The following is needed for STEP 5. | */
-/*        | Compute the B-norm of OP*v_{j}.     | */
-/*        %-------------------------------------% */
+    /*        %-------------------------------------% */
+    /*        | The following is needed for STEP 5. | */
+    /*        | Compute the B-norm of OP*v_{j}.     | */
+    /*        %-------------------------------------% */
 
 L65:
-    if (*mode == 2) {
+    if (*mode == 2)
+    {
 
-/*           %----------------------------------% */
-/*           | Note that the B-norm of OP*v_{j} | */
-/*           | is the inv(B)-norm of A*v_{j}.   | */
-/*           %----------------------------------% */
+        /*           %----------------------------------% */
+        /*           | Note that the B-norm of OP*v_{j} | */
+        /*           | is the inv(B)-norm of A*v_{j}.   | */
+        /*           %----------------------------------% */
 
-	wnorm = sdot_(n, &resid[1], &c__1, &workd[ivj], &c__1);
-	wnorm = sqrt((dabs(wnorm)));
-    } else if (*(unsigned char *)bmat == 'G') {
-	wnorm = sdot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
-	wnorm = sqrt((dabs(wnorm)));
-    } else if (*(unsigned char *)bmat == 'I') {
-	wnorm = snrm2_(n, &resid[1], &c__1);
+        wnorm = sdot_(n, &resid[1], &c__1, &workd[ivj], &c__1);
+        wnorm = sqrt((dabs(wnorm)));
+    }
+    else if (*(unsigned char *)bmat == 'G')
+    {
+        wnorm = sdot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        wnorm = sqrt((dabs(wnorm)));
+    }
+    else if (*(unsigned char *)bmat == 'I')
+    {
+        wnorm = snrm2_(n, &resid[1], &c__1);
     }
 
-/*        %-----------------------------------------% */
-/*        | Compute the j-th residual corresponding | */
-/*        | to the j step factorization.            | */
-/*        | Use Classical Gram Schmidt and compute: | */
-/*        | w_{j} <-  V_{j}^T * B * OP * v_{j}      | */
-/*        | r_{j} <-  OP*v_{j} - V_{j} * w_{j}      | */
-/*        %-----------------------------------------% */
+    /*        %-----------------------------------------% */
+    /*        | Compute the j-th residual corresponding | */
+    /*        | to the j step factorization.            | */
+    /*        | Use Classical Gram Schmidt and compute: | */
+    /*        | w_{j} <-  V_{j}^T * B * OP * v_{j}      | */
+    /*        | r_{j} <-  OP*v_{j} - V_{j} * w_{j}      | */
+    /*        %-----------------------------------------% */
 
+    /*        %------------------------------------------% */
+    /*        | Compute the j Fourier coefficients w_{j} | */
+    /*        | WORKD(IPJ:IPJ+N-1) contains B*OP*v_{j}.  | */
+    /*        %------------------------------------------% */
 
-/*        %------------------------------------------% */
-/*        | Compute the j Fourier coefficients w_{j} | */
-/*        | WORKD(IPJ:IPJ+N-1) contains B*OP*v_{j}.  | */
-/*        %------------------------------------------% */
-
-    if (*mode != 2) {
-	sgemv_("T", n, &j, &c_b24, &v[v_offset], ldv, &workd[ipj], &c__1, &
-		c_b49, &workd[irj], &c__1, (ftnlen)1);
-    } else if (*mode == 2) {
-	sgemv_("T", n, &j, &c_b24, &v[v_offset], ldv, &workd[ivj], &c__1, &
-		c_b49, &workd[irj], &c__1, (ftnlen)1);
+    if (*mode != 2)
+    {
+        sgemv_("T", n, &j, &c_b24, &v[v_offset], ldv, &workd[ipj], &c__1, &c_b49, &workd[irj], &c__1, (ftnlen)1);
+    }
+    else if (*mode == 2)
+    {
+        sgemv_("T", n, &j, &c_b24, &v[v_offset], ldv, &workd[ivj], &c__1, &c_b49, &workd[irj], &c__1, (ftnlen)1);
     }
 
-/*        %--------------------------------------% */
-/*        | Orthgonalize r_{j} against V_{j}.    | */
-/*        | RESID contains OP*v_{j}. See STEP 3. | */
-/*        %--------------------------------------% */
+    /*        %--------------------------------------% */
+    /*        | Orthgonalize r_{j} against V_{j}.    | */
+    /*        | RESID contains OP*v_{j}. See STEP 3. | */
+    /*        %--------------------------------------% */
 
-    sgemv_("N", n, &j, &c_b57, &v[v_offset], ldv, &workd[irj], &c__1, &c_b24, 
-	    &resid[1], &c__1, (ftnlen)1);
+    sgemv_("N", n, &j, &c_b57, &v[v_offset], ldv, &workd[irj], &c__1, &c_b24, &resid[1], &c__1, (ftnlen)1);
 
-/*        %--------------------------------------% */
-/*        | Extend H to have j rows and columns. | */
-/*        %--------------------------------------% */
+    /*        %--------------------------------------% */
+    /*        | Extend H to have j rows and columns. | */
+    /*        %--------------------------------------% */
 
     h__[j + (h_dim1 << 1)] = workd[irj + j - 1];
-    if (j == 1 || rstart) {
-	h__[j + h_dim1] = 0.f;
-    } else {
-	h__[j + h_dim1] = *rnorm;
+    if (j == 1 || rstart)
+    {
+        h__[j + h_dim1] = 0.f;
+    }
+    else
+    {
+        h__[j + h_dim1] = *rnorm;
     }
     arscnd_(&t4);
 
@@ -705,201 +711,228 @@ L65:
     iter = 0;
 
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G') {
-	++timing_1.nbx;
-	scopy_(n, &resid[1], &c__1, &workd[irj], &c__1);
-	ipntr[1] = irj;
-	ipntr[2] = ipj;
-	*ido = 2;
+    if (*(unsigned char *)bmat == 'G')
+    {
+        ++timing_1.nbx;
+        scopy_(n, &resid[1], &c__1, &workd[irj], &c__1);
+        ipntr[1] = irj;
+        ipntr[2] = ipj;
+        *ido = 2;
 
-/*           %----------------------------------% */
-/*           | Exit in order to compute B*r_{j} | */
-/*           %----------------------------------% */
+        /*           %----------------------------------% */
+        /*           | Exit in order to compute B*r_{j} | */
+        /*           %----------------------------------% */
 
-	goto L9000;
-    } else if (*(unsigned char *)bmat == 'I') {
-	scopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        goto L9000;
+    }
+    else if (*(unsigned char *)bmat == 'I')
+    {
+        scopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
     }
 L70:
 
-/*        %---------------------------------------------------% */
-/*        | Back from reverse communication if ORTH1 = .true. | */
-/*        | WORKD(IPJ:IPJ+N-1) := B*r_{j}.                    | */
-/*        %---------------------------------------------------% */
+    /*        %---------------------------------------------------% */
+    /*        | Back from reverse communication if ORTH1 = .true. | */
+    /*        | WORKD(IPJ:IPJ+N-1) := B*r_{j}.                    | */
+    /*        %---------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G') {
-	arscnd_(&t3);
-	timing_1.tmvbx += t3 - t2;
+    if (*(unsigned char *)bmat == 'G')
+    {
+        arscnd_(&t3);
+        timing_1.tmvbx += t3 - t2;
     }
 
     orth1 = FALSE_;
 
-/*        %------------------------------% */
-/*        | Compute the B-norm of r_{j}. | */
-/*        %------------------------------% */
+    /*        %------------------------------% */
+    /*        | Compute the B-norm of r_{j}. | */
+    /*        %------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G') {
-	*rnorm = sdot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
-	*rnorm = sqrt((dabs(*rnorm)));
-    } else if (*(unsigned char *)bmat == 'I') {
-	*rnorm = snrm2_(n, &resid[1], &c__1);
+    if (*(unsigned char *)bmat == 'G')
+    {
+        *rnorm = sdot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        *rnorm = sqrt((dabs(*rnorm)));
+    }
+    else if (*(unsigned char *)bmat == 'I')
+    {
+        *rnorm = snrm2_(n, &resid[1], &c__1);
     }
 
-/*        %-----------------------------------------------------------% */
-/*        | STEP 5: Re-orthogonalization / Iterative refinement phase | */
-/*        | Maximum NITER_ITREF tries.                                | */
-/*        |                                                           | */
-/*        |          s      = V_{j}^T * B * r_{j}                     | */
-/*        |          r_{j}  = r_{j} - V_{j}*s                         | */
-/*        |          alphaj = alphaj + s_{j}                          | */
-/*        |                                                           | */
-/*        | The stopping criteria used for iterative refinement is    | */
-/*        | discussed in Parlett's book SEP, page 107 and in Gragg &  | */
-/*        | Reichel ACM TOMS paper; Algorithm 686, Dec. 1990.         | */
-/*        | Determine if we need to correct the residual. The goal is | */
-/*        | to enforce ||v(:,1:j)^T * r_{j}|| .le. eps * || r_{j} ||  | */
-/*        %-----------------------------------------------------------% */
+    /*        %-----------------------------------------------------------% */
+    /*        | STEP 5: Re-orthogonalization / Iterative refinement phase | */
+    /*        | Maximum NITER_ITREF tries.                                | */
+    /*        |                                                           | */
+    /*        |          s      = V_{j}^T * B * r_{j}                     | */
+    /*        |          r_{j}  = r_{j} - V_{j}*s                         | */
+    /*        |          alphaj = alphaj + s_{j}                          | */
+    /*        |                                                           | */
+    /*        | The stopping criteria used for iterative refinement is    | */
+    /*        | discussed in Parlett's book SEP, page 107 and in Gragg &  | */
+    /*        | Reichel ACM TOMS paper; Algorithm 686, Dec. 1990.         | */
+    /*        | Determine if we need to correct the residual. The goal is | */
+    /*        | to enforce ||v(:,1:j)^T * r_{j}|| .le. eps * || r_{j} ||  | */
+    /*        %-----------------------------------------------------------% */
 
-    if (*rnorm > wnorm * .717f) {
-	goto L100;
+    if (*rnorm > wnorm * .717f)
+    {
+        goto L100;
     }
     ++timing_1.nrorth;
 
-/*        %---------------------------------------------------% */
-/*        | Enter the Iterative refinement phase. If further  | */
-/*        | refinement is necessary, loop back here. The loop | */
-/*        | variable is ITER. Perform a step of Classical     | */
-/*        | Gram-Schmidt using all the Arnoldi vectors V_{j}  | */
-/*        %---------------------------------------------------% */
+    /*        %---------------------------------------------------% */
+    /*        | Enter the Iterative refinement phase. If further  | */
+    /*        | refinement is necessary, loop back here. The loop | */
+    /*        | variable is ITER. Perform a step of Classical     | */
+    /*        | Gram-Schmidt using all the Arnoldi vectors V_{j}  | */
+    /*        %---------------------------------------------------% */
 
 L80:
 
-    if (msglvl > 2) {
-	xtemp[0] = wnorm;
-	xtemp[1] = *rnorm;
-	svout_(&debug_1.logfil, &c__2, xtemp, &debug_1.ndigit, "_saitr: re-o"
-		"rthonalization ; wnorm and rnorm are", (ftnlen)48);
+    if (msglvl > 2)
+    {
+        xtemp[0] = wnorm;
+        xtemp[1] = *rnorm;
+        svout_(&debug_1.logfil, &c__2, xtemp, &debug_1.ndigit,
+               "_saitr: re-o"
+               "rthonalization ; wnorm and rnorm are",
+               (ftnlen)48);
     }
 
-/*        %----------------------------------------------------% */
-/*        | Compute V_{j}^T * B * r_{j}.                       | */
-/*        | WORKD(IRJ:IRJ+J-1) = v(:,1:J)'*WORKD(IPJ:IPJ+N-1). | */
-/*        %----------------------------------------------------% */
+    /*        %----------------------------------------------------% */
+    /*        | Compute V_{j}^T * B * r_{j}.                       | */
+    /*        | WORKD(IRJ:IRJ+J-1) = v(:,1:J)'*WORKD(IPJ:IPJ+N-1). | */
+    /*        %----------------------------------------------------% */
 
-    sgemv_("T", n, &j, &c_b24, &v[v_offset], ldv, &workd[ipj], &c__1, &c_b49, 
-	    &workd[irj], &c__1, (ftnlen)1);
+    sgemv_("T", n, &j, &c_b24, &v[v_offset], ldv, &workd[ipj], &c__1, &c_b49, &workd[irj], &c__1, (ftnlen)1);
 
-/*        %----------------------------------------------% */
-/*        | Compute the correction to the residual:      | */
-/*        | r_{j} = r_{j} - V_{j} * WORKD(IRJ:IRJ+J-1).  | */
-/*        | The correction to H is v(:,1:J)*H(1:J,1:J) + | */
-/*        | v(:,1:J)*WORKD(IRJ:IRJ+J-1)*e'_j, but only   | */
-/*        | H(j,j) is updated.                           | */
-/*        %----------------------------------------------% */
+    /*        %----------------------------------------------% */
+    /*        | Compute the correction to the residual:      | */
+    /*        | r_{j} = r_{j} - V_{j} * WORKD(IRJ:IRJ+J-1).  | */
+    /*        | The correction to H is v(:,1:J)*H(1:J,1:J) + | */
+    /*        | v(:,1:J)*WORKD(IRJ:IRJ+J-1)*e'_j, but only   | */
+    /*        | H(j,j) is updated.                           | */
+    /*        %----------------------------------------------% */
 
-    sgemv_("N", n, &j, &c_b57, &v[v_offset], ldv, &workd[irj], &c__1, &c_b24, 
-	    &resid[1], &c__1, (ftnlen)1);
+    sgemv_("N", n, &j, &c_b57, &v[v_offset], ldv, &workd[irj], &c__1, &c_b24, &resid[1], &c__1, (ftnlen)1);
 
-    if (j == 1 || rstart) {
-	h__[j + h_dim1] = 0.f;
+    if (j == 1 || rstart)
+    {
+        h__[j + h_dim1] = 0.f;
     }
     h__[j + (h_dim1 << 1)] += workd[irj + j - 1];
 
     orth2 = TRUE_;
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G') {
-	++timing_1.nbx;
-	scopy_(n, &resid[1], &c__1, &workd[irj], &c__1);
-	ipntr[1] = irj;
-	ipntr[2] = ipj;
-	*ido = 2;
+    if (*(unsigned char *)bmat == 'G')
+    {
+        ++timing_1.nbx;
+        scopy_(n, &resid[1], &c__1, &workd[irj], &c__1);
+        ipntr[1] = irj;
+        ipntr[2] = ipj;
+        *ido = 2;
 
-/*           %-----------------------------------% */
-/*           | Exit in order to compute B*r_{j}. | */
-/*           | r_{j} is the corrected residual.  | */
-/*           %-----------------------------------% */
+        /*           %-----------------------------------% */
+        /*           | Exit in order to compute B*r_{j}. | */
+        /*           | r_{j} is the corrected residual.  | */
+        /*           %-----------------------------------% */
 
-	goto L9000;
-    } else if (*(unsigned char *)bmat == 'I') {
-	scopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        goto L9000;
+    }
+    else if (*(unsigned char *)bmat == 'I')
+    {
+        scopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
     }
 L90:
 
-/*        %---------------------------------------------------% */
-/*        | Back from reverse communication if ORTH2 = .true. | */
-/*        %---------------------------------------------------% */
+    /*        %---------------------------------------------------% */
+    /*        | Back from reverse communication if ORTH2 = .true. | */
+    /*        %---------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G') {
-	arscnd_(&t3);
-	timing_1.tmvbx += t3 - t2;
+    if (*(unsigned char *)bmat == 'G')
+    {
+        arscnd_(&t3);
+        timing_1.tmvbx += t3 - t2;
     }
 
-/*        %-----------------------------------------------------% */
-/*        | Compute the B-norm of the corrected residual r_{j}. | */
-/*        %-----------------------------------------------------% */
+    /*        %-----------------------------------------------------% */
+    /*        | Compute the B-norm of the corrected residual r_{j}. | */
+    /*        %-----------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G') {
-	rnorm1 = sdot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
-	rnorm1 = sqrt((dabs(rnorm1)));
-    } else if (*(unsigned char *)bmat == 'I') {
-	rnorm1 = snrm2_(n, &resid[1], &c__1);
+    if (*(unsigned char *)bmat == 'G')
+    {
+        rnorm1 = sdot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        rnorm1 = sqrt((dabs(rnorm1)));
+    }
+    else if (*(unsigned char *)bmat == 'I')
+    {
+        rnorm1 = snrm2_(n, &resid[1], &c__1);
     }
 
-    if (msglvl > 0 && iter > 0) {
-	ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit, "_saitr: Iterati"
-		"ve refinement for Arnoldi residual", (ftnlen)49);
-	if (msglvl > 2) {
-	    xtemp[0] = *rnorm;
-	    xtemp[1] = rnorm1;
-	    svout_(&debug_1.logfil, &c__2, xtemp, &debug_1.ndigit, "_saitr: "
-		    "iterative refinement ; rnorm and rnorm1 are", (ftnlen)51);
-	}
+    if (msglvl > 0 && iter > 0)
+    {
+        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+               "_saitr: Iterati"
+               "ve refinement for Arnoldi residual",
+               (ftnlen)49);
+        if (msglvl > 2)
+        {
+            xtemp[0] = *rnorm;
+            xtemp[1] = rnorm1;
+            svout_(&debug_1.logfil, &c__2, xtemp, &debug_1.ndigit,
+                   "_saitr: "
+                   "iterative refinement ; rnorm and rnorm1 are",
+                   (ftnlen)51);
+        }
     }
 
-/*        %-----------------------------------------% */
-/*        | Determine if we need to perform another | */
-/*        | step of re-orthogonalization.           | */
-/*        %-----------------------------------------% */
+    /*        %-----------------------------------------% */
+    /*        | Determine if we need to perform another | */
+    /*        | step of re-orthogonalization.           | */
+    /*        %-----------------------------------------% */
 
-    if (rnorm1 > *rnorm * .717f) {
+    if (rnorm1 > *rnorm * .717f)
+    {
 
-/*           %--------------------------------% */
-/*           | No need for further refinement | */
-/*           %--------------------------------% */
+        /*           %--------------------------------% */
+        /*           | No need for further refinement | */
+        /*           %--------------------------------% */
 
-	*rnorm = rnorm1;
+        *rnorm = rnorm1;
+    }
+    else
+    {
 
-    } else {
+        /*           %-------------------------------------------% */
+        /*           | Another step of iterative refinement step | */
+        /*           | is required. NITREF is used by stat.h     | */
+        /*           %-------------------------------------------% */
 
-/*           %-------------------------------------------% */
-/*           | Another step of iterative refinement step | */
-/*           | is required. NITREF is used by stat.h     | */
-/*           %-------------------------------------------% */
+        ++timing_1.nitref;
+        *rnorm = rnorm1;
+        ++iter;
+        if (iter <= 1)
+        {
+            goto L80;
+        }
 
-	++timing_1.nitref;
-	*rnorm = rnorm1;
-	++iter;
-	if (iter <= 1) {
-	    goto L80;
-	}
+        /*           %-------------------------------------------------% */
+        /*           | Otherwise RESID is numerically in the span of V | */
+        /*           %-------------------------------------------------% */
 
-/*           %-------------------------------------------------% */
-/*           | Otherwise RESID is numerically in the span of V | */
-/*           %-------------------------------------------------% */
-
-	i__1 = *n;
-	for (jj = 1; jj <= i__1; ++jj) {
-	    resid[jj] = 0.f;
-/* L95: */
-	}
-	*rnorm = 0.f;
+        i__1 = *n;
+        for (jj = 1; jj <= i__1; ++jj)
+        {
+            resid[jj] = 0.f;
+            /* L95: */
+        }
+        *rnorm = 0.f;
     }
 
-/*        %----------------------------------------------% */
-/*        | Branch here directly if iterative refinement | */
-/*        | wasn't necessary or after at most NITER_REF  | */
-/*        | steps of iterative refinement.               | */
-/*        %----------------------------------------------% */
+    /*        %----------------------------------------------% */
+    /*        | Branch here directly if iterative refinement | */
+    /*        | wasn't necessary or after at most NITER_REF  | */
+    /*        | steps of iterative refinement.               | */
+    /*        %----------------------------------------------% */
 
 L100:
 
@@ -909,65 +942,73 @@ L100:
     arscnd_(&t5);
     timing_1.titref += t5 - t4;
 
-/*        %----------------------------------------------------------% */
-/*        | Make sure the last off-diagonal element is non negative  | */
-/*        | If not perform a similarity transformation on H(1:j,1:j) | */
-/*        | and scale v(:,j) by -1.                                  | */
-/*        %----------------------------------------------------------% */
+    /*        %----------------------------------------------------------% */
+    /*        | Make sure the last off-diagonal element is non negative  | */
+    /*        | If not perform a similarity transformation on H(1:j,1:j) | */
+    /*        | and scale v(:,j) by -1.                                  | */
+    /*        %----------------------------------------------------------% */
 
-    if (h__[j + h_dim1] < 0.f) {
-	h__[j + h_dim1] = -h__[j + h_dim1];
-	if (j < *k + *np) {
-	    sscal_(n, &c_b57, &v[(j + 1) * v_dim1 + 1], &c__1);
-	} else {
-	    sscal_(n, &c_b57, &resid[1], &c__1);
-	}
+    if (h__[j + h_dim1] < 0.f)
+    {
+        h__[j + h_dim1] = -h__[j + h_dim1];
+        if (j < *k + *np)
+        {
+            sscal_(n, &c_b57, &v[(j + 1) * v_dim1 + 1], &c__1);
+        }
+        else
+        {
+            sscal_(n, &c_b57, &resid[1], &c__1);
+        }
     }
 
-/*        %------------------------------------% */
-/*        | STEP 6: Update  j = j+1;  Continue | */
-/*        %------------------------------------% */
+    /*        %------------------------------------% */
+    /*        | STEP 6: Update  j = j+1;  Continue | */
+    /*        %------------------------------------% */
 
     ++j;
-    if (j > *k + *np) {
-	arscnd_(&t1);
-	timing_1.tsaitr += t1 - t0;
-	*ido = 99;
+    if (j > *k + *np)
+    {
+        arscnd_(&t1);
+        timing_1.tsaitr += t1 - t0;
+        *ido = 99;
 
-	if (msglvl > 1) {
-	    i__1 = *k + *np;
-	    svout_(&debug_1.logfil, &i__1, &h__[(h_dim1 << 1) + 1], &
-		    debug_1.ndigit, "_saitr: main diagonal of matrix H of st"
-		    "ep K+NP.", (ftnlen)47);
-	    if (*k + *np > 1) {
-		i__1 = *k + *np - 1;
-		svout_(&debug_1.logfil, &i__1, &h__[h_dim1 + 2], &
-			debug_1.ndigit, "_saitr: sub diagonal of matrix H of"
-			" step K+NP.", (ftnlen)46);
-	    }
-	}
+        if (msglvl > 1)
+        {
+            i__1 = *k + *np;
+            svout_(&debug_1.logfil, &i__1, &h__[(h_dim1 << 1) + 1], &debug_1.ndigit,
+                   "_saitr: main diagonal of matrix H of st"
+                   "ep K+NP.",
+                   (ftnlen)47);
+            if (*k + *np > 1)
+            {
+                i__1 = *k + *np - 1;
+                svout_(&debug_1.logfil, &i__1, &h__[h_dim1 + 2], &debug_1.ndigit,
+                       "_saitr: sub diagonal of matrix H of"
+                       " step K+NP.",
+                       (ftnlen)46);
+            }
+        }
 
-	goto L9000;
+        goto L9000;
     }
 
-/*        %--------------------------------------------------------% */
-/*        | Loop back to extend the factorization by another step. | */
-/*        %--------------------------------------------------------% */
+    /*        %--------------------------------------------------------% */
+    /*        | Loop back to extend the factorization by another step. | */
+    /*        %--------------------------------------------------------% */
 
     goto L1000;
 
-/*     %---------------------------------------------------------------% */
-/*     |                                                               | */
-/*     |  E N D     O F     M A I N     I T E R A T I O N     L O O P  | */
-/*     |                                                               | */
-/*     %---------------------------------------------------------------% */
+    /*     %---------------------------------------------------------------% */
+    /*     |                                                               | */
+    /*     |  E N D     O F     M A I N     I T E R A T I O N     L O O P  | */
+    /*     |                                                               | */
+    /*     %---------------------------------------------------------------% */
 
 L9000:
     return 0;
 
-/*     %---------------% */
-/*     | End of ssaitr | */
-/*     %---------------% */
+    /*     %---------------% */
+    /*     | End of ssaitr | */
+    /*     %---------------% */
 
 } /* ssaitr_ */
-
