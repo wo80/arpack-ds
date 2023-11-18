@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static float c_b4 = 0.f;
-static float c_b5 = 1.f;
-static a_int c__1 = 1;
-static float c_b20 = -1.f;
+static float s_zero = 0.f;
+static float s_one = 1.f;
+static a_int i_one = 1;
+static float s_n1 = -1.f;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -256,7 +256,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     /*     | kplusp used to accumulate the rotations.     | */
     /*     %----------------------------------------------% */
 
-    slaset_("All", &kplusp, &kplusp, &c_b4, &c_b5, &q[q_offset], ldq, (ftnlen)3);
+    slaset_("All", &kplusp, &kplusp, &s_zero, &s_one, &q[q_offset], ldq, (ftnlen)3);
 
     /*     %----------------------------------------------% */
     /*     | Quick return if there are no shifts to apply | */
@@ -303,9 +303,9 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &c__1, &i__, &debug_1.ndigit, "_sapps: deflation at row/column no.", (ftnlen)35);
-                    ivout_(&debug_1.logfil, &c__1, &jj, &debug_1.ndigit, "_sapps: occurred before shift number.", (ftnlen)37);
-                    svout_(&debug_1.logfil, &c__1, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
+                    ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit, "_sapps: deflation at row/column no.", (ftnlen)35);
+                    ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_sapps: occurred before shift number.", (ftnlen)37);
+                    svout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
                            "_sapps: the corresponding off d"
                            "iagonal element",
                            (ftnlen)46);
@@ -455,7 +455,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
         if (h__[iend + h_dim1] < 0.f)
         {
             h__[iend + h_dim1] = -h__[iend + h_dim1];
-            sscal_(&kplusp, &c_b20, &q[iend * q_dim1 + 1], &c__1);
+            sscal_(&kplusp, &s_n1, &q[iend * q_dim1 + 1], &i_one);
         }
 
         /*        %--------------------------------------------------------% */
@@ -503,11 +503,11 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
         {
             if (msglvl > 0)
             {
-                ivout_(&debug_1.logfil, &c__1, &i__, &debug_1.ndigit,
+                ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit,
                        "_sapp"
                        "s: deflation at row/column no.",
                        (ftnlen)35);
-                svout_(&debug_1.logfil, &c__1, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
+                svout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
                        "_sapps: the corresponding off diago"
                        "nal element",
                        (ftnlen)46);
@@ -525,7 +525,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
 
     if (h__[*kev + 1 + h_dim1] > 0.f)
     {
-        sgemv_("N", n, &kplusp, &c_b5, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &c__1, &c_b4, &workd[*n + 1], &c__1, (ftnlen)1);
+        sgemv_("N", n, &kplusp, &s_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[*n + 1], &i_one, (ftnlen)1);
     }
 
     /*     %-------------------------------------------------------% */
@@ -539,8 +539,8 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     for (i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = kplusp - i__ + 1;
-        sgemv_("N", n, &i__2, &c_b5, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &c__1, &c_b4, &workd[1], &c__1, (ftnlen)1);
-        scopy_(n, &workd[1], &c__1, &v[(kplusp - i__ + 1) * v_dim1 + 1], &c__1);
+        sgemv_("N", n, &i__2, &s_one, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[1], &i_one, (ftnlen)1);
+        scopy_(n, &workd[1], &i_one, &v[(kplusp - i__ + 1) * v_dim1 + 1], &i_one);
         /* L130: */
     }
 
@@ -557,7 +557,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
 
     if (h__[*kev + 1 + h_dim1] > 0.f)
     {
-        scopy_(n, &workd[*n + 1], &c__1, &v[(*kev + 1) * v_dim1 + 1], &c__1);
+        scopy_(n, &workd[*n + 1], &i_one, &v[(*kev + 1) * v_dim1 + 1], &i_one);
     }
 
     /*     %-------------------------------------% */
@@ -568,19 +568,19 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     /*     |    betak = e_{kev+1}'*H*e_{kev}     | */
     /*     %-------------------------------------% */
 
-    sscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &c__1);
+    sscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &i_one);
     if (h__[*kev + 1 + h_dim1] > 0.f)
     {
-        saxpy_(n, &h__[*kev + 1 + h_dim1], &v[(*kev + 1) * v_dim1 + 1], &c__1, &resid[1], &c__1);
+        saxpy_(n, &h__[*kev + 1 + h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
     }
 
     if (msglvl > 1)
     {
-        svout_(&debug_1.logfil, &c__1, &q[kplusp + *kev * q_dim1], &debug_1.ndigit,
+        svout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit,
                "_sapps: sigmak of the updated residual vect"
                "or",
                (ftnlen)45);
-        svout_(&debug_1.logfil, &c__1, &h__[*kev + 1 + h_dim1], &debug_1.ndigit, "_sapps: betak of the updated residual vector", (ftnlen)44);
+        svout_(&debug_1.logfil, &i_one, &h__[*kev + 1 + h_dim1], &debug_1.ndigit, "_sapps: betak of the updated residual vector", (ftnlen)44);
         svout_(&debug_1.logfil, kev, &h__[(h_dim1 << 1) + 1], &debug_1.ndigit, "_sapps: updated main diagonal of H for next iteration", (ftnlen)53);
         if (*kev > 1)
         {

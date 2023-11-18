@@ -4,7 +4,7 @@
 
 /* Table of constant values */
 
-static a_int c__1 = 1;
+static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -721,11 +721,11 @@ int dsaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &c__1, &mxiter, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &mxiter, &debug_1.ndigit,
                "_saupd: nu"
                "mber of update iterations taken",
                (ftnlen)41);
-        ivout_(&debug_1.logfil, &c__1, &np, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &np, &debug_1.ndigit,
                "_saupd: number"
                " of \"converged\" Ritz values",
                (ftnlen)41);
@@ -752,23 +752,23 @@ int dsaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
         s_wsfe(&io___21);
         e_wsfe();
         s_wsfe(&io___22);
-        do_fio(&c__1, (char *)&mxiter, (ftnlen)sizeof(a_int));
-        do_fio(&c__1, (char *)&timing_1.nopx, (ftnlen)sizeof(a_int));
-        do_fio(&c__1, (char *)&timing_1.nbx, (ftnlen)sizeof(a_int));
-        do_fio(&c__1, (char *)&timing_1.nrorth, (ftnlen)sizeof(a_int));
-        do_fio(&c__1, (char *)&timing_1.nitref, (ftnlen)sizeof(a_int));
-        do_fio(&c__1, (char *)&timing_1.nrstrt, (ftnlen)sizeof(a_int));
-        do_fio(&c__1, (char *)&timing_1.tmvopx, (ftnlen)sizeof(float));
-        do_fio(&c__1, (char *)&timing_1.tmvbx, (ftnlen)sizeof(float));
-        do_fio(&c__1, (char *)&timing_1.tsaupd, (ftnlen)sizeof(float));
-        do_fio(&c__1, (char *)&timing_1.tsaup2, (ftnlen)sizeof(float));
-        do_fio(&c__1, (char *)&timing_1.tsaitr, (ftnlen)sizeof(float));
-        do_fio(&c__1, (char *)&timing_1.titref, (ftnlen)sizeof(float));
-        do_fio(&c__1, (char *)&timing_1.tgetv0, (ftnlen)sizeof(float));
-        do_fio(&c__1, (char *)&timing_1.tseigt, (ftnlen)sizeof(float));
-        do_fio(&c__1, (char *)&timing_1.tsgets, (ftnlen)sizeof(float));
-        do_fio(&c__1, (char *)&timing_1.tsapps, (ftnlen)sizeof(float));
-        do_fio(&c__1, (char *)&timing_1.tsconv, (ftnlen)sizeof(float));
+        do_fio(&i_one, (char *)&mxiter, (ftnlen)sizeof(a_int));
+        do_fio(&i_one, (char *)&timing_1.nopx, (ftnlen)sizeof(a_int));
+        do_fio(&i_one, (char *)&timing_1.nbx, (ftnlen)sizeof(a_int));
+        do_fio(&i_one, (char *)&timing_1.nrorth, (ftnlen)sizeof(a_int));
+        do_fio(&i_one, (char *)&timing_1.nitref, (ftnlen)sizeof(a_int));
+        do_fio(&i_one, (char *)&timing_1.nrstrt, (ftnlen)sizeof(a_int));
+        do_fio(&i_one, (char *)&timing_1.tmvopx, (ftnlen)sizeof(float));
+        do_fio(&i_one, (char *)&timing_1.tmvbx, (ftnlen)sizeof(float));
+        do_fio(&i_one, (char *)&timing_1.tsaupd, (ftnlen)sizeof(float));
+        do_fio(&i_one, (char *)&timing_1.tsaup2, (ftnlen)sizeof(float));
+        do_fio(&i_one, (char *)&timing_1.tsaitr, (ftnlen)sizeof(float));
+        do_fio(&i_one, (char *)&timing_1.titref, (ftnlen)sizeof(float));
+        do_fio(&i_one, (char *)&timing_1.tgetv0, (ftnlen)sizeof(float));
+        do_fio(&i_one, (char *)&timing_1.tseigt, (ftnlen)sizeof(float));
+        do_fio(&i_one, (char *)&timing_1.tsgets, (ftnlen)sizeof(float));
+        do_fio(&i_one, (char *)&timing_1.tsapps, (ftnlen)sizeof(float));
+        do_fio(&i_one, (char *)&timing_1.tsconv, (ftnlen)sizeof(float));
         e_wsfe();
     }
 

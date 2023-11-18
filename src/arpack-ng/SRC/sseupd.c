@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static double c_b21 = .66666666666666663;
-static a_int c__1 = 1;
-static a_bool c_true = TRUE_;
-static float c_b111 = 1.f;
+static double TWO_THIRDS = .66666666666666663;
+static a_int i_one = 1;
+static a_bool b_true = TRUE_;
+static float s_one = 1.f;
 
 /* \BeginDoc */
 
@@ -497,7 +497,7 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
 
     eps23 = slamch_("Epsilon-Machine", (ftnlen)15);
     d__1 = (double)eps23;
-    eps23 = pow_dd(&d__1, &c_b21);
+    eps23 = pow_dd(&d__1, &TWO_THIRDS);
 
     /*     %---------------------------------------% */
     /*     | RNORM is B-norm of the RESID(1:N).    | */
@@ -513,7 +513,7 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
     }
     else if (*(unsigned char *)bmat == 'G')
     {
-        bnorm2 = snrm2_(n, &workd[1], &c__1);
+        bnorm2 = snrm2_(n, &workd[1], &i_one);
     }
 
     if (msglvl > 2)
@@ -603,11 +603,11 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &c__1, &numcnv, &debug_1.ndigit,
+            ivout_(&debug_1.logfil, &i_one, &numcnv, &debug_1.ndigit,
                    "_seupd"
                    ": Number of specified eigenvalues",
                    (ftnlen)39);
-            ivout_(&debug_1.logfil, &c__1, &nconv, &debug_1.ndigit,
+            ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,
                    "_seupd:"
                    " Number of \"converged\" eigenvalues",
                    (ftnlen)41);
@@ -626,8 +626,8 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
         /*        %-----------------------------------------------------------% */
 
         i__1 = *ncv - 1;
-        scopy_(&i__1, &workl[ih + 1], &c__1, &workl[ihb], &c__1);
-        scopy_(ncv, &workl[ih + ldh], &c__1, &workl[ihd], &c__1);
+        scopy_(&i__1, &workl[ih + 1], &i_one, &workl[ihb], &i_one);
+        scopy_(ncv, &workl[ih + ldh], &i_one, &workl[ihd], &i_one);
 
         ssteqr_("Identity", ncv, &workl[ihd], &workl[ihb], &workl[iq], &ldq, &workl[iw], &ierr, (ftnlen)8);
 
@@ -639,7 +639,7 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
 
         if (msglvl > 1)
         {
-            scopy_(ncv, &workl[iq + *ncv - 1], &ldq, &workl[iw], &c__1);
+            scopy_(ncv, &workl[iq + *ncv - 1], &ldq, &workl[iw], &i_one);
             svout_(&debug_1.logfil, ncv, &workl[ihd], &debug_1.ndigit,
                    "_seu"
                    "pd: NCV Ritz values of the final H matrix",
@@ -705,9 +705,9 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
                 temp = workl[ihd + leftptr - 1];
                 workl[ihd + leftptr - 1] = workl[ihd + rghtptr - 1];
                 workl[ihd + rghtptr - 1] = temp;
-                scopy_(ncv, &workl[iq + *ncv * (leftptr - 1)], &c__1, &workl[iw], &c__1);
-                scopy_(ncv, &workl[iq + *ncv * (rghtptr - 1)], &c__1, &workl[iq + *ncv * (leftptr - 1)], &c__1);
-                scopy_(ncv, &workl[iw], &c__1, &workl[iq + *ncv * (rghtptr - 1)], &c__1);
+                scopy_(ncv, &workl[iq + *ncv * (leftptr - 1)], &i_one, &workl[iw], &i_one);
+                scopy_(ncv, &workl[iq + *ncv * (rghtptr - 1)], &i_one, &workl[iq + *ncv * (leftptr - 1)], &i_one);
+                scopy_(ncv, &workl[iw], &i_one, &workl[iq + *ncv * (rghtptr - 1)], &i_one);
                 ++leftptr;
                 --rghtptr;
             }
@@ -731,7 +731,7 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
         /*        | Load the converged Ritz values into D. | */
         /*        %----------------------------------------% */
 
-        scopy_(&nconv, &workl[ihd], &c__1, &d__[1], &c__1);
+        scopy_(&nconv, &workl[ihd], &i_one, &d__[1], &i_one);
     }
     else
     {
@@ -740,8 +740,8 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
         /*        | Ritz vectors not required. Load Ritz values into D. | */
         /*        %-----------------------------------------------------% */
 
-        scopy_(&nconv, &workl[ritz], &c__1, &d__[1], &c__1);
-        scopy_(ncv, &workl[ritz], &c__1, &workl[ihd], &c__1);
+        scopy_(&nconv, &workl[ritz], &i_one, &d__[1], &i_one);
+        scopy_(ncv, &workl[ritz], &i_one, &workl[ihd], &i_one);
     }
 
     /*     %------------------------------------------------------------------% */
@@ -764,7 +764,7 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
         }
         else
         {
-            scopy_(ncv, &workl[bounds], &c__1, &workl[ihb], &c__1);
+            scopy_(ncv, &workl[bounds], &i_one, &workl[ihb], &i_one);
         }
     }
     else
@@ -785,7 +785,7 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
         /*        |  They are only reordered.                                   | */
         /*        %-------------------------------------------------------------% */
 
-        scopy_(ncv, &workl[ihd], &c__1, &workl[iw], &c__1);
+        scopy_(ncv, &workl[ihd], &i_one, &workl[iw], &i_one);
         if (s_cmp(type__, "SHIFTI", (ftnlen)6, (ftnlen)6) == 0)
         {
             i__1 = *ncv;
@@ -829,18 +829,18 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
         /*        |  Ritz vector purification.                                  | */
         /*        %-------------------------------------------------------------% */
 
-        scopy_(&nconv, &workl[ihd], &c__1, &d__[1], &c__1);
-        ssortr_("LA", &c_true, &nconv, &workl[ihd], &workl[iw], (ftnlen)2);
+        scopy_(&nconv, &workl[ihd], &i_one, &d__[1], &i_one);
+        ssortr_("LA", &b_true, &nconv, &workl[ihd], &workl[iw], (ftnlen)2);
         if (*rvec)
         {
             ssesrt_("LA", rvec, &nconv, &d__[1], ncv, &workl[iq], &ldq, (ftnlen)2);
         }
         else
         {
-            scopy_(ncv, &workl[bounds], &c__1, &workl[ihb], &c__1);
+            scopy_(ncv, &workl[bounds], &i_one, &workl[ihb], &i_one);
             r__1 = bnorm2 / rnorm;
-            sscal_(ncv, &r__1, &workl[ihb], &c__1);
-            ssortr_("LA", &c_true, &nconv, &d__[1], &workl[ihb], (ftnlen)2);
+            sscal_(ncv, &r__1, &workl[ihb], &i_one);
+            ssortr_("LA", &b_true, &nconv, &d__[1], &workl[ihb], (ftnlen)2);
         }
     }
 
@@ -885,7 +885,7 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
             /* L65: */
         }
         workl[ihb + *ncv - 1] = 1.f;
-        sorm2r_("Left", "Transpose", ncv, &c__1, &nconv, &workl[iq], &ldq, &workl[iw + *ncv], &workl[ihb], ncv, &temp, &ierr, (ftnlen)4, (ftnlen)9);
+        sorm2r_("Left", "Transpose", ncv, &i_one, &nconv, &workl[iq], &ldq, &workl[iw + *ncv], &workl[ihb], ncv, &temp, &ierr, (ftnlen)4, (ftnlen)9);
 
         /*        %-----------------------------------------------------% */
         /*        | Make a copy of the last row into                    | */
@@ -928,7 +928,7 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
         /*        | *  Determine Ritz estimates of the lambda.      | */
         /*        %-------------------------------------------------% */
 
-        sscal_(ncv, &bnorm2, &workl[ihb], &c__1);
+        sscal_(ncv, &bnorm2, &workl[ihb], &i_one);
         if (s_cmp(type__, "SHIFTI", (ftnlen)6, (ftnlen)6) == 0)
         {
 
@@ -1017,7 +1017,7 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, 
 
     if (s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) != 0)
     {
-        sger_(n, &nconv, &c_b111, &resid[1], &c__1, &workl[iw], &c__1, &z__[z_offset], ldz);
+        sger_(n, &nconv, &s_one, &resid[1], &i_one, &workl[iw], &i_one, &z__[z_offset], ldz);
     }
 
 L9000:

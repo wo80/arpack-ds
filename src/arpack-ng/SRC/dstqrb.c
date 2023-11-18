@@ -4,9 +4,9 @@
 
 /* Table of constant values */
 
-static a_int c__0 = 0;
-static a_int c__1 = 1;
-static double c_b31 = 1.;
+static a_int i_zero = 0;
+static a_int i_one = 1;
+static double d_one = 1.;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -313,17 +313,17 @@ L30:
     {
         iscale = 1;
         i__1 = lend - l + 1;
-        dlascl_("g", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &d__[l], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &d__[l], n, info, (ftnlen)1);
         i__1 = lend - l;
-        dlascl_("g", &c__0, &c__0, &anorm, &ssfmax, &i__1, &c__1, &e[l], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &e[l], n, info, (ftnlen)1);
     }
     else if (anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
-        dlascl_("g", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &d__[l], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &d__[l], n, info, (ftnlen)1);
         i__1 = lend - l;
-        dlascl_("g", &c__0, &c__0, &anorm, &ssfmin, &i__1, &c__1, &e[l], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &e[l], n, info, (ftnlen)1);
     }
 
     /*     choose between ql and qr iteration */
@@ -416,7 +416,7 @@ L30:
         /*        form shift. */
 
         g = (d__[l + 1] - p) / (e[l] * 2.);
-        r__ = dlapy2_(&g, &c_b31);
+        r__ = dlapy2_(&g, &d_one);
         g = d__[m] - p + e[l] / (g + d_sign(&r__, &g));
 
         s = 1.;
@@ -463,7 +463,7 @@ L30:
 
             /*             *** New starting with version 2.5 *** */
 
-            dlasr_("r", "v", "b", &c__1, &mm, &work[l], &work[*n - 1 + l], &z__[l], &c__1, (ftnlen)1, (ftnlen)1, (ftnlen)1);
+            dlasr_("r", "v", "b", &i_one, &mm, &work[l], &work[*n - 1 + l], &z__[l], &i_one, (ftnlen)1, (ftnlen)1, (ftnlen)1);
             /*             ************************************* */
         }
 
@@ -565,7 +565,7 @@ L30:
         /*        form shift. */
 
         g = (d__[l - 1] - p) / (e[l - 1] * 2.);
-        r__ = dlapy2_(&g, &c_b31);
+        r__ = dlapy2_(&g, &d_one);
         g = d__[m] - p + e[l - 1] / (g + d_sign(&r__, &g));
 
         s = 1.;
@@ -612,7 +612,7 @@ L30:
 
             /*           *** New starting with version 2.5 *** */
 
-            dlasr_("r", "v", "f", &c__1, &mm, &work[m], &work[*n - 1 + m], &z__[m], &c__1, (ftnlen)1, (ftnlen)1, (ftnlen)1);
+            dlasr_("r", "v", "f", &i_one, &mm, &work[m], &work[*n - 1 + m], &z__[m], &i_one, (ftnlen)1, (ftnlen)1, (ftnlen)1);
             /*           ************************************* */
         }
 
@@ -639,16 +639,16 @@ L140:
     if (iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("g", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &d__[lsv], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &d__[lsv], n, info, (ftnlen)1);
         i__1 = lendsv - lsv;
-        dlascl_("g", &c__0, &c__0, &ssfmax, &anorm, &i__1, &c__1, &e[lsv], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &e[lsv], n, info, (ftnlen)1);
     }
     else if (iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("g", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &d__[lsv], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &d__[lsv], n, info, (ftnlen)1);
         i__1 = lendsv - lsv;
-        dlascl_("g", &c__0, &c__0, &ssfmin, &anorm, &i__1, &c__1, &e[lsv], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &e[lsv], n, info, (ftnlen)1);
     }
 
     /*     check for no convergence to an eigenvalue after a total */

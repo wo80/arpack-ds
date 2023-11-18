@@ -4,9 +4,9 @@
 
 /* Table of constant values */
 
-static a_dcomplex c_b1 = {1., 0.};
-static a_dcomplex c_b2 = {0., 0.};
-static a_int c__1 = 1;
+static a_dcomplex z_one = {1., 0.};
+static a_dcomplex z_zero = {0., 0.};
+static a_int i_one = 1;
 
 /* \BeginDoc */
 
@@ -289,7 +289,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     /*     | the rotations and reflections              | */
     /*     %--------------------------------------------% */
 
-    zlaset_("All", &kplusp, &kplusp, &c_b2, &c_b1, &q[q_offset], ldq, (ftnlen)3);
+    zlaset_("All", &kplusp, &kplusp, &z_zero, &z_one, &q[q_offset], ldq, (ftnlen)3);
 
     /*     %----------------------------------------------% */
     /*     | Quick return if there are no shifts to apply | */
@@ -314,11 +314,11 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &c__1, &jj, &debug_1.ndigit,
+            ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit,
                    "_napps: sh"
                    "ift number.",
                    (ftnlen)21);
-            zvout_(&debug_1.logfil, &c__1, &sigma, &debug_1.ndigit,
+            zvout_(&debug_1.logfil, &i_one, &sigma, &debug_1.ndigit,
                    "_napps:"
                    " Value of the shift ",
                    (ftnlen)27);
@@ -352,9 +352,9 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &c__1, &i__, &debug_1.ndigit, "_napps: matrix splitting at row/column no.", (ftnlen)42);
-                    ivout_(&debug_1.logfil, &c__1, &jj, &debug_1.ndigit, "_napps: matrix splitting with shift number.", (ftnlen)43);
-                    zvout_(&debug_1.logfil, &c__1, &h__[i__ + 1 + i__ * h_dim1], &debug_1.ndigit,
+                    ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit, "_napps: matrix splitting at row/column no.", (ftnlen)42);
+                    ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_napps: matrix splitting with shift number.", (ftnlen)43);
+                    zvout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + i__ * h_dim1], &debug_1.ndigit,
                            "_napps: off diagonal "
                            "element.",
                            (ftnlen)29);
@@ -371,11 +371,11 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &c__1, &istart, &debug_1.ndigit,
+            ivout_(&debug_1.logfil, &i_one, &istart, &debug_1.ndigit,
                    "_napps"
                    ": Start of current block ",
                    (ftnlen)31);
-            ivout_(&debug_1.logfil, &c__1, &iend, &debug_1.ndigit,
+            ivout_(&debug_1.logfil, &i_one, &iend, &debug_1.ndigit,
                    "_napps: "
                    "End of current block ",
                    (ftnlen)29);
@@ -564,11 +564,11 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
             /* Computing MIN */
             i__3 = j + 2;
             i__2 = min(i__3, kplusp);
-            zscal_(&i__2, &t, &h__[(j + 1) * h_dim1 + 1], &c__1);
+            zscal_(&i__2, &t, &h__[(j + 1) * h_dim1 + 1], &i_one);
             /* Computing MIN */
             i__3 = j + *np + 1;
             i__2 = min(i__3, kplusp);
-            zscal_(&i__2, &t, &q[(j + 1) * q_dim1 + 1], &c__1);
+            zscal_(&i__2, &t, &q[(j + 1) * q_dim1 + 1], &i_one);
             i__2 = j + 1 + j * h_dim1;
             i__3 = j + 1 + j * h_dim1;
             d__1 = h__[i__3].r;
@@ -620,7 +620,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     i__1 = *kev + 1 + *kev * h_dim1;
     if (h__[i__1].r > 0.)
     {
-        zgemv_("N", n, &kplusp, &c_b1, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &c__1, &c_b2, &workd[*n + 1], &c__1, (ftnlen)1);
+        zgemv_("N", n, &kplusp, &z_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &z_zero, &workd[*n + 1], &i_one, (ftnlen)1);
     }
 
     /*     %----------------------------------------------------------% */
@@ -632,8 +632,8 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     for (i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = kplusp - i__ + 1;
-        zgemv_("N", n, &i__2, &c_b1, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &c__1, &c_b2, &workd[1], &c__1, (ftnlen)1);
-        zcopy_(n, &workd[1], &c__1, &v[(kplusp - i__ + 1) * v_dim1 + 1], &c__1);
+        zgemv_("N", n, &i__2, &z_one, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &i_one, &z_zero, &workd[1], &i_one, (ftnlen)1);
+        zcopy_(n, &workd[1], &i_one, &v[(kplusp - i__ + 1) * v_dim1 + 1], &i_one);
         /* L140: */
     }
 
@@ -650,7 +650,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     i__1 = *kev + 1 + *kev * h_dim1;
     if (h__[i__1].r > 0.)
     {
-        zcopy_(n, &workd[*n + 1], &c__1, &v[(*kev + 1) * v_dim1 + 1], &c__1);
+        zcopy_(n, &workd[*n + 1], &i_one, &v[(*kev + 1) * v_dim1 + 1], &i_one);
     }
 
     /*     %-------------------------------------% */
@@ -661,18 +661,18 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     /*     |    betak = e_{kev+1}'*H*e_{kev}     | */
     /*     %-------------------------------------% */
 
-    zscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &c__1);
+    zscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &i_one);
     i__1 = *kev + 1 + *kev * h_dim1;
     if (h__[i__1].r > 0.)
     {
-        zaxpy_(n, &h__[*kev + 1 + *kev * h_dim1], &v[(*kev + 1) * v_dim1 + 1], &c__1, &resid[1], &c__1);
+        zaxpy_(n, &h__[*kev + 1 + *kev * h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
     }
 
     if (msglvl > 1)
     {
-        zvout_(&debug_1.logfil, &c__1, &q[kplusp + *kev * q_dim1], &debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}", (ftnlen)40);
-        zvout_(&debug_1.logfil, &c__1, &h__[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}", (ftnlen)37);
-        ivout_(&debug_1.logfil, &c__1, kev, &debug_1.ndigit,
+        zvout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}", (ftnlen)40);
+        zvout_(&debug_1.logfil, &i_one, &h__[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}", (ftnlen)37);
+        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit,
                "_napps: Order "
                "of the final Hessenberg matrix ",
                (ftnlen)45);

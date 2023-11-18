@@ -4,9 +4,9 @@
 
 /* Table of constant values */
 
-static a_dcomplex c_b1 = {1., 0.};
-static a_dcomplex c_b2 = {0., 0.};
-static a_int c__1 = 1;
+static a_dcomplex z_one = {1., 0.};
+static a_dcomplex z_zero = {0., 0.};
+static a_int i_one = 1;
 
 /* \BeginDoc */
 
@@ -269,13 +269,13 @@ int zgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
             ++timing_1.nopx;
             ipntr[1] = 1;
             ipntr[2] = *n + 1;
-            zcopy_(n, &resid[1], &c__1, &workd[1], &c__1);
+            zcopy_(n, &resid[1], &i_one, &workd[1], &i_one);
             *ido = -1;
             goto L9000;
         }
         else if (*itry > 1 && *(unsigned char *)bmat == 'G')
         {
-            zcopy_(n, &resid[1], &c__1, &workd[*n + 1], &c__1);
+            zcopy_(n, &resid[1], &i_one, &workd[*n + 1], &i_one);
         }
     }
 
@@ -309,7 +309,7 @@ int zgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
     first = TRUE_;
     if (*itry == 1)
     {
-        zcopy_(n, &workd[*n + 1], &c__1, &resid[1], &c__1);
+        zcopy_(n, &workd[*n + 1], &i_one, &resid[1], &i_one);
     }
     if (*(unsigned char *)bmat == 'G')
     {
@@ -321,7 +321,7 @@ int zgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        zcopy_(n, &resid[1], &c__1, &workd[1], &c__1);
+        zcopy_(n, &resid[1], &i_one, &workd[1], &i_one);
     }
 
 L20:
@@ -335,7 +335,7 @@ L20:
     first = FALSE_;
     if (*(unsigned char *)bmat == 'G')
     {
-        zzdotc_(&z__1, n, &resid[1], &c__1, &workd[1], &c__1);
+        zzdotc_(&z__1, n, &resid[1], &i_one, &workd[1], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
         d__1 = cnorm.r;
         d__2 = d_imag(&cnorm);
@@ -343,7 +343,7 @@ L20:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        rnorm0 = dznrm2_(n, &resid[1], &c__1);
+        rnorm0 = dznrm2_(n, &resid[1], &i_one);
     }
     *rnorm = rnorm0;
 
@@ -372,10 +372,10 @@ L20:
 L30:
 
     i__1 = *j - 1;
-    zgemv_("C", n, &i__1, &c_b1, &v[v_offset], ldv, &workd[1], &c__1, &c_b2, &workd[*n + 1], &c__1, (ftnlen)1);
+    zgemv_("C", n, &i__1, &z_one, &v[v_offset], ldv, &workd[1], &i_one, &z_zero, &workd[*n + 1], &i_one, (ftnlen)1);
     i__1 = *j - 1;
     z__1.r = -1., z__1.i = -0.;
-    zgemv_("N", n, &i__1, &z__1, &v[v_offset], ldv, &workd[*n + 1], &c__1, &c_b1, &resid[1], &c__1, (ftnlen)1);
+    zgemv_("N", n, &i__1, &z__1, &v[v_offset], ldv, &workd[*n + 1], &i_one, &z_one, &resid[1], &i_one, (ftnlen)1);
 
     /*     %----------------------------------------------------------% */
     /*     | Compute the B-norm of the orthogonalized starting vector | */
@@ -385,7 +385,7 @@ L30:
     if (*(unsigned char *)bmat == 'G')
     {
         ++timing_1.nbx;
-        zcopy_(n, &resid[1], &c__1, &workd[*n + 1], &c__1);
+        zcopy_(n, &resid[1], &i_one, &workd[*n + 1], &i_one);
         ipntr[1] = *n + 1;
         ipntr[2] = 1;
         *ido = 2;
@@ -393,7 +393,7 @@ L30:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        zcopy_(n, &resid[1], &c__1, &workd[1], &c__1);
+        zcopy_(n, &resid[1], &i_one, &workd[1], &i_one);
     }
 
 L40:
@@ -406,7 +406,7 @@ L40:
 
     if (*(unsigned char *)bmat == 'G')
     {
-        zzdotc_(&z__1, n, &resid[1], &c__1, &workd[1], &c__1);
+        zzdotc_(&z__1, n, &resid[1], &i_one, &workd[1], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
         d__1 = cnorm.r;
         d__2 = d_imag(&cnorm);
@@ -414,7 +414,7 @@ L40:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        *rnorm = dznrm2_(n, &resid[1], &c__1);
+        *rnorm = dznrm2_(n, &resid[1], &i_one);
     }
 
     /*     %--------------------------------------% */
@@ -423,11 +423,11 @@ L40:
 
     if (msglvl > 2)
     {
-        dvout_(&debug_1.logfil, &c__1, &rnorm0, &debug_1.ndigit,
+        dvout_(&debug_1.logfil, &i_one, &rnorm0, &debug_1.ndigit,
                "_getv0: re"
                "-orthonalization ; rnorm0 is",
                (ftnlen)38);
-        dvout_(&debug_1.logfil, &c__1, rnorm, &debug_1.ndigit,
+        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
                "_getv0: re-o"
                "rthonalization ; rnorm is",
                (ftnlen)37);
@@ -471,7 +471,7 @@ L50:
 
     if (msglvl > 0)
     {
-        dvout_(&debug_1.logfil, &c__1, rnorm, &debug_1.ndigit,
+        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
                "_getv0: B-no"
                "rm of initial / restarted starting vector",
                (ftnlen)53);

@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static a_fcomplex c_b1 = {1.f, 0.f};
-static a_fcomplex c_b2 = {0.f, 0.f};
-static a_bool c_true = TRUE_;
-static a_int c__1 = 1;
+static a_fcomplex c_one = {1.f, 0.f};
+static a_fcomplex c_zero = {0.f, 0.f};
+static a_bool b_true = TRUE_;
+static a_int i_one = 1;
 
 /* \BeginDoc */
 
@@ -206,14 +206,14 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h__, a_int *ldh, a_fcomplex *rit
     /*     %----------------------------------------------------------% */
 
     clacpy_("All", n, n, &h__[h_offset], ldh, &workl[1], n, (ftnlen)3);
-    claset_("All", n, n, &c_b2, &c_b1, &q[q_offset], ldq, (ftnlen)3);
-    clahqr_(&c_true, &c_true, n, &c__1, n, &workl[1], ldh, &ritz[1], &c__1, n, &q[q_offset], ldq, ierr);
+    claset_("All", n, n, &c_zero, &c_one, &q[q_offset], ldq, (ftnlen)3);
+    clahqr_(&b_true, &b_true, n, &i_one, n, &workl[1], ldh, &ritz[1], &i_one, n, &q[q_offset], ldq, ierr);
     if (*ierr != 0)
     {
         goto L9000;
     }
 
-    ccopy_(n, &q[*n - 1 + q_dim1], ldq, &bounds[1], &c__1);
+    ccopy_(n, &q[*n - 1 + q_dim1], ldq, &bounds[1], &i_one);
     if (msglvl > 1)
     {
         cvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
@@ -247,15 +247,15 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h__, a_int *ldh, a_fcomplex *rit
     i__1 = *n;
     for (j = 1; j <= i__1; ++j)
     {
-        temp = scnrm2_(n, &q[j * q_dim1 + 1], &c__1);
+        temp = scnrm2_(n, &q[j * q_dim1 + 1], &i_one);
         r__1 = 1.f / temp;
-        csscal_(n, &r__1, &q[j * q_dim1 + 1], &c__1);
+        csscal_(n, &r__1, &q[j * q_dim1 + 1], &i_one);
         /* L10: */
     }
 
     if (msglvl > 1)
     {
-        ccopy_(n, &q[*n + q_dim1], ldq, &workl[1], &c__1);
+        ccopy_(n, &q[*n + q_dim1], ldq, &workl[1], &i_one);
         cvout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,
                "_neigh: Last"
                " row of the eigenvector matrix for H",
@@ -266,8 +266,8 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h__, a_int *ldh, a_fcomplex *rit
     /*     | Compute the Ritz estimates | */
     /*     %----------------------------% */
 
-    ccopy_(n, &q[*n + q_dim1], n, &bounds[1], &c__1);
-    csscal_(n, rnorm, &bounds[1], &c__1);
+    ccopy_(n, &q[*n + q_dim1], n, &bounds[1], &i_one);
+    csscal_(n, rnorm, &bounds[1], &i_one);
 
     if (msglvl > 2)
     {

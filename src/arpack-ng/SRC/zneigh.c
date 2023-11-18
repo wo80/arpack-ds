@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static a_dcomplex c_b1 = {1., 0.};
-static a_dcomplex c_b2 = {0., 0.};
-static a_bool c_true = TRUE_;
-static a_int c__1 = 1;
+static a_dcomplex z_one = {1., 0.};
+static a_dcomplex z_zero = {0., 0.};
+static a_bool b_true = TRUE_;
+static a_int i_one = 1;
 
 /* \BeginDoc */
 
@@ -207,14 +207,14 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h__, a_int *ldh, a_dcomplex *ri
     /*     %----------------------------------------------------------% */
 
     zlacpy_("All", n, n, &h__[h_offset], ldh, &workl[1], n, (ftnlen)3);
-    zlaset_("All", n, n, &c_b2, &c_b1, &q[q_offset], ldq, (ftnlen)3);
-    zlahqr_(&c_true, &c_true, n, &c__1, n, &workl[1], ldh, &ritz[1], &c__1, n, &q[q_offset], ldq, ierr);
+    zlaset_("All", n, n, &z_zero, &z_one, &q[q_offset], ldq, (ftnlen)3);
+    zlahqr_(&b_true, &b_true, n, &i_one, n, &workl[1], ldh, &ritz[1], &i_one, n, &q[q_offset], ldq, ierr);
     if (*ierr != 0)
     {
         goto L9000;
     }
 
-    zcopy_(n, &q[*n - 1 + q_dim1], ldq, &bounds[1], &c__1);
+    zcopy_(n, &q[*n - 1 + q_dim1], ldq, &bounds[1], &i_one);
     if (msglvl > 1)
     {
         zvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
@@ -248,15 +248,15 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h__, a_int *ldh, a_dcomplex *ri
     i__1 = *n;
     for (j = 1; j <= i__1; ++j)
     {
-        temp = dznrm2_(n, &q[j * q_dim1 + 1], &c__1);
+        temp = dznrm2_(n, &q[j * q_dim1 + 1], &i_one);
         d__1 = 1. / temp;
-        zdscal_(n, &d__1, &q[j * q_dim1 + 1], &c__1);
+        zdscal_(n, &d__1, &q[j * q_dim1 + 1], &i_one);
         /* L10: */
     }
 
     if (msglvl > 1)
     {
-        zcopy_(n, &q[*n + q_dim1], ldq, &workl[1], &c__1);
+        zcopy_(n, &q[*n + q_dim1], ldq, &workl[1], &i_one);
         zvout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,
                "_neigh: Last"
                " row of the eigenvector matrix for H",
@@ -267,8 +267,8 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h__, a_int *ldh, a_dcomplex *ri
     /*     | Compute the Ritz estimates | */
     /*     %----------------------------% */
 
-    zcopy_(n, &q[*n + q_dim1], n, &bounds[1], &c__1);
-    zdscal_(n, rnorm, &bounds[1], &c__1);
+    zcopy_(n, &q[*n + q_dim1], n, &bounds[1], &i_one);
+    zdscal_(n, rnorm, &bounds[1], &i_one);
 
     if (msglvl > 2)
     {

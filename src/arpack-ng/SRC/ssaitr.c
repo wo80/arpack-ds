@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static a_int c__1 = 1;
-static a_bool c_false = FALSE_;
-static float c_b24 = 1.f;
-static float c_b49 = 0.f;
-static float c_b57 = -1.f;
-static a_int c__2 = 2;
+static a_int i_one = 1;
+static a_bool b_false = FALSE_;
+static float s_one = 1.f;
+static float s_zero = 0.f;
+static float s_n1 = -1.f;
+static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -419,11 +419,11 @@ L1000:
 
     if (msglvl > 2)
     {
-        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
                "_saitr: generat"
                "ing Arnoldi vector no.",
                (ftnlen)37);
-        svout_(&debug_1.logfil, &c__1, rnorm, &debug_1.ndigit,
+        svout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
                "_saitr: B-no"
                "rm of the current residual =",
                (ftnlen)40);
@@ -447,7 +447,7 @@ L1000:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
                "_saitr: ****** "
                "restart at step ******",
                (ftnlen)37);
@@ -471,7 +471,7 @@ L30:
     /*           | RSTART = .true. flow returns here.   | */
     /*           %--------------------------------------% */
 
-    sgetv0_(ido, bmat, &itry, &c_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr, (ftnlen)1);
+    sgetv0_(ido, bmat, &itry, &b_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr, (ftnlen)1);
     if (*ido != 99)
     {
         goto L9000;
@@ -506,12 +506,12 @@ L40:
     /*        | machine bound.                                          | */
     /*        %---------------------------------------------------------% */
 
-    scopy_(n, &resid[1], &c__1, &v[j * v_dim1 + 1], &c__1);
+    scopy_(n, &resid[1], &i_one, &v[j * v_dim1 + 1], &i_one);
     if (*rnorm >= safmin)
     {
         temp1 = 1.f / *rnorm;
-        sscal_(n, &temp1, &v[j * v_dim1 + 1], &c__1);
-        sscal_(n, &temp1, &workd[ipj], &c__1);
+        sscal_(n, &temp1, &v[j * v_dim1 + 1], &i_one);
+        sscal_(n, &temp1, &workd[ipj], &i_one);
     }
     else
     {
@@ -521,8 +521,8 @@ L40:
         /*            | use LAPACK routine SLASCL               | */
         /*            %-----------------------------------------% */
 
-        slascl_("General", &i__, &i__, rnorm, &c_b24, n, &c__1, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
-        slascl_("General", &i__, &i__, rnorm, &c_b24, n, &c__1, &workd[ipj], n, &infol, (ftnlen)7);
+        slascl_("General", &i__, &i__, rnorm, &s_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
+        slascl_("General", &i__, &i__, rnorm, &s_one, n, &i_one, &workd[ipj], n, &infol, (ftnlen)7);
     }
 
     /*        %------------------------------------------------------% */
@@ -533,7 +533,7 @@ L40:
     step3 = TRUE_;
     ++timing_1.nopx;
     arscnd_(&t2);
-    scopy_(n, &v[j * v_dim1 + 1], &c__1, &workd[ivj], &c__1);
+    scopy_(n, &v[j * v_dim1 + 1], &i_one, &workd[ivj], &i_one);
     ipntr[1] = ivj;
     ipntr[2] = irj;
     ipntr[3] = ipj;
@@ -560,7 +560,7 @@ L50:
     /*        | Put another copy of OP*v_{j} into RESID. | */
     /*        %------------------------------------------% */
 
-    scopy_(n, &workd[irj], &c__1, &resid[1], &c__1);
+    scopy_(n, &workd[irj], &i_one, &resid[1], &i_one);
 
     /*        %-------------------------------------------% */
     /*        | STEP 4:  Finish extending the symmetric   | */
@@ -592,7 +592,7 @@ L50:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        scopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        scopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
 L60:
 
@@ -623,17 +623,17 @@ L65:
         /*           | is the inv(B)-norm of A*v_{j}.   | */
         /*           %----------------------------------% */
 
-        wnorm = sdot_(n, &resid[1], &c__1, &workd[ivj], &c__1);
+        wnorm = sdot_(n, &resid[1], &i_one, &workd[ivj], &i_one);
         wnorm = sqrt((dabs(wnorm)));
     }
     else if (*(unsigned char *)bmat == 'G')
     {
-        wnorm = sdot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        wnorm = sdot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         wnorm = sqrt((dabs(wnorm)));
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        wnorm = snrm2_(n, &resid[1], &c__1);
+        wnorm = snrm2_(n, &resid[1], &i_one);
     }
 
     /*        %-----------------------------------------% */
@@ -651,11 +651,11 @@ L65:
 
     if (*mode != 2)
     {
-        sgemv_("T", n, &j, &c_b24, &v[v_offset], ldv, &workd[ipj], &c__1, &c_b49, &workd[irj], &c__1, (ftnlen)1);
+        sgemv_("T", n, &j, &s_one, &v[v_offset], ldv, &workd[ipj], &i_one, &s_zero, &workd[irj], &i_one, (ftnlen)1);
     }
     else if (*mode == 2)
     {
-        sgemv_("T", n, &j, &c_b24, &v[v_offset], ldv, &workd[ivj], &c__1, &c_b49, &workd[irj], &c__1, (ftnlen)1);
+        sgemv_("T", n, &j, &s_one, &v[v_offset], ldv, &workd[ivj], &i_one, &s_zero, &workd[irj], &i_one, (ftnlen)1);
     }
 
     /*        %--------------------------------------% */
@@ -663,7 +663,7 @@ L65:
     /*        | RESID contains OP*v_{j}. See STEP 3. | */
     /*        %--------------------------------------% */
 
-    sgemv_("N", n, &j, &c_b57, &v[v_offset], ldv, &workd[irj], &c__1, &c_b24, &resid[1], &c__1, (ftnlen)1);
+    sgemv_("N", n, &j, &s_n1, &v[v_offset], ldv, &workd[irj], &i_one, &s_one, &resid[1], &i_one, (ftnlen)1);
 
     /*        %--------------------------------------% */
     /*        | Extend H to have j rows and columns. | */
@@ -687,7 +687,7 @@ L65:
     if (*(unsigned char *)bmat == 'G')
     {
         ++timing_1.nbx;
-        scopy_(n, &resid[1], &c__1, &workd[irj], &c__1);
+        scopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
         ipntr[1] = irj;
         ipntr[2] = ipj;
         *ido = 2;
@@ -700,7 +700,7 @@ L65:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        scopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        scopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
 L70:
 
@@ -723,12 +723,12 @@ L70:
 
     if (*(unsigned char *)bmat == 'G')
     {
-        *rnorm = sdot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        *rnorm = sdot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         *rnorm = sqrt((dabs(*rnorm)));
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        *rnorm = snrm2_(n, &resid[1], &c__1);
+        *rnorm = snrm2_(n, &resid[1], &i_one);
     }
 
     /*        %-----------------------------------------------------------% */
@@ -765,7 +765,7 @@ L80:
     {
         xtemp[0] = wnorm;
         xtemp[1] = *rnorm;
-        svout_(&debug_1.logfil, &c__2, xtemp, &debug_1.ndigit,
+        svout_(&debug_1.logfil, &i_two, xtemp, &debug_1.ndigit,
                "_saitr: re-o"
                "rthonalization ; wnorm and rnorm are",
                (ftnlen)48);
@@ -776,7 +776,7 @@ L80:
     /*        | WORKD(IRJ:IRJ+J-1) = v(:,1:J)'*WORKD(IPJ:IPJ+N-1). | */
     /*        %----------------------------------------------------% */
 
-    sgemv_("T", n, &j, &c_b24, &v[v_offset], ldv, &workd[ipj], &c__1, &c_b49, &workd[irj], &c__1, (ftnlen)1);
+    sgemv_("T", n, &j, &s_one, &v[v_offset], ldv, &workd[ipj], &i_one, &s_zero, &workd[irj], &i_one, (ftnlen)1);
 
     /*        %----------------------------------------------% */
     /*        | Compute the correction to the residual:      | */
@@ -786,7 +786,7 @@ L80:
     /*        | H(j,j) is updated.                           | */
     /*        %----------------------------------------------% */
 
-    sgemv_("N", n, &j, &c_b57, &v[v_offset], ldv, &workd[irj], &c__1, &c_b24, &resid[1], &c__1, (ftnlen)1);
+    sgemv_("N", n, &j, &s_n1, &v[v_offset], ldv, &workd[irj], &i_one, &s_one, &resid[1], &i_one, (ftnlen)1);
 
     if (j == 1 || rstart)
     {
@@ -799,7 +799,7 @@ L80:
     if (*(unsigned char *)bmat == 'G')
     {
         ++timing_1.nbx;
-        scopy_(n, &resid[1], &c__1, &workd[irj], &c__1);
+        scopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
         ipntr[1] = irj;
         ipntr[2] = ipj;
         *ido = 2;
@@ -813,7 +813,7 @@ L80:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        scopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        scopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
 L90:
 
@@ -833,17 +833,17 @@ L90:
 
     if (*(unsigned char *)bmat == 'G')
     {
-        rnorm1 = sdot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        rnorm1 = sdot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         rnorm1 = sqrt((dabs(rnorm1)));
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        rnorm1 = snrm2_(n, &resid[1], &c__1);
+        rnorm1 = snrm2_(n, &resid[1], &i_one);
     }
 
     if (msglvl > 0 && iter > 0)
     {
-        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
                "_saitr: Iterati"
                "ve refinement for Arnoldi residual",
                (ftnlen)49);
@@ -851,7 +851,7 @@ L90:
         {
             xtemp[0] = *rnorm;
             xtemp[1] = rnorm1;
-            svout_(&debug_1.logfil, &c__2, xtemp, &debug_1.ndigit,
+            svout_(&debug_1.logfil, &i_two, xtemp, &debug_1.ndigit,
                    "_saitr: "
                    "iterative refinement ; rnorm and rnorm1 are",
                    (ftnlen)51);
@@ -926,11 +926,11 @@ L100:
         h__[j + h_dim1] = -h__[j + h_dim1];
         if (j < *k + *np)
         {
-            sscal_(n, &c_b57, &v[(j + 1) * v_dim1 + 1], &c__1);
+            sscal_(n, &s_n1, &v[(j + 1) * v_dim1 + 1], &i_one);
         }
         else
         {
-            sscal_(n, &c_b57, &resid[1], &c__1);
+            sscal_(n, &s_n1, &resid[1], &i_one);
         }
     }
 

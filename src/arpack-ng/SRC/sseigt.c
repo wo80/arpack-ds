@@ -4,7 +4,7 @@
 
 /* Table of constant values */
 
-static a_int c__1 = 1;
+static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -174,9 +174,9 @@ int sseigt_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *eig, float *b
         }
     }
 
-    scopy_(n, &h__[(h_dim1 << 1) + 1], &c__1, &eig[1], &c__1);
+    scopy_(n, &h__[(h_dim1 << 1) + 1], &i_one, &eig[1], &i_one);
     i__1 = *n - 1;
-    scopy_(&i__1, &h__[h_dim1 + 2], &c__1, &workl[1], &c__1);
+    scopy_(&i__1, &h__[h_dim1 + 2], &i_one, &workl[1], &i_one);
     sstqrb_(n, &eig[1], &workl[1], &bounds[1], &workl[*n + 1], ierr);
     if (*ierr != 0)
     {

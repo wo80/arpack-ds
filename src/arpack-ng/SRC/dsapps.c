@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static double c_b4 = 0.;
-static double c_b5 = 1.;
-static a_int c__1 = 1;
-static double c_b20 = -1.;
+static double d_zero = 0.;
+static double d_one = 1.;
+static a_int i_one = 1;
+static double d_n1 = -1.;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -256,7 +256,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /*     | kplusp used to accumulate the rotations.     | */
     /*     %----------------------------------------------% */
 
-    dlaset_("All", &kplusp, &kplusp, &c_b4, &c_b5, &q[q_offset], ldq, (ftnlen)3);
+    dlaset_("All", &kplusp, &kplusp, &d_zero, &d_one, &q[q_offset], ldq, (ftnlen)3);
 
     /*     %----------------------------------------------% */
     /*     | Quick return if there are no shifts to apply | */
@@ -303,9 +303,9 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &c__1, &i__, &debug_1.ndigit, "_sapps: deflation at row/column no.", (ftnlen)35);
-                    ivout_(&debug_1.logfil, &c__1, &jj, &debug_1.ndigit, "_sapps: occurred before shift number.", (ftnlen)37);
-                    dvout_(&debug_1.logfil, &c__1, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
+                    ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit, "_sapps: deflation at row/column no.", (ftnlen)35);
+                    ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_sapps: occurred before shift number.", (ftnlen)37);
+                    dvout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
                            "_sapps: the corresponding off d"
                            "iagonal element",
                            (ftnlen)46);
@@ -455,7 +455,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
         if (h__[iend + h_dim1] < 0.)
         {
             h__[iend + h_dim1] = -h__[iend + h_dim1];
-            dscal_(&kplusp, &c_b20, &q[iend * q_dim1 + 1], &c__1);
+            dscal_(&kplusp, &d_n1, &q[iend * q_dim1 + 1], &i_one);
         }
 
         /*        %--------------------------------------------------------% */
@@ -503,11 +503,11 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
         {
             if (msglvl > 0)
             {
-                ivout_(&debug_1.logfil, &c__1, &i__, &debug_1.ndigit,
+                ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit,
                        "_sapp"
                        "s: deflation at row/column no.",
                        (ftnlen)35);
-                dvout_(&debug_1.logfil, &c__1, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
+                dvout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + h_dim1], &debug_1.ndigit,
                        "_sapps: the corresponding off diago"
                        "nal element",
                        (ftnlen)46);
@@ -525,7 +525,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
 
     if (h__[*kev + 1 + h_dim1] > 0.)
     {
-        dgemv_("N", n, &kplusp, &c_b5, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &c__1, &c_b4, &workd[*n + 1], &c__1, (ftnlen)1);
+        dgemv_("N", n, &kplusp, &d_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &d_zero, &workd[*n + 1], &i_one, (ftnlen)1);
     }
 
     /*     %-------------------------------------------------------% */
@@ -539,8 +539,8 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     for (i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = kplusp - i__ + 1;
-        dgemv_("N", n, &i__2, &c_b5, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &c__1, &c_b4, &workd[1], &c__1, (ftnlen)1);
-        dcopy_(n, &workd[1], &c__1, &v[(kplusp - i__ + 1) * v_dim1 + 1], &c__1);
+        dgemv_("N", n, &i__2, &d_one, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &i_one, &d_zero, &workd[1], &i_one, (ftnlen)1);
+        dcopy_(n, &workd[1], &i_one, &v[(kplusp - i__ + 1) * v_dim1 + 1], &i_one);
         /* L130: */
     }
 
@@ -551,7 +551,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     i__1 = *kev;
     for (i__ = 1; i__ <= i__1; ++i__)
     {
-        dcopy_(n, &v[(*np + i__) * v_dim1 + 1], &c__1, &v[i__ * v_dim1 + 1], &c__1);
+        dcopy_(n, &v[(*np + i__) * v_dim1 + 1], &i_one, &v[i__ * v_dim1 + 1], &i_one);
         /* L140: */
     }
 
@@ -562,7 +562,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
 
     if (h__[*kev + 1 + h_dim1] > 0.)
     {
-        dcopy_(n, &workd[*n + 1], &c__1, &v[(*kev + 1) * v_dim1 + 1], &c__1);
+        dcopy_(n, &workd[*n + 1], &i_one, &v[(*kev + 1) * v_dim1 + 1], &i_one);
     }
 
     /*     %-------------------------------------% */
@@ -573,19 +573,19 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /*     |    betak = e_{kev+1}'*H*e_{kev}     | */
     /*     %-------------------------------------% */
 
-    dscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &c__1);
+    dscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &i_one);
     if (h__[*kev + 1 + h_dim1] > 0.)
     {
-        daxpy_(n, &h__[*kev + 1 + h_dim1], &v[(*kev + 1) * v_dim1 + 1], &c__1, &resid[1], &c__1);
+        daxpy_(n, &h__[*kev + 1 + h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
     }
 
     if (msglvl > 1)
     {
-        dvout_(&debug_1.logfil, &c__1, &q[kplusp + *kev * q_dim1], &debug_1.ndigit,
+        dvout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit,
                "_sapps: sigmak of the updated residual vect"
                "or",
                (ftnlen)45);
-        dvout_(&debug_1.logfil, &c__1, &h__[*kev + 1 + h_dim1], &debug_1.ndigit, "_sapps: betak of the updated residual vector", (ftnlen)44);
+        dvout_(&debug_1.logfil, &i_one, &h__[*kev + 1 + h_dim1], &debug_1.ndigit, "_sapps: betak of the updated residual vector", (ftnlen)44);
         dvout_(&debug_1.logfil, kev, &h__[(h_dim1 << 1) + 1], &debug_1.ndigit, "_sapps: updated main diagonal of H for next iteration", (ftnlen)53);
         if (*kev > 1)
         {

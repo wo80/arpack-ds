@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static a_bool c_true = TRUE_;
-static a_int c__1 = 1;
-static float c_b23 = 1.f;
-static float c_b25 = 0.f;
+static a_bool b_true = TRUE_;
+static a_int i_one = 1;
+static float s_one = 1.f;
+static float s_zero = 0.f;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -218,7 +218,7 @@ int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float 
         /* L5: */
     }
     bounds[*n] = 1.f;
-    slahqr_(&c_true, &c_true, n, &c__1, n, &workl[1], n, &ritzr[1], &ritzi[1], &c__1, &c__1, &bounds[1], &c__1, ierr);
+    slahqr_(&b_true, &b_true, n, &i_one, n, &workl[1], n, &ritzr[1], &ritzi[1], &i_one, &i_one, &bounds[1], &i_one, ierr);
     if (*ierr != 0)
     {
         goto L9000;
@@ -269,9 +269,9 @@ int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float 
             /*           | Real eigenvalue case | */
             /*           %----------------------% */
 
-            temp = snrm2_(n, &q[i__ * q_dim1 + 1], &c__1);
+            temp = snrm2_(n, &q[i__ * q_dim1 + 1], &i_one);
             r__1 = 1.f / temp;
-            sscal_(n, &r__1, &q[i__ * q_dim1 + 1], &c__1);
+            sscal_(n, &r__1, &q[i__ * q_dim1 + 1], &i_one);
         }
         else
         {
@@ -286,13 +286,13 @@ int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float 
 
             if (iconj == 0)
             {
-                r__1 = snrm2_(n, &q[i__ * q_dim1 + 1], &c__1);
-                r__2 = snrm2_(n, &q[(i__ + 1) * q_dim1 + 1], &c__1);
+                r__1 = snrm2_(n, &q[i__ * q_dim1 + 1], &i_one);
+                r__2 = snrm2_(n, &q[(i__ + 1) * q_dim1 + 1], &i_one);
                 temp = slapy2_(&r__1, &r__2);
                 r__1 = 1.f / temp;
-                sscal_(n, &r__1, &q[i__ * q_dim1 + 1], &c__1);
+                sscal_(n, &r__1, &q[i__ * q_dim1 + 1], &i_one);
                 r__1 = 1.f / temp;
-                sscal_(n, &r__1, &q[(i__ + 1) * q_dim1 + 1], &c__1);
+                sscal_(n, &r__1, &q[(i__ + 1) * q_dim1 + 1], &i_one);
                 iconj = 1;
             }
             else
@@ -303,7 +303,7 @@ int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float 
         /* L10: */
     }
 
-    sgemv_("T", n, n, &c_b23, &q[q_offset], ldq, &bounds[1], &c__1, &c_b25, &workl[1], &c__1, (ftnlen)1);
+    sgemv_("T", n, n, &s_one, &q[q_offset], ldq, &bounds[1], &i_one, &s_zero, &workl[1], &i_one, (ftnlen)1);
 
     if (msglvl > 1)
     {

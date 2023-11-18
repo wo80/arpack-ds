@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static a_int c__1 = 1;
-static a_bool c_false = FALSE_;
-static double c_b25 = 1.;
-static double c_b47 = 0.;
-static double c_b50 = -1.;
-static a_int c__2 = 2;
+static a_int i_one = 1;
+static a_bool b_false = FALSE_;
+static double d_one = 1.;
+static double d_zero = 0.;
+static double d_n1 = -1.;
+static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -428,11 +428,11 @@ L1000:
 
     if (msglvl > 1)
     {
-        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
                "_naitr: generat"
                "ing Arnoldi vector number",
                (ftnlen)40);
-        dvout_(&debug_1.logfil, &c__1, rnorm, &debug_1.ndigit,
+        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
                "_naitr: B-no"
                "rm of the current residual is",
                (ftnlen)41);
@@ -458,7 +458,7 @@ L1000:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
                "_naitr: ****** "
                "RESTART AT STEP ******",
                (ftnlen)37);
@@ -483,7 +483,7 @@ L30:
     /*           | RSTART = .true. flow returns here.   | */
     /*           %--------------------------------------% */
 
-    dgetv0_(ido, bmat, &itry, &c_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr, (ftnlen)1);
+    dgetv0_(ido, bmat, &itry, &b_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr, (ftnlen)1);
     if (*ido != 99)
     {
         goto L9000;
@@ -518,12 +518,12 @@ L40:
     /*        | machine bound.                                          | */
     /*        %---------------------------------------------------------% */
 
-    dcopy_(n, &resid[1], &c__1, &v[j * v_dim1 + 1], &c__1);
+    dcopy_(n, &resid[1], &i_one, &v[j * v_dim1 + 1], &i_one);
     if (*rnorm >= unfl)
     {
         temp1 = 1. / *rnorm;
-        dscal_(n, &temp1, &v[j * v_dim1 + 1], &c__1);
-        dscal_(n, &temp1, &workd[ipj], &c__1);
+        dscal_(n, &temp1, &v[j * v_dim1 + 1], &i_one);
+        dscal_(n, &temp1, &workd[ipj], &i_one);
     }
     else
     {
@@ -533,8 +533,8 @@ L40:
         /*            | use LAPACK routine SLASCL               | */
         /*            %-----------------------------------------% */
 
-        dlascl_("General", &i__, &i__, rnorm, &c_b25, n, &c__1, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
-        dlascl_("General", &i__, &i__, rnorm, &c_b25, n, &c__1, &workd[ipj], n, &infol, (ftnlen)7);
+        dlascl_("General", &i__, &i__, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
+        dlascl_("General", &i__, &i__, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol, (ftnlen)7);
     }
 
     /*        %------------------------------------------------------% */
@@ -545,7 +545,7 @@ L40:
     step3 = TRUE_;
     ++timing_1.nopx;
     arscnd_(&t2);
-    dcopy_(n, &v[j * v_dim1 + 1], &c__1, &workd[ivj], &c__1);
+    dcopy_(n, &v[j * v_dim1 + 1], &i_one, &workd[ivj], &i_one);
     ipntr[1] = ivj;
     ipntr[2] = irj;
     ipntr[3] = ipj;
@@ -572,7 +572,7 @@ L50:
     /*        | Put another copy of OP*v_{j} into RESID. | */
     /*        %------------------------------------------% */
 
-    dcopy_(n, &workd[irj], &c__1, &resid[1], &c__1);
+    dcopy_(n, &workd[irj], &i_one, &resid[1], &i_one);
 
     /*        %---------------------------------------% */
     /*        | STEP 4:  Finish extending the Arnoldi | */
@@ -596,7 +596,7 @@ L50:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        dcopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        dcopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
 L60:
 
@@ -621,12 +621,12 @@ L60:
 
     if (*(unsigned char *)bmat == 'G')
     {
-        wnorm = ddot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        wnorm = ddot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         wnorm = sqrt((abs(wnorm)));
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        wnorm = dnrm2_(n, &resid[1], &c__1);
+        wnorm = dnrm2_(n, &resid[1], &i_one);
     }
 
     /*        %-----------------------------------------% */
@@ -642,14 +642,14 @@ L60:
     /*        | WORKD(IPJ:IPJ+N-1) contains B*OP*v_{j}.  | */
     /*        %------------------------------------------% */
 
-    dgemv_("T", n, &j, &c_b25, &v[v_offset], ldv, &workd[ipj], &c__1, &c_b47, &h__[j * h_dim1 + 1], &c__1, (ftnlen)1);
+    dgemv_("T", n, &j, &d_one, &v[v_offset], ldv, &workd[ipj], &i_one, &d_zero, &h__[j * h_dim1 + 1], &i_one, (ftnlen)1);
 
     /*        %--------------------------------------% */
     /*        | Orthogonalize r_{j} against V_{j}.   | */
     /*        | RESID contains OP*v_{j}. See STEP 3. | */
     /*        %--------------------------------------% */
 
-    dgemv_("N", n, &j, &c_b50, &v[v_offset], ldv, &h__[j * h_dim1 + 1], &c__1, &c_b25, &resid[1], &c__1, (ftnlen)1);
+    dgemv_("N", n, &j, &d_n1, &v[v_offset], ldv, &h__[j * h_dim1 + 1], &i_one, &d_one, &resid[1], &i_one, (ftnlen)1);
 
     if (j > 1)
     {
@@ -664,7 +664,7 @@ L60:
     if (*(unsigned char *)bmat == 'G')
     {
         ++timing_1.nbx;
-        dcopy_(n, &resid[1], &c__1, &workd[irj], &c__1);
+        dcopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
         ipntr[1] = irj;
         ipntr[2] = ipj;
         *ido = 2;
@@ -677,7 +677,7 @@ L60:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        dcopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        dcopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
 L70:
 
@@ -700,12 +700,12 @@ L70:
 
     if (*(unsigned char *)bmat == 'G')
     {
-        *rnorm = ddot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        *rnorm = ddot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         *rnorm = sqrt((abs(*rnorm)));
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        *rnorm = dnrm2_(n, &resid[1], &c__1);
+        *rnorm = dnrm2_(n, &resid[1], &i_one);
     }
 
     /*        %-----------------------------------------------------------% */
@@ -746,7 +746,7 @@ L80:
     {
         xtemp[0] = wnorm;
         xtemp[1] = *rnorm;
-        dvout_(&debug_1.logfil, &c__2, xtemp, &debug_1.ndigit,
+        dvout_(&debug_1.logfil, &i_two, xtemp, &debug_1.ndigit,
                "_naitr: re-o"
                "rthonalization; wnorm and rnorm are",
                (ftnlen)47);
@@ -758,7 +758,7 @@ L80:
     /*        | WORKD(IRJ:IRJ+J-1) = v(:,1:J)'*WORKD(IPJ:IPJ+N-1). | */
     /*        %----------------------------------------------------% */
 
-    dgemv_("T", n, &j, &c_b25, &v[v_offset], ldv, &workd[ipj], &c__1, &c_b47, &workd[irj], &c__1, (ftnlen)1);
+    dgemv_("T", n, &j, &d_one, &v[v_offset], ldv, &workd[ipj], &i_one, &d_zero, &workd[irj], &i_one, (ftnlen)1);
 
     /*        %---------------------------------------------% */
     /*        | Compute the correction to the residual:     | */
@@ -767,15 +767,15 @@ L80:
     /*        | + v(:,1:J)*WORKD(IRJ:IRJ+J-1)*e'_j.         | */
     /*        %---------------------------------------------% */
 
-    dgemv_("N", n, &j, &c_b50, &v[v_offset], ldv, &workd[irj], &c__1, &c_b25, &resid[1], &c__1, (ftnlen)1);
-    daxpy_(&j, &c_b25, &workd[irj], &c__1, &h__[j * h_dim1 + 1], &c__1);
+    dgemv_("N", n, &j, &d_n1, &v[v_offset], ldv, &workd[irj], &i_one, &d_one, &resid[1], &i_one, (ftnlen)1);
+    daxpy_(&j, &d_one, &workd[irj], &i_one, &h__[j * h_dim1 + 1], &i_one);
 
     orth2 = TRUE_;
     arscnd_(&t2);
     if (*(unsigned char *)bmat == 'G')
     {
         ++timing_1.nbx;
-        dcopy_(n, &resid[1], &c__1, &workd[irj], &c__1);
+        dcopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
         ipntr[1] = irj;
         ipntr[2] = ipj;
         *ido = 2;
@@ -789,7 +789,7 @@ L80:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        dcopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        dcopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
 L90:
 
@@ -809,17 +809,17 @@ L90:
 
     if (*(unsigned char *)bmat == 'G')
     {
-        rnorm1 = ddot_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        rnorm1 = ddot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         rnorm1 = sqrt((abs(rnorm1)));
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        rnorm1 = dnrm2_(n, &resid[1], &c__1);
+        rnorm1 = dnrm2_(n, &resid[1], &i_one);
     }
 
     if (msglvl > 0 && iter > 0)
     {
-        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
                "_naitr: Iterati"
                "ve refinement for Arnoldi residual",
                (ftnlen)49);
@@ -827,7 +827,7 @@ L90:
         {
             xtemp[0] = *rnorm;
             xtemp[1] = rnorm1;
-            dvout_(&debug_1.logfil, &c__2, xtemp, &debug_1.ndigit,
+            dvout_(&debug_1.logfil, &i_two, xtemp, &debug_1.ndigit,
                    "_naitr: "
                    "iterative refinement ; rnorm and rnorm1 are",
                    (ftnlen)51);

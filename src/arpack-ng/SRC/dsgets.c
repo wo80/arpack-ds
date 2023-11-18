@@ -4,8 +4,8 @@
 
 /* Table of constant values */
 
-static a_bool c_true = TRUE_;
-static a_int c__1 = 1;
+static a_bool b_true = TRUE_;
+static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -187,14 +187,14 @@ int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, dou
         /*        %-----------------------------------------------------% */
 
         i__1 = *kev + *np;
-        dsortr_("LA", &c_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
+        dsortr_("LA", &b_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
         kevd2 = *kev / 2;
         if (*kev > 1)
         {
             i__1 = min(kevd2, *np);
-            dswap_(&i__1, &ritz[1], &c__1, &ritz[max(kevd2, *np) + 1], &c__1);
+            dswap_(&i__1, &ritz[1], &i_one, &ritz[max(kevd2, *np) + 1], &i_one);
             i__1 = min(kevd2, *np);
-            dswap_(&i__1, &bounds[1], &c__1, &bounds[max(kevd2, *np) + 1], &c__1);
+            dswap_(&i__1, &bounds[1], &i_one, &bounds[max(kevd2, *np) + 1], &i_one);
         }
     }
     else
@@ -209,7 +209,7 @@ int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, dou
         /*        %----------------------------------------------------% */
 
         i__1 = *kev + *np;
-        dsortr_(which, &c_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
+        dsortr_(which, &b_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
     }
 
     if (*ishift == 1 && *np > 0)
@@ -223,8 +223,8 @@ int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, dou
         /*        | are applied in subroutine dsapps.                     | */
         /*        %-------------------------------------------------------% */
 
-        dsortr_("SM", &c_true, np, &bounds[1], &ritz[1], (ftnlen)2);
-        dcopy_(np, &ritz[1], &c__1, &shifts[1], &c__1);
+        dsortr_("SM", &b_true, np, &bounds[1], &ritz[1], (ftnlen)2);
+        dcopy_(np, &ritz[1], &i_one, &shifts[1], &i_one);
     }
 
     arscnd_(&t1);
@@ -232,8 +232,8 @@ int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, dou
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &c__1, kev, &debug_1.ndigit, "_sgets: KEV is", (ftnlen)14);
-        ivout_(&debug_1.logfil, &c__1, np, &debug_1.ndigit, "_sgets: NP is", (ftnlen)13);
+        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit, "_sgets: KEV is", (ftnlen)14);
+        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit, "_sgets: NP is", (ftnlen)13);
         i__1 = *kev + *np;
         dvout_(&debug_1.logfil, &i__1, &ritz[1], &debug_1.ndigit,
                "_sgets: E"

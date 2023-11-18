@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static a_bool c_true = TRUE_;
-static a_int c__1 = 1;
-static double c_b23 = 1.;
-static double c_b25 = 0.;
+static a_bool b_true = TRUE_;
+static a_int i_one = 1;
+static double d_one = 1.;
+static double d_zero = 0.;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -219,7 +219,7 @@ int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, dou
         /* L5: */
     }
     bounds[*n] = 1.;
-    dlahqr_(&c_true, &c_true, n, &c__1, n, &workl[1], n, &ritzr[1], &ritzi[1], &c__1, &c__1, &bounds[1], &c__1, ierr);
+    dlahqr_(&b_true, &b_true, n, &i_one, n, &workl[1], n, &ritzr[1], &ritzi[1], &i_one, &i_one, &bounds[1], &i_one, ierr);
     if (*ierr != 0)
     {
         goto L9000;
@@ -270,9 +270,9 @@ int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, dou
             /*           | Real eigenvalue case | */
             /*           %----------------------% */
 
-            temp = dnrm2_(n, &q[i__ * q_dim1 + 1], &c__1);
+            temp = dnrm2_(n, &q[i__ * q_dim1 + 1], &i_one);
             d__1 = 1. / temp;
-            dscal_(n, &d__1, &q[i__ * q_dim1 + 1], &c__1);
+            dscal_(n, &d__1, &q[i__ * q_dim1 + 1], &i_one);
         }
         else
         {
@@ -287,13 +287,13 @@ int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, dou
 
             if (iconj == 0)
             {
-                d__1 = dnrm2_(n, &q[i__ * q_dim1 + 1], &c__1);
-                d__2 = dnrm2_(n, &q[(i__ + 1) * q_dim1 + 1], &c__1);
+                d__1 = dnrm2_(n, &q[i__ * q_dim1 + 1], &i_one);
+                d__2 = dnrm2_(n, &q[(i__ + 1) * q_dim1 + 1], &i_one);
                 temp = dlapy2_(&d__1, &d__2);
                 d__1 = 1. / temp;
-                dscal_(n, &d__1, &q[i__ * q_dim1 + 1], &c__1);
+                dscal_(n, &d__1, &q[i__ * q_dim1 + 1], &i_one);
                 d__1 = 1. / temp;
-                dscal_(n, &d__1, &q[(i__ + 1) * q_dim1 + 1], &c__1);
+                dscal_(n, &d__1, &q[(i__ + 1) * q_dim1 + 1], &i_one);
                 iconj = 1;
             }
             else
@@ -304,7 +304,7 @@ int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, dou
         /* L10: */
     }
 
-    dgemv_("T", n, n, &c_b23, &q[q_offset], ldq, &bounds[1], &c__1, &c_b25, &workl[1], &c__1, (ftnlen)1);
+    dgemv_("T", n, n, &d_one, &q[q_offset], ldq, &bounds[1], &i_one, &d_zero, &workl[1], &i_one, (ftnlen)1);
 
     if (msglvl > 1)
     {

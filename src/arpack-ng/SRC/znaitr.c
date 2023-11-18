@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static a_dcomplex c_b1 = {1., 0.};
-static a_dcomplex c_b2 = {0., 0.};
-static a_int c__1 = 1;
-static a_bool c_false = FALSE_;
-static double c_b27 = 1.;
-static a_int c__2 = 2;
+static a_dcomplex z_one = {1., 0.};
+static a_dcomplex z_zero = {0., 0.};
+static a_int i_one = 1;
+static a_bool b_false = FALSE_;
+static double d_one = 1.;
+static a_int i_two = 2;
 
 /* \BeginDoc */
 
@@ -432,11 +432,11 @@ L1000:
 
     if (msglvl > 1)
     {
-        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
                "_naitr: generat"
                "ing Arnoldi vector number",
                (ftnlen)40);
-        dvout_(&debug_1.logfil, &c__1, rnorm, &debug_1.ndigit,
+        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
                "_naitr: B-no"
                "rm of the current residual is",
                (ftnlen)41);
@@ -462,7 +462,7 @@ L1000:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
                "_naitr: ****** "
                "RESTART AT STEP ******",
                (ftnlen)37);
@@ -487,7 +487,7 @@ L30:
     /*           | RSTART = .true. flow returns here.   | */
     /*           %--------------------------------------% */
 
-    zgetv0_(ido, bmat, &itry, &c_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr, (ftnlen)1);
+    zgetv0_(ido, bmat, &itry, &b_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr, (ftnlen)1);
     if (*ido != 99)
     {
         goto L9000;
@@ -522,12 +522,12 @@ L40:
     /*        | machine bound.                                          | */
     /*        %---------------------------------------------------------% */
 
-    zcopy_(n, &resid[1], &c__1, &v[j * v_dim1 + 1], &c__1);
+    zcopy_(n, &resid[1], &i_one, &v[j * v_dim1 + 1], &i_one);
     if (*rnorm >= unfl)
     {
         temp1 = 1. / *rnorm;
-        zdscal_(n, &temp1, &v[j * v_dim1 + 1], &c__1);
-        zdscal_(n, &temp1, &workd[ipj], &c__1);
+        zdscal_(n, &temp1, &v[j * v_dim1 + 1], &i_one);
+        zdscal_(n, &temp1, &workd[ipj], &i_one);
     }
     else
     {
@@ -537,8 +537,8 @@ L40:
         /*            | use LAPACK routine zlascl               | */
         /*            %-----------------------------------------% */
 
-        zlascl_("General", &i__, &i__, rnorm, &c_b27, n, &c__1, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
-        zlascl_("General", &i__, &i__, rnorm, &c_b27, n, &c__1, &workd[ipj], n, &infol, (ftnlen)7);
+        zlascl_("General", &i__, &i__, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
+        zlascl_("General", &i__, &i__, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol, (ftnlen)7);
     }
 
     /*        %------------------------------------------------------% */
@@ -549,7 +549,7 @@ L40:
     step3 = TRUE_;
     ++timing_1.nopx;
     arscnd_(&t2);
-    zcopy_(n, &v[j * v_dim1 + 1], &c__1, &workd[ivj], &c__1);
+    zcopy_(n, &v[j * v_dim1 + 1], &i_one, &workd[ivj], &i_one);
     ipntr[1] = ivj;
     ipntr[2] = irj;
     ipntr[3] = ipj;
@@ -576,7 +576,7 @@ L50:
     /*        | Put another copy of OP*v_{j} into RESID. | */
     /*        %------------------------------------------% */
 
-    zcopy_(n, &workd[irj], &c__1, &resid[1], &c__1);
+    zcopy_(n, &workd[irj], &i_one, &resid[1], &i_one);
 
     /*        %---------------------------------------% */
     /*        | STEP 4:  Finish extending the Arnoldi | */
@@ -600,7 +600,7 @@ L50:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        zcopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        zcopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
 L60:
 
@@ -625,7 +625,7 @@ L60:
 
     if (*(unsigned char *)bmat == 'G')
     {
-        zzdotc_(&z__1, n, &resid[1], &c__1, &workd[ipj], &c__1);
+        zzdotc_(&z__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
         d__1 = cnorm.r;
         d__2 = d_imag(&cnorm);
@@ -633,7 +633,7 @@ L60:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        wnorm = dznrm2_(n, &resid[1], &c__1);
+        wnorm = dznrm2_(n, &resid[1], &i_one);
     }
 
     /*        %-----------------------------------------% */
@@ -649,7 +649,7 @@ L60:
     /*        | WORKD(IPJ:IPJ+N-1) contains B*OP*v_{j}.  | */
     /*        %------------------------------------------% */
 
-    zgemv_("C", n, &j, &c_b1, &v[v_offset], ldv, &workd[ipj], &c__1, &c_b2, &h__[j * h_dim1 + 1], &c__1, (ftnlen)1);
+    zgemv_("C", n, &j, &z_one, &v[v_offset], ldv, &workd[ipj], &i_one, &z_zero, &h__[j * h_dim1 + 1], &i_one, (ftnlen)1);
 
     /*        %--------------------------------------% */
     /*        | Orthogonalize r_{j} against V_{j}.   | */
@@ -657,7 +657,7 @@ L60:
     /*        %--------------------------------------% */
 
     z__1.r = -1., z__1.i = -0.;
-    zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &h__[j * h_dim1 + 1], &c__1, &c_b1, &resid[1], &c__1, (ftnlen)1);
+    zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &h__[j * h_dim1 + 1], &i_one, &z_one, &resid[1], &i_one, (ftnlen)1);
 
     if (j > 1)
     {
@@ -674,7 +674,7 @@ L60:
     if (*(unsigned char *)bmat == 'G')
     {
         ++timing_1.nbx;
-        zcopy_(n, &resid[1], &c__1, &workd[irj], &c__1);
+        zcopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
         ipntr[1] = irj;
         ipntr[2] = ipj;
         *ido = 2;
@@ -687,7 +687,7 @@ L60:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        zcopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        zcopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
 L70:
 
@@ -710,7 +710,7 @@ L70:
 
     if (*(unsigned char *)bmat == 'G')
     {
-        zzdotc_(&z__1, n, &resid[1], &c__1, &workd[ipj], &c__1);
+        zzdotc_(&z__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
         d__1 = cnorm.r;
         d__2 = d_imag(&cnorm);
@@ -718,7 +718,7 @@ L70:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        *rnorm = dznrm2_(n, &resid[1], &c__1);
+        *rnorm = dznrm2_(n, &resid[1], &i_one);
     }
 
     /*        %-----------------------------------------------------------% */
@@ -760,7 +760,7 @@ L80:
     {
         rtemp[0] = wnorm;
         rtemp[1] = *rnorm;
-        dvout_(&debug_1.logfil, &c__2, rtemp, &debug_1.ndigit,
+        dvout_(&debug_1.logfil, &i_two, rtemp, &debug_1.ndigit,
                "_naitr: re-o"
                "rthogonalization; wnorm and rnorm are",
                (ftnlen)49);
@@ -772,7 +772,7 @@ L80:
     /*        | WORKD(IRJ:IRJ+J-1) = v(:,1:J)'*WORKD(IPJ:IPJ+N-1). | */
     /*        %----------------------------------------------------% */
 
-    zgemv_("C", n, &j, &c_b1, &v[v_offset], ldv, &workd[ipj], &c__1, &c_b2, &workd[irj], &c__1, (ftnlen)1);
+    zgemv_("C", n, &j, &z_one, &v[v_offset], ldv, &workd[ipj], &i_one, &z_zero, &workd[irj], &i_one, (ftnlen)1);
 
     /*        %---------------------------------------------% */
     /*        | Compute the correction to the residual:     | */
@@ -782,15 +782,15 @@ L80:
     /*        %---------------------------------------------% */
 
     z__1.r = -1., z__1.i = -0.;
-    zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &workd[irj], &c__1, &c_b1, &resid[1], &c__1, (ftnlen)1);
-    zaxpy_(&j, &c_b1, &workd[irj], &c__1, &h__[j * h_dim1 + 1], &c__1);
+    zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &workd[irj], &i_one, &z_one, &resid[1], &i_one, (ftnlen)1);
+    zaxpy_(&j, &z_one, &workd[irj], &i_one, &h__[j * h_dim1 + 1], &i_one);
 
     orth2 = TRUE_;
     arscnd_(&t2);
     if (*(unsigned char *)bmat == 'G')
     {
         ++timing_1.nbx;
-        zcopy_(n, &resid[1], &c__1, &workd[irj], &c__1);
+        zcopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
         ipntr[1] = irj;
         ipntr[2] = ipj;
         *ido = 2;
@@ -804,7 +804,7 @@ L80:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        zcopy_(n, &resid[1], &c__1, &workd[ipj], &c__1);
+        zcopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
 L90:
 
@@ -824,7 +824,7 @@ L90:
 
     if (*(unsigned char *)bmat == 'G')
     {
-        zzdotc_(&z__1, n, &resid[1], &c__1, &workd[ipj], &c__1);
+        zzdotc_(&z__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
         d__1 = cnorm.r;
         d__2 = d_imag(&cnorm);
@@ -832,12 +832,12 @@ L90:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        rnorm1 = dznrm2_(n, &resid[1], &c__1);
+        rnorm1 = dznrm2_(n, &resid[1], &i_one);
     }
 
     if (msglvl > 0 && iter > 0)
     {
-        ivout_(&debug_1.logfil, &c__1, &j, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
                "_naitr: Iterati"
                "ve refinement for Arnoldi residual",
                (ftnlen)49);
@@ -845,7 +845,7 @@ L90:
         {
             rtemp[0] = *rnorm;
             rtemp[1] = rnorm1;
-            dvout_(&debug_1.logfil, &c__2, rtemp, &debug_1.ndigit,
+            dvout_(&debug_1.logfil, &i_two, rtemp, &debug_1.ndigit,
                    "_naitr: "
                    "iterative refinement ; rnorm and rnorm1 are",
                    (ftnlen)51);

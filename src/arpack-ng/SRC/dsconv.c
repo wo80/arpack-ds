@@ -4,7 +4,7 @@
 
 /* Table of constant values */
 
-static double c_b3 = .66666666666666663;
+static double TWO_THIRDS = .66666666666666663;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -130,7 +130,7 @@ int dsconv_(a_int *n, double *ritz, double *bounds, double *tol, a_int *nconv)
     arscnd_(&t0);
 
     eps23 = dlamch_("Epsilon-Machine", (ftnlen)15);
-    eps23 = pow_dd(&eps23, &c_b3);
+    eps23 = pow_dd(&eps23, &TWO_THIRDS);
 
     *nconv = 0;
     i__1 = *n;

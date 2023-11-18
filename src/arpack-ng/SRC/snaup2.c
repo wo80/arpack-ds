@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static double c_b3 = .66666666666666663;
-static a_int c__1 = 1;
-static a_int c__0 = 0;
-static a_int c__4 = 4;
-static a_bool c_true = TRUE_;
-static a_int c__2 = 2;
+static double TWO_THIRDS = .66666666666666663;
+static a_int i_one = 1;
+static a_int i_zero = 0;
+static a_int i_four = 4;
+static a_bool b_true = TRUE_;
+static a_int i_two = 2;
 
 /* \BeginDoc */
 
@@ -313,7 +313,7 @@ int snaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
 
         eps23 = slamch_("Epsilon-Machine", (ftnlen)15);
         d__1 = (double)eps23;
-        eps23 = pow_dd(&d__1, &c_b3);
+        eps23 = pow_dd(&d__1, &TWO_THIRDS);
 
         nev0 = *nev;
         np0 = *np;
@@ -366,7 +366,7 @@ int snaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
 
     if (getv0)
     {
-        sgetv0_(ido, bmat, &c__1, &initv, n, &c__1, &v[v_offset], ldv, &resid[1], &rnorm, &ipntr[1], &workd[1], info, (ftnlen)1);
+        sgetv0_(ido, bmat, &i_one, &initv, n, &i_one, &v[v_offset], ldv, &resid[1], &rnorm, &ipntr[1], &workd[1], info, (ftnlen)1);
 
         if (*ido != 99)
         {
@@ -420,7 +420,7 @@ int snaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
     /*     | Compute the first NEV steps of the Arnoldi factorization | */
     /*     %----------------------------------------------------------% */
 
-    snaitr_(ido, bmat, n, &c__0, nev, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h__[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
+    snaitr_(ido, bmat, n, &i_zero, nev, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h__[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
 
     /*     %---------------------------------------------------% */
     /*     | ido .ne. 99 implies use of reverse communication  | */
@@ -454,7 +454,7 @@ L1000:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &c__1, &iter, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &iter, &debug_1.ndigit,
                "_naup2: ****"
                " Start of major iteration number ****",
                (ftnlen)49);
@@ -470,11 +470,11 @@ L1000:
 
     if (msglvl > 1)
     {
-        ivout_(&debug_1.logfil, &c__1, nev, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, nev, &debug_1.ndigit,
                "_naup2: The le"
                "ngth of the current Arnoldi factorization",
                (ftnlen)55);
-        ivout_(&debug_1.logfil, &c__1, np, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit,
                "_naup2: Extend "
                "the Arnoldi factorization by",
                (ftnlen)43);
@@ -511,7 +511,7 @@ L20:
 
     if (msglvl > 1)
     {
-        svout_(&debug_1.logfil, &c__1, &rnorm, &debug_1.ndigit,
+        svout_(&debug_1.logfil, &i_one, &rnorm, &debug_1.ndigit,
                "_naup2: Cor"
                "responding B-norm of the residual",
                (ftnlen)44);
@@ -537,13 +537,13 @@ L20:
 
     /* Computing 2nd power */
     i__1 = kplusp;
-    scopy_(&kplusp, &ritzr[1], &c__1, &workl[i__1 * i__1 + 1], &c__1);
+    scopy_(&kplusp, &ritzr[1], &i_one, &workl[i__1 * i__1 + 1], &i_one);
     /* Computing 2nd power */
     i__1 = kplusp;
-    scopy_(&kplusp, &ritzi[1], &c__1, &workl[i__1 * i__1 + kplusp + 1], &c__1);
+    scopy_(&kplusp, &ritzi[1], &i_one, &workl[i__1 * i__1 + kplusp + 1], &i_one);
     /* Computing 2nd power */
     i__1 = kplusp;
-    scopy_(&kplusp, &bounds[1], &c__1, &workl[i__1 * i__1 + (kplusp << 1) + 1], &c__1);
+    scopy_(&kplusp, &bounds[1], &i_one, &workl[i__1 * i__1 + (kplusp << 1) + 1], &i_one);
 
     /*        %---------------------------------------------------% */
     /*        | Select the wanted Ritz values and their bounds    | */
@@ -571,7 +571,7 @@ L20:
     /*        | Convergence test. | */
     /*        %-------------------% */
 
-    scopy_(nev, &bounds[*np + 1], &c__1, &workl[(*np << 1) + 1], &c__1);
+    scopy_(nev, &bounds[*np + 1], &i_one, &workl[(*np << 1) + 1], &i_one);
     snconv_(nev, &ritzr[*np + 1], &ritzi[*np + 1], &workl[(*np << 1) + 1], tol, &nconv);
 
     if (msglvl > 2)
@@ -580,7 +580,7 @@ L20:
         kp[1] = *np;
         kp[2] = numcnv;
         kp[3] = nconv;
-        ivout_(&debug_1.logfil, &c__4, kp, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_four, kp, &debug_1.ndigit,
                "_naup2: NEV, NP"
                ", NUMCNV, NCONV are",
                (ftnlen)34);
@@ -692,7 +692,7 @@ L20:
             s_copy(wprime, "LM", (ftnlen)2, (ftnlen)2);
         }
 
-        ssortc_(wprime, &c_true, &kplusp, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_(wprime, &b_true, &kplusp, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
 
         /*           %----------------------------------------------% */
         /*           | Now sort Ritz values so that converged Ritz  | */
@@ -726,7 +726,7 @@ L20:
             s_copy(wprime, "LI", (ftnlen)2, (ftnlen)2);
         }
 
-        ssortc_(wprime, &c_true, &kplusp, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_(wprime, &b_true, &kplusp, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
 
         /*           %--------------------------------------------------% */
         /*           | Scale the Ritz estimate of each Ritz value       | */
@@ -751,7 +751,7 @@ L20:
         /*           %----------------------------------------------------% */
 
         s_copy(wprime, "LR", (ftnlen)2, (ftnlen)2);
-        ssortc_(wprime, &c_true, &numcnv, &bounds[1], &ritzr[1], &ritzi[1], (ftnlen)2);
+        ssortc_(wprime, &b_true, &numcnv, &bounds[1], &ritzr[1], &ritzi[1], (ftnlen)2);
 
         /*           %----------------------------------------------% */
         /*           | Scale the Ritz estimate back to its original | */
@@ -774,7 +774,7 @@ L20:
         /*           | ritzr, ritzi and bound.                        | */
         /*           %------------------------------------------------% */
 
-        ssortc_(which, &c_true, &nconv, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_(which, &b_true, &nconv, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
 
         if (msglvl > 1)
         {
@@ -852,7 +852,7 @@ L20:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &c__1, &nconv, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,
                "_naup2: no."
                " of \"converged\" Ritz values at this iter.",
                (ftnlen)52);
@@ -860,7 +860,7 @@ L20:
         {
             kp[0] = *nev;
             kp[1] = *np;
-            ivout_(&debug_1.logfil, &c__2, kp, &debug_1.ndigit,
+            ivout_(&debug_1.logfil, &i_two, kp, &debug_1.ndigit,
                    "_naup2: NEV"
                    " and NP are",
                    (ftnlen)22);
@@ -903,13 +903,13 @@ L50:
         /*            | for non-exact shift case.        | */
         /*            %----------------------------------% */
 
-        scopy_(np, &workl[1], &c__1, &ritzr[1], &c__1);
-        scopy_(np, &workl[*np + 1], &c__1, &ritzi[1], &c__1);
+        scopy_(np, &workl[1], &i_one, &ritzr[1], &i_one);
+        scopy_(np, &workl[*np + 1], &i_one, &ritzi[1], &i_one);
     }
 
     if (msglvl > 2)
     {
-        ivout_(&debug_1.logfil, &c__1, np, &debug_1.ndigit,
+        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit,
                "_naup2: The num"
                "ber of shifts to apply ",
                (ftnlen)38);
@@ -950,7 +950,7 @@ L50:
     if (*(unsigned char *)bmat == 'G')
     {
         ++timing_1.nbx;
-        scopy_(n, &resid[1], &c__1, &workd[*n + 1], &c__1);
+        scopy_(n, &resid[1], &i_one, &workd[*n + 1], &i_one);
         ipntr[1] = *n + 1;
         ipntr[2] = 1;
         *ido = 2;
@@ -963,7 +963,7 @@ L50:
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        scopy_(n, &resid[1], &c__1, &workd[1], &c__1);
+        scopy_(n, &resid[1], &i_one, &workd[1], &i_one);
     }
 
 L100:
@@ -981,18 +981,18 @@ L100:
 
     if (*(unsigned char *)bmat == 'G')
     {
-        rnorm = sdot_(n, &resid[1], &c__1, &workd[1], &c__1);
+        rnorm = sdot_(n, &resid[1], &i_one, &workd[1], &i_one);
         rnorm = sqrt((dabs(rnorm)));
     }
     else if (*(unsigned char *)bmat == 'I')
     {
-        rnorm = snrm2_(n, &resid[1], &c__1);
+        rnorm = snrm2_(n, &resid[1], &i_one);
     }
     cnorm = FALSE_;
 
     if (msglvl > 2)
     {
-        svout_(&debug_1.logfil, &c__1, &rnorm, &debug_1.ndigit,
+        svout_(&debug_1.logfil, &i_one, &rnorm, &debug_1.ndigit,
                "_naup2: B-n"
                "orm of residual for compressed factorization",
                (ftnlen)55);

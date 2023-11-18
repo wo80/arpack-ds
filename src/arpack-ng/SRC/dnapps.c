@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static double c_b5 = 0.;
-static double c_b6 = 1.;
-static a_int c__1 = 1;
-static double c_b43 = -1.;
+static double d_zero = 0.;
+static double d_one = 1.;
+static a_int i_one = 1;
+static double d_n1 = -1.;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -292,7 +292,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     /*     | the rotations and reflections              | */
     /*     %--------------------------------------------% */
 
-    dlaset_("All", &kplusp, &kplusp, &c_b5, &c_b6, &q[q_offset], ldq, (ftnlen)3);
+    dlaset_("All", &kplusp, &kplusp, &d_zero, &d_one, &q[q_offset], ldq, (ftnlen)3);
 
     /*     %----------------------------------------------% */
     /*     | Quick return if there are no shifts to apply | */
@@ -318,15 +318,15 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &c__1, &jj, &debug_1.ndigit,
+            ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit,
                    "_napps: sh"
                    "ift number.",
                    (ftnlen)21);
-            dvout_(&debug_1.logfil, &c__1, &sigmar, &debug_1.ndigit,
+            dvout_(&debug_1.logfil, &i_one, &sigmar, &debug_1.ndigit,
                    "_napps"
                    ": The float part of the shift ",
                    (ftnlen)35);
-            dvout_(&debug_1.logfil, &c__1, &sigmai, &debug_1.ndigit,
+            dvout_(&debug_1.logfil, &i_one, &sigmai, &debug_1.ndigit,
                    "_napps"
                    ": The imaginary part of the shift ",
                    (ftnlen)40);
@@ -407,9 +407,9 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &c__1, &i__, &debug_1.ndigit, "_napps: matrix splitting at row/column no.", (ftnlen)42);
-                    ivout_(&debug_1.logfil, &c__1, &jj, &debug_1.ndigit, "_napps: matrix splitting with shift number.", (ftnlen)43);
-                    dvout_(&debug_1.logfil, &c__1, &h__[i__ + 1 + i__ * h_dim1], &debug_1.ndigit,
+                    ivout_(&debug_1.logfil, &i_one, &i__, &debug_1.ndigit, "_napps: matrix splitting at row/column no.", (ftnlen)42);
+                    ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_napps: matrix splitting with shift number.", (ftnlen)43);
+                    dvout_(&debug_1.logfil, &i_one, &h__[i__ + 1 + i__ * h_dim1], &debug_1.ndigit,
                            "_napps: off diagonal "
                            "element.",
                            (ftnlen)29);
@@ -425,11 +425,11 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &c__1, &istart, &debug_1.ndigit,
+            ivout_(&debug_1.logfil, &i_one, &istart, &debug_1.ndigit,
                    "_napps"
                    ": Start of current block ",
                    (ftnlen)31);
-            ivout_(&debug_1.logfil, &c__1, &iend, &debug_1.ndigit,
+            ivout_(&debug_1.logfil, &i_one, &iend, &debug_1.ndigit,
                    "_napps: "
                    "End of current block ",
                    (ftnlen)29);
@@ -587,7 +587,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
                 /*              | G is of the form I - tau*( 1 u )' * ( 1 u' ).       | */
                 /*              %-----------------------------------------------------% */
 
-                dlarfg_(&nr, u, &u[1], &c__1, &tau);
+                dlarfg_(&nr, u, &u[1], &i_one, &tau);
 
                 if (i__ > istart)
                 {
@@ -605,7 +605,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
                 /*              %--------------------------------------% */
 
                 i__3 = kplusp - i__ + 1;
-                dlarf_("Left", &nr, &i__3, u, &c__1, &tau, &h__[i__ + i__ * h_dim1], ldh, &workl[1], (ftnlen)4);
+                dlarf_("Left", &nr, &i__3, u, &i_one, &tau, &h__[i__ + i__ * h_dim1], ldh, &workl[1], (ftnlen)4);
 
                 /*              %---------------------------------------% */
                 /*              | Apply the reflector to the right of H | */
@@ -614,13 +614,13 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
                 /* Computing MIN */
                 i__3 = i__ + 3;
                 ir = min(i__3, iend);
-                dlarf_("Right", &ir, &nr, u, &c__1, &tau, &h__[i__ * h_dim1 + 1], ldh, &workl[1], (ftnlen)5);
+                dlarf_("Right", &ir, &nr, u, &i_one, &tau, &h__[i__ * h_dim1 + 1], ldh, &workl[1], (ftnlen)5);
 
                 /*              %-----------------------------------------------------% */
                 /*              | Accumulate the reflector in the matrix Q;  Q <- Q*G | */
                 /*              %-----------------------------------------------------% */
 
-                dlarf_("Right", &kplusp, &nr, u, &c__1, &tau, &q[i__ * q_dim1 + 1], ldq, &workl[1], (ftnlen)5);
+                dlarf_("Right", &kplusp, &nr, u, &i_one, &tau, &q[i__ * q_dim1 + 1], ldq, &workl[1], (ftnlen)5);
 
                 /*              %----------------------------% */
                 /*              | Prepare for next reflector | */
@@ -675,15 +675,15 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
         if (h__[j + 1 + j * h_dim1] < 0.)
         {
             i__2 = kplusp - j + 1;
-            dscal_(&i__2, &c_b43, &h__[j + 1 + j * h_dim1], ldh);
+            dscal_(&i__2, &d_n1, &h__[j + 1 + j * h_dim1], ldh);
             /* Computing MIN */
             i__3 = j + 2;
             i__2 = min(i__3, kplusp);
-            dscal_(&i__2, &c_b43, &h__[(j + 1) * h_dim1 + 1], &c__1);
+            dscal_(&i__2, &d_n1, &h__[(j + 1) * h_dim1 + 1], &i_one);
             /* Computing MIN */
             i__3 = j + *np + 1;
             i__2 = min(i__3, kplusp);
-            dscal_(&i__2, &c_b43, &q[(j + 1) * q_dim1 + 1], &c__1);
+            dscal_(&i__2, &d_n1, &q[(j + 1) * q_dim1 + 1], &i_one);
         }
         /* L120: */
     }
@@ -722,7 +722,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
 
     if (h__[*kev + 1 + *kev * h_dim1] > 0.)
     {
-        dgemv_("N", n, &kplusp, &c_b6, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &c__1, &c_b5, &workd[*n + 1], &c__1, (ftnlen)1);
+        dgemv_("N", n, &kplusp, &d_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &d_zero, &workd[*n + 1], &i_one, (ftnlen)1);
     }
 
     /*     %----------------------------------------------------------% */
@@ -734,8 +734,8 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     for (i__ = 1; i__ <= i__1; ++i__)
     {
         i__2 = kplusp - i__ + 1;
-        dgemv_("N", n, &i__2, &c_b6, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &c__1, &c_b5, &workd[1], &c__1, (ftnlen)1);
-        dcopy_(n, &workd[1], &c__1, &v[(kplusp - i__ + 1) * v_dim1 + 1], &c__1);
+        dgemv_("N", n, &i__2, &d_one, &v[v_offset], ldv, &q[(*kev - i__ + 1) * q_dim1 + 1], &i_one, &d_zero, &workd[1], &i_one, (ftnlen)1);
+        dcopy_(n, &workd[1], &i_one, &v[(kplusp - i__ + 1) * v_dim1 + 1], &i_one);
         /* L140: */
     }
 
@@ -746,7 +746,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     i__1 = *kev;
     for (i__ = 1; i__ <= i__1; ++i__)
     {
-        dcopy_(n, &v[(kplusp - *kev + i__) * v_dim1 + 1], &c__1, &v[i__ * v_dim1 + 1], &c__1);
+        dcopy_(n, &v[(kplusp - *kev + i__) * v_dim1 + 1], &i_one, &v[i__ * v_dim1 + 1], &i_one);
         /* L150: */
     }
 
@@ -756,7 +756,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
 
     if (h__[*kev + 1 + *kev * h_dim1] > 0.)
     {
-        dcopy_(n, &workd[*n + 1], &c__1, &v[(*kev + 1) * v_dim1 + 1], &c__1);
+        dcopy_(n, &workd[*n + 1], &i_one, &v[(*kev + 1) * v_dim1 + 1], &i_one);
     }
 
     /*     %-------------------------------------% */
@@ -767,17 +767,17 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     /*     |    betak = e_{kev+1}'*H*e_{kev}     | */
     /*     %-------------------------------------% */
 
-    dscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &c__1);
+    dscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &i_one);
     if (h__[*kev + 1 + *kev * h_dim1] > 0.)
     {
-        daxpy_(n, &h__[*kev + 1 + *kev * h_dim1], &v[(*kev + 1) * v_dim1 + 1], &c__1, &resid[1], &c__1);
+        daxpy_(n, &h__[*kev + 1 + *kev * h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
     }
 
     if (msglvl > 1)
     {
-        dvout_(&debug_1.logfil, &c__1, &q[kplusp + *kev * q_dim1], &debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}", (ftnlen)40);
-        dvout_(&debug_1.logfil, &c__1, &h__[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}", (ftnlen)37);
-        ivout_(&debug_1.logfil, &c__1, kev, &debug_1.ndigit,
+        dvout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}", (ftnlen)40);
+        dvout_(&debug_1.logfil, &i_one, &h__[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}", (ftnlen)37);
+        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit,
                "_napps: Order "
                "of the final Hessenberg matrix ",
                (ftnlen)45);

@@ -4,7 +4,7 @@
 
 /* Table of constant values */
 
-static a_int c__1 = 1;
+static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -143,7 +143,7 @@ int ssesrt_(char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a,
                 x[j + igap] = temp;
                 if (*apply)
                 {
-                    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * a_dim1 + 1], &c__1);
+                    sswap_(na, &a[j * a_dim1 + 1], &i_one, &a[(j + igap) * a_dim1 + 1], &i_one);
                 }
             }
             else
@@ -185,7 +185,7 @@ int ssesrt_(char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a,
                 x[j + igap] = temp;
                 if (*apply)
                 {
-                    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * a_dim1 + 1], &c__1);
+                    sswap_(na, &a[j * a_dim1 + 1], &i_one, &a[(j + igap) * a_dim1 + 1], &i_one);
                 }
             }
             else
@@ -227,7 +227,7 @@ int ssesrt_(char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a,
                 x[j + igap] = temp;
                 if (*apply)
                 {
-                    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * a_dim1 + 1], &c__1);
+                    sswap_(na, &a[j * a_dim1 + 1], &i_one, &a[(j + igap) * a_dim1 + 1], &i_one);
                 }
             }
             else
@@ -269,7 +269,7 @@ int ssesrt_(char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a,
                 x[j + igap] = temp;
                 if (*apply)
                 {
-                    sswap_(na, &a[j * a_dim1 + 1], &c__1, &a[(j + igap) * a_dim1 + 1], &c__1);
+                    sswap_(na, &a[j * a_dim1 + 1], &i_one, &a[(j + igap) * a_dim1 + 1], &i_one);
                 }
             }
             else

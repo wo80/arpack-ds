@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static double c_b3 = .66666666666666663;
-static a_int c__1 = 1;
-static float c_b37 = 0.f;
-static float c_b38 = 1.f;
-static a_bool c_true = TRUE_;
-static float c_b64 = -1.f;
+static double TWO_THIRDS = .66666666666666663;
+static a_int i_one = 1;
+static float s_zero = 0.f;
+static float s_one = 1.f;
+static a_bool b_true = TRUE_;
+static float s_n1 = -1.f;
 
 /* \BeginDoc */
 
@@ -442,7 +442,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
 
     eps23 = slamch_("Epsilon-Machine", (ftnlen)15);
     d__1 = (double)eps23;
-    eps23 = pow_dd(&d__1, &c_b3);
+    eps23 = pow_dd(&d__1, &TWO_THIRDS);
 
     /*     %--------------% */
     /*     | Quick return | */
@@ -692,11 +692,11 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &c__1, &numcnv, &debug_1.ndigit,
+            ivout_(&debug_1.logfil, &i_one, &numcnv, &debug_1.ndigit,
                    "_neupd"
                    ": Number of specified eigenvalues",
                    (ftnlen)39);
-            ivout_(&debug_1.logfil, &c__1, &nconv, &debug_1.ndigit,
+            ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,
                    "_neupd:"
                    " Number of \"converged\" eigenvalues",
                    (ftnlen)41);
@@ -716,10 +716,10 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
         /*        %-----------------------------------------------------------% */
 
         i__1 = ldh * *ncv;
-        scopy_(&i__1, &workl[ih], &c__1, &workl[iuptri], &c__1);
-        slaset_("All", ncv, ncv, &c_b37, &c_b38, &workl[invsub], &ldq, (ftnlen)3);
-        slahqr_(&c_true, &c_true, ncv, &c__1, ncv, &workl[iuptri], &ldh, &workl[iheigr], &workl[iheigi], &c__1, ncv, &workl[invsub], &ldq, &ierr);
-        scopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &c__1);
+        scopy_(&i__1, &workl[ih], &i_one, &workl[iuptri], &i_one);
+        slaset_("All", ncv, ncv, &s_zero, &s_one, &workl[invsub], &ldq, (ftnlen)3);
+        slahqr_(&b_true, &b_true, ncv, &i_one, ncv, &workl[iuptri], &ldh, &workl[iheigr], &workl[iheigi], &i_one, ncv, &workl[invsub], &ldq, &ierr);
+        scopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
 
         if (ierr != 0)
         {
@@ -748,7 +748,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
             /*           | Reorder the computed upper quasi-triangular matrix. | */
             /*           %-----------------------------------------------------% */
 
-            strsen_("None", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheigr], &workl[iheigi], &nconv2, &conds, &sep, &workl[ihbds], ncv, iwork, &c__1, &ierr, (ftnlen)4, (ftnlen)1);
+            strsen_("None", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheigr], &workl[iheigi], &nconv2, &conds, &sep, &workl[ihbds], ncv, iwork, &i_one, &ierr, (ftnlen)4, (ftnlen)1);
 
             if (nconv2 < nconv)
             {
@@ -781,7 +781,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
         /*        | converged Ritz values.                | */
         /*        %---------------------------------------% */
 
-        scopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &c__1);
+        scopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
 
         /*        %----------------------------------------------------% */
         /*        | Place the computed eigenvalues of H into DR and DI | */
@@ -790,8 +790,8 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
 
         if (s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) == 0)
         {
-            scopy_(&nconv, &workl[iheigr], &c__1, &dr[1], &c__1);
-            scopy_(&nconv, &workl[iheigi], &c__1, &di[1], &c__1);
+            scopy_(&nconv, &workl[iheigr], &i_one, &dr[1], &i_one);
+            scopy_(&nconv, &workl[iheigi], &i_one, &di[1], &i_one);
         }
 
         /*        %----------------------------------------------------------% */
@@ -832,8 +832,8 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
 
             if (workl[invsub + (j - 1) * ldq + j - 1] < 0.f)
             {
-                sscal_(&nconv, &c_b64, &workl[iuptri + j - 1], &ldq);
-                sscal_(&nconv, &c_b64, &workl[iuptri + (j - 1) * ldq], &c__1);
+                sscal_(&nconv, &s_n1, &workl[iuptri + j - 1], &ldq);
+                sscal_(&nconv, &s_n1, &workl[iuptri + (j - 1) * ldq], &i_one);
             }
 
             /* L20: */
@@ -861,7 +861,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
                 /* L30: */
             }
 
-            strevc_("Right", "Select", &select[1], ncv, &workl[iuptri], &ldq, vl, &c__1, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &ierr, (ftnlen)5, (ftnlen)6);
+            strevc_("Right", "Select", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &ierr, (ftnlen)5, (ftnlen)6);
 
             if (ierr != 0)
             {
@@ -889,9 +889,9 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
                     /*                 | real eigenvalue case | */
                     /*                 %----------------------% */
 
-                    temp = snrm2_(ncv, &workl[invsub + (j - 1) * ldq], &c__1);
+                    temp = snrm2_(ncv, &workl[invsub + (j - 1) * ldq], &i_one);
                     r__1 = 1.f / temp;
-                    sscal_(ncv, &r__1, &workl[invsub + (j - 1) * ldq], &c__1);
+                    sscal_(ncv, &r__1, &workl[invsub + (j - 1) * ldq], &i_one);
                 }
                 else
                 {
@@ -906,13 +906,13 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
 
                     if (iconj == 0)
                     {
-                        r__1 = snrm2_(ncv, &workl[invsub + (j - 1) * ldq], &c__1);
-                        r__2 = snrm2_(ncv, &workl[invsub + j * ldq], &c__1);
+                        r__1 = snrm2_(ncv, &workl[invsub + (j - 1) * ldq], &i_one);
+                        r__2 = snrm2_(ncv, &workl[invsub + j * ldq], &i_one);
                         temp = slapy2_(&r__1, &r__2);
                         r__1 = 1.f / temp;
-                        sscal_(ncv, &r__1, &workl[invsub + (j - 1) * ldq], &c__1);
+                        sscal_(ncv, &r__1, &workl[invsub + (j - 1) * ldq], &i_one);
                         r__1 = 1.f / temp;
-                        sscal_(ncv, &r__1, &workl[invsub + j * ldq], &c__1);
+                        sscal_(ncv, &r__1, &workl[invsub + j * ldq], &i_one);
                         iconj = 1;
                     }
                     else
@@ -924,7 +924,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
                 /* L40: */
             }
 
-            sgemv_("T", ncv, &nconv, &c_b38, &workl[invsub], &ldq, &workl[ihbds], &c__1, &c_b37, &workev[1], &c__1, (ftnlen)1);
+            sgemv_("T", ncv, &nconv, &s_one, &workl[invsub], &ldq, &workl[ihbds], &i_one, &s_zero, &workev[1], &i_one, (ftnlen)1);
 
             iconj = 0;
             i__1 = nconv;
@@ -955,7 +955,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
 
             if (msglvl > 2)
             {
-                scopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &c__1);
+                scopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
                 svout_(&debug_1.logfil, ncv, &workl[ihbds], &debug_1.ndigit, "_neupd: Last row of the eigenvector matrix for T", (ftnlen)48);
                 if (msglvl > 3)
                 {
@@ -970,7 +970,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
             /*           | Copy Ritz estimates into workl(ihbds) | */
             /*           %---------------------------------------% */
 
-            scopy_(&nconv, &workev[1], &c__1, &workl[ihbds], &c__1);
+            scopy_(&nconv, &workev[1], &i_one, &workl[ihbds], &i_one);
 
             /*           %---------------------------------------------------------% */
             /*           | Compute the QR factorization of the eigenvector matrix  | */
@@ -990,7 +990,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
 
             sorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &z__[z_offset], ldz, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
 
-            strmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &c_b38, &workl[invsub], &ldq, &z__[z_offset], ldz, (ftnlen)5, (ftnlen)5, (ftnlen)12, (ftnlen)8);
+            strmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &s_one, &workl[invsub], &ldq, &z__[z_offset], ldz, (ftnlen)5, (ftnlen)5, (ftnlen)12, (ftnlen)8);
         }
     }
     else
@@ -1001,11 +1001,11 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
         /*        | Place the Ritz values computed SNAUPD into DR and DI | */
         /*        %------------------------------------------------------% */
 
-        scopy_(&nconv, &workl[ritzr], &c__1, &dr[1], &c__1);
-        scopy_(&nconv, &workl[ritzi], &c__1, &di[1], &c__1);
-        scopy_(&nconv, &workl[ritzr], &c__1, &workl[iheigr], &c__1);
-        scopy_(&nconv, &workl[ritzi], &c__1, &workl[iheigi], &c__1);
-        scopy_(&nconv, &workl[bounds], &c__1, &workl[ihbds], &c__1);
+        scopy_(&nconv, &workl[ritzr], &i_one, &dr[1], &i_one);
+        scopy_(&nconv, &workl[ritzi], &i_one, &di[1], &i_one);
+        scopy_(&nconv, &workl[ritzr], &i_one, &workl[iheigr], &i_one);
+        scopy_(&nconv, &workl[ritzi], &i_one, &workl[iheigi], &i_one);
+        scopy_(&nconv, &workl[bounds], &i_one, &workl[ihbds], &i_one);
     }
 
     /*     %------------------------------------------------% */
@@ -1019,7 +1019,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
 
         if (*rvec)
         {
-            sscal_(ncv, &rnorm, &workl[ihbds], &c__1);
+            sscal_(ncv, &rnorm, &workl[ihbds], &i_one);
         }
     }
     else
@@ -1036,7 +1036,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
 
             if (*rvec)
             {
-                sscal_(ncv, &rnorm, &workl[ihbds], &c__1);
+                sscal_(ncv, &rnorm, &workl[ihbds], &i_one);
             }
 
             i__1 = *ncv;
@@ -1088,14 +1088,14 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
                 /* L80: */
             }
 
-            scopy_(&nconv, &workl[iheigr], &c__1, &dr[1], &c__1);
-            scopy_(&nconv, &workl[iheigi], &c__1, &di[1], &c__1);
+            scopy_(&nconv, &workl[iheigr], &i_one, &dr[1], &i_one);
+            scopy_(&nconv, &workl[iheigi], &i_one, &di[1], &i_one);
         }
         else if (s_cmp(type__, "REALPT", (ftnlen)6, (ftnlen)6) == 0 || s_cmp(type__, "IMAGPT", (ftnlen)6, (ftnlen)6) == 0)
         {
 
-            scopy_(&nconv, &workl[iheigr], &c__1, &dr[1], &c__1);
-            scopy_(&nconv, &workl[iheigi], &c__1, &di[1], &c__1);
+            scopy_(&nconv, &workl[iheigr], &i_one, &dr[1], &i_one);
+            scopy_(&nconv, &workl[iheigi], &i_one, &di[1], &i_one);
         }
     }
 
@@ -1180,7 +1180,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
         /*        | purify all the Ritz vectors together. | */
         /*        %---------------------------------------% */
 
-        sger_(n, &nconv, &c_b38, &resid[1], &c__1, &workev[1], &c__1, &z__[z_offset], ldz);
+        sger_(n, &nconv, &s_one, &resid[1], &i_one, &workev[1], &i_one, &z__[z_offset], ldz);
     }
 
 L9000:

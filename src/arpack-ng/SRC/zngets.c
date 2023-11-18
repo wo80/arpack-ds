@@ -4,8 +4,8 @@
 
 /* Table of constant values */
 
-static a_bool c_true = TRUE_;
-static a_int c__1 = 1;
+static a_bool b_true = TRUE_;
+static a_int i_one = 1;
 
 /* \BeginDoc */
 
@@ -159,7 +159,7 @@ int zngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_dcomplex *ritz,
     msglvl = debug_1.mcgets;
 
     i__1 = *kev + *np;
-    zsortc_(which, &c_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
+    zsortc_(which, &b_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
 
     if (*ishift == 1)
     {
@@ -173,7 +173,7 @@ int zngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_dcomplex *ritz,
         /*        | Be careful and use 'SM' since we want to sort BOUNDS! | */
         /*        %-------------------------------------------------------% */
 
-        zsortc_("SM", &c_true, np, &bounds[1], &ritz[1], (ftnlen)2);
+        zsortc_("SM", &b_true, np, &bounds[1], &ritz[1], (ftnlen)2);
     }
 
     arscnd_(&t1);
@@ -181,8 +181,8 @@ int zngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_dcomplex *ritz,
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &c__1, kev, &debug_1.ndigit, "_ngets: KEV is", (ftnlen)14);
-        ivout_(&debug_1.logfil, &c__1, np, &debug_1.ndigit, "_ngets: NP is", (ftnlen)13);
+        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit, "_ngets: KEV is", (ftnlen)14);
+        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit, "_ngets: NP is", (ftnlen)13);
         i__1 = *kev + *np;
         zvout_(&debug_1.logfil, &i__1, &ritz[1], &debug_1.ndigit,
                "_ngets: E"
