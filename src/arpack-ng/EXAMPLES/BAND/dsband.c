@@ -1,0 +1,1113 @@
+/* D:\projects\Fortran\arpack-ng-3.9.1-patched\EXAMPLES\BAND\dsband.f -- translated by f2c (version 20230428).
+   You must link the resulting object file with libf2c:
+	on Microsoft Windows system, link with libf2c.lib;
+	on Linux or Unix systems, link with .../path/to/libf2c.a -lm
+	or, if you install libf2c.a in a standard place, with -lf2c -lm
+	-- in that order, at the end of the command line, as in
+		cc *.o -lf2c -lm
+	Source for libf2c is in /netlib/f2c/libf2c.zip, e.g.,
+
+		http://www.netlib.org/f2c/libf2c.zip
+*/
+
+#include "f2c.h"
+
+/* Table of constant values */
+
+static integer c__9 = 9;
+static integer c__1 = 1;
+static doublereal c_b50 = 1.;
+static doublereal c_b52 = 0.;
+static integer c__3 = 3;
+
+/* \BeginDoc */
+
+/* \Name: dsband */
+
+/* \Description: */
+
+/*  This subroutine returns the converged approximations to eigenvalues */
+/*  of A*z = lambda*B*z and (optionally): */
+
+/*      (1) The corresponding approximate eigenvectors; */
+
+/*      (2) An orthonormal (Lanczos) basis for the associated approximate */
+/*          invariant subspace; */
+
+/*      (3) Both. */
+
+/*  Matrices A and B are stored in LAPACK-style band form. */
+
+/*  There is negligible additional cost to obtain eigenvectors.  An orthonormal */
+/*  (Lanczos) basis is always computed.  There is an additional storage cost */
+/*  of n*nev if both are requested (in this case a separate array Z must be */
+/*  supplied). */
+
+/*  The approximate eigenvalues and eigenvectors of  A*z = lambda*B*z */
+/*  are called Ritz values and Ritz vectors respectively.  They are referred */
+/*  to as such in the comments that follow.  The computed orthonormal basis */
+/*  for the invariant subspace corresponding to these Ritz values is referred */
+/*  to as a Lanczos basis. */
+
+/*  dsband can be called with one of the following modes: */
+
+/*  Mode 1:  A*x = lambda*x, A symmetric */
+/*           ===> OP = A  and  B = I. */
+
+/*  Mode 2:  A*x = lambda*M*x, A symmetric, M symmetric positive definite */
+/*           ===> OP = inv[M]*A  and  B = M. */
+/*           ===> (If M can be factored see remark 3 in DSAUPD) */
+
+/*  Mode 3:  K*x = lambda*M*x, K symmetric, M symmetric positive semi-definite */
+/*           ===> OP = (inv[K - sigma*M])*M  and  B = M. */
+/*           ===> Shift-and-Invert mode */
+
+/*  Mode 4:  K*x = lambda*KG*x, K symmetric positive semi-definite, */
+/*           KG symmetric indefinite */
+/*           ===> OP = (inv[K - sigma*KG])*K  and  B = K. */
+/*           ===> Buckling mode */
+
+/*  Mode 5:  A*x = lambda*M*x, A symmetric, M symmetric positive semi-definite */
+/*           ===> OP = inv[A - sigma*M]*[A + sigma*M]  and  B = M. */
+/*           ===> Cayley transformed mode */
+
+/*  The choice of mode must be specified in IPARAM(7) defined below. */
+
+/* \Usage */
+/*   call dsband */
+/*      ( RVEC, HOWMNY, SELECT, D, Z, LDZ, SIGMA, N, AB, MB, LDA, */
+/*        RFAC, KL, KU, WHICH, BMAT, NEV, TOL, RESID, NCV, V, */
+/*        LDV, IPARAM, WORKD, WORKL, LWORKL, IWORK, INFO ) */
+
+/* \Arguments */
+
+/*  RVEC    Logical (INPUT) */
+/*          Specifies whether Ritz vectors corresponding to the Ritz value */
+/*          approximations to the eigenproblem A*z = lambda*B*z are computed. */
+
+/*             RVEC = .FALSE.     Compute Ritz values only. */
+
+/*             RVEC = .TRUE.      Compute the associated Ritz vectors. */
+
+/*  HOWMNY  Character*1  (INPUT) */
+/*          Specifies how many Ritz vectors are wanted and the form of Z */
+/*          the matrix of Ritz vectors. See remark 1 below. */
+/*          = 'A': compute all Ritz vectors; */
+/*          = 'S': compute some of the Ritz vectors, specified */
+/*                 by the logical array SELECT. */
+
+/*  SELECT  Logical array of dimension NCV.  (INPUT) */
+/*          If HOWMNY = 'S', SELECT specifies the Ritz vectors to be */
+/*          computed. To select the Ritz vector corresponding to a */
+/*          Ritz value D(j), SELECT(j) must be set to .TRUE.. */
+/*          If HOWMNY = 'A' , SELECT is not referenced. */
+
+/*  D       Double precision array of dimension NEV.  (OUTPUT) */
+/*          On exit, D contains the Ritz value approximations to the */
+/*          eigenvalues of A*z = lambda*B*z. The values are returned */
+/*          in ascending order. If IPARAM(7) = 3,4,5 then D represents */
+/*          the Ritz values of OP computed by dsaupd transformed to */
+/*          those of the original eigensystem A*z = lambda*B*z. If */
+/*          IPARAM(7) = 1,2 then the Ritz values of OP are the same */
+/*          as the those of A*z = lambda*B*z. */
+
+/*  Z       Double precision N by NEV array if HOWMNY = 'A'.  (OUTPUT) */
+/*          On exit, Z contains the B-orthonormal Ritz vectors of the */
+/*          eigensystem A*z = lambda*B*z corresponding to the Ritz */
+/*          value approximations. */
+
+/*          If  RVEC = .FALSE. then Z is not referenced. */
+/*          NOTE: The array Z may be set equal to first NEV columns of the */
+/*          Lanczos basis array V computed by DSAUPD. */
+
+/*  LDZ     Integer.  (INPUT) */
+/*          The leading dimension of the array Z.  If Ritz vectors are */
+/*          desired, then  LDZ .ge.  max( 1, N ).  In any case,  LDZ .ge. 1. */
+
+/*  SIGMA   Double precision  (INPUT) */
+/*          If IPARAM(7) = 3,4,5 represents the shift. Not referenced if */
+/*          IPARAM(7) = 1 or 2. */
+
+/*  N       Integer.  (INPUT) */
+/*          Dimension of the eigenproblem. */
+
+/*  AB      Double precision array of dimension LDA by N. (INPUT) */
+/*          The matrix A in band storage, in rows KL+1 to */
+/*          2*KL+KU+1; rows 1 to KL of the array need not be set. */
+/*          The j-th column of A is stored in the j-th column of the */
+/*          array AB as follows: */
+/*          AB(kl+ku+1+i-j,j) = A(i,j) for max(1,j-ku)<=i<=min(m,j+kl) */
+
+/*  MB      Double precision array of dimension LDA by N. (INPUT) */
+/*          The matrix M in band storage, in rows KL+1 to */
+/*          2*KL+KU+1; rows 1 to KL of the array need not be set. */
+/*          The j-th column of M is stored in the j-th column of the */
+/*          array AB as follows: */
+/*          MB(kl+ku+1+i-j,j) = M(i,j) for max(1,j-ku)<=i<=min(m,j+kl) */
+/*          Not referenced if IPARAM(7) = 1 */
+
+/*  LDA     Integer. (INPUT) */
+/*          Leading dimension of AB, MB, RFAC. */
+
+/*  RFAC    Double precision array of LDA by N. (WORKSPACE/OUTPUT) */
+/*          RFAC is used to store the LU factors of MB when IPARAM(7) = 2 */
+/*          is invoked.  It is used to store the LU factors of */
+/*          (A-sigma*M) when IPARAM(7) = 3,4,5 is invoked. */
+/*          It is not referenced when IPARAM(7) = 1. */
+
+/*  KL      Integer. (INPUT) */
+/*          Max(number of subdiagonals of A, number of subdiagonals of M) */
+
+/*  KU      Integer. (OUTPUT) */
+/*          Max(number of superdiagonals of A, number of superdiagonals of M) */
+
+/*  WHICH   Character*2.  (INPUT) */
+/*          When IPARAM(7)= 1 or 2,  WHICH can be set to any one of */
+/*          the following. */
+
+/*            'LM' -> want the NEV eigenvalues of largest magnitude. */
+/*            'SM' -> want the NEV eigenvalues of smallest magnitude. */
+/*            'LA' -> want the NEV eigenvalues of largest REAL part. */
+/*            'SA' -> want the NEV eigenvalues of smallest REAL part. */
+/*            'BE' -> Compute NEV eigenvalues, half from each end of the */
+/*                    spectrum.  When NEV is odd, compute one more from */
+/*                    the high end than from the low end. */
+
+/*          When IPARAM(7) = 3, 4, or 5,  WHICH should be set to 'LM' only. */
+
+/*  BMAT    Character*1.  (INPUT) */
+/*          BMAT specifies the type of the matrix B that defines the */
+/*          semi-inner product for the operator OP. */
+/*          BMAT = 'I' -> standard eigenvalue problem A*x = lambda*x */
+/*          BMAT = 'G' -> generalized eigenvalue problem A*x = lambda*M*x */
+/*  NEV     Integer. (INPUT) */
+/*          Number of eigenvalues of OP to be computed. */
+
+/*  TOL     Double precision scalar.  (INPUT) */
+/*          Stopping criterion: the relative accuracy of the Ritz value */
+/*          is considered acceptable if BOUNDS(I) .LE. TOL*ABS(RITZ(I)). */
+/*          If TOL .LE. 0. is passed a default is set: */
+/*          DEFAULT = DLAMCH('EPS')  (machine precision as computed */
+/*                    by the LAPACK auxiliary subroutine DLAMCH). */
+
+/*  RESID   Double precision array of length N.  (INPUT/OUTPUT) */
+/*          On INPUT: */
+/*          If INFO .EQ. 0, a random initial residual vector is used. */
+/*          If INFO .NE. 0, RESID contains the initial residual vector, */
+/*                          possibly from a previous run. */
+/*          On OUTPUT: */
+/*          RESID contains the final residual vector. */
+
+/*  NCV     Integer.  (INPUT) */
+/*          Number of columns of the matrix V (less than or equal to N). */
+/*          Represents the dimension of the Lanczos basis constructed */
+/*          by dsaupd for OP. */
+
+/*  V       Double precision array N by NCV.  (OUTPUT) */
+/*          Upon INPUT: the NCV columns of V contain the Lanczos basis */
+/*                      vectors as constructed by dsaupd for OP. */
+/*          Upon OUTPUT: If RVEC = .TRUE. the first NCONV=IPARAM(5) columns */
+/*                       represent the Ritz vectors that span the desired */
+/*                       invariant subspace. */
+/*          NOTE: The array Z may be set equal to first NEV columns of the */
+/*          Lanczos basis vector array V computed by dsaupd. In this case */
+/*          if RVEC=.TRUE., the first NCONV=IPARAM(5) columns of V contain */
+/*          the desired Ritz vectors. */
+
+/*  LDV     Integer.  (INPUT) */
+/*          Leading dimension of V exactly as declared in the calling */
+/*          program. */
+
+/*  IPARAM  Integer array of length 11.  (INPUT/OUTPUT) */
+/*          IPARAM(1) = ISHIFT: */
+/*          The shifts selected at each iteration are used to restart */
+/*          the Arnoldi iteration in an implicit fashion. */
+/*          It is set to 1 in this subroutine.  The user do not need */
+/*          to set this parameter. */
+/*          ------------------------------------------------------------ */
+/*          ISHIFT = 1: exact shifts with respect to the reduced */
+/*                      tridiagonal matrix T.  This is equivalent to */
+/*                      restarting the iteration with a starting vector */
+/*                      that is a linear combination of Ritz vectors */
+/*                      associated with the "wanted" Ritz values. */
+/*          ------------------------------------------------------------- */
+
+/*          IPARAM(2) = No longer referenced. */
+
+/*          IPARAM(3) = MXITER */
+/*          On INPUT:  max number of Arnoldi update iterations allowed. */
+/*          On OUTPUT: actual number of Arnoldi update iterations taken. */
+
+/*          IPARAM(4) = NB: blocksize to be used in the recurrence. */
+/*          The code currently works only for NB = 1. */
+
+/*          IPARAM(5) = NCONV: number of "converged" eigenvalues. */
+/*          This represents the number of Ritz values that satisfy */
+/*          the convergence criterion. */
+
+/*          IPARAM(6) = IUPD */
+/*          No longer referenced. Implicit restarting is ALWAYS used. */
+
+/*          IPARAM(7) = MODE */
+/*          On INPUT determines what type of eigenproblem is being solved. */
+/*          Must be 1,2,3,4,5; See under \Description of dsband for the */
+/*          five modes available. */
+
+/*          IPARAM(8) = NP */
+/*          Not referenced. */
+
+/*          IPARAM(9) = NUMOP, IPARAM(10) = NUMOPB, IPARAM(11) = NUMREO, */
+/*          OUTPUT: NUMOP  = total number of OP*x operations, */
+/*                  NUMOPB = total number of B*x operations if BMAT='G', */
+/*                  NUMREO = total number of steps of re-orthogonalization. */
+
+/* WORKD    Double precision work array of length at least 3*n. (WORKSPACE) */
+
+/* WORKL    Double precision work array of length LWORKL.  (WORKSPACE) */
+
+/* LWORKL   Integer.  (INPUT) */
+/*          LWORKL must be at least NCV**2 + 8*NCV. */
+
+/* IWORK    Integer array of dimension at least N. (WORKSPACE) */
+/*          Used when IPARAM(7)=2,3,4,5 to store the pivot information in the */
+/*          factorization of M or (A-SIGMA*M). */
+
+/* INFO     Integer.  (INPUT/OUTPUT) */
+/*          Error flag on output. */
+/*          =  0: Normal exit. */
+/*          =  1: Maximum number of iterations taken. */
+/*                All possible eigenvalues of OP has been found. IPARAM(5) */
+/*                returns the number of wanted converged Ritz values. */
+/*          =  3: No shifts could be applied during a cycle of the */
+/*                Implicitly restarted Arnoldi iteration. One possibility */
+/*                is to increase the size of NCV relative to NEV. */
+/*                See remark 4 in DSAUPD. */
+
+/*          = -1: N must be positive. */
+/*          = -2: NEV must be positive. */
+/*          = -3: NCV-NEV >= 2 and less than or equal to N. */
+/*          = -5: WHICH must be one of 'LM', 'SM', 'LR', 'SR', 'LI', 'SI' */
+/*          = -6: BMAT must be one of 'I' or 'G'. */
+/*          = -7: Length of private work WORKL array is not sufficient. */
+/*          = -8: Error return from trid. eigenvalue calculation; */
+/*                Informational error from LAPACK routine dsteqr. */
+/*          = -9: Starting vector is zero. */
+/*          = -10: IPARAM(7) must be 1,2,3,4,5. */
+/*          = -11: IPARAM(7) = 1 and BMAT = 'G' are incompatible. */
+/*          = -12: NEV and WHICH = 'BE' are incompatible. */
+/*          = -13: HOWMNY must be one of 'A' or 'P' */
+/*          = -14: DSAUPD did not find any eigenvalues to sufficient */
+/*                 accuracy. */
+/*          = -9999: Could not build an Arnoldi factorization. */
+/*                   IPARAM(5) returns the size of the current */
+/*                   Arnoldi factorization. */
+
+/* \EndDoc */
+
+/* ------------------------------------------------------------------------ */
+
+/* \BeginLib */
+
+/* \References: */
+/*  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in */
+/*     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992), */
+/*     pp 357-385. */
+
+/*  2. R.B. Lehoucq, "Analysis and Implementation of an Implicitly */
+/*     Restarted Arnoldi Iteration", Ph.D thesis, TR95-13, Rice Univ, */
+/*     May 1995. */
+
+/* \Routines called: */
+/*     dsaupd  ARPACK reverse communication interface routine. */
+/*     dseupd  ARPACK routine that returns Ritz values and (optionally) */
+/*             Ritz vectors. */
+/*     dgbtrf  LAPACK band matrix factorization routine. */
+/*     dgbtrs  LAPACK band linear system solve routine. */
+/*     dlacpy  LAPACK matrix copy routine. */
+/*     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
+/*     dcopy   Level 1 BLAS that copies one vector to another. */
+/*     ddot    Level 1 BLAS that computes the dot product of two vectors. */
+/*     dnrm2   Level 1 BLAS that computes the norm of a vector. */
+/*     dgbmv   Level 2 BLAS that computes the band matrix vector product. */
+
+/* \Remarks */
+/*  1. The converged Ritz values are always returned in increasing */
+/*     (algebraic) order. */
+
+/*  2. Currently only HOWMNY = 'A' is implemented. It is included at this */
+/*     stage for the user who wants to incorporate it. */
+
+/* \Author */
+/*     Danny Sorensen */
+/*     Richard Lehoucq */
+/*     Chao Yang */
+/*     Dept. of Computational & */
+/*     Applied Mathematics */
+/*     Rice University */
+/*     Houston, Texas */
+
+/* \SCCS Information: @(#) */
+/* FILE: sband.F   SID: 2.3   DATE OF SID: 10/17/00   RELEASE: 2 */
+
+/* \EndLib */
+
+/* --------------------------------------------------------------------- */
+
+/* Subroutine */ int dsband_(logical *rvec, char *howmny, logical *select, 
+	doublereal *d__, doublereal *z__, integer *ldz, doublereal *sigma, 
+	integer *n, doublereal *ab, doublereal *mb, integer *lda, doublereal *
+	rfac, integer *kl, integer *ku, char *which, char *bmat, integer *nev,
+	 doublereal *tol, doublereal *resid, integer *ncv, doublereal *v, 
+	integer *ldv, integer *iparam, doublereal *workd, doublereal *workl, 
+	integer *lworkl, integer *iwork, integer *info, ftnlen howmny_len, 
+	ftnlen which_len, ftnlen bmat_len)
+{
+    /* System generated locals */
+    integer v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, 
+	    mb_offset, rfac_dim1, rfac_offset, i__1, i__2;
+
+    /* Builtin functions */
+    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), 
+	    e_wsle(void);
+
+    /* Local variables */
+    integer i__, j, ido, imid, ibot, ierr, itop, type__;
+    extern /* Subroutine */ int dgbmv_(char *, integer *, integer *, integer *
+	    , integer *, doublereal *, doublereal *, integer *, doublereal *, 
+	    integer *, doublereal *, doublereal *, integer *, ftnlen), dcopy_(
+	    integer *, doublereal *, integer *, doublereal *, integer *), 
+	    daxpy_(integer *, doublereal *, doublereal *, integer *, 
+	    doublereal *, integer *);
+    integer ipntr[14];
+    extern /* Subroutine */ int dgbtrf_(integer *, integer *, integer *, 
+	    integer *, doublereal *, integer *, integer *, integer *), 
+	    dlacpy_(char *, integer *, integer *, doublereal *, integer *, 
+	    doublereal *, integer *, ftnlen), dsaupd_(integer *, char *, 
+	    integer *, char *, integer *, doublereal *, doublereal *, integer 
+	    *, doublereal *, integer *, integer *, integer *, doublereal *, 
+	    doublereal *, integer *, integer *, ftnlen, ftnlen), dseupd_(
+	    logical *, char *, logical *, doublereal *, doublereal *, integer 
+	    *, doublereal *, char *, integer *, char *, integer *, doublereal 
+	    *, doublereal *, integer *, doublereal *, integer *, integer *, 
+	    integer *, doublereal *, doublereal *, integer *, integer *, 
+	    ftnlen, ftnlen, ftnlen), dgbtrs_(char *, integer *, integer *, 
+	    integer *, integer *, doublereal *, integer *, integer *, 
+	    doublereal *, integer *, integer *, ftnlen);
+
+    /* Fortran I/O blocks */
+    static cilist io___2 = { 0, 6, 0, 0, 0 };
+    static cilist io___3 = { 0, 6, 0, 0, 0 };
+    static cilist io___4 = { 0, 6, 0, 0, 0 };
+    static cilist io___11 = { 0, 6, 0, 0, 0 };
+    static cilist io___12 = { 0, 6, 0, 0, 0 };
+    static cilist io___13 = { 0, 6, 0, 0, 0 };
+    static cilist io___14 = { 0, 6, 0, 0, 0 };
+    static cilist io___15 = { 0, 6, 0, 0, 0 };
+    static cilist io___16 = { 0, 6, 0, 0, 0 };
+    static cilist io___18 = { 0, 6, 0, 0, 0 };
+    static cilist io___19 = { 0, 6, 0, 0, 0 };
+    static cilist io___20 = { 0, 6, 0, 0, 0 };
+    static cilist io___22 = { 0, 6, 0, 0, 0 };
+    static cilist io___23 = { 0, 6, 0, 0, 0 };
+    static cilist io___24 = { 0, 6, 0, 0, 0 };
+    static cilist io___25 = { 0, 6, 0, 0, 0 };
+    static cilist io___26 = { 0, 6, 0, 0, 0 };
+    static cilist io___27 = { 0, 6, 0, 0, 0 };
+    static cilist io___28 = { 0, 6, 0, 0, 0 };
+    static cilist io___29 = { 0, 6, 0, 0, 0 };
+    static cilist io___30 = { 0, 6, 0, 0, 0 };
+    static cilist io___31 = { 0, 6, 0, 0, 0 };
+    static cilist io___32 = { 0, 6, 0, 0, 0 };
+    static cilist io___33 = { 0, 6, 0, 0, 0 };
+    static cilist io___34 = { 0, 6, 0, 0, 0 };
+    static cilist io___35 = { 0, 6, 0, 0, 0 };
+    static cilist io___36 = { 0, 6, 0, 0, 0 };
+    static cilist io___37 = { 0, 6, 0, 0, 0 };
+    static cilist io___38 = { 0, 6, 0, 0, 0 };
+    static cilist io___39 = { 0, 6, 0, 0, 0 };
+    static cilist io___40 = { 0, 6, 0, 0, 0 };
+    static cilist io___41 = { 0, 6, 0, 0, 0 };
+    static cilist io___42 = { 0, 6, 0, 0, 0 };
+    static cilist io___43 = { 0, 6, 0, 0, 0 };
+    static cilist io___44 = { 0, 6, 0, 0, 0 };
+    static cilist io___45 = { 0, 6, 0, 0, 0 };
+    static cilist io___46 = { 0, 6, 0, 0, 0 };
+    static cilist io___47 = { 0, 6, 0, 0, 0 };
+    static cilist io___48 = { 0, 6, 0, 0, 0 };
+    static cilist io___49 = { 0, 6, 0, 0, 0 };
+    static cilist io___50 = { 0, 6, 0, 0, 0 };
+    static cilist io___51 = { 0, 6, 0, 0, 0 };
+    static cilist io___52 = { 0, 6, 0, 0, 0 };
+    static cilist io___53 = { 0, 6, 0, 0, 0 };
+    static cilist io___54 = { 0, 6, 0, 0, 0 };
+    static cilist io___55 = { 0, 6, 0, 0, 0 };
+    static cilist io___56 = { 0, 6, 0, 0, 0 };
+    static cilist io___57 = { 0, 6, 0, 0, 0 };
+    static cilist io___58 = { 0, 6, 0, 0, 0 };
+    static cilist io___59 = { 0, 6, 0, 0, 0 };
+    static cilist io___60 = { 0, 6, 0, 0, 0 };
+    static cilist io___61 = { 0, 6, 0, 0, 0 };
+    static cilist io___62 = { 0, 6, 0, 0, 0 };
+
+
+
+/*     %------------------% */
+/*     | Scalar Arguments | */
+/*     %------------------% */
+
+
+/*     %-----------------% */
+/*     | Array Arguments | */
+/*     %-----------------% */
+
+
+/*     %--------------% */
+/*     | Local Arrays | */
+/*     %--------------% */
+
+
+/*     %---------------% */
+/*     | Local Scalars | */
+/*     %---------------% */
+
+
+/*     %------------% */
+/*     | Parameters | */
+/*     %------------% */
+
+
+
+/*     %-----------------------------% */
+/*     | LAPACK & BLAS routines used | */
+/*     %-----------------------------% */
+
+
+/*     %-----------------------% */
+/*     | Executable Statements | */
+/*     %-----------------------% */
+
+/*     %----------------------------------------------------------------% */
+/*     | Set type of the problem to be solved. Check consistency        | */
+/*     | between BMAT and IPARAM(7).                                    | */
+/*     | type = 1 --> Solving standard problem in regular mode.         | */
+/*     | type = 2 --> Solving standard problem in shift-invert mode.    | */
+/*     | type = 3 --> Solving generalized problem in regular mode.      | */
+/*     | type = 4 --> Solving generalized problem in shift-invert mode. | */
+/*     | type = 5 --> Solving generalized problem in Buckling mode.     | */
+/*     | type = 6 --> Solving generalized problem in Cayley mode.       | */
+/*     %----------------------------------------------------------------% */
+
+    /* Parameter adjustments */
+    --select;
+    --d__;
+    z_dim1 = *ldz;
+    z_offset = 1 + z_dim1;
+    z__ -= z_offset;
+    rfac_dim1 = *lda;
+    rfac_offset = 1 + rfac_dim1;
+    rfac -= rfac_offset;
+    mb_dim1 = *lda;
+    mb_offset = 1 + mb_dim1;
+    mb -= mb_offset;
+    ab_dim1 = *lda;
+    ab_offset = 1 + ab_dim1;
+    ab -= ab_offset;
+    --resid;
+    v_dim1 = *ldv;
+    v_offset = 1 + v_dim1;
+    v -= v_offset;
+    --iparam;
+    --workd;
+    --workl;
+    --iwork;
+
+    /* Function Body */
+    if (iparam[7] == 1) {
+	type__ = 1;
+    } else if (iparam[7] == 3 && *(unsigned char *)bmat == 'I') {
+	type__ = 2;
+    } else if (iparam[7] == 2) {
+	type__ = 3;
+    } else if (iparam[7] == 3 && *(unsigned char *)bmat == 'G') {
+	type__ = 4;
+    } else if (iparam[7] == 4) {
+	type__ = 5;
+    } else if (iparam[7] == 5) {
+	type__ = 6;
+    } else {
+	s_wsle(&io___2);
+	do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	e_wsle();
+	s_wsle(&io___3);
+	do_lio(&c__9, &c__1, "BMAT is inconsistent with IPARAM(7).", (ftnlen)
+		36);
+	e_wsle();
+	s_wsle(&io___4);
+	do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	e_wsle();
+	goto L9000;
+    }
+
+/*     %------------------------% */
+/*     | Initialize the reverse | */
+/*     | communication flag.    | */
+/*     %------------------------% */
+
+    ido = 0;
+
+/*     %----------------% */
+/*     | Exact shift is | */
+/*     | used.          | */
+/*     %----------------% */
+
+    iparam[1] = 1;
+
+/*     %-----------------------------------% */
+/*     | Both matrices A and M are stored  | */
+/*     | between rows itop and ibot.  Imid | */
+/*     | is the index of the row that      | */
+/*     | stores the diagonal elements.     | */
+/*     %-----------------------------------% */
+
+    itop = *kl + 1;
+    imid = *kl + *ku + 1;
+    ibot = (*kl << 1) + *ku + 1;
+
+    if (type__ == 2 || type__ == 6 && *(unsigned char *)bmat == 'I') {
+
+/*         %----------------------------------% */
+/*         | Solving a standard eigenvalue    | */
+/*         | problem in shift-invert or       | */
+/*         | Cayley mode. Factor (A-sigma*I). | */
+/*         %----------------------------------% */
+
+	dlacpy_("A", &ibot, n, &ab[ab_offset], lda, &rfac[rfac_offset], lda, (
+		ftnlen)1);
+	i__1 = *n;
+	for (j = 1; j <= i__1; ++j) {
+	    rfac[imid + j * rfac_dim1] = ab[imid + j * ab_dim1] - *sigma;
+/* L10: */
+	}
+	dgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
+	if (ierr != 0) {
+	    s_wsle(&io___11);
+	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	    e_wsle();
+	    s_wsle(&io___12);
+	    do_lio(&c__9, &c__1, " _SBAND: Error with _gbtrf. ", (ftnlen)28);
+	    e_wsle();
+	    s_wsle(&io___13);
+	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	    e_wsle();
+	    goto L9000;
+	}
+
+    } else if (type__ == 3) {
+
+/*        %----------------------------------------------% */
+/*        | Solving generalized eigenvalue problem in    | */
+/*        | regular mode. Copy M to rfac and Call LAPACK | */
+/*        | routine dgbtrf to factor M.                  | */
+/*        %----------------------------------------------% */
+
+	dlacpy_("A", &ibot, n, &mb[mb_offset], lda, &rfac[rfac_offset], lda, (
+		ftnlen)1);
+	dgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
+	if (ierr != 0) {
+	    s_wsle(&io___14);
+	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	    e_wsle();
+	    s_wsle(&io___15);
+	    do_lio(&c__9, &c__1, "_SBAND:  Error with _gbtrf.", (ftnlen)27);
+	    e_wsle();
+	    s_wsle(&io___16);
+	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	    e_wsle();
+	    goto L9000;
+	}
+
+    } else if (type__ == 4 || type__ == 5 || type__ == 6 && *(unsigned char *)
+	    bmat == 'G') {
+
+/*        %-------------------------------------------% */
+/*        | Solving generalized eigenvalue problem in | */
+/*        | shift-invert, Buckling, or Cayley mode.   | */
+/*        %-------------------------------------------% */
+
+/*        %-------------------------------------% */
+/*        | Construct and factor (A - sigma*M). | */
+/*        %-------------------------------------% */
+
+	i__1 = *n;
+	for (j = 1; j <= i__1; ++j) {
+	    i__2 = ibot;
+	    for (i__ = itop; i__ <= i__2; ++i__) {
+		rfac[i__ + j * rfac_dim1] = ab[i__ + j * ab_dim1] - *sigma * 
+			mb[i__ + j * mb_dim1];
+/* L50: */
+	    }
+/* L60: */
+	}
+
+	dgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
+	if (ierr != 0) {
+	    s_wsle(&io___18);
+	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	    e_wsle();
+	    s_wsle(&io___19);
+	    do_lio(&c__9, &c__1, "_SBAND: Error with _gbtrf.", (ftnlen)26);
+	    e_wsle();
+	    s_wsle(&io___20);
+	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	    e_wsle();
+	    goto L9000;
+	}
+
+    }
+
+/*     %--------------------------------------------% */
+/*     |  M A I N   L O O P (reverse communication) | */
+/*     %--------------------------------------------% */
+
+L90:
+
+    dsaupd_(&ido, bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv,
+	     &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info, (ftnlen)1,
+	     (ftnlen)2);
+
+    if (ido == -1) {
+
+	if (type__ == 1) {
+
+/*           %----------------------------% */
+/*           | Perform  y <--- OP*x = A*x | */
+/*           %----------------------------% */
+
+	    dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], 
+		    lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &
+		    c__1, (ftnlen)11);
+
+	} else if (type__ == 2) {
+
+/*           %----------------------------------% */
+/*           |             Perform              | */
+/*           | y <--- OP*x = inv[A-sigma*I]*x   | */
+/*           | to force the starting vector     | */
+/*           | into the range of OP.            | */
+/*           %----------------------------------% */
+
+	    dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
+	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
+		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+	    if (ierr != 0) {
+		s_wsle(&io___22);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		s_wsle(&io___23);
+		do_lio(&c__9, &c__1, " _SBAND: Error with _bgtrs. ", (ftnlen)
+			28);
+		e_wsle();
+		s_wsle(&io___24);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		goto L9000;
+	    }
+
+	} else if (type__ == 3) {
+
+/*           %-----------------------------------% */
+/*           | Perform  y <--- OP*x = inv[M]*A*x | */
+/*           | to force the starting vector into | */
+/*           | the range of OP.                  | */
+/*           %-----------------------------------% */
+
+	    dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], 
+		    lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &
+		    c__1, (ftnlen)11);
+	    dcopy_(n, &workd[ipntr[1]], &c__1, &workd[ipntr[0]], &c__1);
+	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
+		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+	    if (ierr != 0) {
+		s_wsle(&io___25);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		s_wsle(&io___26);
+		do_lio(&c__9, &c__1, "_SBAND: Error with sbgtrs.", (ftnlen)26)
+			;
+		e_wsle();
+		s_wsle(&io___27);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		goto L9000;
+	    }
+
+	} else if (type__ == 4) {
+
+/*           %-----------------------------------------% */
+/*           | Perform y <-- OP*x                      | */
+/*           |           = inv[A-SIGMA*M]*M            | */
+/*           | to force the starting vector into the   | */
+/*           | range of OP.                            | */
+/*           %-----------------------------------------% */
+
+	    dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &mb[itop + mb_dim1], 
+		    lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &
+		    c__1, (ftnlen)11);
+	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
+		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+	    if (ierr != 0) {
+		s_wsle(&io___28);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		s_wsle(&io___29);
+		do_lio(&c__9, &c__1, "_SBAND: Error with _gbtrs.", (ftnlen)26)
+			;
+		e_wsle();
+		s_wsle(&io___30);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		goto L9000;
+	    }
+
+	} else if (type__ == 5) {
+
+/*           %---------------------------------------% */
+/*           | Perform y <-- OP*x                    | */
+/*           |    = inv[A-SIGMA*M]*A                 | */
+/*           | to force the starting vector into the | */
+/*           | range of OP.                          | */
+/*           %---------------------------------------% */
+
+	    dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], 
+		    lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &
+		    c__1, (ftnlen)11);
+	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
+		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+
+	    if (ierr != 0) {
+		s_wsle(&io___31);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		s_wsle(&io___32);
+		do_lio(&c__9, &c__1, " _SBAND: Error with _gbtrs. ", (ftnlen)
+			28);
+		e_wsle();
+		s_wsle(&io___33);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		goto L9000;
+	    }
+
+	} else if (type__ == 6) {
+
+/*           %---------------------------------------% */
+/*           | Perform y <-- OP*x                    | */
+/*           | = (inv[A-SIGMA*M])*(A+SIGMA*M)*x      | */
+/*           | to force the starting vector into the | */
+/*           | range of OP.                          | */
+/*           %---------------------------------------% */
+
+	    if (*(unsigned char *)bmat == 'G') {
+		dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + 
+			ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &
+			workd[ipntr[1]], &c__1, (ftnlen)11);
+		dgbmv_("Notranspose", n, n, kl, ku, sigma, &mb[itop + mb_dim1]
+			, lda, &workd[ipntr[0]], &c__1, &c_b50, &workd[ipntr[
+			1]], &c__1, (ftnlen)11);
+	    } else {
+		dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
+		dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + 
+			ab_dim1], lda, &workd[ipntr[0]], &c__1, sigma, &workd[
+			ipntr[1]], &c__1, (ftnlen)11);
+	    }
+
+	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
+		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+
+	    if (ierr != 0) {
+		s_wsle(&io___34);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		s_wsle(&io___35);
+		do_lio(&c__9, &c__1, "_SBAND: Error with _gbtrs.", (ftnlen)26)
+			;
+		e_wsle();
+		s_wsle(&io___36);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		goto L9000;
+	    }
+
+	}
+
+    } else if (ido == 1) {
+
+	if (type__ == 1) {
+
+/*           %----------------------------% */
+/*           | Perform  y <--- OP*x = A*x | */
+/*           %----------------------------% */
+
+	    dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], 
+		    lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &
+		    c__1, (ftnlen)11);
+
+	} else if (type__ == 2) {
+
+/*              %----------------------------------% */
+/*              |             Perform              | */
+/*              | y <--- OP*x = inv[A-sigma*I]*x.  | */
+/*              %----------------------------------% */
+
+	    dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
+	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
+		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+	    if (ierr != 0) {
+		s_wsle(&io___37);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		s_wsle(&io___38);
+		do_lio(&c__9, &c__1, "_SBAND: Error with _gbtrs.", (ftnlen)26)
+			;
+		e_wsle();
+		s_wsle(&io___39);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		goto L9000;
+	    }
+
+	} else if (type__ == 3) {
+
+/*           %-----------------------------------% */
+/*           | Perform  y <--- OP*x = inv[M]*A*x | */
+/*           %-----------------------------------% */
+
+	    dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], 
+		    lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &
+		    c__1, (ftnlen)11);
+	    dcopy_(n, &workd[ipntr[1]], &c__1, &workd[ipntr[0]], &c__1);
+	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
+		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+	    if (ierr != 0) {
+		s_wsle(&io___40);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		s_wsle(&io___41);
+		do_lio(&c__9, &c__1, "_SBAND: error with _bgtrs.", (ftnlen)26)
+			;
+		e_wsle();
+		s_wsle(&io___42);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		goto L9000;
+	    }
+
+	} else if (type__ == 4) {
+
+/*           %-------------------------------------% */
+/*           | Perform y <-- inv(A-sigma*M)*(M*x). | */
+/*           | (M*x) has been computed and stored  | */
+/*           | in workd(ipntr(3)).                 | */
+/*           %-------------------------------------% */
+
+	    dcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
+	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
+		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+	    if (ierr != 0) {
+		s_wsle(&io___43);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		s_wsle(&io___44);
+		do_lio(&c__9, &c__1, "_SBAND: Error with _gbtrs.", (ftnlen)26)
+			;
+		e_wsle();
+		s_wsle(&io___45);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		goto L9000;
+	    }
+
+	} else if (type__ == 5) {
+
+/*           %-------------------------------% */
+/*           | Perform y <-- OP*x            | */
+/*           |    = inv[A-SIGMA*M]*A*x       | */
+/*           | B*x = A*x has been computed   | */
+/*           | and saved in workd(ipntr(3)). | */
+/*           %-------------------------------% */
+
+	    dcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
+	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
+		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+	    if (ierr != 0) {
+		s_wsle(&io___46);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		s_wsle(&io___47);
+		do_lio(&c__9, &c__1, " _SBAND: Error with _gbtrs. ", (ftnlen)
+			28);
+		e_wsle();
+		s_wsle(&io___48);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		goto L9000;
+	    }
+
+	} else if (type__ == 6) {
+
+/*           %---------------------------------% */
+/*           | Perform y <-- OP*x              | */
+/*           | = inv[A-SIGMA*M]*(A+SIGMA*M)*x. | */
+/*           | (M*x) has been saved in         | */
+/*           | workd(ipntr(3)).                | */
+/*           %---------------------------------% */
+
+	    if (*(unsigned char *)bmat == 'G') {
+		dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + 
+			ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &
+			workd[ipntr[1]], &c__1, (ftnlen)11);
+		daxpy_(n, sigma, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &
+			c__1);
+	    } else {
+		dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
+		dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + 
+			ab_dim1], lda, &workd[ipntr[0]], &c__1, sigma, &workd[
+			ipntr[1]], &c__1, (ftnlen)11);
+	    }
+	    dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, 
+		    &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+
+	}
+
+    } else if (ido == 2) {
+
+/*        %----------------------------------% */
+/*        |        Perform y <-- B*x         | */
+/*        | Note when Buckling mode is used, | */
+/*        | B = A, otherwise B=M.            | */
+/*        %----------------------------------% */
+
+	if (type__ == 5) {
+
+/*           %---------------------% */
+/*           | Buckling Mode, B=A. | */
+/*           %---------------------% */
+
+	    dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], 
+		    lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &
+		    c__1, (ftnlen)11);
+	} else {
+	    dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &mb[itop + mb_dim1], 
+		    lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &
+		    c__1, (ftnlen)11);
+	}
+
+    } else {
+
+/*        %-----------------------------------------% */
+/*        | Either we have convergence, or there is | */
+/*        | error.                                  | */
+/*        %-----------------------------------------% */
+
+	if (*info < 0) {
+
+/*           %--------------------------% */
+/*           | Error message, check the | */
+/*           | documentation in DSAUPD  | */
+/*           %--------------------------% */
+
+	    s_wsle(&io___49);
+	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	    e_wsle();
+	    s_wsle(&io___50);
+	    do_lio(&c__9, &c__1, " Error with _saupd info = ", (ftnlen)26);
+	    do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
+	    e_wsle();
+	    s_wsle(&io___51);
+	    do_lio(&c__9, &c__1, " Check the documentation of _saupd ", (
+		    ftnlen)35);
+	    e_wsle();
+	    s_wsle(&io___52);
+	    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+	    e_wsle();
+	    goto L9000;
+
+	} else {
+
+	    if (*info == 1) {
+		s_wsle(&io___53);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		s_wsle(&io___54);
+		do_lio(&c__9, &c__1, " Maximum number of iterations reached.",
+			 (ftnlen)38);
+		e_wsle();
+		s_wsle(&io___55);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+	    } else if (*info == 3) {
+		s_wsle(&io___56);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+		s_wsle(&io___57);
+		do_lio(&c__9, &c__1, " No shifts could be applied during imp"
+			"licit", (ftnlen)43);
+		do_lio(&c__9, &c__1, " Arnoldi update, try increasing NCV.", (
+			ftnlen)36);
+		e_wsle();
+		s_wsle(&io___58);
+		do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		e_wsle();
+	    }
+
+	    if (iparam[5] > 0) {
+
+		dseupd_(rvec, "A", &select[1], &d__[1], &z__[z_offset], ldz, 
+			sigma, bmat, n, which, nev, tol, &resid[1], ncv, &v[
+			v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[
+			1], lworkl, info, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+
+		if (*info != 0) {
+
+/*                 %------------------------------------% */
+/*                 | Check the documentation of dneupd. | */
+/*                 %------------------------------------% */
+
+		    s_wsle(&io___59);
+		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		    e_wsle();
+		    s_wsle(&io___60);
+		    do_lio(&c__9, &c__1, " Error with _neupd = ", (ftnlen)21);
+		    do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(
+			    integer));
+		    e_wsle();
+		    s_wsle(&io___61);
+		    do_lio(&c__9, &c__1, " Check the documentation of _neupd "
+			    , (ftnlen)35);
+		    e_wsle();
+		    s_wsle(&io___62);
+		    do_lio(&c__9, &c__1, " ", (ftnlen)1);
+		    e_wsle();
+		    goto L9000;
+
+		}
+
+	    }
+
+	}
+
+	goto L9000;
+
+    }
+
+/*     %----------------------------------------% */
+/*     | L O O P  B A C K to call DSAUPD again. | */
+/*     %----------------------------------------% */
+
+    goto L90;
+
+L9000:
+
+    return 0;
+} /* dsband_ */
+
