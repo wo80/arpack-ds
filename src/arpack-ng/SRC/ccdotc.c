@@ -1,6 +1,6 @@
 /* SRC\ccdotc.f -- translated by f2c (version 20230428). */
 
-#include "f2c.h"
+#include "arpack_internal.h"
 
 /* Complex */ VOID ccdotc_(complex *ret_val, integer *n, complex *zx, integer *incx, complex *zy, integer *incy)
 {

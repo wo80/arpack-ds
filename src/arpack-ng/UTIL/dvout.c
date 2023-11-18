@@ -1,6 +1,6 @@
 /* UTIL\dvout.f -- translated by f2c (version 20230428). */
 
-#include "f2c.h"
+#include "arpack_internal.h"
 
 /* Table of constant values */
 
