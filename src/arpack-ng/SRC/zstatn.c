@@ -2,16 +2,6 @@
 
 #include "arpack_internal.h"
 
-/* Common Block Declarations */
-
-Extern struct
-{
-    integer nopx, nbx, nrorth, nitref, nrstrt;
-    real tsaupd, tsaup2, tsaitr, tseigt, tsgets, tsapps, tsconv, tnaupd, tnaup2, tnaitr, tneigh, tngets, tnapps, tnconv, tcaupd, tcaup2, tcaitr, tceigh, tcgets, tcapps, tcconv, tmvopx, tmvbx, tgetv0, titref, trvec;
-} timing_;
-
-#define timing_1 timing_
-
 /* \SCCS Information: @(#) */
 /* FILE: statn.F   SID: 2.2   DATE OF SID: 4/20/96   RELEASE: 2 */
 
