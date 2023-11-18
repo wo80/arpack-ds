@@ -4,8 +4,8 @@
 
 /* Table of constant values */
 
-static logical c_true = TRUE_;
-static integer c__1 = 1;
+static a_bool c_true = TRUE_;
+static a_int c__1 = 1;
 
 /* \BeginDoc */
 
@@ -92,16 +92,16 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int zngets_(integer *ishift, char *which, integer *kev, integer *np, doublecomplex *ritz, doublecomplex *bounds, ftnlen which_len)
+int zngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_dcomplex *ritz, a_dcomplex *bounds, ftnlen which_len)
 {
     /* System generated locals */
-    integer i__1;
+    a_int i__1;
 
     /* Local variables */
-    static real t0, t1;
-    extern int ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), zvout_(integer *, integer *, doublecomplex *, integer *, char *, ftnlen), arscnd_(real *);
-    integer msglvl;
-    extern int zsortc_(char *, logical *, integer *, doublecomplex *, doublecomplex *, ftnlen);
+    static float t0, t1;
+    extern int ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen), arscnd_(float *);
+    a_int msglvl;
+    extern int zsortc_(char *, a_bool *, a_int *, a_dcomplex *, a_dcomplex *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static real c_b4 = 0.f;
-static real c_b5 = 1.f;
-static integer c__1 = 1;
-static real c_b20 = -1.f;
+static float c_b4 = 0.f;
+static float c_b5 = 1.f;
+static a_int c__1 = 1;
+static float c_b20 = -1.f;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -139,30 +139,30 @@ static real c_b20 = -1.f;
 
 /* ----------------------------------------------------------------------- */
 
-int ssapps_(integer *n, integer *kev, integer *np, real *shift, real *v, integer *ldv, real *h__, integer *ldh, real *resid, real *q, integer *ldq, real *workd)
+int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv, float *h__, a_int *ldh, float *resid, float *q, a_int *ldq, float *workd)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static a_bool first = TRUE_;
 
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4;
-    real r__1, r__2;
+    a_int h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4;
+    float r__1, r__2;
 
     /* Local variables */
-    real c__, f, g;
-    integer i__, j;
-    real r__, s, a1, a2, a3, a4;
-    static real t0, t1;
-    integer jj;
-    real big;
-    integer iend, itop;
-    extern int sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, ftnlen), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), svout_(integer *, integer *, real *, integer *, char *, ftnlen);
-    extern doublereal slamch_(char *, ftnlen);
-    extern int arscnd_(real *);
-    static real epsmch;
-    integer istart, kplusp, msglvl;
-    extern int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *, ftnlen), slartg_(real *, real *, real *, real *, real *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *, ftnlen);
+    float c__, f, g;
+    a_int i__, j;
+    float r__, s, a1, a2, a3, a4;
+    static float t0, t1;
+    a_int jj;
+    float big;
+    a_int iend, itop;
+    extern int sscal_(a_int *, float *, float *, a_int *), sgemv_(char *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen), scopy_(a_int *, float *, a_int *, float *, a_int *), saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen);
+    extern double slamch_(char *, ftnlen);
+    extern int arscnd_(float *);
+    static float epsmch;
+    a_int istart, kplusp, msglvl;
+    extern int slacpy_(char *, a_int *, a_int *, float *, a_int *, float *, a_int *, ftnlen), slartg_(float *, float *, float *, float *, float *), slaset_(char *, a_int *, a_int *, float *, float *, float *, a_int *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

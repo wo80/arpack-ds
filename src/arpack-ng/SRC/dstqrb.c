@@ -4,9 +4,9 @@
 
 /* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__1 = 1;
-static doublereal c_b31 = 1.;
+static a_int c__0 = 0;
+static a_int c__1 = 1;
+static double c_b31 = 1.;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -112,38 +112,38 @@ static doublereal c_b31 = 1.;
 
 /* ----------------------------------------------------------------------- */
 
-int dstqrb_(integer *n, doublereal *d__, doublereal *e, doublereal *z__, doublereal *work, integer *info)
+int dstqrb_(a_int *n, double *d__, double *e, double *z__, double *work, a_int *info)
 {
     /* System generated locals */
-    integer i__1, i__2;
-    doublereal d__1, d__2;
+    a_int i__1, i__2;
+    double d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal), d_sign(doublereal *, doublereal *);
+    double sqrt(double), d_sign(double *, double *);
 
     /* Local variables */
-    doublereal b, c__, f, g;
-    integer i__, j, k, l, m;
-    doublereal p, r__, s;
-    integer l1, ii, mm, lm1, mm1, nm1;
-    doublereal rt1, rt2, eps;
-    integer lsv;
-    doublereal tst, eps2;
-    integer lend, jtot;
-    extern int dlae2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlasr_(char *, char *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, ftnlen, ftnlen, ftnlen);
-    doublereal anorm;
-    extern int dlaev2_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    integer lendm1, lendp1;
-    extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *, ftnlen);
-    integer iscale;
-    extern int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, ftnlen);
-    doublereal safmin;
-    extern int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    doublereal safmax;
-    extern doublereal dlanst_(char *, integer *, doublereal *, doublereal *, ftnlen);
-    extern int dlasrt_(char *, integer *, doublereal *, integer *, ftnlen);
-    integer lendsv, nmaxit, icompz;
-    doublereal ssfmax, ssfmin;
+    double b, c__, f, g;
+    a_int i__, j, k, l, m;
+    double p, r__, s;
+    a_int l1, ii, mm, lm1, mm1, nm1;
+    double rt1, rt2, eps;
+    a_int lsv;
+    double tst, eps2;
+    a_int lend, jtot;
+    extern int dlae2_(double *, double *, double *, double *, double *), dlasr_(char *, char *, char *, a_int *, a_int *, double *, double *, double *, a_int *, ftnlen, ftnlen, ftnlen);
+    double anorm;
+    extern int dlaev2_(double *, double *, double *, double *, double *, double *, double *);
+    a_int lendm1, lendp1;
+    extern double dlapy2_(double *, double *), dlamch_(char *, ftnlen);
+    a_int iscale;
+    extern int dlascl_(char *, a_int *, a_int *, double *, double *, a_int *, a_int *, double *, a_int *, a_int *, ftnlen);
+    double safmin;
+    extern int dlartg_(double *, double *, double *, double *, double *);
+    double safmax;
+    extern double dlanst_(char *, a_int *, double *, double *, ftnlen);
+    extern int dlasrt_(char *, a_int *, double *, a_int *, ftnlen);
+    a_int lendsv, nmaxit, icompz;
+    double ssfmax, ssfmin;
 
     /*     %------------------% */
     /*     | Scalar Arguments | */

@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static logical c_false = FALSE_;
-static doublereal c_b24 = 1.;
-static doublereal c_b49 = 0.;
-static doublereal c_b57 = -1.;
-static integer c__2 = 2;
+static a_int c__1 = 1;
+static a_bool c_false = FALSE_;
+static double c_b24 = 1.;
+static double c_b49 = 0.;
+static double c_b57 = -1.;
+static a_int c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -214,42 +214,42 @@ static integer c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int dsaitr_(integer *ido, char *bmat, integer *n, integer *k, integer *np, integer *mode, doublereal *resid, doublereal *rnorm, doublereal *v, integer *ldv, doublereal *h__, integer *ldh, integer *ipntr, doublereal *workd, integer *info, ftnlen bmat_len)
+int dsaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *mode, double *resid, double *rnorm, double *v, a_int *ldv, double *h__, a_int *ldh, a_int *ipntr, double *workd, a_int *info, ftnlen bmat_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static a_bool first = TRUE_;
 
     /* System generated locals */
-    integer h_dim1, h_offset, v_dim1, v_offset, i__1;
+    a_int h_dim1, h_offset, v_dim1, v_offset, i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    integer i__;
-    static integer j;
-    static real t0, t1, t2, t3, t4, t5;
-    integer jj;
-    static integer ipj, irj, ivj;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    static integer ierr, iter, itry;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    doublereal temp1;
-    static logical orth1, orth2, step3, step4;
-    extern int dscal_(integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, ftnlen);
-    integer infol;
-    extern int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    doublereal xtemp[2];
-    extern int dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen);
-    static doublereal wnorm;
-    extern int ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), dgetv0_(integer *, char *, integer *, logical *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, ftnlen);
-    static doublereal rnorm1;
-    extern doublereal dlamch_(char *, ftnlen);
-    extern int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, ftnlen), arscnd_(real *);
-    static doublereal safmin;
-    static logical rstart;
-    static integer msglvl;
+    a_int i__;
+    static a_int j;
+    static float t0, t1, t2, t3, t4, t5;
+    a_int jj;
+    static a_int ipj, irj, ivj;
+    extern double ddot_(a_int *, double *, a_int *, double *, a_int *);
+    static a_int ierr, iter, itry;
+    extern double dnrm2_(a_int *, double *, a_int *);
+    double temp1;
+    static a_bool orth1, orth2, step3, step4;
+    extern int dscal_(a_int *, double *, double *, a_int *), dgemv_(char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen);
+    a_int infol;
+    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *);
+    double xtemp[2];
+    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen);
+    static double wnorm;
+    extern int ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), dgetv0_(a_int *, char *, a_int *, a_bool *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, double *, a_int *, ftnlen);
+    static double rnorm1;
+    extern double dlamch_(char *, ftnlen);
+    extern int dlascl_(char *, a_int *, a_int *, double *, double *, a_int *, a_int *, double *, a_int *, a_int *, ftnlen), arscnd_(float *);
+    static double safmin;
+    static a_bool rstart;
+    static a_int msglvl;
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

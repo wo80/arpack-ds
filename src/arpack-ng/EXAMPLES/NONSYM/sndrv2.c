@@ -6,65 +6,65 @@
 
 Extern struct
 {
-    real rho;
+    float rho;
 } convct_;
 
 #define convct_1 convct_
 
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__256 = 256;
-static integer c__3 = 3;
-static integer c__6 = 6;
-static integer c__25 = 25;
-static integer c_n6 = -6;
-static integer c__4 = 4;
+static a_int c__9 = 9;
+static a_int c__1 = 1;
+static a_int c__256 = 256;
+static a_int c__3 = 3;
+static a_int c__6 = 6;
+static a_int c__25 = 25;
+static a_int c_n6 = -6;
+static a_int c__4 = 4;
 
 /* Main program */ int MAIN__(void)
 {
     /* System generated locals */
-    integer i__1;
-    real r__1;
+    a_int i__1;
+    float r__1;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
+    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
     int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    real d__[75] /* was [25][3] */, h__;
-    integer j, n;
-    real s, v[6400] /* was [256][25] */, s1, s2, s3, dd[256], dl[256];
-    extern int av_(integer *, real *, real *);
-    real ax[256], du[256], du2[256];
-    integer ido, ncv, nev;
-    real tol;
+    float d__[75] /* was [25][3] */, h__;
+    a_int j, n;
+    float s, v[6400] /* was [256][25] */, s1, s2, s3, dd[256], dl[256];
+    extern int av_(a_int *, float *, float *);
+    float ax[256], du[256], du2[256];
+    a_int ido, ncv, nev;
+    float tol;
     char bmat[1];
-    integer mode, info;
-    logical rvec;
-    integer ierr, ipiv[256];
-    extern doublereal snrm2_(integer *, real *, integer *);
+    a_int mode, info;
+    a_bool rvec;
+    a_int ierr, ipiv[256];
+    extern double snrm2_(a_int *, float *, a_int *);
     char which[2];
-    real resid[256];
-    integer nconv;
-    real workd[768];
-    logical first;
-    integer ipntr[14];
-    extern int scopy_(integer *, real *, integer *, real *, integer *);
-    real workl[2025];
-    extern int saxpy_(integer *, real *, real *, integer *, real *, integer *), smout_(integer *, integer *, integer *, real *, integer *, integer *, char *, ftnlen);
-    extern doublereal slapy2_(real *, real *);
-    integer iparam[11];
-    real sigmai;
-    logical select[25];
-    real sigmar;
-    extern int snaupd_(integer *, char *, integer *, char *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, ftnlen, ftnlen), sneupd_(logical *, char *, logical *, real *, real *, real *, integer *, real *, real *, real *, char *, integer *, char *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    integer ishfts, maxitr;
-    extern int sgttrf_(integer *, real *, real *, real *, real *, integer *, integer *);
-    integer lworkl;
-    real workev[75];
-    extern int sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *, ftnlen);
+    float resid[256];
+    a_int nconv;
+    float workd[768];
+    a_bool first;
+    a_int ipntr[14];
+    extern int scopy_(a_int *, float *, a_int *, float *, a_int *);
+    float workl[2025];
+    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
+    extern double slapy2_(float *, float *);
+    a_int iparam[11];
+    float sigmai;
+    a_bool select[25];
+    float sigmar;
+    extern int snaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen), sneupd_(a_bool *, char *, a_bool *, float *, float *, float *, a_int *, float *, float *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
+    a_int ishfts, maxitr;
+    extern int sgttrf_(a_int *, float *, float *, float *, float *, a_int *, a_int *);
+    a_int lworkl;
+    float workev[75];
+    extern int sgttrs_(char *, a_int *, a_int *, float *, float *, float *, float *, a_int *, float *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___4 = {0, 6, 0, 0, 0};
@@ -243,7 +243,7 @@ static integer c__4 = 4;
     /*     %----------------------------------------------------% */
 
     convct_1.rho = 10.f;
-    h__ = 1.f / (real)(n + 1);
+    h__ = 1.f / (float)(n + 1);
     s = convct_1.rho * h__ / 2.f;
 
     s1 = -1.f - s;
@@ -378,7 +378,7 @@ L20:
         e_wsle();
         s_wsle(&io___43);
         do_lio(&c__9, &c__1, " Error with _naupd, info = ", (ftnlen)27);
-        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___44);
         do_lio(&c__9, &c__1, " Check the documentation in _naupd.", (ftnlen)35);
@@ -429,7 +429,7 @@ L20:
             e_wsle();
             s_wsle(&io___51);
             do_lio(&c__9, &c__1, " Error with _neupd, info = ", (ftnlen)27);
-            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(integer));
+            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(a_int));
             e_wsle();
             s_wsle(&io___52);
             do_lio(&c__9, &c__1, " Check the documentation of _neupd. ", (ftnlen)36);
@@ -560,16 +560,16 @@ L20:
         e_wsle();
         s_wsle(&io___67);
         do_lio(&c__9, &c__1, " Size of the matrix is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___68);
         do_lio(&c__9, &c__1, " The number of Ritz values requested is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___69);
         do_lio(&c__9, &c__1, " The number of Arnoldi vectors generated", (ftnlen)40);
         do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
-        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___70);
         do_lio(&c__9, &c__1, " What portion of the spectrum: ", (ftnlen)31);
@@ -577,20 +577,20 @@ L20:
         e_wsle();
         s_wsle(&io___71);
         do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___72);
         do_lio(&c__9, &c__1, " The number of Implicit Arnoldi update", (ftnlen)38);
         do_lio(&c__9, &c__1, " iterations taken is ", (ftnlen)21);
-        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___73);
         do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___74);
         do_lio(&c__9, &c__1, " The convergence criterion is ", (ftnlen)30);
-        do_lio(&c__4, &c__1, (char *)&tol, (ftnlen)sizeof(real));
+        do_lio(&c__4, &c__1, (char *)&tol, (ftnlen)sizeof(float));
         e_wsle();
         s_wsle(&io___75);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -610,15 +610,15 @@ L9000:
 
 /*     matrix vector multiplication subroutine */
 
-int av_(integer *n, real *v, real *w)
+int av_(a_int *n, float *v, float *w)
 {
     /* System generated locals */
-    integer i__1;
+    a_int i__1;
 
     /* Local variables */
-    real h__;
-    integer j;
-    real s, dd, dl, du;
+    float h__;
+    a_int j;
+    float s, dd, dl, du;
 
     /*     Compute the matrix vector multiplication y<---A*x */
     /*     where A is a n by n nonsymmetric tridiagonal matrix derived from */
@@ -631,7 +631,7 @@ int av_(integer *n, real *v, real *w)
     --v;
 
     /* Function Body */
-    h__ = 1.f / (real)(*n + 1);
+    h__ = 1.f / (float)(*n + 1);
     s = convct_1.rho * h__ / 2.f;
     dd = 2.f;
     dl = -1.f - s;

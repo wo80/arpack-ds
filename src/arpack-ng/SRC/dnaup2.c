@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static doublereal c_b3 = .66666666666666663;
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c__4 = 4;
-static logical c_true = TRUE_;
-static integer c__2 = 2;
+static double c_b3 = .66666666666666663;
+static a_int c__1 = 1;
+static a_int c__0 = 0;
+static a_int c__4 = 4;
+static a_bool c_true = TRUE_;
+static a_int c__2 = 2;
 
 /* \BeginDoc */
 
@@ -184,48 +184,48 @@ static integer c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int dnaup2_(integer *ido, char *bmat, integer *n, char *which, integer *nev, integer *np, doublereal *tol, doublereal *resid, integer *mode, integer *iupd, integer *ishift, integer *mxiter, doublereal *v, integer *ldv, doublereal *h__, integer *ldh, doublereal *ritzr, doublereal *ritzi, doublereal *bounds, doublereal *q, integer *ldq, doublereal *workl, integer *ipntr, doublereal *workd, integer *info, ftnlen bmat_len, ftnlen which_len)
+int dnaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np, double *tol, double *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter, double *v, a_int *ldv, double *h__, a_int *ldh, double *ritzr, double *ritzi, double *bounds, double *q, a_int *ldq, double *workl, a_int *ipntr, double *workd, a_int *info, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2;
-    doublereal d__1, d__2;
+    a_int h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2;
+    double d__1, d__2;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    double pow_dd(double *, double *);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
     int s_copy(char *, char *, ftnlen, ftnlen);
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    integer j;
-    static real t0, t1, t2, t3;
-    integer kp[4];
-    static integer np0, nev0;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    static doublereal eps23;
-    integer ierr;
-    static integer iter;
-    doublereal temp;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    static logical getv0, cnorm;
-    extern int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    static integer nconv;
-    extern int dmout_(integer *, integer *, integer *, doublereal *, integer *, integer *, char *, ftnlen);
-    static logical initv;
-    static doublereal rnorm;
-    extern int dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), dgetv0_(integer *, char *, integer *, logical *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, ftnlen);
-    extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *, ftnlen);
-    extern int dneigh_(doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *);
-    static integer nevbef;
-    extern int arscnd_(real *);
-    static logical update;
+    a_int j;
+    static float t0, t1, t2, t3;
+    a_int kp[4];
+    static a_int np0, nev0;
+    extern double ddot_(a_int *, double *, a_int *, double *, a_int *);
+    static double eps23;
+    a_int ierr;
+    static a_int iter;
+    double temp;
+    extern double dnrm2_(a_int *, double *, a_int *);
+    static a_bool getv0, cnorm;
+    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *);
+    static a_int nconv;
+    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
+    static a_bool initv;
+    static double rnorm;
+    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), dgetv0_(a_int *, char *, a_int *, a_bool *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, double *, a_int *, ftnlen);
+    extern double dlapy2_(double *, double *), dlamch_(char *, ftnlen);
+    extern int dneigh_(double *, a_int *, double *, a_int *, double *, double *, double *, double *, a_int *, double *, a_int *);
+    static a_int nevbef;
+    extern int arscnd_(float *);
+    static a_bool update;
     char wprime[2];
-    static logical ushift;
-    static integer kplusp, msglvl;
-    integer nptemp;
-    static integer numcnv;
-    extern int dnaitr_(integer *, char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, ftnlen), dnconv_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *), dngets_(integer *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, ftnlen),
-        dnapps_(integer *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *), dsortc_(char *, logical *, integer *, doublereal *, doublereal *, doublereal *, ftnlen);
+    static a_bool ushift;
+    static a_int kplusp, msglvl;
+    a_int nptemp;
+    static a_int numcnv;
+    extern int dnaitr_(a_int *, char *, a_int *, a_int *, a_int *, a_int *, double *, double *, double *, a_int *, double *, a_int *, a_int *, double *, a_int *, ftnlen), dnconv_(a_int *, double *, double *, double *, double *, a_int *), dngets_(a_int *, char *, a_int *, a_int *, double *, double *, double *, double *, double *, ftnlen),
+        dnapps_(a_int *, a_int *, a_int *, double *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, double *, double *), dsortc_(char *, a_bool *, a_int *, double *, double *, double *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -777,7 +777,7 @@ L20:
 
         if (msglvl > 1)
         {
-            dvout_(&debug_1.logfil, &kplusp, &ritzr[1], &debug_1.ndigit, "_naup2: Sorted real part of the eigenvalues", (ftnlen)43);
+            dvout_(&debug_1.logfil, &kplusp, &ritzr[1], &debug_1.ndigit, "_naup2: Sorted float part of the eigenvalues", (ftnlen)43);
             dvout_(&debug_1.logfil, &kplusp, &ritzi[1], &debug_1.ndigit, "_naup2: Sorted imaginary part of the eigenvalues", (ftnlen)48);
             dvout_(&debug_1.logfil, &kplusp, &bounds[1], &debug_1.ndigit, "_naup2: Sorted ritz estimates.", (ftnlen)30);
         }
@@ -863,7 +863,7 @@ L20:
                    "_naup2: NEV"
                    " and NP are",
                    (ftnlen)22);
-            dvout_(&debug_1.logfil, nev, &ritzr[*np + 1], &debug_1.ndigit, "_naup2: \"wanted\" Ritz values -- real part", (ftnlen)41);
+            dvout_(&debug_1.logfil, nev, &ritzr[*np + 1], &debug_1.ndigit, "_naup2: \"wanted\" Ritz values -- float part", (ftnlen)41);
             dvout_(&debug_1.logfil, nev, &ritzi[*np + 1], &debug_1.ndigit, "_naup2: \"wanted\" Ritz values -- imag part", (ftnlen)41);
             dvout_(&debug_1.logfil, nev, &bounds[*np + 1], &debug_1.ndigit, "_naup2: Ritz estimates of the \"wanted\" values ", (ftnlen)46);
         }

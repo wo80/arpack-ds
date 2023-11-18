@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static logical c_false = FALSE_;
-static real c_b24 = 1.f;
-static real c_b49 = 0.f;
-static real c_b57 = -1.f;
-static integer c__2 = 2;
+static a_int c__1 = 1;
+static a_bool c_false = FALSE_;
+static float c_b24 = 1.f;
+static float c_b49 = 0.f;
+static float c_b57 = -1.f;
+static a_int c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -214,43 +214,43 @@ static integer c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int ssaitr_(integer *ido, char *bmat, integer *n, integer *k, integer *np, integer *mode, real *resid, real *rnorm, real *v, integer *ldv, real *h__, integer *ldh, integer *ipntr, real *workd, integer *info, ftnlen bmat_len)
+int ssaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *mode, float *resid, float *rnorm, float *v, a_int *ldv, float *h__, a_int *ldh, a_int *ipntr, float *workd, a_int *info, ftnlen bmat_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static a_bool first = TRUE_;
 
     /* System generated locals */
-    integer h_dim1, h_offset, v_dim1, v_offset, i__1;
+    a_int h_dim1, h_offset, v_dim1, v_offset, i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    integer i__;
-    static integer j;
-    static real t0, t1, t2, t3, t4, t5;
-    integer jj;
-    static integer ipj, irj, ivj, ierr, iter;
-    extern doublereal sdot_(integer *, real *, integer *, real *, integer *);
-    static integer itry;
-    real temp1;
-    static logical orth1, orth2, step3, step4;
-    extern doublereal snrm2_(integer *, real *, integer *);
-    extern int sscal_(integer *, real *, real *, integer *);
-    integer infol;
-    extern int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, ftnlen);
-    real xtemp[2];
-    extern int scopy_(integer *, real *, integer *, real *, integer *);
-    static real wnorm;
-    extern int ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), svout_(integer *, integer *, real *, integer *, char *, ftnlen), sgetv0_(integer *, char *, integer *, logical *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, ftnlen);
-    static real rnorm1;
-    extern doublereal slamch_(char *, ftnlen);
-    extern int arscnd_(real *);
-    static real safmin;
-    static logical rstart;
-    static integer msglvl;
-    extern int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *, ftnlen);
+    a_int i__;
+    static a_int j;
+    static float t0, t1, t2, t3, t4, t5;
+    a_int jj;
+    static a_int ipj, irj, ivj, ierr, iter;
+    extern double sdot_(a_int *, float *, a_int *, float *, a_int *);
+    static a_int itry;
+    float temp1;
+    static a_bool orth1, orth2, step3, step4;
+    extern double snrm2_(a_int *, float *, a_int *);
+    extern int sscal_(a_int *, float *, float *, a_int *);
+    a_int infol;
+    extern int sgemv_(char *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen);
+    float xtemp[2];
+    extern int scopy_(a_int *, float *, a_int *, float *, a_int *);
+    static float wnorm;
+    extern int ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen), sgetv0_(a_int *, char *, a_int *, a_bool *, a_int *, a_int *, float *, a_int *, float *, float *, a_int *, float *, a_int *, ftnlen);
+    static float rnorm1;
+    extern double slamch_(char *, ftnlen);
+    extern int arscnd_(float *);
+    static float safmin;
+    static a_bool rstart;
+    static a_int msglvl;
+    extern int slascl_(char *, a_int *, a_int *, float *, float *, a_int *, a_int *, float *, a_int *, a_int *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

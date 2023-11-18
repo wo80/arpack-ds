@@ -4,65 +4,65 @@
 
 /* Table of constant values */
 
-static doublecomplex c_b2 = {1., 0.};
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__256 = 256;
-static integer c__3 = 3;
-static integer c__6 = 6;
-static integer c__25 = 25;
-static integer c_n6 = -6;
-static integer c__5 = 5;
-static doublecomplex c_b163 = {2., 0.};
-static doublecomplex c_b164 = {10., 0.};
+static a_dcomplex c_b2 = {1., 0.};
+static a_int c__9 = 9;
+static a_int c__1 = 1;
+static a_int c__256 = 256;
+static a_int c__3 = 3;
+static a_int c__6 = 6;
+static a_int c__25 = 25;
+static a_int c_n6 = -6;
+static a_int c__5 = 5;
+static a_dcomplex c_b163 = {2., 0.};
+static a_dcomplex c_b164 = {10., 0.};
 
 /* Main program */ int MAIN__(void)
 {
     /* System generated locals */
-    integer i__1, i__2;
-    doublecomplex z__1, z__2;
+    a_int i__1, i__2;
+    a_dcomplex z__1, z__2;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
+    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
     int s_copy(char *, char *, ftnlen, ftnlen);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
-    double d_imag(doublecomplex *);
+    void z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
+    double d_imag(a_dcomplex *);
 
     /* Local variables */
-    doublecomplex d__[25], h__;
-    integer j, n;
-    doublecomplex v[6400] /* was [256][25] */, dd[256], dl[256];
-    doublereal rd[75] /* was [25][3] */;
-    extern int av_(integer *, doublecomplex *, doublecomplex *);
-    doublecomplex ax[256], du[256];
-    extern int mv_(integer *, doublecomplex *, doublecomplex *);
-    doublecomplex mx[256], du2[256];
-    integer ido, ncv, nev;
-    doublereal tol;
+    a_dcomplex d__[25], h__;
+    a_int j, n;
+    a_dcomplex v[6400] /* was [256][25] */, dd[256], dl[256];
+    double rd[75] /* was [25][3] */;
+    extern int av_(a_int *, a_dcomplex *, a_dcomplex *);
+    a_dcomplex ax[256], du[256];
+    extern int mv_(a_int *, a_dcomplex *, a_dcomplex *);
+    a_dcomplex mx[256], du2[256];
+    a_int ido, ncv, nev;
+    double tol;
     char bmat[1];
-    integer mode, info;
-    logical rvec;
-    integer ierr, ipiv[256];
-    doublecomplex sigma;
+    a_int mode, info;
+    a_bool rvec;
+    a_int ierr, ipiv[256];
+    a_dcomplex sigma;
     char which[2];
-    doublecomplex resid[256];
-    integer nconv;
-    doublecomplex workd[768];
-    extern int dmout_(integer *, integer *, integer *, doublereal *, integer *, integer *, char *, ftnlen);
-    integer ipntr[14];
-    doublecomplex workl[2000];
-    doublereal rwork[256];
-    extern int zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *);
-    extern doublereal dlapy2_(doublereal *, doublereal *), dznrm2_(integer *, doublecomplex *, integer *);
-    integer iparam[11];
-    logical select[25];
-    integer ishfts;
-    extern int znaupd_(integer *, char *, integer *, char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublereal *, integer *, ftnlen, ftnlen);
-    integer maxitr;
-    extern int zneupd_(logical *, char *, logical *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, char *, integer *, char *, integer *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublereal *, integer *, ftnlen, ftnlen, ftnlen);
-    integer lworkl;
-    doublecomplex workev[50];
-    extern int zgttrf_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, ftnlen);
+    a_dcomplex resid[256];
+    a_int nconv;
+    a_dcomplex workd[768];
+    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
+    a_int ipntr[14];
+    a_dcomplex workl[2000];
+    double rwork[256];
+    extern int zaxpy_(a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *);
+    extern double dlapy2_(double *, double *), dznrm2_(a_int *, a_dcomplex *, a_int *);
+    a_int iparam[11];
+    a_bool select[25];
+    a_int ishfts;
+    extern int znaupd_(a_int *, char *, a_int *, char *, a_int *, double *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, double *, a_int *, ftnlen, ftnlen);
+    a_int maxitr;
+    extern int zneupd_(a_bool *, char *, a_bool *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, char *, a_int *, char *, a_int *, double *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, double *, a_int *, ftnlen, ftnlen, ftnlen);
+    a_int lworkl;
+    a_dcomplex workev[50];
+    extern int zgttrf_(a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, a_int *), zgttrs_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___4 = {0, 6, 0, 0, 0};
@@ -230,7 +230,7 @@ static doublecomplex c_b164 = {10., 0.};
     /*     %-----------------------------------------------------% */
 
     i__1 = n + 1;
-    z__2.r = (doublereal)i__1, z__2.i = 0.;
+    z__2.r = (double)i__1, z__2.i = 0.;
     z_div(&z__1, &c_b2, &z__2);
     h__.r = z__1.r, h__.i = z__1.i;
     i__1 = n - 1;
@@ -390,7 +390,7 @@ L10:
         e_wsle();
         s_wsle(&io___39);
         do_lio(&c__9, &c__1, " Error with _naupd, info = ", (ftnlen)27);
-        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___40);
         do_lio(&c__9, &c__1, " Check the documentation of _naupd.", (ftnlen)35);
@@ -440,7 +440,7 @@ L10:
             e_wsle();
             s_wsle(&io___47);
             do_lio(&c__9, &c__1, " Error with _neupd, info = ", (ftnlen)27);
-            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(integer));
+            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(a_int));
             e_wsle();
             s_wsle(&io___48);
             do_lio(&c__9, &c__1, " Check the documentation of _neupd", (ftnlen)34);
@@ -537,16 +537,16 @@ L10:
         e_wsle();
         s_wsle(&io___64);
         do_lio(&c__9, &c__1, " Size of the matrix is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___65);
         do_lio(&c__9, &c__1, " The number of Ritz values requested is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___66);
         do_lio(&c__9, &c__1, " The number of Arnoldi vectors generated ", (ftnlen)41);
         do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
-        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___67);
         do_lio(&c__9, &c__1, " What portion of the spectrum: ", (ftnlen)31);
@@ -554,20 +554,20 @@ L10:
         e_wsle();
         s_wsle(&io___68);
         do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___69);
         do_lio(&c__9, &c__1, " The number of Implicit Arnoldi update", (ftnlen)38);
         do_lio(&c__9, &c__1, " iterations taken is ", (ftnlen)21);
-        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___70);
         do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___71);
         do_lio(&c__9, &c__1, " The convergence criterion is ", (ftnlen)30);
-        do_lio(&c__5, &c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
+        do_lio(&c__5, &c__1, (char *)&tol, (ftnlen)sizeof(double));
         e_wsle();
         s_wsle(&io___72);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -583,19 +583,19 @@ L9000:
 
 /*     matrix vector multiplication subroutine */
 
-int av_(integer *n, doublecomplex *v, doublecomplex *w)
+int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
 {
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1, z__2, z__3, z__4, z__5;
+    a_int i__1, i__2, i__3, i__4, i__5;
+    a_dcomplex z__1, z__2, z__3, z__4, z__5;
 
     /* Builtin functions */
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    void z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
-    doublecomplex h__;
-    integer j;
-    doublecomplex s, dd, dl, du;
+    a_dcomplex h__;
+    a_int j;
+    a_dcomplex s, dd, dl, du;
 
     /*     Compute the matrix vector multiplication y<---A*x */
     /*     where A is the stiffness matrix formed by using piecewise linear */
@@ -607,7 +607,7 @@ int av_(integer *n, doublecomplex *v, doublecomplex *w)
 
     /* Function Body */
     i__1 = *n + 1;
-    z__2.r = (doublereal)i__1, z__2.i = 0.;
+    z__2.r = (double)i__1, z__2.i = 0.;
     z_div(&z__1, &c_b2, &z__2);
     h__.r = z__1.r, h__.i = z__1.i;
     z_div(&z__1, &c_b164, &c_b163);
@@ -653,19 +653,19 @@ int av_(integer *n, doublecomplex *v, doublecomplex *w)
 } /* av_ */
 
 /* ------------------------------------------------------------------------ */
-int mv_(integer *n, doublecomplex *v, doublecomplex *w)
+int mv_(a_int *n, a_dcomplex *v, a_dcomplex *w)
 {
     /* System generated locals */
-    integer i__1, i__2, i__3, i__4, i__5;
-    doublecomplex z__1, z__2, z__3, z__4, z__5;
+    a_int i__1, i__2, i__3, i__4, i__5;
+    a_dcomplex z__1, z__2, z__3, z__4, z__5;
 
     /* Builtin functions */
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    void z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
-    doublecomplex h__;
-    integer j;
-    extern int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
+    a_dcomplex h__;
+    a_int j;
+    extern int zscal_(a_int *, a_dcomplex *, a_dcomplex *, a_int *);
 
     /*     Compute the matrix vector multiplication y<---M*x */
     /*     where M is the mass matrix formed by using piecewise linear elements */
@@ -704,7 +704,7 @@ int mv_(integer *n, doublecomplex *v, doublecomplex *w)
     w[i__1].r = z__1.r, w[i__1].i = z__1.i;
 
     i__1 = *n + 1;
-    z__2.r = (doublereal)i__1, z__2.i = 0.;
+    z__2.r = (double)i__1, z__2.i = 0.;
     z_div(&z__1, &c_b2, &z__2);
     h__.r = z__1.r, h__.i = z__1.i;
     zscal_(n, &h__, &w[1], &c__1);

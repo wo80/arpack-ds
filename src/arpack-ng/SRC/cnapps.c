@@ -4,9 +4,9 @@
 
 /* Table of constant values */
 
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static integer c__1 = 1;
+static a_fcomplex c_b1 = {1.f, 0.f};
+static a_fcomplex c_b2 = {0.f, 0.f};
+static a_int c__1 = 1;
 
 /* \BeginDoc */
 
@@ -141,44 +141,44 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int cnapps_(integer *n, integer *kev, integer *np, complex *shift, complex *v, integer *ldv, complex *h__, integer *ldh, complex *resid, complex *q, integer *ldq, complex *workl, complex *workd)
+int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a_int *ldv, a_fcomplex *h__, a_int *ldh, a_fcomplex *resid, a_fcomplex *q, a_int *ldq, a_fcomplex *workl, a_fcomplex *workd)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static a_bool first = TRUE_;
 
     /* System generated locals */
-    integer h_dim1, h_offset, v_dim1, v_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    real r__1, r__2, r__3, r__4;
-    complex q__1, q__2, q__3, q__4, q__5;
+    a_int h_dim1, h_offset, v_dim1, v_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    float r__1, r__2, r__3, r__4;
+    a_fcomplex q__1, q__2, q__3, q__4, q__5;
 
     /* Builtin functions */
-    double r_imag(complex *);
-    void r_cnjg(complex *, complex *);
+    double r_imag(a_fcomplex *);
+    void r_cnjg(a_fcomplex *, a_fcomplex *);
 
     /* Local variables */
-    real c__;
-    complex f, g;
-    integer i__, j;
-    complex r__, s, t;
-    static real t0, t1;
-    complex h11, h21;
-    integer jj;
-    static real ulp;
-    real tst1;
-    integer iend;
-    static real unfl, ovfl;
-    extern int cscal_(integer *, complex *, complex *, integer *);
-    complex sigma;
-    extern int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, ftnlen), ccopy_(integer *, complex *, integer *, complex *, integer *), caxpy_(integer *, complex *, complex *, integer *, complex *, integer *), cmout_(integer *, integer *, integer *, complex *, integer *, integer *, char *, ftnlen), cvout_(integer *, integer *, complex *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen);
-    extern doublereal slapy2_(real *, real *);
-    extern int slabad_(real *, real *);
-    extern doublereal clanhs_(char *, integer *, complex *, integer *, complex *, ftnlen);
-    extern int arscnd_(real *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *, ftnlen);
-    integer istart, kplusp, msglvl;
-    static real smlnum;
-    extern int clartg_(complex *, complex *, real *, complex *, complex *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *, ftnlen);
-    extern doublereal slamch_(char *, ftnlen);
+    float c__;
+    a_fcomplex f, g;
+    a_int i__, j;
+    a_fcomplex r__, s, t;
+    static float t0, t1;
+    a_fcomplex h11, h21;
+    a_int jj;
+    static float ulp;
+    float tst1;
+    a_int iend;
+    static float unfl, ovfl;
+    extern int cscal_(a_int *, a_fcomplex *, a_fcomplex *, a_int *);
+    a_fcomplex sigma;
+    extern int cgemv_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen), ccopy_(a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *), caxpy_(a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *), cmout_(a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, char *, ftnlen), cvout_(a_int *, a_int *, a_fcomplex *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen);
+    extern double slapy2_(float *, float *);
+    extern int slabad_(float *, float *);
+    extern double clanhs_(char *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, ftnlen);
+    extern int arscnd_(float *), clacpy_(char *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, ftnlen);
+    a_int istart, kplusp, msglvl;
+    static float smlnum;
+    extern int clartg_(a_fcomplex *, a_fcomplex *, float *, a_fcomplex *, a_fcomplex *), claset_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen);
+    extern double slamch_(char *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

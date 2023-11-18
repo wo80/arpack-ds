@@ -4,54 +4,54 @@
 
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__256 = 256;
-static integer c__3 = 3;
-static integer c__6 = 6;
-static integer c__30 = 30;
-static integer c_n6 = -6;
-static integer c__4 = 4;
+static a_int c__9 = 9;
+static a_int c__1 = 1;
+static a_int c__256 = 256;
+static a_int c__3 = 3;
+static a_int c__6 = 6;
+static a_int c__30 = 30;
+static a_int c_n6 = -6;
+static a_int c__4 = 4;
 
 /* Main program */ int MAIN__(void)
 {
     /* System generated locals */
-    integer i__1;
-    real r__1;
+    a_int i__1;
+    float r__1;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
+    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
     int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    real d__[90] /* was [30][3] */;
-    integer j, n;
-    real v[7680] /* was [256][30] */;
-    extern int av_(integer *, real *, real *);
-    real ax[256];
-    integer nx, ido, ncv, nev;
-    real tol;
+    float d__[90] /* was [30][3] */;
+    a_int j, n;
+    float v[7680] /* was [256][30] */;
+    extern int av_(a_int *, float *, float *);
+    float ax[256];
+    a_int nx, ido, ncv, nev;
+    float tol;
     char bmat[1];
-    integer mode, info;
-    logical rvec;
-    integer ierr;
-    extern doublereal snrm2_(integer *, real *, integer *);
+    a_int mode, info;
+    a_bool rvec;
+    a_int ierr;
+    extern double snrm2_(a_int *, float *, a_int *);
     char which[2];
-    real resid[256];
-    integer nconv;
-    real workd[768];
-    logical first;
-    integer ipntr[14];
-    real workl[2880];
-    extern int saxpy_(integer *, real *, real *, integer *, real *, integer *), smout_(integer *, integer *, integer *, real *, integer *, integer *, char *, ftnlen);
-    extern doublereal slapy2_(real *, real *);
-    integer iparam[11];
-    real sigmai;
-    logical select[30];
-    real sigmar;
-    extern int snaupd_(integer *, char *, integer *, char *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, ftnlen, ftnlen), sneupd_(logical *, char *, logical *, real *, real *, real *, integer *, real *, real *, real *, char *, integer *, char *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    integer ishfts, maxitr, lworkl;
-    real workev[90];
+    float resid[256];
+    a_int nconv;
+    float workd[768];
+    a_bool first;
+    a_int ipntr[14];
+    float workl[2880];
+    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
+    extern double slapy2_(float *, float *);
+    a_int iparam[11];
+    float sigmai;
+    a_bool select[30];
+    float sigmar;
+    extern int snaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen), sneupd_(a_bool *, char *, a_bool *, float *, float *, float *, a_int *, float *, float *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
+    a_int ishfts, maxitr, lworkl;
+    float workev[90];
 
     /* Fortran I/O blocks */
     static cilist io___5 = {0, 6, 0, 0, 0};
@@ -306,7 +306,7 @@ L10:
         e_wsle();
         s_wsle(&io___24);
         do_lio(&c__9, &c__1, " Error with _naupd, info = ", (ftnlen)27);
-        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___25);
         do_lio(&c__9, &c__1, " Check the documentation of _naupd", (ftnlen)34);
@@ -357,7 +357,7 @@ L10:
             e_wsle();
             s_wsle(&io___35);
             do_lio(&c__9, &c__1, " Error with _neupd, info = ", (ftnlen)27);
-            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(integer));
+            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(a_int));
             e_wsle();
             s_wsle(&io___36);
             do_lio(&c__9, &c__1, " Check the documentation of _neupd. ", (ftnlen)36);
@@ -489,16 +489,16 @@ L10:
         e_wsle();
         s_wsle(&io___52);
         do_lio(&c__9, &c__1, " Size of the matrix is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___53);
         do_lio(&c__9, &c__1, " The number of Ritz values requested is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___54);
         do_lio(&c__9, &c__1, " The number of Arnoldi vectors generated", (ftnlen)40);
         do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
-        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___55);
         do_lio(&c__9, &c__1, " What portion of the spectrum: ", (ftnlen)31);
@@ -506,20 +506,20 @@ L10:
         e_wsle();
         s_wsle(&io___56);
         do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___57);
         do_lio(&c__9, &c__1, " The number of Implicit Arnoldi update", (ftnlen)38);
         do_lio(&c__9, &c__1, " iterations taken is ", (ftnlen)21);
-        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___58);
         do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___59);
         do_lio(&c__9, &c__1, " The convergence criterion is ", (ftnlen)30);
-        do_lio(&c__4, &c__1, (char *)&tol, (ftnlen)sizeof(real));
+        do_lio(&c__4, &c__1, (char *)&tol, (ftnlen)sizeof(float));
         e_wsle();
         s_wsle(&io___60);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -542,17 +542,17 @@ L9000:
 /*     The matrix used is the 2 dimensional convection-diffusion */
 /*     operator discretized using central difference. */
 
-int av_(integer *nx, real *v, real *w)
+int av_(a_int *nx, float *v, float *w)
 {
     /* System generated locals */
-    integer i__1;
-    real r__1;
+    a_int i__1;
+    float r__1;
 
     /* Local variables */
-    integer j;
-    real h2;
-    integer lo;
-    extern int tv_(integer *, real *, real *), saxpy_(integer *, real *, real *, integer *, real *, integer *);
+    a_int j;
+    float h2;
+    a_int lo;
+    extern int tv_(a_int *, float *, float *), saxpy_(a_int *, float *, float *, a_int *, float *, a_int *);
 
     /*     Computes w <--- OP*v, where OP is the nx*nx by nx*nx block */
     /*     tridiagonal matrix */
@@ -579,7 +579,7 @@ int av_(integer *nx, real *v, real *w)
     --v;
 
     /* Function Body */
-    h2 = 1.f / (real)((*nx + 1) * (*nx + 1));
+    h2 = 1.f / (float)((*nx + 1) * (*nx + 1));
 
     tv_(nx, &v[1], &w[1]);
     r__1 = -1.f / h2;
@@ -606,15 +606,15 @@ int av_(integer *nx, real *v, real *w)
 } /* av_ */
 
 /* ========================================================================= */
-int tv_(integer *nx, real *x, real *y)
+int tv_(a_int *nx, float *x, float *y)
 {
     /* System generated locals */
-    integer i__1;
+    a_int i__1;
 
     /* Local variables */
-    real h__;
-    integer j;
-    real h2, dd, dl, du;
+    float h__;
+    a_int j;
+    float h2, dd, dl, du;
 
     /*     Compute the matrix vector multiplication y<---T*x */
     /*     where T is a nx by nx tridiagonal matrix with DD on the */
@@ -629,7 +629,7 @@ int tv_(integer *nx, real *x, real *y)
     --x;
 
     /* Function Body */
-    h__ = 1.f / (real)(*nx + 1);
+    h__ = 1.f / (float)(*nx + 1);
     h2 = h__ * h__;
     dd = 4.f / h2;
     dl = -1.f / h2 - 0.f / h__;

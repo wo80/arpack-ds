@@ -62,21 +62,21 @@
 
 /* ----------------------------------------------------------------------- */
 
-int csortc_(char *which, logical *apply, integer *n, complex *x, complex *y, ftnlen which_len)
+int csortc_(char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomplex *y, ftnlen which_len)
 {
     /* System generated locals */
-    integer i__1, i__2, i__3;
-    real r__1, r__2;
+    a_int i__1, i__2, i__3;
+    float r__1, r__2;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    double r_imag(complex *);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
+    double r_imag(a_fcomplex *);
 
     /* Local variables */
-    integer i__, j, igap;
-    complex temp;
-    real temp1, temp2;
-    extern doublereal slapy2_(real *, real *);
+    a_int i__, j, igap;
+    a_fcomplex temp;
+    float temp1, temp2;
+    extern double slapy2_(float *, float *);
 
     /*     %------------------% */
     /*     | Scalar Arguments | */

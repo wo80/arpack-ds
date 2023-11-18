@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static doublereal c_b26 = 1.;
-static doublereal c_b28 = 0.;
-static doublereal c_b31 = -1.;
+static a_int c__1 = 1;
+static double c_b26 = 1.;
+static double c_b28 = 0.;
+static double c_b31 = -1.;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -127,35 +127,35 @@ static doublereal c_b31 = -1.;
 
 /* ----------------------------------------------------------------------- */
 
-int dgetv0_(integer *ido, char *bmat, integer *itry, logical *initv, integer *n, integer *j, doublereal *v, integer *ldv, doublereal *resid, doublereal *rnorm, integer *ipntr, doublereal *workd, integer *ierr, ftnlen bmat_len)
+int dgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j, double *v, a_int *ldv, double *resid, double *rnorm, a_int *ipntr, double *workd, a_int *ierr, ftnlen bmat_len)
 {
     /* Initialized data */
 
-    static logical inits = TRUE_;
+    static a_bool inits = TRUE_;
 
     /* System generated locals */
-    integer v_dim1, v_offset, i__1;
+    a_int v_dim1, v_offset, i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    static real t0, t1, t2, t3;
-    integer jj;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    static integer iter;
-    static logical orth;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    static integer iseed[4];
-    extern int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, ftnlen);
-    integer idist;
-    extern int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    static logical first;
-    extern int dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen);
-    static doublereal rnorm0;
-    extern int arscnd_(real *);
-    static integer msglvl;
-    extern int dlarnv_(integer *, integer *, integer *, doublereal *);
+    static float t0, t1, t2, t3;
+    a_int jj;
+    extern double ddot_(a_int *, double *, a_int *, double *, a_int *);
+    static a_int iter;
+    static a_bool orth;
+    extern double dnrm2_(a_int *, double *, a_int *);
+    static a_int iseed[4];
+    extern int dgemv_(char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen);
+    a_int idist;
+    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *);
+    static a_bool first;
+    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen);
+    static double rnorm0;
+    extern int arscnd_(float *);
+    static a_int msglvl;
+    extern int dlarnv_(a_int *, a_int *, a_int *, double *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

@@ -4,70 +4,70 @@
 
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__256 = 256;
-static integer c__3 = 3;
-static integer c__6 = 6;
-static integer c__25 = 25;
-static integer c_n6 = -6;
-static integer c__5 = 5;
+static a_int c__9 = 9;
+static a_int c__1 = 1;
+static a_int c__256 = 256;
+static a_int c__3 = 3;
+static a_int c__6 = 6;
+static a_int c__25 = 25;
+static a_int c_n6 = -6;
+static a_int c__5 = 5;
 
 /* Main program */ int MAIN__(void)
 {
     /* System generated locals */
-    integer i__1, i__2, i__3;
-    doublereal d__1, d__2;
-    doublecomplex z__1;
+    a_int i__1, i__2, i__3;
+    double d__1, d__2;
+    a_dcomplex z__1;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
+    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
     int s_copy(char *, char *, ftnlen, ftnlen);
-    double d_imag(doublecomplex *);
+    double d_imag(a_dcomplex *);
 
     /* Local variables */
-    doublereal d__[75] /* was [25][3] */;
-    integer j, n;
-    doublereal v[6400] /* was [256][25] */;
-    doublecomplex c1, c2, c3;
-    extern int av_(integer *, doublereal *, doublereal *);
-    doublereal ax[256];
-    extern int mv_(integer *, doublereal *, doublereal *);
-    doublereal mx[256];
-    doublecomplex cdd[256], cdl[256], cdu[256];
-    integer ido, ncv, nev;
-    doublereal tol;
-    doublecomplex cdu2[256];
-    doublereal deni;
+    double d__[75] /* was [25][3] */;
+    a_int j, n;
+    double v[6400] /* was [256][25] */;
+    a_dcomplex c1, c2, c3;
+    extern int av_(a_int *, double *, double *);
+    double ax[256];
+    extern int mv_(a_int *, double *, double *);
+    double mx[256];
+    a_dcomplex cdd[256], cdl[256], cdu[256];
+    a_int ido, ncv, nev;
+    double tol;
+    a_dcomplex cdu2[256];
+    double deni;
     char bmat[1];
-    integer mode;
-    doublereal denr;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer info;
-    logical rvec;
-    integer ierr, ipiv[256];
-    doublereal numi, numr;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
+    a_int mode;
+    double denr;
+    extern double ddot_(a_int *, double *, a_int *, double *, a_int *);
+    a_int info;
+    a_bool rvec;
+    a_int ierr, ipiv[256];
+    double numi, numr;
+    extern double dnrm2_(a_int *, double *, a_int *);
     char which[2];
-    doublereal resid[256];
-    doublecomplex ctemp[256];
-    integer nconv;
-    extern int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
-    doublereal workd[768];
-    logical first;
-    extern int dmout_(integer *, integer *, integer *, doublereal *, integer *, integer *, char *, ftnlen);
-    integer ipntr[14];
-    doublereal workl[2025];
-    extern doublereal dlapy2_(doublereal *, doublereal *);
-    integer iparam[11];
-    doublereal sigmai;
-    extern int dnaupd_(integer *, char *, integer *, char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, ftnlen, ftnlen);
-    logical select[25];
-    extern int dneupd_(logical *, char *, logical *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, char *, integer *, char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    doublereal sigmar;
-    integer ishfts, maxitr, lworkl;
-    doublereal workev[75];
-    extern int zgttrf_(integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, integer *), zgttrs_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, ftnlen);
+    double resid[256];
+    a_dcomplex ctemp[256];
+    a_int nconv;
+    extern int daxpy_(a_int *, double *, double *, a_int *, double *, a_int *);
+    double workd[768];
+    a_bool first;
+    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
+    a_int ipntr[14];
+    double workl[2025];
+    extern double dlapy2_(double *, double *);
+    a_int iparam[11];
+    double sigmai;
+    extern int dnaupd_(a_int *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen);
+    a_bool select[25];
+    extern int dneupd_(a_bool *, char *, a_bool *, double *, double *, double *, a_int *, double *, double *, double *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
+    double sigmar;
+    a_int ishfts, maxitr, lworkl;
+    double workev[75];
+    extern int zgttrf_(a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, a_int *), zgttrs_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___4 = {0, 6, 0, 0, 0};
@@ -477,7 +477,7 @@ L20:
         e_wsle();
         s_wsle(&io___45);
         do_lio(&c__9, &c__1, " Error with _naupd, info = ", (ftnlen)27);
-        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___46);
         do_lio(&c__9, &c__1, " Check the documentation of _naupd.", (ftnlen)35);
@@ -527,7 +527,7 @@ L20:
             e_wsle();
             s_wsle(&io___53);
             do_lio(&c__9, &c__1, " Error with _neupd, info = ", (ftnlen)27);
-            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(integer));
+            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(a_int));
             e_wsle();
             s_wsle(&io___54);
             do_lio(&c__9, &c__1, " Check the documentation of _neupd. ", (ftnlen)36);
@@ -746,16 +746,16 @@ L20:
         e_wsle();
         s_wsle(&io___74);
         do_lio(&c__9, &c__1, " Size of the matrix is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___75);
         do_lio(&c__9, &c__1, " The number of Ritz values requested is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___76);
         do_lio(&c__9, &c__1, " The number of Arnoldi vectors generated", (ftnlen)40);
         do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
-        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___77);
         do_lio(&c__9, &c__1, " What portion of the spectrum: ", (ftnlen)31);
@@ -763,20 +763,20 @@ L20:
         e_wsle();
         s_wsle(&io___78);
         do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___79);
         do_lio(&c__9, &c__1, " The number of Implicit Arnoldi update", (ftnlen)38);
         do_lio(&c__9, &c__1, " iterations taken is ", (ftnlen)21);
-        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___80);
         do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___81);
         do_lio(&c__9, &c__1, " The convergence criterion is ", (ftnlen)30);
-        do_lio(&c__5, &c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
+        do_lio(&c__5, &c__1, (char *)&tol, (ftnlen)sizeof(double));
         e_wsle();
         s_wsle(&io___82);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -796,13 +796,13 @@ L9000:
 
 /*     matrix vector multiplication subroutine */
 
-int mv_(integer *n, doublereal *v, doublereal *w)
+int mv_(a_int *n, double *v, double *w)
 {
     /* System generated locals */
-    integer i__1;
+    a_int i__1;
 
     /* Local variables */
-    integer j;
+    a_int j;
 
     /*     Compute the matrix vector multiplication y<---M*x */
     /*     where M is a n by n symmetric tridiagonal matrix with 4 on the */
@@ -825,13 +825,13 @@ int mv_(integer *n, doublereal *v, doublereal *w)
 } /* mv_ */
 
 /* ------------------------------------------------------------------ */
-int av_(integer *n, doublereal *v, doublereal *w)
+int av_(a_int *n, double *v, double *w)
 {
     /* System generated locals */
-    integer i__1;
+    a_int i__1;
 
     /* Local variables */
-    integer j;
+    a_int j;
 
     /*     Compute the matrix vector multiplication y<---A*x */
     /*     where M is a n by n symmetric tridiagonal matrix with 2 on the */

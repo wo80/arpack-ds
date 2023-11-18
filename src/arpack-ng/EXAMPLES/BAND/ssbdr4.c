@@ -4,60 +4,60 @@
 
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__50 = 50;
-static real c_b15 = 0.f;
-static integer c__1000 = 1000;
-static integer c__3 = 3;
-static integer c__4 = 4;
-static real c_b97 = 1.f;
-static integer c__6 = 6;
-static integer c__2 = 2;
-static integer c_n6 = -6;
+static a_int c__9 = 9;
+static a_int c__1 = 1;
+static a_int c__50 = 50;
+static float c_b15 = 0.f;
+static a_int c__1000 = 1000;
+static a_int c__3 = 3;
+static a_int c__4 = 4;
+static float c_b97 = 1.f;
+static a_int c__6 = 6;
+static a_int c__2 = 2;
+static a_int c_n6 = -6;
 
 /* Main program */ int MAIN__(void)
 {
     /* System generated locals */
-    integer i__1;
-    real r__1;
+    a_int i__1;
+    float r__1;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
+    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
     int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    real a[50000] /* was [50][1000] */, d__[100] /* was [50][2] */, h__;
-    integer j;
-    real m[50000] /* was [50][1000] */;
-    integer n;
-    real v[50000] /* was [1000][50] */, r1, r2;
-    integer kl;
-    real ax[1000];
-    integer ku;
-    real mx[1000];
-    integer ido, ncv, nev;
-    real tol, rfac[50000] /* was [50][1000] */;
+    float a[50000] /* was [50][1000] */, d__[100] /* was [50][2] */, h__;
+    a_int j;
+    float m[50000] /* was [50][1000] */;
+    a_int n;
+    float v[50000] /* was [1000][50] */, r1, r2;
+    a_int kl;
+    float ax[1000];
+    a_int ku;
+    float mx[1000];
+    a_int ido, ncv, nev;
+    float tol, rfac[50000] /* was [50][1000] */;
     char bmat[1];
-    integer mode, info;
-    logical rvec;
-    integer isub, isup;
-    extern doublereal snrm2_(integer *, real *, integer *);
-    integer idiag;
-    real sigma;
+    a_int mode, info;
+    a_bool rvec;
+    a_int isub, isup;
+    extern double snrm2_(a_int *, float *, a_int *);
+    a_int idiag;
+    float sigma;
     char which[2];
-    real resid[1000];
-    extern int sgbmv_(char *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, ftnlen);
-    integer nconv;
-    real workd[3000];
-    integer iwork[1000];
-    real workl[2900];
-    extern int saxpy_(integer *, real *, real *, integer *, real *, integer *), smout_(integer *, integer *, integer *, real *, integer *, integer *, char *, ftnlen);
-    integer iparam[11];
-    extern int ssband_(logical *, char *, logical *, real *, real *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, integer *, char *, char *, integer *, real *, real *, integer *, real *, integer *, integer *, real *, real *, integer *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    logical select[50];
-    extern int slaset_(char *, integer *, integer *, real *, real *, real *, integer *, ftnlen);
-    integer maxitr, lworkl;
+    float resid[1000];
+    extern int sgbmv_(char *, a_int *, a_int *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen);
+    a_int nconv;
+    float workd[3000];
+    a_int iwork[1000];
+    float workl[2900];
+    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
+    a_int iparam[11];
+    extern int ssband_(a_bool *, char *, a_bool *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, char *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, float *, float *, a_int *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
+    a_bool select[50];
+    extern int slaset_(char *, a_int *, a_int *, float *, float *, float *, a_int *, ftnlen);
+    a_int maxitr, lworkl;
 
     /* Fortran I/O blocks */
     static cilist io___4 = {0, 6, 0, 0, 0};
@@ -254,7 +254,7 @@ static integer c_n6 = -6;
     /*     | Main diagonal | */
     /*     %---------------% */
 
-    h__ = 1.f / (real)(n + 1);
+    h__ = 1.f / (float)(n + 1);
     r1 = .66666666666666663f;
     idiag = kl + ku + 1;
     i__1 = n;
@@ -317,20 +317,20 @@ static integer c_n6 = -6;
         e_wsle();
         s_wsle(&io___42);
         do_lio(&c__9, &c__1, " The size of the matrix is ", (ftnlen)27);
-        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___43);
         do_lio(&c__9, &c__1, " Number of eigenvalue requested is ", (ftnlen)35);
-        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___44);
         do_lio(&c__9, &c__1, " The number of Lanczos vectors generated", (ftnlen)40);
         do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
-        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___45);
         do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___46);
         do_lio(&c__9, &c__1, " What portion of the spectrum ", (ftnlen)30);
@@ -339,15 +339,15 @@ static integer c_n6 = -6;
         s_wsle(&io___47);
         do_lio(&c__9, &c__1, " The number of Implicit Arnoldi", (ftnlen)31);
         do_lio(&c__9, &c__1, " update taken is ", (ftnlen)17);
-        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___48);
         do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___49);
         do_lio(&c__9, &c__1, " The convergence tolerance is ", (ftnlen)30);
-        do_lio(&c__4, &c__1, (char *)&tol, (ftnlen)sizeof(real));
+        do_lio(&c__4, &c__1, (char *)&tol, (ftnlen)sizeof(float));
         e_wsle();
         s_wsle(&io___50);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -389,7 +389,7 @@ static integer c_n6 = -6;
         e_wsle();
         s_wsle(&io___54);
         do_lio(&c__9, &c__1, " Error with _sband, info= ", (ftnlen)26);
-        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___55);
         do_lio(&c__9, &c__1, " Check the documentation of _sband ", (ftnlen)35);

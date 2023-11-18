@@ -67,19 +67,19 @@
 
 /* ----------------------------------------------------------------------- */
 
-int dsortc_(char *which, logical *apply, integer *n, doublereal *xreal, doublereal *ximag, doublereal *y, ftnlen which_len)
+int dsortc_(char *which, a_bool *apply, a_int *n, double *xfloat, double *ximag, double *y, ftnlen which_len)
 {
     /* System generated locals */
-    integer i__1;
-    doublereal d__1, d__2;
+    a_int i__1;
+    double d__1, d__2;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, j, igap;
-    doublereal temp, temp1, temp2;
-    extern doublereal dlapy2_(doublereal *, doublereal *);
+    a_int i__, j, igap;
+    double temp, temp1, temp2;
+    extern double dlapy2_(double *, double *);
 
     /*     %------------------% */
     /*     | Scalar Arguments | */
@@ -127,14 +127,14 @@ int dsortc_(char *which, logical *apply, integer *n, doublereal *xreal, doublere
                 goto L30;
             }
 
-            temp1 = dlapy2_(&xreal[j], &ximag[j]);
-            temp2 = dlapy2_(&xreal[j + igap], &ximag[j + igap]);
+            temp1 = dlapy2_(&xfloat[j], &ximag[j]);
+            temp2 = dlapy2_(&xfloat[j + igap], &ximag[j + igap]);
 
             if (temp1 > temp2)
             {
-                temp = xreal[j];
-                xreal[j] = xreal[j + igap];
-                xreal[j + igap] = temp;
+                temp = xfloat[j];
+                xfloat[j] = xfloat[j + igap];
+                xfloat[j + igap] = temp;
 
                 temp = ximag[j];
                 ximag[j] = ximag[j + igap];
@@ -182,14 +182,14 @@ int dsortc_(char *which, logical *apply, integer *n, doublereal *xreal, doublere
                 goto L60;
             }
 
-            temp1 = dlapy2_(&xreal[j], &ximag[j]);
-            temp2 = dlapy2_(&xreal[j + igap], &ximag[j + igap]);
+            temp1 = dlapy2_(&xfloat[j], &ximag[j]);
+            temp2 = dlapy2_(&xfloat[j + igap], &ximag[j + igap]);
 
             if (temp1 < temp2)
             {
-                temp = xreal[j];
-                xreal[j] = xreal[j + igap];
-                xreal[j + igap] = temp;
+                temp = xfloat[j];
+                xfloat[j] = xfloat[j + igap];
+                xfloat[j + igap] = temp;
 
                 temp = ximag[j];
                 ximag[j] = ximag[j + igap];
@@ -237,11 +237,11 @@ int dsortc_(char *which, logical *apply, integer *n, doublereal *xreal, doublere
                 goto L90;
             }
 
-            if (xreal[j] > xreal[j + igap])
+            if (xfloat[j] > xfloat[j + igap])
             {
-                temp = xreal[j];
-                xreal[j] = xreal[j + igap];
-                xreal[j + igap] = temp;
+                temp = xfloat[j];
+                xfloat[j] = xfloat[j + igap];
+                xfloat[j + igap] = temp;
 
                 temp = ximag[j];
                 ximag[j] = ximag[j + igap];
@@ -288,11 +288,11 @@ int dsortc_(char *which, logical *apply, integer *n, doublereal *xreal, doublere
                 goto L120;
             }
 
-            if (xreal[j] < xreal[j + igap])
+            if (xfloat[j] < xfloat[j + igap])
             {
-                temp = xreal[j];
-                xreal[j] = xreal[j + igap];
-                xreal[j + igap] = temp;
+                temp = xfloat[j];
+                xfloat[j] = xfloat[j + igap];
+                xfloat[j + igap] = temp;
 
                 temp = ximag[j];
                 ximag[j] = ximag[j + igap];
@@ -341,9 +341,9 @@ int dsortc_(char *which, logical *apply, integer *n, doublereal *xreal, doublere
 
             if ((d__1 = ximag[j], abs(d__1)) > (d__2 = ximag[j + igap], abs(d__2)))
             {
-                temp = xreal[j];
-                xreal[j] = xreal[j + igap];
-                xreal[j + igap] = temp;
+                temp = xfloat[j];
+                xfloat[j] = xfloat[j + igap];
+                xfloat[j + igap] = temp;
 
                 temp = ximag[j];
                 ximag[j] = ximag[j + igap];
@@ -392,9 +392,9 @@ int dsortc_(char *which, logical *apply, integer *n, doublereal *xreal, doublere
 
             if ((d__1 = ximag[j], abs(d__1)) < (d__2 = ximag[j + igap], abs(d__2)))
             {
-                temp = xreal[j];
-                xreal[j] = xreal[j + igap];
-                xreal[j + igap] = temp;
+                temp = xfloat[j];
+                xfloat[j] = xfloat[j + igap];
+                xfloat[j + igap] = temp;
 
                 temp = ximag[j];
                 ximag[j] = ximag[j + igap];

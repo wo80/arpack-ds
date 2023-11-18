@@ -4,7 +4,7 @@
 
 /* Table of constant values */
 
-static doublereal c_b3 = .66666666666666663;
+static double c_b3 = .66666666666666663;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -70,21 +70,21 @@ static doublereal c_b3 = .66666666666666663;
 
 /* ----------------------------------------------------------------------- */
 
-int dnconv_(integer *n, doublereal *ritzr, doublereal *ritzi, doublereal *bounds, doublereal *tol, integer *nconv)
+int dnconv_(a_int *n, double *ritzr, double *ritzi, double *bounds, double *tol, a_int *nconv)
 {
     /* System generated locals */
-    integer i__1;
-    doublereal d__1, d__2;
+    a_int i__1;
+    double d__1, d__2;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *);
+    double pow_dd(double *, double *);
 
     /* Local variables */
-    integer i__;
-    static real t0, t1;
-    doublereal eps23, temp;
-    extern doublereal dlapy2_(doublereal *, doublereal *), dlamch_(char *, ftnlen);
-    extern int arscnd_(real *);
+    a_int i__;
+    static float t0, t1;
+    double eps23, temp;
+    extern double dlapy2_(double *, double *), dlamch_(char *, ftnlen);
+    extern int arscnd_(float *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

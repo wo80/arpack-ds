@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static doublereal c_b4 = 0.;
-static doublereal c_b5 = 1.;
-static integer c__1 = 1;
-static doublereal c_b20 = -1.;
+static double c_b4 = 0.;
+static double c_b5 = 1.;
+static a_int c__1 = 1;
+static double c_b20 = -1.;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -139,30 +139,30 @@ static doublereal c_b20 = -1.;
 
 /* ----------------------------------------------------------------------- */
 
-int dsapps_(integer *n, integer *kev, integer *np, doublereal *shift, doublereal *v, integer *ldv, doublereal *h__, integer *ldh, doublereal *resid, doublereal *q, integer *ldq, doublereal *workd)
+int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ldv, double *h__, a_int *ldh, double *resid, double *q, a_int *ldq, double *workd)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static a_bool first = TRUE_;
 
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4;
-    doublereal d__1, d__2;
+    a_int h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3, i__4;
+    double d__1, d__2;
 
     /* Local variables */
-    doublereal c__, f, g;
-    integer i__, j;
-    doublereal r__, s, a1, a2, a3, a4;
-    static real t0, t1;
-    integer jj;
-    doublereal big;
-    integer iend, itop;
-    extern int dscal_(integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, ftnlen), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen);
-    extern doublereal dlamch_(char *, ftnlen);
-    extern int arscnd_(real *);
-    static doublereal epsmch;
-    integer istart, kplusp, msglvl;
-    extern int dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, ftnlen);
+    double c__, f, g;
+    a_int i__, j;
+    double r__, s, a1, a2, a3, a4;
+    static float t0, t1;
+    a_int jj;
+    double big;
+    a_int iend, itop;
+    extern int dscal_(a_int *, double *, double *, a_int *), dgemv_(char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen), dcopy_(a_int *, double *, a_int *, double *, a_int *), daxpy_(a_int *, double *, double *, a_int *, double *, a_int *), dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen);
+    extern double dlamch_(char *, ftnlen);
+    extern int arscnd_(float *);
+    static double epsmch;
+    a_int istart, kplusp, msglvl;
+    extern int dlartg_(double *, double *, double *, double *, double *), dlaset_(char *, a_int *, a_int *, double *, double *, double *, a_int *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

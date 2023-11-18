@@ -4,11 +4,11 @@
 
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static real c_b50 = 1.f;
-static real c_b52 = 0.f;
-static integer c__3 = 3;
+static a_int c__9 = 9;
+static a_int c__1 = 1;
+static float c_b50 = 1.f;
+static float c_b52 = 0.f;
+static a_int c__3 = 3;
 
 /* \BeginDoc */
 
@@ -343,20 +343,20 @@ static integer c__3 = 3;
 
 /* --------------------------------------------------------------------- */
 
-int ssband_(logical *rvec, char *howmny, logical *select, real *d__, real *z__, integer *ldz, real *sigma, integer *n, real *ab, real *mb, integer *lda, real *rfac, integer *kl, integer *ku, char *which, char *bmat, integer *nev, real *tol, real *resid, integer *ncv, real *v, integer *ldv, integer *iparam, real *workd, real *workl, integer *lworkl, integer *iwork, integer *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
+int ssband_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, a_int *ldz, float *sigma, a_int *n, float *ab, float *mb, a_int *lda, float *rfac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, float *workd, float *workl, a_int *lworkl, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
 {
     /* System generated locals */
-    integer v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, rfac_dim1, rfac_offset, i__1, i__2;
+    a_int v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, rfac_dim1, rfac_offset, i__1, i__2;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
+    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
 
     /* Local variables */
-    integer i__, j, ido, imid, ibot, ierr, itop, type__;
-    extern int sgbmv_(char *, integer *, integer *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, ftnlen);
-    integer ipntr[14];
-    extern int scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), sgbtrf_(integer *, integer *, integer *, integer *, real *, integer *, integer *, integer *), slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *, ftnlen), ssaupd_(integer *, char *, integer *, char *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, ftnlen, ftnlen),
-        sseupd_(logical *, char *, logical *, real *, real *, integer *, real *, char *, integer *, char *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, ftnlen, ftnlen, ftnlen), sgbtrs_(char *, integer *, integer *, integer *, integer *, real *, integer *, integer *, real *, integer *, integer *, ftnlen);
+    a_int i__, j, ido, imid, ibot, ierr, itop, type__;
+    extern int sgbmv_(char *, a_int *, a_int *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen);
+    a_int ipntr[14];
+    extern int scopy_(a_int *, float *, a_int *, float *, a_int *), saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), sgbtrf_(a_int *, a_int *, a_int *, a_int *, float *, a_int *, a_int *, a_int *), slacpy_(char *, a_int *, a_int *, float *, a_int *, float *, a_int *, ftnlen), ssaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen),
+        sseupd_(a_bool *, char *, a_bool *, float *, float *, a_int *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen), sgbtrs_(char *, a_int *, a_int *, a_int *, a_int *, float *, a_int *, a_int *, float *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___2 = {0, 6, 0, 0, 0};
@@ -977,7 +977,7 @@ L90:
             e_wsle();
             s_wsle(&io___50);
             do_lio(&c__9, &c__1, " Error with _saupd info = ", (ftnlen)26);
-            do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
+            do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(a_int));
             e_wsle();
             s_wsle(&io___51);
             do_lio(&c__9, &c__1, " Check the documentation of _saupd ", (ftnlen)35);
@@ -1036,7 +1036,7 @@ L90:
                     e_wsle();
                     s_wsle(&io___60);
                     do_lio(&c__9, &c__1, " Error with _neupd = ", (ftnlen)21);
-                    do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
+                    do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(a_int));
                     e_wsle();
                     s_wsle(&io___61);
                     do_lio(&c__9, &c__1, " Check the documentation of _neupd ", (ftnlen)35);

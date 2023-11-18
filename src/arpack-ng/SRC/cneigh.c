@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static logical c_true = TRUE_;
-static integer c__1 = 1;
+static a_fcomplex c_b1 = {1.f, 0.f};
+static a_fcomplex c_b2 = {0.f, 0.f};
+static a_bool c_true = TRUE_;
+static a_int c__1 = 1;
 
 /* \BeginDoc */
 
@@ -107,23 +107,23 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int cneigh_(real *rnorm, integer *n, complex *h__, integer *ldh, complex *ritz, complex *bounds, complex *q, integer *ldq, complex *workl, real *rwork, integer *ierr)
+int cneigh_(float *rnorm, a_int *n, a_fcomplex *h__, a_int *ldh, a_fcomplex *ritz, a_fcomplex *bounds, a_fcomplex *q, a_int *ldq, a_fcomplex *workl, float *rwork, a_int *ierr)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, i__1;
-    real r__1;
+    a_int h_dim1, h_offset, q_dim1, q_offset, i__1;
+    float r__1;
 
     /* Local variables */
-    integer j;
-    static real t0, t1;
-    complex vl[1];
-    real temp;
-    extern int ccopy_(integer *, complex *, integer *, complex *, integer *), cmout_(integer *, integer *, integer *, complex *, integer *, integer *, char *, ftnlen), cvout_(integer *, integer *, complex *, integer *, char *, ftnlen);
-    extern doublereal scnrm2_(integer *, complex *, integer *);
-    extern int csscal_(integer *, real *, complex *, integer *), clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *, ftnlen);
-    logical select[1];
-    integer msglvl;
-    extern int ctrevc_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, real *, integer *, ftnlen, ftnlen), arscnd_(real *), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *, ftnlen);
+    a_int j;
+    static float t0, t1;
+    a_fcomplex vl[1];
+    float temp;
+    extern int ccopy_(a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *), cmout_(a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, char *, ftnlen), cvout_(a_int *, a_int *, a_fcomplex *, a_int *, char *, ftnlen);
+    extern double scnrm2_(a_int *, a_fcomplex *, a_int *);
+    extern int csscal_(a_int *, float *, a_fcomplex *, a_int *), clahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *), clacpy_(char *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, ftnlen);
+    a_bool select[1];
+    a_int msglvl;
+    extern int ctrevc_(char *, char *, a_bool *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *, a_fcomplex *, float *, a_int *, ftnlen, ftnlen), arscnd_(float *), claset_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

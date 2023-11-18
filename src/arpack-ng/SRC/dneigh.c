@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static logical c_true = TRUE_;
-static integer c__1 = 1;
-static doublereal c_b23 = 1.;
-static doublereal c_b25 = 0.;
+static a_bool c_true = TRUE_;
+static a_int c__1 = 1;
+static double c_b23 = 1.;
+static double c_b25 = 0.;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -107,25 +107,25 @@ static doublereal c_b25 = 0.;
 
 /* ----------------------------------------------------------------------- */
 
-int dneigh_(doublereal *rnorm, integer *n, doublereal *h__, integer *ldh, doublereal *ritzr, doublereal *ritzi, doublereal *bounds, doublereal *q, integer *ldq, doublereal *workl, integer *ierr)
+int dneigh_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *ritzr, double *ritzi, double *bounds, double *q, a_int *ldq, double *workl, a_int *ierr)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, i__1;
-    doublereal d__1, d__2;
+    a_int h_dim1, h_offset, q_dim1, q_offset, i__1;
+    double d__1, d__2;
 
     /* Local variables */
-    integer i__, j;
-    static real t0, t1;
-    doublereal vl[1], temp;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    extern int dscal_(integer *, doublereal *, doublereal *, integer *);
-    integer iconj;
-    extern int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, ftnlen), dmout_(integer *, integer *, integer *, doublereal *, integer *, integer *, char *, ftnlen), dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen);
-    extern doublereal dlapy2_(doublereal *, doublereal *);
-    extern int arscnd_(real *), dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *);
-    logical select[1];
-    integer msglvl;
-    extern int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, ftnlen), dtrevc_(char *, char *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, ftnlen, ftnlen);
+    a_int i__, j;
+    static float t0, t1;
+    double vl[1], temp;
+    extern double dnrm2_(a_int *, double *, a_int *);
+    extern int dscal_(a_int *, double *, double *, a_int *);
+    a_int iconj;
+    extern int dgemv_(char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen), dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen), dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen);
+    extern double dlapy2_(double *, double *);
+    extern int arscnd_(float *), dlahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, a_int *, double *, a_int *, a_int *);
+    a_bool select[1];
+    a_int msglvl;
+    extern int dlacpy_(char *, a_int *, a_int *, double *, a_int *, double *, a_int *, ftnlen), dtrevc_(char *, char *, a_bool *, a_int *, double *, a_int *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, a_int *, ftnlen, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

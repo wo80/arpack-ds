@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static logical c_false = FALSE_;
-static doublereal c_b25 = 1.;
-static doublereal c_b47 = 0.;
-static doublereal c_b50 = -1.;
-static integer c__2 = 2;
+static a_int c__1 = 1;
+static a_bool c_false = FALSE_;
+static double c_b25 = 1.;
+static double c_b47 = 0.;
+static double c_b50 = -1.;
+static a_int c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -219,49 +219,49 @@ static integer c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int dnaitr_(integer *ido, char *bmat, integer *n, integer *k, integer *np, integer *nb, doublereal *resid, doublereal *rnorm, doublereal *v, integer *ldv, doublereal *h__, integer *ldh, integer *ipntr, doublereal *workd, integer *info, ftnlen bmat_len)
+int dnaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, double *resid, double *rnorm, double *v, a_int *ldv, double *h__, a_int *ldh, a_int *ipntr, double *workd, a_int *info, ftnlen bmat_len)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static a_bool first = TRUE_;
 
     /* System generated locals */
-    integer h_dim1, h_offset, v_dim1, v_offset, i__1, i__2;
-    doublereal d__1, d__2;
+    a_int h_dim1, h_offset, v_dim1, v_offset, i__1, i__2;
+    double d__1, d__2;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    integer i__;
-    static integer j;
-    static real t0, t1, t2, t3, t4, t5;
-    integer jj;
-    static integer ipj, irj, ivj;
-    static doublereal ulp;
-    doublereal tst1;
-    extern doublereal ddot_(integer *, doublereal *, integer *, doublereal *, integer *);
-    static integer ierr, iter;
-    static doublereal unfl, ovfl;
-    static integer itry;
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    doublereal temp1;
-    static logical orth1, orth2, step3, step4;
-    static doublereal betaj;
-    extern int dscal_(integer *, doublereal *, doublereal *, integer *), dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, ftnlen);
-    integer infol;
-    extern int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dmout_(integer *, integer *, integer *, doublereal *, integer *, integer *, char *, ftnlen);
-    doublereal xtemp[2];
-    extern int dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen);
-    static doublereal wnorm;
-    extern int ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), dgetv0_(integer *, char *, integer *, logical *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, ftnlen), dlabad_(doublereal *, doublereal *);
-    static doublereal rnorm1;
-    extern doublereal dlamch_(char *, ftnlen);
-    extern int dlascl_(char *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, ftnlen), arscnd_(real *);
-    extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *, ftnlen);
-    static logical rstart;
-    static integer msglvl;
-    static doublereal smlnum;
+    a_int i__;
+    static a_int j;
+    static float t0, t1, t2, t3, t4, t5;
+    a_int jj;
+    static a_int ipj, irj, ivj;
+    static double ulp;
+    double tst1;
+    extern double ddot_(a_int *, double *, a_int *, double *, a_int *);
+    static a_int ierr, iter;
+    static double unfl, ovfl;
+    static a_int itry;
+    extern double dnrm2_(a_int *, double *, a_int *);
+    double temp1;
+    static a_bool orth1, orth2, step3, step4;
+    static double betaj;
+    extern int dscal_(a_int *, double *, double *, a_int *), dgemv_(char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen);
+    a_int infol;
+    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *), daxpy_(a_int *, double *, double *, a_int *, double *, a_int *), dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
+    double xtemp[2];
+    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen);
+    static double wnorm;
+    extern int ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), dgetv0_(a_int *, char *, a_int *, a_bool *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, double *, a_int *, ftnlen), dlabad_(double *, double *);
+    static double rnorm1;
+    extern double dlamch_(char *, ftnlen);
+    extern int dlascl_(char *, a_int *, a_int *, double *, double *, a_int *, a_int *, double *, a_int *, a_int *, ftnlen), arscnd_(float *);
+    extern double dlanhs_(char *, a_int *, double *, a_int *, double *, ftnlen);
+    static a_bool rstart;
+    static a_int msglvl;
+    static double smlnum;
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

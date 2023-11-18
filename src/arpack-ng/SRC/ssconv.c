@@ -4,7 +4,7 @@
 
 /* Table of constant values */
 
-static doublereal c_b3 = .66666666666666663;
+static double c_b3 = .66666666666666663;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -64,22 +64,22 @@ static doublereal c_b3 = .66666666666666663;
 
 /* ----------------------------------------------------------------------- */
 
-int ssconv_(integer *n, real *ritz, real *bounds, real *tol, integer *nconv)
+int ssconv_(a_int *n, float *ritz, float *bounds, float *tol, a_int *nconv)
 {
     /* System generated locals */
-    integer i__1;
-    real r__1, r__2, r__3;
-    doublereal d__1;
+    a_int i__1;
+    float r__1, r__2, r__3;
+    double d__1;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *);
+    double pow_dd(double *, double *);
 
     /* Local variables */
-    integer i__;
-    static real t0, t1;
-    real eps23, temp;
-    extern doublereal slamch_(char *, ftnlen);
-    extern int arscnd_(real *);
+    a_int i__;
+    static float t0, t1;
+    float eps23, temp;
+    extern double slamch_(char *, ftnlen);
+    extern int arscnd_(float *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -131,7 +131,7 @@ int ssconv_(integer *n, real *ritz, real *bounds, real *tol, integer *nconv)
     arscnd_(&t0);
 
     eps23 = slamch_("Epsilon-Machine", (ftnlen)15);
-    d__1 = (doublereal)eps23;
+    d__1 = (double)eps23;
     eps23 = pow_dd(&d__1, &c_b3);
 
     *nconv = 0;

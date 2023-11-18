@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static logical c_true = TRUE_;
-static integer c__1 = 1;
-static real c_b23 = 1.f;
-static real c_b25 = 0.f;
+static a_bool c_true = TRUE_;
+static a_int c__1 = 1;
+static float c_b23 = 1.f;
+static float c_b25 = 0.f;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -107,24 +107,24 @@ static real c_b25 = 0.f;
 
 /* ----------------------------------------------------------------------- */
 
-int sneigh_(real *rnorm, integer *n, real *h__, integer *ldh, real *ritzr, real *ritzi, real *bounds, real *q, integer *ldq, real *workl, integer *ierr)
+int sneigh_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *ritzr, float *ritzi, float *bounds, float *q, a_int *ldq, float *workl, a_int *ierr)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, i__1;
-    real r__1, r__2;
+    a_int h_dim1, h_offset, q_dim1, q_offset, i__1;
+    float r__1, r__2;
 
     /* Local variables */
-    integer i__, j;
-    static real t0, t1;
-    real vl[1], temp;
-    extern doublereal snrm2_(integer *, real *, integer *);
-    integer iconj;
-    extern int sscal_(integer *, real *, real *, integer *), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, ftnlen), smout_(integer *, integer *, integer *, real *, integer *, integer *, char *, ftnlen), svout_(integer *, integer *, real *, integer *, char *, ftnlen);
-    extern doublereal slapy2_(real *, real *);
-    extern int arscnd_(real *);
-    logical select[1];
-    integer msglvl;
-    extern int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *, ftnlen), slahqr_(logical *, logical *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *), strevc_(char *, char *, logical *, integer *, real *, integer *, real *, integer *, real *, integer *, integer *, integer *, real *, integer *, ftnlen, ftnlen);
+    a_int i__, j;
+    static float t0, t1;
+    float vl[1], temp;
+    extern double snrm2_(a_int *, float *, a_int *);
+    a_int iconj;
+    extern int sscal_(a_int *, float *, float *, a_int *), sgemv_(char *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen);
+    extern double slapy2_(float *, float *);
+    extern int arscnd_(float *);
+    a_bool select[1];
+    a_int msglvl;
+    extern int slacpy_(char *, a_int *, a_int *, float *, a_int *, float *, a_int *, ftnlen), slahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, float *, a_int *, float *, float *, a_int *, a_int *, float *, a_int *, a_int *), strevc_(char *, char *, a_bool *, a_int *, float *, a_int *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, a_int *, ftnlen, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

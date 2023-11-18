@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static doublereal c_b5 = 0.;
-static doublereal c_b6 = 1.;
-static integer c__1 = 1;
-static doublereal c_b43 = -1.;
+static double c_b5 = 0.;
+static double c_b6 = 1.;
+static a_int c__1 = 1;
+static double c_b43 = -1.;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -151,42 +151,42 @@ static doublereal c_b43 = -1.;
 
 /* ----------------------------------------------------------------------- */
 
-int dnapps_(integer *n, integer *kev, integer *np, doublereal *shiftr, doublereal *shifti, doublereal *v, integer *ldv, doublereal *h__, integer *ldh, doublereal *resid, doublereal *q, integer *ldq, doublereal *workl, doublereal *workd)
+int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, double *v, a_int *ldv, double *h__, a_int *ldh, double *resid, double *q, a_int *ldq, double *workl, double *workd)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static a_bool first = TRUE_;
 
     /* System generated locals */
-    integer h_dim1, h_offset, v_dim1, v_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4;
-    doublereal d__1, d__2;
+    a_int h_dim1, h_offset, v_dim1, v_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4;
+    double d__1, d__2;
 
     /* Local variables */
-    doublereal c__, f, g;
-    integer i__, j;
-    doublereal r__, s, t, u[3];
-    static real t0, t1;
-    doublereal h11, h12, h21, h22, h32;
-    integer jj, ir, nr;
-    doublereal tau;
-    static doublereal ulp;
-    doublereal tst1;
-    integer iend;
-    static doublereal unfl, ovfl;
-    extern int dscal_(integer *, doublereal *, doublereal *, integer *), dlarf_(char *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, ftnlen);
-    logical cconj;
-    extern int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, ftnlen), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *), dmout_(integer *, integer *, integer *, doublereal *, integer *, integer *, char *, ftnlen), dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen);
-    extern doublereal dlapy2_(doublereal *, doublereal *);
-    extern int dlabad_(doublereal *, doublereal *);
-    extern doublereal dlamch_(char *, ftnlen);
-    extern int dlarfg_(integer *, doublereal *, doublereal *, integer *, doublereal *);
-    doublereal sigmai;
-    extern int arscnd_(real *);
-    integer istart, kplusp, msglvl;
-    doublereal sigmar;
-    static doublereal smlnum;
-    extern int dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, ftnlen), dlartg_(doublereal *, doublereal *, doublereal *, doublereal *, doublereal *);
-    extern doublereal dlanhs_(char *, integer *, doublereal *, integer *, doublereal *, ftnlen);
+    double c__, f, g;
+    a_int i__, j;
+    double r__, s, t, u[3];
+    static float t0, t1;
+    double h11, h12, h21, h22, h32;
+    a_int jj, ir, nr;
+    double tau;
+    static double ulp;
+    double tst1;
+    a_int iend;
+    static double unfl, ovfl;
+    extern int dscal_(a_int *, double *, double *, a_int *), dlarf_(char *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, double *, ftnlen);
+    a_bool cconj;
+    extern int dgemv_(char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen), dcopy_(a_int *, double *, a_int *, double *, a_int *), daxpy_(a_int *, double *, double *, a_int *, double *, a_int *), dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen), dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen);
+    extern double dlapy2_(double *, double *);
+    extern int dlabad_(double *, double *);
+    extern double dlamch_(char *, ftnlen);
+    extern int dlarfg_(a_int *, double *, double *, a_int *, double *);
+    double sigmai;
+    extern int arscnd_(float *);
+    a_int istart, kplusp, msglvl;
+    double sigmar;
+    static double smlnum;
+    extern int dlaset_(char *, a_int *, a_int *, double *, double *, double *, a_int *, ftnlen), dlartg_(double *, double *, double *, double *, double *);
+    extern double dlanhs_(char *, a_int *, double *, a_int *, double *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -324,7 +324,7 @@ int dnapps_(integer *n, integer *kev, integer *np, doublereal *shiftr, doublerea
                    (ftnlen)21);
             dvout_(&debug_1.logfil, &c__1, &sigmar, &debug_1.ndigit,
                    "_napps"
-                   ": The real part of the shift ",
+                   ": The float part of the shift ",
                    (ftnlen)35);
             dvout_(&debug_1.logfil, &c__1, &sigmai, &debug_1.ndigit,
                    "_napps"

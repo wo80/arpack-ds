@@ -2,7 +2,7 @@
 
 #include "arpack_internal.h"
 
-int arscnd_(real *t)
+int arscnd_(float *t)
 {
 
     /*  -- LAPACK auxiliary routine (preliminary version) -- */

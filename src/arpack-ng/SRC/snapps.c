@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static real c_b5 = 0.f;
-static real c_b6 = 1.f;
-static integer c__1 = 1;
-static real c_b43 = -1.f;
+static float c_b5 = 0.f;
+static float c_b6 = 1.f;
+static a_int c__1 = 1;
+static float c_b43 = -1.f;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -151,41 +151,41 @@ static real c_b43 = -1.f;
 
 /* ----------------------------------------------------------------------- */
 
-int snapps_(integer *n, integer *kev, integer *np, real *shiftr, real *shifti, real *v, integer *ldv, real *h__, integer *ldh, real *resid, real *q, integer *ldq, real *workl, real *workd)
+int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float *v, a_int *ldv, float *h__, a_int *ldh, float *resid, float *q, a_int *ldq, float *workl, float *workd)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static a_bool first = TRUE_;
 
     /* System generated locals */
-    integer h_dim1, h_offset, v_dim1, v_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4;
-    real r__1, r__2;
+    a_int h_dim1, h_offset, v_dim1, v_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4;
+    float r__1, r__2;
 
     /* Local variables */
-    real c__, f, g;
-    integer i__, j;
-    real r__, s, t, u[3];
-    static real t0, t1;
-    real h11, h12, h21, h22, h32;
-    integer jj, ir, nr;
-    real tau;
-    static real ulp;
-    real tst1;
-    integer iend;
-    static real unfl, ovfl;
-    logical cconj;
-    extern int sscal_(integer *, real *, real *, integer *), slarf_(char *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, ftnlen), sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, ftnlen), scopy_(integer *, real *, integer *, real *, integer *), saxpy_(integer *, real *, real *, integer *, real *, integer *), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), smout_(integer *, integer *, integer *, real *, integer *, integer *, char *, ftnlen),
-        svout_(integer *, integer *, real *, integer *, char *, ftnlen);
-    extern doublereal slapy2_(real *, real *);
-    extern int slabad_(real *, real *);
-    extern doublereal slamch_(char *, ftnlen);
-    real sigmai;
-    extern int arscnd_(real *);
-    real sigmar;
-    integer istart, kplusp, msglvl;
-    static real smlnum;
-    extern int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *, ftnlen), slarfg_(integer *, real *, real *, integer *, real *), slaset_(char *, integer *, integer *, real *, real *, real *, integer *, ftnlen), slartg_(real *, real *, real *, real *, real *);
-    extern doublereal slanhs_(char *, integer *, real *, integer *, real *, ftnlen);
+    float c__, f, g;
+    a_int i__, j;
+    float r__, s, t, u[3];
+    static float t0, t1;
+    float h11, h12, h21, h22, h32;
+    a_int jj, ir, nr;
+    float tau;
+    static float ulp;
+    float tst1;
+    a_int iend;
+    static float unfl, ovfl;
+    a_bool cconj;
+    extern int sscal_(a_int *, float *, float *, a_int *), slarf_(char *, a_int *, a_int *, float *, a_int *, float *, float *, a_int *, float *, ftnlen), sgemv_(char *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen), scopy_(a_int *, float *, a_int *, float *, a_int *), saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen),
+        svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen);
+    extern double slapy2_(float *, float *);
+    extern int slabad_(float *, float *);
+    extern double slamch_(char *, ftnlen);
+    float sigmai;
+    extern int arscnd_(float *);
+    float sigmar;
+    a_int istart, kplusp, msglvl;
+    static float smlnum;
+    extern int slacpy_(char *, a_int *, a_int *, float *, a_int *, float *, a_int *, ftnlen), slarfg_(a_int *, float *, float *, a_int *, float *), slaset_(char *, a_int *, a_int *, float *, float *, float *, a_int *, ftnlen), slartg_(float *, float *, float *, float *, float *);
+    extern double slanhs_(char *, a_int *, float *, a_int *, float *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -323,7 +323,7 @@ int snapps_(integer *n, integer *kev, integer *np, real *shiftr, real *shifti, r
                    (ftnlen)21);
             svout_(&debug_1.logfil, &c__1, &sigmar, &debug_1.ndigit,
                    "_napps"
-                   ": The real part of the shift ",
+                   ": The float part of the shift ",
                    (ftnlen)35);
             svout_(&debug_1.logfil, &c__1, &sigmai, &debug_1.ndigit,
                    "_napps"

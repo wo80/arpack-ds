@@ -4,58 +4,58 @@
 
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__250 = 250;
-static integer c__3 = 3;
-static integer c__6 = 6;
-static integer c__2 = 2;
-static integer c__25 = 25;
-static integer c_n6 = -6;
-static integer c__4 = 4;
+static a_int c__9 = 9;
+static a_int c__1 = 1;
+static a_int c__250 = 250;
+static a_int c__3 = 3;
+static a_int c__6 = 6;
+static a_int c__2 = 2;
+static a_int c__25 = 25;
+static a_int c_n6 = -6;
+static a_int c__4 = 4;
 
 /* Main program */ int MAIN__(void)
 {
     /* System generated locals */
-    integer i__1;
-    real r__1;
+    a_int i__1;
+    float r__1;
 
     /* Builtin functions */
     int s_copy(char *, char *, ftnlen, ftnlen);
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
-    double sqrt(doublereal);
+    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
+    double sqrt(double);
 
     /* Local variables */
-    integer j, m, n;
-    real s[50] /* was [25][2] */, u[5000] /* was [500][10] */, v[6250]
+    a_int j, m, n;
+    float s[50] /* was [25][2] */, u[5000] /* was [500][10] */, v[6250]
         /* was [250][25] */;
-    extern int av_(integer *, integer *, real *, real *);
-    real ax[500];
-    integer ido, ncv, nev;
-    extern int atv_(integer *, integer *, real *, real *);
-    real tol;
+    extern int av_(a_int *, a_int *, float *, float *);
+    float ax[500];
+    a_int ido, ncv, nev;
+    extern int atv_(a_int *, a_int *, float *, float *);
+    float tol;
     char bmat[1];
-    integer info;
-    logical rvec;
-    integer ierr;
-    real temp;
-    integer mode1;
-    extern doublereal snrm2_(integer *, real *, integer *);
-    real sigma;
+    a_int info;
+    a_bool rvec;
+    a_int ierr;
+    float temp;
+    a_int mode1;
+    extern double snrm2_(a_int *, float *, a_int *);
+    float sigma;
     char which[2];
-    extern int sscal_(integer *, real *, real *, integer *);
-    real resid[250];
-    integer nconv;
-    real workd[750];
-    integer ipntr[11];
-    extern int scopy_(integer *, real *, integer *, real *, integer *);
-    real workl[825];
-    extern int saxpy_(integer *, real *, real *, integer *, real *, integer *), smout_(integer *, integer *, integer *, real *, integer *, integer *, char *, ftnlen);
-    integer iparam[11];
-    logical select[25];
-    integer ishfts, maxitr;
-    extern int ssaupd_(integer *, char *, integer *, char *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, ftnlen, ftnlen), sseupd_(logical *, char *, logical *, real *, real *, integer *, real *, char *, integer *, char *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    integer lworkl;
+    extern int sscal_(a_int *, float *, float *, a_int *);
+    float resid[250];
+    a_int nconv;
+    float workd[750];
+    a_int ipntr[11];
+    extern int scopy_(a_int *, float *, a_int *, float *, a_int *);
+    float workl[825];
+    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
+    a_int iparam[11];
+    a_bool select[25];
+    a_int ishfts, maxitr;
+    extern int ssaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen), sseupd_(a_bool *, char *, a_bool *, float *, float *, a_int *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
+    a_int lworkl;
 
     /* Fortran I/O blocks */
     static cilist io___7 = {0, 6, 0, 0, 0};
@@ -450,7 +450,7 @@ L10:
         e_wsle();
         s_wsle(&io___26);
         do_lio(&c__9, &c__1, " Error with _saupd, info = ", (ftnlen)27);
-        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___27);
         do_lio(&c__9, &c__1, " Check documentation in _saupd ", (ftnlen)31);
@@ -500,7 +500,7 @@ L10:
             e_wsle();
             s_wsle(&io___35);
             do_lio(&c__9, &c__1, " Error with _seupd, info = ", (ftnlen)27);
-            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(integer));
+            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(a_int));
             e_wsle();
             s_wsle(&io___36);
             do_lio(&c__9, &c__1, " Check the documentation of _seupd. ", (ftnlen)36);
@@ -611,16 +611,16 @@ L10:
         e_wsle();
         s_wsle(&io___52);
         do_lio(&c__9, &c__1, " Size of the matrix is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___53);
         do_lio(&c__9, &c__1, " The number of Ritz values requested is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___54);
         do_lio(&c__9, &c__1, " The number of Arnoldi vectors generated", (ftnlen)40);
         do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
-        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___55);
         do_lio(&c__9, &c__1, " What portion of the spectrum: ", (ftnlen)31);
@@ -628,20 +628,20 @@ L10:
         e_wsle();
         s_wsle(&io___56);
         do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___57);
         do_lio(&c__9, &c__1, " The number of Implicit Arnoldi update", (ftnlen)38);
         do_lio(&c__9, &c__1, " iterations taken is ", (ftnlen)21);
-        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___58);
         do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___59);
         do_lio(&c__9, &c__1, " The convergence criterion is ", (ftnlen)30);
-        do_lio(&c__4, &c__1, (char *)&tol, (ftnlen)sizeof(real));
+        do_lio(&c__4, &c__1, (char *)&tol, (ftnlen)sizeof(float));
         e_wsle();
         s_wsle(&io___60);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -680,15 +680,15 @@ L9000:
 
 /* ------------------------------------------------------------------- */
 
-int av_(integer *m, integer *n, real *x, real *w)
+int av_(a_int *m, a_int *n, float *x, float *w)
 {
     /* System generated locals */
-    integer i__1, i__2;
+    a_int i__1, i__2;
 
     /* Local variables */
-    real h__;
-    integer i__, j;
-    real k, s, t;
+    float h__;
+    a_int i__, j;
+    float k, s, t;
 
     /*     computes  w <- A*x */
 
@@ -697,8 +697,8 @@ int av_(integer *m, integer *n, real *x, real *w)
     --x;
 
     /* Function Body */
-    h__ = 1.f / (real)(*m + 1);
-    k = 1.f / (real)(*n + 1);
+    h__ = 1.f / (float)(*m + 1);
+    k = 1.f / (float)(*n + 1);
     i__1 = *m;
     for (i__ = 1; i__ <= i__1; ++i__)
     {
@@ -734,15 +734,15 @@ int av_(integer *m, integer *n, real *x, real *w)
 
 /* ------------------------------------------------------------------- */
 
-int atv_(integer *m, integer *n, real *w, real *y)
+int atv_(a_int *m, a_int *n, float *w, float *y)
 {
     /* System generated locals */
-    integer i__1, i__2;
+    a_int i__1, i__2;
 
     /* Local variables */
-    real h__;
-    integer i__, j;
-    real k, s, t;
+    float h__;
+    a_int i__, j;
+    float k, s, t;
 
     /*     computes  y <- A'*w */
 
@@ -751,8 +751,8 @@ int atv_(integer *m, integer *n, real *w, real *y)
     --y;
 
     /* Function Body */
-    h__ = 1.f / (real)(*m + 1);
-    k = 1.f / (real)(*n + 1);
+    h__ = 1.f / (float)(*m + 1);
+    k = 1.f / (float)(*n + 1);
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__)
     {

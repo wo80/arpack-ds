@@ -4,9 +4,9 @@
 
 /* Table of constant values */
 
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
-static integer c__1 = 1;
+static a_dcomplex c_b1 = {1., 0.};
+static a_dcomplex c_b2 = {0., 0.};
+static a_int c__1 = 1;
 
 /* \BeginDoc */
 
@@ -141,44 +141,44 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int znapps_(integer *n, integer *kev, integer *np, doublecomplex *shift, doublecomplex *v, integer *ldv, doublecomplex *h__, integer *ldh, doublecomplex *resid, doublecomplex *q, integer *ldq, doublecomplex *workl, doublecomplex *workd)
+int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a_int *ldv, a_dcomplex *h__, a_int *ldh, a_dcomplex *resid, a_dcomplex *q, a_int *ldq, a_dcomplex *workl, a_dcomplex *workd)
 {
     /* Initialized data */
 
-    static logical first = TRUE_;
+    static a_bool first = TRUE_;
 
     /* System generated locals */
-    integer h_dim1, h_offset, v_dim1, v_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6;
-    doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1, z__2, z__3, z__4, z__5;
+    a_int h_dim1, h_offset, v_dim1, v_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6;
+    double d__1, d__2, d__3, d__4;
+    a_dcomplex z__1, z__2, z__3, z__4, z__5;
 
     /* Builtin functions */
-    double d_imag(doublecomplex *);
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    double d_imag(a_dcomplex *);
+    void d_cnjg(a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
-    doublereal c__;
-    doublecomplex f, g;
-    integer i__, j;
-    doublecomplex r__, s, t;
-    static real t0, t1;
-    doublecomplex h11, h21;
-    integer jj;
-    static doublereal ulp;
-    doublereal tst1;
-    integer iend;
-    static doublereal unfl, ovfl;
-    doublecomplex sigma;
-    extern int zscal_(integer *, doublecomplex *, doublecomplex *, integer *), zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, ftnlen), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), zaxpy_(integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *), zmout_(integer *, integer *, integer *, doublecomplex *, integer *, integer *, char *, ftnlen),
-        zvout_(integer *, integer *, doublecomplex *, integer *, char *, ftnlen);
-    extern doublereal dlapy2_(doublereal *, doublereal *);
-    extern int dlabad_(doublereal *, doublereal *);
-    extern doublereal dlamch_(char *, ftnlen);
-    extern int arscnd_(real *);
-    integer istart, kplusp, msglvl;
-    static doublereal smlnum;
-    extern int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, ftnlen), zlartg_(doublecomplex *, doublecomplex *, doublereal *, doublecomplex *, doublecomplex *), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, ftnlen);
-    extern doublereal zlanhs_(char *, integer *, doublecomplex *, integer *, doublecomplex *, ftnlen);
+    double c__;
+    a_dcomplex f, g;
+    a_int i__, j;
+    a_dcomplex r__, s, t;
+    static float t0, t1;
+    a_dcomplex h11, h21;
+    a_int jj;
+    static double ulp;
+    double tst1;
+    a_int iend;
+    static double unfl, ovfl;
+    a_dcomplex sigma;
+    extern int zscal_(a_int *, a_dcomplex *, a_dcomplex *, a_int *), zgemv_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen), zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), zaxpy_(a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), zmout_(a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, char *, ftnlen),
+        zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen);
+    extern double dlapy2_(double *, double *);
+    extern int dlabad_(double *, double *);
+    extern double dlamch_(char *, ftnlen);
+    extern int arscnd_(float *);
+    a_int istart, kplusp, msglvl;
+    static double smlnum;
+    extern int zlacpy_(char *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, ftnlen), zlartg_(a_dcomplex *, a_dcomplex *, double *, a_dcomplex *, a_dcomplex *), zlaset_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen);
+    extern double zlanhs_(char *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

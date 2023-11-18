@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static doublereal c_b21 = .66666666666666663;
-static integer c__1 = 1;
-static logical c_true = TRUE_;
-static real c_b111 = 1.f;
+static double c_b21 = .66666666666666663;
+static a_int c__1 = 1;
+static a_bool c_true = TRUE_;
+static float c_b111 = 1.f;
 
 /* \BeginDoc */
 
@@ -224,40 +224,40 @@ static real c_b111 = 1.f;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int sseupd_(logical *rvec, char *howmny, logical *select, real *d__, real *z__, integer *ldz, real *sigma, char *bmat, integer *n, char *which, integer *nev, real *tol, real *resid, integer *ncv, real *v, integer *ldv, integer *iparam, integer *ipntr, real *workd, real *workl, integer *lworkl, integer *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
+int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d__, float *z__, a_int *ldz, float *sigma, char *bmat, a_int *n, char *which, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, a_int *ipntr, float *workd, float *workl, a_int *lworkl, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
-    integer v_dim1, v_offset, z_dim1, z_offset, i__1;
-    real r__1, r__2, r__3;
-    doublereal d__1;
+    a_int v_dim1, v_offset, z_dim1, z_offset, i__1;
+    float r__1, r__2, r__3;
+    double d__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
     int s_copy(char *, char *, ftnlen, ftnlen);
-    double pow_dd(doublereal *, doublereal *);
+    double pow_dd(double *, double *);
 
     /* Local variables */
-    integer j, k, ih, jj, iq, np, iw, ibd, ihb, ihd, ldh, ldq, irz, mode;
-    real eps23;
-    extern int sger_(integer *, integer *, real *, real *, integer *, real *, integer *, real *, integer *);
-    integer ierr;
-    real temp;
-    integer next;
+    a_int j, k, ih, jj, iq, np, iw, ibd, ihb, ihd, ldh, ldq, irz, mode;
+    float eps23;
+    extern int sger_(a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, a_int *);
+    a_int ierr;
+    float temp;
+    a_int next;
     char type__[6];
-    integer ritz;
-    real temp1;
-    extern doublereal snrm2_(integer *, real *, integer *);
-    extern int sscal_(integer *, real *, real *, integer *);
-    logical reord;
-    integer nconv;
-    real rnorm;
-    extern int scopy_(integer *, real *, integer *, real *, integer *), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), svout_(integer *, integer *, real *, integer *, char *, ftnlen);
-    real bnorm2;
-    extern int sgeqr2_(integer *, integer *, real *, integer *, real *, real *, integer *), sorm2r_(char *, char *, integer *, integer *, integer *, real *, integer *, real *, real *, integer *, real *, integer *, ftnlen, ftnlen);
-    extern doublereal slamch_(char *, ftnlen);
-    integer bounds, msglvl, ishift, numcnv;
-    extern int slacpy_(char *, integer *, integer *, real *, integer *, real *, integer *, ftnlen), ssesrt_(char *, logical *, integer *, real *, integer *, real *, integer *, ftnlen), ssteqr_(char *, integer *, real *, real *, real *, integer *, real *, integer *, ftnlen), ssortr_(char *, logical *, integer *, real *, real *, ftnlen), ssgets_(integer *, char *, integer *, integer *, real *, real *, real *, ftnlen);
-    integer leftptr, rghtptr;
+    a_int ritz;
+    float temp1;
+    extern double snrm2_(a_int *, float *, a_int *);
+    extern int sscal_(a_int *, float *, float *, a_int *);
+    a_bool reord;
+    a_int nconv;
+    float rnorm;
+    extern int scopy_(a_int *, float *, a_int *, float *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen);
+    float bnorm2;
+    extern int sgeqr2_(a_int *, a_int *, float *, a_int *, float *, float *, a_int *), sorm2r_(char *, char *, a_int *, a_int *, a_int *, float *, a_int *, float *, float *, a_int *, float *, a_int *, ftnlen, ftnlen);
+    extern double slamch_(char *, ftnlen);
+    a_int bounds, msglvl, ishift, numcnv;
+    extern int slacpy_(char *, a_int *, a_int *, float *, a_int *, float *, a_int *, ftnlen), ssesrt_(char *, a_bool *, a_int *, float *, a_int *, float *, a_int *, ftnlen), ssteqr_(char *, a_int *, float *, float *, float *, a_int *, float *, a_int *, ftnlen), ssortr_(char *, a_bool *, a_int *, float *, float *, ftnlen), ssgets_(a_int *, char *, a_int *, a_int *, float *, float *, float *, ftnlen);
+    a_int leftptr, rghtptr;
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -496,7 +496,7 @@ int sseupd_(logical *rvec, char *howmny, logical *select, real *d__, real *z__, 
     /*     %---------------------------------% */
 
     eps23 = slamch_("Epsilon-Machine", (ftnlen)15);
-    d__1 = (doublereal)eps23;
+    d__1 = (double)eps23;
     eps23 = pow_dd(&d__1, &c_b21);
 
     /*     %---------------------------------------% */
@@ -541,7 +541,7 @@ int sseupd_(logical *rvec, char *howmny, logical *select, real *d__, real *z__, 
         i__1 = *ncv;
         for (j = 1; j <= i__1; ++j)
         {
-            workl[bounds + j - 1] = (real)j;
+            workl[bounds + j - 1] = (float)j;
             select[j] = FALSE_;
             /* L10: */
         }

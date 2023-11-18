@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
-static logical c_true = TRUE_;
-static integer c__1 = 1;
+static a_dcomplex c_b1 = {1., 0.};
+static a_dcomplex c_b2 = {0., 0.};
+static a_bool c_true = TRUE_;
+static a_int c__1 = 1;
 
 /* \BeginDoc */
 
@@ -107,24 +107,24 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int zneigh_(doublereal *rnorm, integer *n, doublecomplex *h__, integer *ldh, doublecomplex *ritz, doublecomplex *bounds, doublecomplex *q, integer *ldq, doublecomplex *workl, doublereal *rwork, integer *ierr)
+int zneigh_(double *rnorm, a_int *n, a_dcomplex *h__, a_int *ldh, a_dcomplex *ritz, a_dcomplex *bounds, a_dcomplex *q, a_int *ldq, a_dcomplex *workl, double *rwork, a_int *ierr)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, i__1;
-    doublereal d__1;
+    a_int h_dim1, h_offset, q_dim1, q_offset, i__1;
+    double d__1;
 
     /* Local variables */
-    integer j;
-    static real t0, t1;
-    doublecomplex vl[1];
-    doublereal temp;
-    extern int zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zmout_(integer *, integer *, integer *, doublecomplex *, integer *, integer *, char *, ftnlen), zvout_(integer *, integer *, doublecomplex *, integer *, char *, ftnlen);
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *);
-    extern int arscnd_(real *);
-    logical select[1];
-    integer msglvl;
-    extern int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, ftnlen), zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *), ztrevc_(char *, char *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublereal *, integer *, ftnlen, ftnlen), zdscal_(integer *, doublereal *, doublecomplex *, integer *),
-        zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, ftnlen);
+    a_int j;
+    static float t0, t1;
+    a_dcomplex vl[1];
+    double temp;
+    extern int zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), zmout_(a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, char *, ftnlen), zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen);
+    extern double dznrm2_(a_int *, a_dcomplex *, a_int *);
+    extern int arscnd_(float *);
+    a_bool select[1];
+    a_int msglvl;
+    extern int zlacpy_(char *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, ftnlen), zlahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *), ztrevc_(char *, char *, a_bool *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, double *, a_int *, ftnlen, ftnlen), zdscal_(a_int *, double *, a_dcomplex *, a_int *),
+        zlaset_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

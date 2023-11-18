@@ -4,57 +4,57 @@
 
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__256 = 256;
-static integer c__3 = 3;
-static integer c__6 = 6;
-static integer c__2 = 2;
-static integer c__25 = 25;
-static integer c_n6 = -6;
-static integer c__4 = 4;
+static a_int c__9 = 9;
+static a_int c__1 = 1;
+static a_int c__256 = 256;
+static a_int c__3 = 3;
+static a_int c__6 = 6;
+static a_int c__2 = 2;
+static a_int c__25 = 25;
+static a_int c_n6 = -6;
+static a_int c__4 = 4;
 
 /* Main program */ int MAIN__(void)
 {
     /* System generated locals */
-    integer i__1;
-    real r__1;
+    a_int i__1;
+    float r__1;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
+    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
     int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    real d__[50] /* was [25][2] */;
-    integer j, n;
-    real v[6400] /* was [256][25] */, h2, ad[256];
-    extern int av_(integer *, real *, real *);
-    real ax[256], adl[256], adu[256];
-    integer ido, ncv, nev;
-    real tol, adu2[256];
+    float d__[50] /* was [25][2] */;
+    a_int j, n;
+    float v[6400] /* was [256][25] */, h2, ad[256];
+    extern int av_(a_int *, float *, float *);
+    float ax[256], adl[256], adu[256];
+    a_int ido, ncv, nev;
+    float tol, adu2[256];
     char bmat[1];
-    integer mode, info;
-    logical rvec;
-    integer ierr, ipiv[256];
-    extern doublereal snrm2_(integer *, real *, integer *);
-    real sigma;
+    a_int mode, info;
+    a_bool rvec;
+    a_int ierr, ipiv[256];
+    extern double snrm2_(a_int *, float *, a_int *);
+    float sigma;
     char which[2];
-    real resid[256];
-    integer nconv;
-    real workd[768];
-    integer ipntr[11];
-    extern int scopy_(integer *, real *, integer *, real *, integer *);
-    real workl[825];
-    extern int saxpy_(integer *, real *, real *, integer *, real *, integer *), smout_(integer *, integer *, integer *, real *, integer *, integer *, char *, ftnlen);
-    integer iparam[11];
-    logical select[25];
-    extern int ssaupd_(integer *, char *, integer *, char *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, ftnlen, ftnlen);
-    integer ishfts;
-    extern int sseupd_(logical *, char *, logical *, real *, real *, integer *, real *, char *, integer *, char *, integer *, real *, real *, integer *, real *, integer *, integer *, integer *, real *, real *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    integer maxitr;
-    extern int sgttrf_(integer *, real *, real *, real *, real *, integer *, integer *);
-    integer lworkl;
-    extern int sgttrs_(char *, integer *, integer *, real *, real *, real *, real *, integer *, real *, integer *, integer *, ftnlen);
+    float resid[256];
+    a_int nconv;
+    float workd[768];
+    a_int ipntr[11];
+    extern int scopy_(a_int *, float *, a_int *, float *, a_int *);
+    float workl[825];
+    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
+    a_int iparam[11];
+    a_bool select[25];
+    extern int ssaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen);
+    a_int ishfts;
+    extern int sseupd_(a_bool *, char *, a_bool *, float *, float *, a_int *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
+    a_int maxitr;
+    extern int sgttrf_(a_int *, float *, float *, float *, float *, a_int *, a_int *);
+    a_int lworkl;
+    extern int sgttrs_(char *, a_int *, a_int *, float *, float *, float *, float *, a_int *, float *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___4 = {0, 6, 0, 0, 0};
@@ -257,7 +257,7 @@ static integer c__4 = 4;
     /*     | is the 1-d Laplacian.                               | */
     /*     %-----------------------------------------------------% */
 
-    h2 = 1.f / (real)((n + 1) * (n + 1));
+    h2 = 1.f / (float)((n + 1) * (n + 1));
     i__1 = n;
     for (j = 1; j <= i__1; ++j)
     {
@@ -349,7 +349,7 @@ L10:
         e_wsle();
         s_wsle(&io___38);
         do_lio(&c__9, &c__1, " Error with _saupd, info = ", (ftnlen)27);
-        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___39);
         do_lio(&c__9, &c__1, " Check documentation of _saupd ", (ftnlen)31);
@@ -398,7 +398,7 @@ L10:
             e_wsle();
             s_wsle(&io___45);
             do_lio(&c__9, &c__1, " Error with _seupd, info = ", (ftnlen)27);
-            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(integer));
+            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(a_int));
             e_wsle();
             s_wsle(&io___46);
             do_lio(&c__9, &c__1, " Check the documentation of _seupd ", (ftnlen)35);
@@ -491,16 +491,16 @@ L10:
         e_wsle();
         s_wsle(&io___60);
         do_lio(&c__9, &c__1, " Size of the matrix is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___61);
         do_lio(&c__9, &c__1, " The number of Ritz values requested is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___62);
         do_lio(&c__9, &c__1, " The number of Arnoldi vectors generated", (ftnlen)40);
         do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
-        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___63);
         do_lio(&c__9, &c__1, " What portion of the spectrum: ", (ftnlen)31);
@@ -508,20 +508,20 @@ L10:
         e_wsle();
         s_wsle(&io___64);
         do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___65);
         do_lio(&c__9, &c__1, " The number of Implicit Arnoldi update", (ftnlen)38);
         do_lio(&c__9, &c__1, " iterations taken is ", (ftnlen)21);
-        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___66);
         do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___67);
         do_lio(&c__9, &c__1, " The convergence criterion is ", (ftnlen)30);
-        do_lio(&c__4, &c__1, (char *)&tol, (ftnlen)sizeof(real));
+        do_lio(&c__4, &c__1, (char *)&tol, (ftnlen)sizeof(float));
         e_wsle();
         s_wsle(&io___68);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -542,16 +542,16 @@ L9000:
 /*     where the matrix is the 1 dimensional discrete Laplacian on */
 /*     the interval [0,1] with zero Dirichlet boundary condition. */
 
-int av_(integer *n, real *v, real *w)
+int av_(a_int *n, float *v, float *w)
 {
     /* System generated locals */
-    integer i__1;
-    real r__1;
+    a_int i__1;
+    float r__1;
 
     /* Local variables */
-    integer j;
-    real h2;
-    extern int sscal_(integer *, real *, real *, integer *);
+    a_int j;
+    float h2;
+    extern int sscal_(a_int *, float *, float *, a_int *);
 
     /* Parameter adjustments */
     --w;
@@ -570,7 +570,7 @@ int av_(integer *n, real *v, real *w)
 
     /*     Scale the vector w by (1 / h^2). */
 
-    h2 = 1.f / (real)((*n + 1) * (*n + 1));
+    h2 = 1.f / (float)((*n + 1) * (*n + 1));
     r__1 = 1.f / h2;
     sscal_(n, &r__1, &w[1], &c__1);
     return 0;

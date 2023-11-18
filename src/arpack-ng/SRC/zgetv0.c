@@ -4,9 +4,9 @@
 
 /* Table of constant values */
 
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
-static integer c__1 = 1;
+static a_dcomplex c_b1 = {1., 0.};
+static a_dcomplex c_b2 = {0., 0.};
+static a_int c__1 = 1;
 
 /* \BeginDoc */
 
@@ -122,36 +122,36 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int zgetv0_(integer *ido, char *bmat, integer *itry, logical *initv, integer *n, integer *j, doublecomplex *v, integer *ldv, doublecomplex *resid, doublereal *rnorm, integer *ipntr, doublecomplex *workd, integer *ierr, ftnlen bmat_len)
+int zgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j, a_dcomplex *v, a_int *ldv, a_dcomplex *resid, double *rnorm, a_int *ipntr, a_dcomplex *workd, a_int *ierr, ftnlen bmat_len)
 {
     /* Initialized data */
 
-    static logical inits = TRUE_;
+    static a_bool inits = TRUE_;
 
     /* System generated locals */
-    integer v_dim1, v_offset, i__1, i__2;
-    doublereal d__1, d__2;
-    doublecomplex z__1;
+    a_int v_dim1, v_offset, i__1, i__2;
+    double d__1, d__2;
+    a_dcomplex z__1;
 
     /* Builtin functions */
-    double d_imag(doublecomplex *), sqrt(doublereal);
+    double d_imag(a_dcomplex *), sqrt(double);
 
     /* Local variables */
-    static real t0, t1, t2, t3;
-    integer jj;
-    static integer iter;
-    static logical orth;
-    static integer iseed[4];
-    integer idist;
-    doublecomplex cnorm;
-    static logical first;
-    extern int zgemv_(char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, ftnlen), dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), zvout_(integer *, integer *, doublecomplex *, integer *, char *, ftnlen);
-    extern doublereal dlapy2_(doublereal *, doublereal *), dznrm2_(integer *, doublecomplex *, integer *);
-    static doublereal rnorm0;
-    extern int arscnd_(real *);
-    static integer msglvl;
-    extern int zlarnv_(integer *, integer *, integer *, doublecomplex *);
-    extern /* Double Complex */ VOID zzdotc_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
+    static float t0, t1, t2, t3;
+    a_int jj;
+    static a_int iter;
+    static a_bool orth;
+    static a_int iseed[4];
+    a_int idist;
+    a_dcomplex cnorm;
+    static a_bool first;
+    extern int zgemv_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen), dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen);
+    extern double dlapy2_(double *, double *), dznrm2_(a_int *, a_dcomplex *, a_int *);
+    static double rnorm0;
+    extern int arscnd_(float *);
+    static a_int msglvl;
+    extern int zlarnv_(a_int *, a_int *, a_int *, a_dcomplex *);
+    extern void zzdotc_(a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

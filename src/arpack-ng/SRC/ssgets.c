@@ -4,8 +4,8 @@
 
 /* Table of constant values */
 
-static logical c_true = TRUE_;
-static integer c__1 = 1;
+static a_bool c_true = TRUE_;
+static a_int c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -99,20 +99,20 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int ssgets_(integer *ishift, char *which, integer *kev, integer *np, real *ritz, real *bounds, real *shifts, ftnlen which_len)
+int ssgets_(a_int *ishift, char *which, a_int *kev, a_int *np, float *ritz, float *bounds, float *shifts, ftnlen which_len)
 {
     /* System generated locals */
-    integer i__1;
+    a_int i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static real t0, t1;
-    integer kevd2;
-    extern int sswap_(integer *, real *, integer *, real *, integer *), scopy_(integer *, real *, integer *, real *, integer *), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), svout_(integer *, integer *, real *, integer *, char *, ftnlen), arscnd_(real *);
-    integer msglvl;
-    extern int ssortr_(char *, logical *, integer *, real *, real *, ftnlen);
+    static float t0, t1;
+    a_int kevd2;
+    extern int sswap_(a_int *, float *, a_int *, float *, a_int *), scopy_(a_int *, float *, a_int *, float *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen), arscnd_(float *);
+    a_int msglvl;
+    extern int ssortr_(char *, a_bool *, a_int *, float *, float *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

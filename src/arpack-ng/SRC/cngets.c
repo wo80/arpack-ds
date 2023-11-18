@@ -4,8 +4,8 @@
 
 /* Table of constant values */
 
-static logical c_true = TRUE_;
-static integer c__1 = 1;
+static a_bool c_true = TRUE_;
+static a_int c__1 = 1;
 
 /* \BeginDoc */
 
@@ -92,16 +92,16 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int cngets_(integer *ishift, char *which, integer *kev, integer *np, complex *ritz, complex *bounds, ftnlen which_len)
+int cngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_fcomplex *ritz, a_fcomplex *bounds, ftnlen which_len)
 {
     /* System generated locals */
-    integer i__1;
+    a_int i__1;
 
     /* Local variables */
-    static real t0, t1;
-    extern int cvout_(integer *, integer *, complex *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), arscnd_(real *);
-    integer msglvl;
-    extern int csortc_(char *, logical *, integer *, complex *, complex *, ftnlen);
+    static float t0, t1;
+    extern int cvout_(a_int *, a_int *, a_fcomplex *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), arscnd_(float *);
+    a_int msglvl;
+    extern int csortc_(char *, a_bool *, a_int *, a_fcomplex *, a_fcomplex *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static doublereal c_b3 = .66666666666666663;
-static integer c__1 = 1;
-static doublereal c_b37 = 0.;
-static doublereal c_b38 = 1.;
-static logical c_true = TRUE_;
-static doublereal c_b64 = -1.;
+static double c_b3 = .66666666666666663;
+static a_int c__1 = 1;
+static double c_b37 = 0.;
+static double c_b38 = 1.;
+static a_bool c_true = TRUE_;
+static double c_b64 = -1.;
 
 /* \BeginDoc */
 
@@ -312,53 +312,53 @@ static doublereal c_b64 = -1.;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int dneupd_(logical *rvec, char *howmny, logical *select, doublereal *dr, doublereal *di, doublereal *z__, integer *ldz, doublereal *sigmar, doublereal *sigmai, doublereal *workev, char *bmat, integer *n, char *which, integer *nev, doublereal *tol, doublereal *resid, integer *ncv, doublereal *v, integer *ldv, integer *iparam, integer *ipntr, doublereal *workd, doublereal *workl, integer *lworkl, integer *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
+int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, double *z__, a_int *ldz, double *sigmar, double *sigmai, double *workev, char *bmat, a_int *n, char *which, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, a_int *ipntr, double *workd, double *workl, a_int *lworkl, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
-    integer v_dim1, v_offset, z_dim1, z_offset, i__1;
-    doublereal d__1, d__2;
+    a_int v_dim1, v_offset, z_dim1, z_offset, i__1;
+    double d__1, d__2;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    double pow_dd(double *, double *);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
     int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer j, k, ih, jj, np;
-    doublereal vl[1] /* was [1][1] */;
-    integer ibd, ldh, ldq, iri;
-    doublereal sep;
-    integer irr, wri, wrr;
-    extern int dger_(integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *);
-    integer mode;
-    doublereal eps23;
-    integer ierr;
-    doublereal temp;
-    integer iwev;
+    a_int j, k, ih, jj, np;
+    double vl[1] /* was [1][1] */;
+    a_int ibd, ldh, ldq, iri;
+    double sep;
+    a_int irr, wri, wrr;
+    extern int dger_(a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, a_int *);
+    a_int mode;
+    double eps23;
+    a_int ierr;
+    double temp;
+    a_int iwev;
     char type__[6];
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
-    doublereal temp1;
-    extern int dscal_(integer *, doublereal *, doublereal *, integer *);
-    integer ihbds, iconj;
-    extern int dgemv_(char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, ftnlen);
-    doublereal conds;
-    logical reord;
-    extern int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer nconv;
-    extern int dtrmm_(char *, char *, char *, char *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, ftnlen, ftnlen, ftnlen, ftnlen), dmout_(integer *, integer *, integer *, doublereal *, integer *, integer *, char *, ftnlen);
-    integer iwork[1];
-    doublereal rnorm;
-    integer ritzi;
-    extern int dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen);
-    integer ritzr;
-    extern int dgeqr2_(integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *);
-    extern doublereal dlapy2_(doublereal *, doublereal *);
-    integer nconv2;
-    extern int dorm2r_(char *, char *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, ftnlen, ftnlen);
-    extern doublereal dlamch_(char *, ftnlen);
-    integer iheigi, iheigr, bounds, invsub, iuptri, msglvl, outncv, ishift, numcnv;
-    extern int dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, ftnlen), dlahqr_(logical *, logical *, integer *, integer *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, integer *, doublereal *, integer *, integer *), dlaset_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, integer *, ftnlen), dtrevc_(char *, char *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, integer *, ftnlen, ftnlen),
-        dtrsen_(char *, char *, logical *, integer *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, integer *, integer *, integer *, integer *, ftnlen, ftnlen), dngets_(integer *, char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, doublereal *, ftnlen);
+    extern double dnrm2_(a_int *, double *, a_int *);
+    double temp1;
+    extern int dscal_(a_int *, double *, double *, a_int *);
+    a_int ihbds, iconj;
+    extern int dgemv_(char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen);
+    double conds;
+    a_bool reord;
+    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *);
+    a_int nconv;
+    extern int dtrmm_(char *, char *, char *, char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, ftnlen, ftnlen, ftnlen, ftnlen), dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
+    a_int iwork[1];
+    double rnorm;
+    a_int ritzi;
+    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen);
+    a_int ritzr;
+    extern int dgeqr2_(a_int *, a_int *, double *, a_int *, double *, double *, a_int *);
+    extern double dlapy2_(double *, double *);
+    a_int nconv2;
+    extern int dorm2r_(char *, char *, a_int *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, double *, a_int *, ftnlen, ftnlen);
+    extern double dlamch_(char *, ftnlen);
+    a_int iheigi, iheigr, bounds, invsub, iuptri, msglvl, outncv, ishift, numcnv;
+    extern int dlacpy_(char *, a_int *, a_int *, double *, a_int *, double *, a_int *, ftnlen), dlahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, a_int *, double *, a_int *, a_int *), dlaset_(char *, a_int *, a_int *, double *, double *, double *, a_int *, ftnlen), dtrevc_(char *, char *, a_bool *, a_int *, double *, a_int *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, a_int *, ftnlen, ftnlen),
+        dtrsen_(char *, char *, a_bool *, a_int *, double *, a_int *, double *, a_int *, double *, double *, a_int *, double *, double *, double *, a_int *, a_int *, a_int *, a_int *, ftnlen, ftnlen), dngets_(a_int *, char *, a_int *, a_int *, double *, double *, double *, double *, double *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -626,7 +626,7 @@ int dneupd_(logical *rvec, char *howmny, logical *select, doublereal *dr, double
         i__1 = *ncv;
         for (j = 1; j <= i__1; ++j)
         {
-            workl[bounds + j - 1] = (doublereal)j;
+            workl[bounds + j - 1] = (double)j;
             select[j] = FALSE_;
             /* L10: */
         }
@@ -670,7 +670,7 @@ int dneupd_(logical *rvec, char *howmny, logical *select, doublereal *dr, double
             /* Computing MAX */
             d__1 = eps23, d__2 = dlapy2_(&workl[irr + *ncv - j], &workl[iri + *ncv - j]);
             temp1 = max(d__1, d__2);
-            jj = (integer)workl[bounds + *ncv - j];
+            jj = (a_int)workl[bounds + *ncv - j];
             if (numcnv < nconv && workl[ibd + jj - 1] <= *tol * temp1)
             {
                 select[jj] = TRUE_;
@@ -1103,7 +1103,7 @@ int dneupd_(logical *rvec, char *howmny, logical *select, doublereal *dr, double
     {
         dvout_(&debug_1.logfil, &nconv, &dr[1], &debug_1.ndigit,
                "_neupd: Un"
-               "transformed real part of the Ritz values.",
+               "transformed float part of the Ritz values.",
                (ftnlen)51);
         dvout_(&debug_1.logfil, &nconv, &di[1], &debug_1.ndigit,
                "_neupd: Un"

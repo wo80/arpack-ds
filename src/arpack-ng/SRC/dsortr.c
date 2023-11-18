@@ -60,18 +60,18 @@
 
 /* ----------------------------------------------------------------------- */
 
-int dsortr_(char *which, logical *apply, integer *n, doublereal *x1, doublereal *x2, ftnlen which_len)
+int dsortr_(char *which, a_bool *apply, a_int *n, double *x1, double *x2, ftnlen which_len)
 {
     /* System generated locals */
-    integer i__1;
-    doublereal d__1, d__2;
+    a_int i__1;
+    double d__1, d__2;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, j, igap;
-    doublereal temp;
+    a_int i__, j, igap;
+    double temp;
 
     /*     %------------------% */
     /*     | Scalar Arguments | */

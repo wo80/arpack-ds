@@ -4,11 +4,11 @@
 
 /* Table of constant values */
 
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static doublereal c_b5 = .66666666666666663;
-static integer c__1 = 1;
-static logical c_true = TRUE_;
+static a_fcomplex c_b1 = {1.f, 0.f};
+static a_fcomplex c_b2 = {0.f, 0.f};
+static double c_b5 = .66666666666666663;
+static a_int c__1 = 1;
+static a_bool c_true = TRUE_;
 
 /* \BeginDoc */
 
@@ -257,54 +257,54 @@ static logical c_true = TRUE_;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int cneupd_(logical *rvec, char *howmny, logical *select, complex *d__, complex *z__, integer *ldz, complex *sigma, complex *workev, char *bmat, integer *n, char *which, integer *nev, real *tol, complex *resid, integer *ncv, complex *v, integer *ldv, integer *iparam, integer *ipntr, complex *workd, complex *workl, integer *lworkl, real *rwork, integer *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
+int cneupd_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d__, a_fcomplex *z__, a_int *ldz, a_fcomplex *sigma, a_fcomplex *workev, char *bmat, a_int *n, char *which, a_int *nev, float *tol, a_fcomplex *resid, a_int *ncv, a_fcomplex *v, a_int *ldv, a_int *iparam, a_int *ipntr, a_fcomplex *workd, a_fcomplex *workl, a_int *lworkl, float *rwork, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
-    integer v_dim1, v_offset, z_dim1, z_offset, i__1, i__2;
-    real r__1, r__2, r__3, r__4;
-    doublereal d__1;
-    complex q__1, q__2;
+    a_int v_dim1, v_offset, z_dim1, z_offset, i__1, i__2;
+    float r__1, r__2, r__3, r__4;
+    double d__1;
+    a_fcomplex q__1, q__2;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    double pow_dd(double *, double *);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
     int s_copy(char *, char *, ftnlen, ftnlen);
-    double r_imag(complex *);
-    void c_div(complex *, complex *, complex *);
+    double r_imag(a_fcomplex *);
+    void c_div(a_fcomplex *, a_fcomplex *, a_fcomplex *);
 
     /* Local variables */
-    integer j, k, ih, jj, iq, np;
-    complex vl[1];
-    integer wr, ibd, ldh, ldq;
-    real sep;
-    integer irz, mode;
-    real eps23;
-    integer ierr;
-    complex temp;
-    integer iwev;
+    a_int j, k, ih, jj, iq, np;
+    a_fcomplex vl[1];
+    a_int wr, ibd, ldh, ldq;
+    float sep;
+    a_int irz, mode;
+    float eps23;
+    a_int ierr;
+    a_fcomplex temp;
+    a_int iwev;
     char type__[6];
-    integer ritz, iheig;
-    extern int cscal_(integer *, complex *, complex *, integer *);
-    integer ihbds;
-    extern int cgeru_(integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, integer *);
-    real conds;
-    logical reord;
-    extern int ccopy_(integer *, complex *, integer *, complex *, integer *), ctrmm_(char *, char *, char *, char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, ftnlen, ftnlen, ftnlen, ftnlen);
-    integer nconv;
-    real rtemp;
-    extern int cmout_(integer *, integer *, integer *, complex *, integer *, integer *, char *, ftnlen);
-    complex rnorm;
-    extern int cvout_(integer *, integer *, complex *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), cgeqr2_(integer *, integer *, complex *, integer *, complex *, complex *, integer *);
-    extern doublereal scnrm2_(integer *, complex *, integer *);
-    integer nconv2;
-    extern int cunm2r_(char *, char *, integer *, integer *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, integer *, ftnlen, ftnlen);
-    extern doublereal slapy2_(real *, real *);
-    extern /* Complex */ VOID ccdotc_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern doublereal slamch_(char *, ftnlen);
-    extern int clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *, ftnlen);
-    integer bounds, invsub, iuptri, msglvl, outncv, numcnv, ishift;
-    extern int clahqr_(logical *, logical *, integer *, integer *, integer *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, integer *), cngets_(integer *, char *, integer *, integer *, complex *, complex *, ftnlen), claset_(char *, integer *, integer *, complex *, complex *, complex *, integer *, ftnlen), ctrsen_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, real *, real *, complex *, integer *, integer *, ftnlen, ftnlen),
-        ctrevc_(char *, char *, logical *, integer *, complex *, integer *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, real *, integer *, ftnlen, ftnlen), csscal_(integer *, real *, complex *, integer *);
+    a_int ritz, iheig;
+    extern int cscal_(a_int *, a_fcomplex *, a_fcomplex *, a_int *);
+    a_int ihbds;
+    extern int cgeru_(a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
+    float conds;
+    a_bool reord;
+    extern int ccopy_(a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *), ctrmm_(char *, char *, char *, char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, ftnlen, ftnlen, ftnlen, ftnlen);
+    a_int nconv;
+    float rtemp;
+    extern int cmout_(a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, char *, ftnlen);
+    a_fcomplex rnorm;
+    extern int cvout_(a_int *, a_int *, a_fcomplex *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), cgeqr2_(a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *);
+    extern double scnrm2_(a_int *, a_fcomplex *, a_int *);
+    a_int nconv2;
+    extern int cunm2r_(char *, char *, a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, ftnlen, ftnlen);
+    extern double slapy2_(float *, float *);
+    extern void ccdotc_(a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
+    extern double slamch_(char *, ftnlen);
+    extern int clacpy_(char *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, ftnlen);
+    a_int bounds, invsub, iuptri, msglvl, outncv, numcnv, ishift;
+    extern int clahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *), cngets_(a_int *, char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, ftnlen), claset_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen), ctrsen_(char *, char *, a_bool *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, float *, float *, a_fcomplex *, a_int *, a_int *, ftnlen, ftnlen),
+        ctrevc_(char *, char *, a_bool *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *, a_fcomplex *, float *, a_int *, ftnlen, ftnlen), csscal_(a_int *, float *, a_fcomplex *, a_int *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -384,7 +384,7 @@ int cneupd_(logical *rvec, char *howmny, logical *select, complex *d__, complex 
     /*     %---------------------------------% */
 
     eps23 = slamch_("Epsilon-Machine", (ftnlen)15);
-    d__1 = (doublereal)eps23;
+    d__1 = (double)eps23;
     eps23 = pow_dd(&d__1, &c_b5);
 
     /*     %-------------------------------% */
@@ -554,7 +554,7 @@ int cneupd_(logical *rvec, char *howmny, logical *select, complex *d__, complex 
         for (j = 1; j <= i__1; ++j)
         {
             i__2 = bounds + j - 1;
-            workl[i__2].r = (real)j, workl[i__2].i = 0.f;
+            workl[i__2].r = (float)j, workl[i__2].i = 0.f;
             select[j] = FALSE_;
             /* L10: */
         }

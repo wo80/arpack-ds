@@ -4,7 +4,7 @@
 
 /* Table of constant values */
 
-static integer c__1 = 1;
+static a_int c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -92,18 +92,18 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int sseigt_(real *rnorm, integer *n, real *h__, integer *ldh, real *eig, real *bounds, real *workl, integer *ierr)
+int sseigt_(float *rnorm, a_int *n, float *h__, a_int *ldh, float *eig, float *bounds, float *workl, a_int *ierr)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, i__1;
-    real r__1;
+    a_int h_dim1, h_offset, i__1;
+    float r__1;
 
     /* Local variables */
-    integer k;
-    static real t0, t1;
-    extern int scopy_(integer *, real *, integer *, real *, integer *), svout_(integer *, integer *, real *, integer *, char *, ftnlen), arscnd_(real *);
-    integer msglvl;
-    extern int sstqrb_(integer *, real *, real *, real *, real *, integer *);
+    a_int k;
+    static float t0, t1;
+    extern int scopy_(a_int *, float *, a_int *, float *, a_int *), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen), arscnd_(float *);
+    a_int msglvl;
+    extern int sstqrb_(a_int *, float *, float *, float *, float *, a_int *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

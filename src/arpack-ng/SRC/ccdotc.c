@@ -5,15 +5,15 @@
 /* Complex */ VOID ccdotc_(complex *ret_val, integer *n, complex *zx, integer *incx, complex *zy, integer *incy)
 {
     /* System generated locals */
-    integer i__1, i__2;
-    complex q__1, q__2, q__3;
+    a_int i__1, i__2;
+    a_fcomplex q__1, q__2, q__3;
 
     /* Builtin functions */
-    void r_cnjg(complex *, complex *);
+    void r_cnjg(a_fcomplex *, a_fcomplex *);
 
     /* Local variables */
-    integer i__, ix, iy;
-    complex ztemp;
+    a_int i__, ix, iy;
+    a_fcomplex ztemp;
 
     /*     forms the dot product of a vector. */
     /*     jack dongarra, 3/11/78. */

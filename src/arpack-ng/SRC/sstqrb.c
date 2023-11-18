@@ -4,9 +4,9 @@
 
 /* Table of constant values */
 
-static integer c__0 = 0;
-static integer c__1 = 1;
-static real c_b31 = 1.f;
+static a_int c__0 = 0;
+static a_int c__1 = 1;
+static float c_b31 = 1.f;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -112,41 +112,41 @@ static real c_b31 = 1.f;
 
 /* ----------------------------------------------------------------------- */
 
-int sstqrb_(integer *n, real *d__, real *e, real *z__, real *work, integer *info)
+int sstqrb_(a_int *n, float *d__, float *e, float *z__, float *work, a_int *info)
 {
     /* System generated locals */
-    integer i__1, i__2;
-    real r__1, r__2;
+    a_int i__1, i__2;
+    float r__1, r__2;
 
     /* Builtin functions */
-    double sqrt(doublereal), r_sign(real *, real *);
+    double sqrt(double), r_sign(float *, float *);
 
     /* Local variables */
-    real b, c__, f, g;
-    integer i__, j, k, l, m;
-    real p, r__, s;
-    integer l1, ii, mm, lm1, mm1, nm1;
-    real rt1, rt2, eps;
-    integer lsv;
-    real tst, eps2;
-    integer lend, jtot;
-    extern int slae2_(real *, real *, real *, real *, real *);
-    real anorm;
-    extern int slasr_(char *, char *, char *, integer *, integer *, real *, real *, real *, integer *, ftnlen, ftnlen, ftnlen);
-    integer lendm1, lendp1;
-    extern int slaev2_(real *, real *, real *, real *, real *, real *, real *);
-    extern doublereal slapy2_(real *, real *);
-    integer iscale;
-    extern doublereal slamch_(char *, ftnlen);
-    real safmin, safmax;
-    extern int slascl_(char *, integer *, integer *, real *, real *, integer *, integer *, real *, integer *, integer *, ftnlen);
-    integer lendsv;
-    extern int slartg_(real *, real *, real *, real *, real *);
-    real ssfmin;
-    integer nmaxit, icompz;
-    real ssfmax;
-    extern doublereal slanst_(char *, integer *, real *, real *, ftnlen);
-    extern int slasrt_(char *, integer *, real *, integer *, ftnlen);
+    float b, c__, f, g;
+    a_int i__, j, k, l, m;
+    float p, r__, s;
+    a_int l1, ii, mm, lm1, mm1, nm1;
+    float rt1, rt2, eps;
+    a_int lsv;
+    float tst, eps2;
+    a_int lend, jtot;
+    extern int slae2_(float *, float *, float *, float *, float *);
+    float anorm;
+    extern int slasr_(char *, char *, char *, a_int *, a_int *, float *, float *, float *, a_int *, ftnlen, ftnlen, ftnlen);
+    a_int lendm1, lendp1;
+    extern int slaev2_(float *, float *, float *, float *, float *, float *, float *);
+    extern double slapy2_(float *, float *);
+    a_int iscale;
+    extern double slamch_(char *, ftnlen);
+    float safmin, safmax;
+    extern int slascl_(char *, a_int *, a_int *, float *, float *, a_int *, a_int *, float *, a_int *, a_int *, ftnlen);
+    a_int lendsv;
+    extern int slartg_(float *, float *, float *, float *, float *);
+    float ssfmin;
+    a_int nmaxit, icompz;
+    float ssfmax;
+    extern double slanst_(char *, a_int *, float *, float *, ftnlen);
+    extern int slasrt_(char *, a_int *, float *, a_int *, ftnlen);
 
     /*     %------------------% */
     /*     | Scalar Arguments | */

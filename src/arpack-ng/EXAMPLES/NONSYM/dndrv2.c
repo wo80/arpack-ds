@@ -6,67 +6,67 @@
 
 Extern struct
 {
-    doublereal rho;
+    double rho;
 } convct_;
 
 #define convct_1 convct_
 
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__256 = 256;
-static integer c__3 = 3;
-static integer c__6 = 6;
-static integer c__25 = 25;
-static integer c_n6 = -6;
-static integer c__5 = 5;
+static a_int c__9 = 9;
+static a_int c__1 = 1;
+static a_int c__256 = 256;
+static a_int c__3 = 3;
+static a_int c__6 = 6;
+static a_int c__25 = 25;
+static a_int c_n6 = -6;
+static a_int c__5 = 5;
 
 /* Main program */ int MAIN__(void)
 {
     /* System generated locals */
-    integer i__1;
-    doublereal d__1;
+    a_int i__1;
+    double d__1;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
+    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
     int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    doublereal d__[75] /* was [25][3] */, h__;
-    integer j, n;
-    doublereal s, v[6400] /* was [256][25] */, s1, s2, s3, dd[256], dl[256];
-    extern int av_(integer *, doublereal *, doublereal *);
-    doublereal ax[256], du[256], du2[256];
-    integer ido, ncv, nev;
-    doublereal tol;
+    double d__[75] /* was [25][3] */, h__;
+    a_int j, n;
+    double s, v[6400] /* was [256][25] */, s1, s2, s3, dd[256], dl[256];
+    extern int av_(a_int *, double *, double *);
+    double ax[256], du[256], du2[256];
+    a_int ido, ncv, nev;
+    double tol;
     char bmat[1];
-    integer mode, info;
-    logical rvec;
-    integer ierr, ipiv[256];
-    extern doublereal dnrm2_(integer *, doublereal *, integer *);
+    a_int mode, info;
+    a_bool rvec;
+    a_int ierr, ipiv[256];
+    extern double dnrm2_(a_int *, double *, a_int *);
     char which[2];
-    doublereal resid[256];
-    extern int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *);
-    integer nconv;
-    extern int daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
-    doublereal workd[768];
-    logical first;
-    extern int dmout_(integer *, integer *, integer *, doublereal *, integer *, integer *, char *, ftnlen);
-    integer ipntr[14];
-    doublereal workl[2025];
-    extern doublereal dlapy2_(doublereal *, doublereal *);
-    integer iparam[11];
-    doublereal sigmai;
-    extern int dnaupd_(integer *, char *, integer *, char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, ftnlen, ftnlen);
-    logical select[25];
-    extern int dneupd_(logical *, char *, logical *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, doublereal *, doublereal *, char *, integer *, char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, ftnlen, ftnlen, ftnlen);
-    doublereal sigmar;
-    extern int dgttrf_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, integer *);
-    integer ishfts, maxitr;
-    extern int dgttrs_(char *, integer *, integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, ftnlen);
-    integer lworkl;
-    doublereal workev[75];
+    double resid[256];
+    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *);
+    a_int nconv;
+    extern int daxpy_(a_int *, double *, double *, a_int *, double *, a_int *);
+    double workd[768];
+    a_bool first;
+    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
+    a_int ipntr[14];
+    double workl[2025];
+    extern double dlapy2_(double *, double *);
+    a_int iparam[11];
+    double sigmai;
+    extern int dnaupd_(a_int *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen);
+    a_bool select[25];
+    extern int dneupd_(a_bool *, char *, a_bool *, double *, double *, double *, a_int *, double *, double *, double *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
+    double sigmar;
+    extern int dgttrf_(a_int *, double *, double *, double *, double *, a_int *, a_int *);
+    a_int ishfts, maxitr;
+    extern int dgttrs_(char *, a_int *, a_int *, double *, double *, double *, double *, a_int *, double *, a_int *, a_int *, ftnlen);
+    a_int lworkl;
+    double workev[75];
 
     /* Fortran I/O blocks */
     static cilist io___4 = {0, 6, 0, 0, 0};
@@ -245,7 +245,7 @@ static integer c__5 = 5;
     /*     %----------------------------------------------------% */
 
     convct_1.rho = 10.;
-    h__ = 1. / (doublereal)(n + 1);
+    h__ = 1. / (double)(n + 1);
     s = convct_1.rho * h__ / 2.;
 
     s1 = -1. - s;
@@ -380,7 +380,7 @@ L20:
         e_wsle();
         s_wsle(&io___43);
         do_lio(&c__9, &c__1, " Error with _naupd, info = ", (ftnlen)27);
-        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___44);
         do_lio(&c__9, &c__1, " Check the documentation in _naupd.", (ftnlen)35);
@@ -431,7 +431,7 @@ L20:
             e_wsle();
             s_wsle(&io___51);
             do_lio(&c__9, &c__1, " Error with _neupd, info = ", (ftnlen)27);
-            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(integer));
+            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(a_int));
             e_wsle();
             s_wsle(&io___52);
             do_lio(&c__9, &c__1, " Check the documentation of _neupd. ", (ftnlen)36);
@@ -562,16 +562,16 @@ L20:
         e_wsle();
         s_wsle(&io___67);
         do_lio(&c__9, &c__1, " Size of the matrix is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___68);
         do_lio(&c__9, &c__1, " The number of Ritz values requested is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___69);
         do_lio(&c__9, &c__1, " The number of Arnoldi vectors generated", (ftnlen)40);
         do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
-        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___70);
         do_lio(&c__9, &c__1, " What portion of the spectrum: ", (ftnlen)31);
@@ -579,20 +579,20 @@ L20:
         e_wsle();
         s_wsle(&io___71);
         do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___72);
         do_lio(&c__9, &c__1, " The number of Implicit Arnoldi update", (ftnlen)38);
         do_lio(&c__9, &c__1, " iterations taken is ", (ftnlen)21);
-        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___73);
         do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(integer));
+        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(a_int));
         e_wsle();
         s_wsle(&io___74);
         do_lio(&c__9, &c__1, " The convergence criterion is ", (ftnlen)30);
-        do_lio(&c__5, &c__1, (char *)&tol, (ftnlen)sizeof(doublereal));
+        do_lio(&c__5, &c__1, (char *)&tol, (ftnlen)sizeof(double));
         e_wsle();
         s_wsle(&io___75);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -612,15 +612,15 @@ L9000:
 
 /*     matrix vector multiplication subroutine */
 
-int av_(integer *n, doublereal *v, doublereal *w)
+int av_(a_int *n, double *v, double *w)
 {
     /* System generated locals */
-    integer i__1;
+    a_int i__1;
 
     /* Local variables */
-    doublereal h__;
-    integer j;
-    doublereal s, dd, dl, du;
+    double h__;
+    a_int j;
+    double s, dd, dl, du;
 
     /*     Compute the matrix vector multiplication y<---A*x */
     /*     where A is a n by n nonsymmetric tridiagonal matrix derived from */
@@ -633,7 +633,7 @@ int av_(integer *n, doublereal *v, doublereal *w)
     --v;
 
     /* Function Body */
-    h__ = 1. / (doublereal)(*n + 1);
+    h__ = 1. / (double)(*n + 1);
     s = convct_1.rho * h__ / 2.;
     dd = 2.;
     dl = -1. - s;

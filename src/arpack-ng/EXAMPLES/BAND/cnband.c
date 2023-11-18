@@ -4,11 +4,11 @@
 
 /* Table of constant values */
 
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static integer c__9 = 9;
-static integer c__1 = 1;
-static integer c__3 = 3;
+static a_fcomplex c_b1 = {1.f, 0.f};
+static a_fcomplex c_b2 = {0.f, 0.f};
+static a_int c__9 = 9;
+static a_int c__1 = 1;
+static a_int c__3 = 3;
 
 /* \BeginDoc */
 
@@ -310,21 +310,21 @@ static integer c__3 = 3;
 
 /* ----------------------------------------------------------------------- */
 
-int cnband_(logical *rvec, char *howmny, logical *select, complex *d__, complex *z__, integer *ldz, complex *sigma, complex *workev, integer *n, complex *ab, complex *mb, integer *lda, complex *fac, integer *kl, integer *ku, char *which, char *bmat, integer *nev, real *tol, complex *resid, integer *ncv, complex *v, integer *ldv, integer *iparam, complex *workd, complex *workl, integer *lworkl, real *rwork, integer *iwork, integer *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
+int cnband_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d__, a_fcomplex *z__, a_int *ldz, a_fcomplex *sigma, a_fcomplex *workev, a_int *n, a_fcomplex *ab, a_fcomplex *mb, a_int *lda, a_fcomplex *fac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, a_fcomplex *resid, a_int *ncv, a_fcomplex *v, a_int *ldv, a_int *iparam, a_fcomplex *workd, a_fcomplex *workl, a_int *lworkl, float *rwork, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
 {
     /* System generated locals */
-    integer v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, fac_dim1, fac_offset, i__1, i__2, i__3, i__4, i__5;
-    complex q__1, q__2;
+    a_int v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, fac_dim1, fac_offset, i__1, i__2, i__3, i__4, i__5;
+    a_fcomplex q__1, q__2;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
+    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
 
     /* Local variables */
-    integer i__, j, ido, imid, mode, ibot, ierr, itop;
-    extern int cgbmv_(char *, integer *, integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, ftnlen), ccopy_(integer *, complex *, integer *, complex *, integer *);
-    integer ipntr[14];
-    extern int cgbtrf_(integer *, integer *, integer *, integer *, complex *, integer *, integer *, integer *), cnaupd_(integer *, char *, integer *, char *, integer *, real *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, complex *, integer *, real *, integer *, ftnlen, ftnlen), clacpy_(char *, integer *, integer *, complex *, integer *, complex *, integer *, ftnlen),
-        cneupd_(logical *, char *, logical *, complex *, complex *, integer *, complex *, complex *, char *, integer *, char *, integer *, real *, complex *, integer *, complex *, integer *, integer *, integer *, complex *, complex *, integer *, real *, integer *, ftnlen, ftnlen, ftnlen), cgbtrs_(char *, integer *, integer *, integer *, integer *, complex *, integer *, integer *, complex *, integer *, integer *, ftnlen);
+    a_int i__, j, ido, imid, mode, ibot, ierr, itop;
+    extern int cgbmv_(char *, a_int *, a_int *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen), ccopy_(a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
+    a_int ipntr[14];
+    extern int cgbtrf_(a_int *, a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *), cnaupd_(a_int *, char *, a_int *, char *, a_int *, float *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, float *, a_int *, ftnlen, ftnlen), clacpy_(char *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, ftnlen),
+        cneupd_(a_bool *, char *, a_bool *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, char *, a_int *, char *, a_int *, float *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, float *, a_int *, ftnlen, ftnlen, ftnlen), cgbtrs_(char *, a_int *, a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___7 = {0, 6, 0, 0, 0};
@@ -720,7 +720,7 @@ L40:
             e_wsle();
             s_wsle(&io___32);
             do_lio(&c__9, &c__1, " Error with _naupd info = ", (ftnlen)26);
-            do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
+            do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(a_int));
             e_wsle();
             s_wsle(&io___33);
             do_lio(&c__9, &c__1, " Check the documentation of _naupd ", (ftnlen)35);
@@ -746,7 +746,7 @@ L40:
                 e_wsle();
                 s_wsle(&io___36);
                 do_lio(&c__9, &c__1, " Error with _neupd = ", (ftnlen)21);
-                do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
+                do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(a_int));
                 e_wsle();
                 s_wsle(&io___37);
                 do_lio(&c__9, &c__1, " Check the documentation of _neupd ", (ftnlen)35);

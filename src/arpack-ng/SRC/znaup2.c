@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static doublereal c_b5 = .66666666666666663;
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c__3 = 3;
-static logical c_true = TRUE_;
-static integer c__2 = 2;
+static double c_b5 = .66666666666666663;
+static a_int c__1 = 1;
+static a_int c__0 = 0;
+static a_int c__3 = 3;
+static a_bool c_true = TRUE_;
+static a_int c__2 = 2;
 
 /* \BeginDoc */
 
@@ -177,46 +177,46 @@ static integer c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int znaup2_(integer *ido, char *bmat, integer *n, char *which, integer *nev, integer *np, doublereal *tol, doublecomplex *resid, integer *mode, integer *iupd, integer *ishift, integer *mxiter, doublecomplex *v, integer *ldv, doublecomplex *h__, integer *ldh, doublecomplex *ritz, doublecomplex *bounds, doublecomplex *q, integer *ldq, doublecomplex *workl, integer *ipntr, doublecomplex *workd, doublereal *rwork, integer *info, ftnlen bmat_len, ftnlen which_len)
+int znaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np, double *tol, a_dcomplex *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter, a_dcomplex *v, a_int *ldv, a_dcomplex *h__, a_int *ldh, a_dcomplex *ritz, a_dcomplex *bounds, a_dcomplex *q, a_int *ldq, a_dcomplex *workl, a_int *ipntr, a_dcomplex *workd, double *rwork, a_int *info, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3;
-    doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1;
+    a_int h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3;
+    double d__1, d__2, d__3, d__4;
+    a_dcomplex z__1;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *), d_imag(doublecomplex *);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    double pow_dd(double *, double *), d_imag(a_dcomplex *);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
     int s_copy(char *, char *, ftnlen, ftnlen);
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    integer i__, j;
-    static real t0, t1, t2, t3;
-    integer kp[3];
-    static integer np0, nev0;
-    static doublereal eps23;
-    integer ierr;
-    static integer iter;
-    static logical getv0, cnorm;
-    static integer nconv;
-    doublereal rtemp;
-    static logical initv;
-    static doublereal rnorm;
-    extern int dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), zmout_(integer *, integer *, integer *, doublecomplex *, integer *, integer *, char *, ftnlen), zvout_(integer *, integer *, doublecomplex *, integer *, char *, ftnlen);
-    extern doublereal dlapy2_(doublereal *, doublereal *), dznrm2_(integer *, doublecomplex *, integer *);
-    extern int zgetv0_(integer *, char *, integer *, logical *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *, doublecomplex *, integer *, ftnlen);
-    extern doublereal dlamch_(char *, ftnlen);
-    static integer nevbef;
-    extern int arscnd_(real *);
-    static logical update, ushift;
-    static integer kplusp, msglvl;
-    integer nptemp;
+    a_int i__, j;
+    static float t0, t1, t2, t3;
+    a_int kp[3];
+    static a_int np0, nev0;
+    static double eps23;
+    a_int ierr;
+    static a_int iter;
+    static a_bool getv0, cnorm;
+    static a_int nconv;
+    double rtemp;
+    static a_bool initv;
+    static double rnorm;
+    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), zmout_(a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, char *, ftnlen), zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen);
+    extern double dlapy2_(double *, double *), dznrm2_(a_int *, a_dcomplex *, a_int *);
+    extern int zgetv0_(a_int *, char *, a_int *, a_bool *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, double *, a_int *, a_dcomplex *, a_int *, ftnlen);
+    extern double dlamch_(char *, ftnlen);
+    static a_int nevbef;
+    extern int arscnd_(float *);
+    static a_bool update, ushift;
+    static a_int kplusp, msglvl;
+    a_int nptemp;
     char wprime[2];
-    extern int znaitr_(integer *, char *, integer *, integer *, integer *, integer *, doublecomplex *, doublereal *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, ftnlen), zneigh_(doublereal *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublereal *, integer *), zngets_(integer *, char *, integer *, integer *, doublecomplex *, doublecomplex *, ftnlen),
-        znapps_(integer *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, doublecomplex *), zsortc_(char *, logical *, integer *, doublecomplex *, doublecomplex *, ftnlen);
-    extern /* Double Complex */ VOID zzdotc_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
-    doublecomplex cmpnorm;
+    extern int znaitr_(a_int *, char *, a_int *, a_int *, a_int *, a_int *, a_dcomplex *, double *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_dcomplex *, a_int *, ftnlen), zneigh_(double *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, double *, a_int *), zngets_(a_int *, char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, ftnlen),
+        znapps_(a_int *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *), zsortc_(char *, a_bool *, a_int *, a_dcomplex *, a_dcomplex *, ftnlen);
+    extern void zzdotc_(a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *);
+    a_dcomplex cmpnorm;
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

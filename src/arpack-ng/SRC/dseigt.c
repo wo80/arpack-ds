@@ -4,7 +4,7 @@
 
 /* Table of constant values */
 
-static integer c__1 = 1;
+static a_int c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -92,18 +92,18 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int dseigt_(doublereal *rnorm, integer *n, doublereal *h__, integer *ldh, doublereal *eig, doublereal *bounds, doublereal *workl, integer *ierr)
+int dseigt_(double *rnorm, a_int *n, double *h__, a_int *ldh, double *eig, double *bounds, double *workl, a_int *ierr)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, i__1;
-    doublereal d__1;
+    a_int h_dim1, h_offset, i__1;
+    double d__1;
 
     /* Local variables */
-    integer k;
-    static real t0, t1;
-    extern int dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), arscnd_(real *);
-    integer msglvl;
-    extern int dstqrb_(integer *, doublereal *, doublereal *, doublereal *, doublereal *, integer *);
+    a_int k;
+    static float t0, t1;
+    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *), dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), arscnd_(float *);
+    a_int msglvl;
+    extern int dstqrb_(a_int *, double *, double *, double *, double *, a_int *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

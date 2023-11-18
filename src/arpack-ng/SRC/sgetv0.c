@@ -4,10 +4,10 @@
 
 /* Table of constant values */
 
-static integer c__1 = 1;
-static real c_b26 = 1.f;
-static real c_b28 = 0.f;
-static real c_b31 = -1.f;
+static a_int c__1 = 1;
+static float c_b26 = 1.f;
+static float c_b28 = 0.f;
+static float c_b31 = -1.f;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -127,34 +127,34 @@ static real c_b31 = -1.f;
 
 /* ----------------------------------------------------------------------- */
 
-int sgetv0_(integer *ido, char *bmat, integer *itry, logical *initv, integer *n, integer *j, real *v, integer *ldv, real *resid, real *rnorm, integer *ipntr, real *workd, integer *ierr, ftnlen bmat_len)
+int sgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j, float *v, a_int *ldv, float *resid, float *rnorm, a_int *ipntr, float *workd, a_int *ierr, ftnlen bmat_len)
 {
     /* Initialized data */
 
-    static logical inits = TRUE_;
+    static a_bool inits = TRUE_;
 
     /* System generated locals */
-    integer v_dim1, v_offset, i__1;
+    a_int v_dim1, v_offset, i__1;
 
     /* Builtin functions */
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    static real t0, t1, t2, t3;
-    integer jj;
-    static integer iter;
-    extern doublereal sdot_(integer *, real *, integer *, real *, integer *);
-    static logical orth;
-    extern doublereal snrm2_(integer *, real *, integer *);
-    static integer iseed[4];
-    integer idist;
-    extern int sgemv_(char *, integer *, integer *, real *, real *, integer *, real *, integer *, real *, real *, integer *, ftnlen);
-    static logical first;
-    extern int scopy_(integer *, real *, integer *, real *, integer *), svout_(integer *, integer *, real *, integer *, char *, ftnlen);
-    static real rnorm0;
-    extern int arscnd_(real *);
-    static integer msglvl;
-    extern int slarnv_(integer *, integer *, integer *, real *);
+    static float t0, t1, t2, t3;
+    a_int jj;
+    static a_int iter;
+    extern double sdot_(a_int *, float *, a_int *, float *, a_int *);
+    static a_bool orth;
+    extern double snrm2_(a_int *, float *, a_int *);
+    static a_int iseed[4];
+    a_int idist;
+    extern int sgemv_(char *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen);
+    static a_bool first;
+    extern int scopy_(a_int *, float *, a_int *, float *, a_int *), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen);
+    static float rnorm0;
+    extern int arscnd_(float *);
+    static a_int msglvl;
+    extern int slarnv_(a_int *, a_int *, a_int *, float *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

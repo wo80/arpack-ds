@@ -4,7 +4,7 @@
 
 /* Table of constant values */
 
-static integer c__1 = 1;
+static a_int c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -73,19 +73,19 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int ssesrt_(char *which, logical *apply, integer *n, real *x, integer *na, real *a, integer *lda, ftnlen which_len)
+int ssesrt_(char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a, a_int *lda, ftnlen which_len)
 {
     /* System generated locals */
-    integer a_dim1, a_offset, i__1;
-    real r__1, r__2;
+    a_int a_dim1, a_offset, i__1;
+    float r__1, r__2;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    integer i__, j, igap;
-    real temp;
-    extern int sswap_(integer *, real *, integer *, real *, integer *);
+    a_int i__, j, igap;
+    float temp;
+    extern int sswap_(a_int *, float *, a_int *, float *, a_int *);
 
     /*     %------------------% */
     /*     | Scalar Arguments | */

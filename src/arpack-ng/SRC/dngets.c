@@ -4,8 +4,8 @@
 
 /* Table of constant values */
 
-static logical c_true = TRUE_;
-static integer c__1 = 1;
+static a_bool c_true = TRUE_;
+static a_int c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -100,19 +100,19 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int dngets_(integer *ishift, char *which, integer *kev, integer *np, doublereal *ritzr, doublereal *ritzi, doublereal *bounds, doublereal *shiftr, doublereal *shifti, ftnlen which_len)
+int dngets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritzr, double *ritzi, double *bounds, double *shiftr, double *shifti, ftnlen which_len)
 {
     /* System generated locals */
-    integer i__1;
+    a_int i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static real t0, t1;
-    extern int dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), arscnd_(real *);
-    integer msglvl;
-    extern int dsortc_(char *, logical *, integer *, doublereal *, doublereal *, doublereal *, ftnlen);
+    static float t0, t1;
+    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), arscnd_(float *);
+    a_int msglvl;
+    extern int dsortc_(char *, a_bool *, a_int *, double *, double *, double *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -258,7 +258,7 @@ int dngets_(integer *ishift, char *which, integer *kev, integer *np, doublereal 
         i__1 = *kev + *np;
         dvout_(&debug_1.logfil, &i__1, &ritzr[1], &debug_1.ndigit,
                "_ngets: "
-               "Eigenvalues of current H matrix -- real part",
+               "Eigenvalues of current H matrix -- float part",
                (ftnlen)52);
         i__1 = *kev + *np;
         dvout_(&debug_1.logfil, &i__1, &ritzi[1], &debug_1.ndigit,

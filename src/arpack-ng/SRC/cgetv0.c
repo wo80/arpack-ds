@@ -4,9 +4,9 @@
 
 /* Table of constant values */
 
-static complex c_b1 = {1.f, 0.f};
-static complex c_b2 = {0.f, 0.f};
-static integer c__1 = 1;
+static a_fcomplex c_b1 = {1.f, 0.f};
+static a_fcomplex c_b2 = {0.f, 0.f};
+static a_int c__1 = 1;
 
 /* \BeginDoc */
 
@@ -122,37 +122,37 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int cgetv0_(integer *ido, char *bmat, integer *itry, logical *initv, integer *n, integer *j, complex *v, integer *ldv, complex *resid, real *rnorm, integer *ipntr, complex *workd, integer *ierr, ftnlen bmat_len)
+int cgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j, a_fcomplex *v, a_int *ldv, a_fcomplex *resid, float *rnorm, a_int *ipntr, a_fcomplex *workd, a_int *ierr, ftnlen bmat_len)
 {
     /* Initialized data */
 
-    static logical inits = TRUE_;
+    static a_bool inits = TRUE_;
 
     /* System generated locals */
-    integer v_dim1, v_offset, i__1, i__2;
-    real r__1, r__2;
-    complex q__1;
+    a_int v_dim1, v_offset, i__1, i__2;
+    float r__1, r__2;
+    a_fcomplex q__1;
 
     /* Builtin functions */
-    double r_imag(complex *), sqrt(doublereal);
+    double r_imag(a_fcomplex *), sqrt(double);
 
     /* Local variables */
-    static real t0, t1, t2, t3;
-    integer jj;
-    static integer iter;
-    static logical orth;
-    static integer iseed[4];
-    extern int cgemv_(char *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, ftnlen);
-    integer idist;
-    extern int ccopy_(integer *, complex *, integer *, complex *, integer *);
-    complex cnorm;
-    static logical first;
-    extern int cvout_(integer *, integer *, complex *, integer *, char *, ftnlen), svout_(integer *, integer *, real *, integer *, char *, ftnlen);
-    extern doublereal scnrm2_(integer *, complex *, integer *), slapy2_(real *, real *);
-    static real rnorm0;
-    extern /* Complex */ VOID ccdotc_(complex *, integer *, complex *, integer *, complex *, integer *);
-    extern int arscnd_(real *), clarnv_(integer *, integer *, integer *, complex *);
-    static integer msglvl;
+    static float t0, t1, t2, t3;
+    a_int jj;
+    static a_int iter;
+    static a_bool orth;
+    static a_int iseed[4];
+    extern int cgemv_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen);
+    a_int idist;
+    extern int ccopy_(a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
+    a_fcomplex cnorm;
+    static a_bool first;
+    extern int cvout_(a_int *, a_int *, a_fcomplex *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen);
+    extern double scnrm2_(a_int *, a_fcomplex *, a_int *), slapy2_(float *, float *);
+    static float rnorm0;
+    extern void ccdotc_(a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
+    extern int arscnd_(float *), clarnv_(a_int *, a_int *, a_int *, a_fcomplex *);
+    static a_int msglvl;
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

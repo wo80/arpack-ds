@@ -4,8 +4,8 @@
 
 /* Table of constant values */
 
-static logical c_true = TRUE_;
-static integer c__1 = 1;
+static a_bool c_true = TRUE_;
+static a_int c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -99,20 +99,20 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int dsgets_(integer *ishift, char *which, integer *kev, integer *np, doublereal *ritz, doublereal *bounds, doublereal *shifts, ftnlen which_len)
+int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, double *bounds, double *shifts, ftnlen which_len)
 {
     /* System generated locals */
-    integer i__1;
+    a_int i__1;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
-    static real t0, t1;
-    integer kevd2;
-    extern int dswap_(integer *, doublereal *, integer *, doublereal *, integer *), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), dvout_(integer *, integer *, doublereal *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), arscnd_(real *);
-    integer msglvl;
-    extern int dsortr_(char *, logical *, integer *, doublereal *, doublereal *, ftnlen);
+    static float t0, t1;
+    a_int kevd2;
+    extern int dswap_(a_int *, double *, a_int *, double *, a_int *), dcopy_(a_int *, double *, a_int *, double *, a_int *), dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), arscnd_(float *);
+    a_int msglvl;
+    extern int dsortr_(char *, a_bool *, a_int *, double *, double *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

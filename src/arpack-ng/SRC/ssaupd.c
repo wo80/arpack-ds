@@ -4,7 +4,7 @@
 
 /* Table of constant values */
 
-static integer c__1 = 1;
+static a_int c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
@@ -411,7 +411,7 @@ static integer c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int ssaupd_(integer *ido, char *bmat, integer *n, char *which, integer *nev, real *tol, real *resid, integer *ncv, real *v, integer *ldv, integer *iparam, integer *ipntr, real *workd, real *workl, integer *lworkl, integer *info, ftnlen bmat_len, ftnlen which_len)
+int ssaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, a_int *ipntr, float *workd, float *workl, a_int *lworkl, a_int *info, ftnlen bmat_len, ftnlen which_len)
 {
     /* Format strings */
     static char fmt_1000[] = "(//,5x,\002==================================="
@@ -441,19 +441,19 @@ int ssaupd_(integer *ido, char *bmat, integer *n, char *which, integer *nev, rea
                              "\002,f12.6)";
 
     /* System generated locals */
-    integer v_dim1, v_offset, i__1, i__2;
+    a_int v_dim1, v_offset, i__1, i__2;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen), s_wsfe(cilist *), e_wsfe(void), do_fio(integer *, char *, ftnlen);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen), s_wsfe(cilist *), e_wsfe(void), do_fio(a_int *, char *, ftnlen);
 
     /* Local variables */
-    integer j;
-    static real t0, t1;
-    static integer nb, ih, iq, np, iw, ldh, ldq, nev0, mode, ierr, iupd, next, ritz;
-    extern int ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), svout_(integer *, integer *, real *, integer *, char *, ftnlen), ssaup2_(integer *, char *, integer *, char *, integer *, integer *, real *, real *, integer *, integer *, integer *, integer *, real *, integer *, real *, integer *, real *, real *, real *, integer *, real *, integer *, real *, integer *, ftnlen, ftnlen);
-    extern doublereal slamch_(char *, ftnlen);
-    extern int arscnd_(real *);
-    static integer bounds, ishift, msglvl, mxiter;
+    a_int j;
+    static float t0, t1;
+    static a_int nb, ih, iq, np, iw, ldh, ldq, nev0, mode, ierr, iupd, next, ritz;
+    extern int ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen), ssaup2_(a_int *, char *, a_int *, char *, a_int *, a_int *, float *, float *, a_int *, a_int *, a_int *, a_int *, float *, a_int *, float *, a_int *, float *, float *, float *, a_int *, float *, a_int *, float *, a_int *, ftnlen, ftnlen);
+    extern double slamch_(char *, ftnlen);
+    extern int arscnd_(float *);
+    static a_int bounds, ishift, msglvl, mxiter;
     extern int sstats_(void);
 
     /* Fortran I/O blocks */
@@ -752,23 +752,23 @@ int ssaupd_(integer *ido, char *bmat, integer *n, char *which, integer *nev, rea
         s_wsfe(&io___21);
         e_wsfe();
         s_wsfe(&io___22);
-        do_fio(&c__1, (char *)&mxiter, (ftnlen)sizeof(integer));
-        do_fio(&c__1, (char *)&timing_1.nopx, (ftnlen)sizeof(integer));
-        do_fio(&c__1, (char *)&timing_1.nbx, (ftnlen)sizeof(integer));
-        do_fio(&c__1, (char *)&timing_1.nrorth, (ftnlen)sizeof(integer));
-        do_fio(&c__1, (char *)&timing_1.nitref, (ftnlen)sizeof(integer));
-        do_fio(&c__1, (char *)&timing_1.nrstrt, (ftnlen)sizeof(integer));
-        do_fio(&c__1, (char *)&timing_1.tmvopx, (ftnlen)sizeof(real));
-        do_fio(&c__1, (char *)&timing_1.tmvbx, (ftnlen)sizeof(real));
-        do_fio(&c__1, (char *)&timing_1.tsaupd, (ftnlen)sizeof(real));
-        do_fio(&c__1, (char *)&timing_1.tsaup2, (ftnlen)sizeof(real));
-        do_fio(&c__1, (char *)&timing_1.tsaitr, (ftnlen)sizeof(real));
-        do_fio(&c__1, (char *)&timing_1.titref, (ftnlen)sizeof(real));
-        do_fio(&c__1, (char *)&timing_1.tgetv0, (ftnlen)sizeof(real));
-        do_fio(&c__1, (char *)&timing_1.tseigt, (ftnlen)sizeof(real));
-        do_fio(&c__1, (char *)&timing_1.tsgets, (ftnlen)sizeof(real));
-        do_fio(&c__1, (char *)&timing_1.tsapps, (ftnlen)sizeof(real));
-        do_fio(&c__1, (char *)&timing_1.tsconv, (ftnlen)sizeof(real));
+        do_fio(&c__1, (char *)&mxiter, (ftnlen)sizeof(a_int));
+        do_fio(&c__1, (char *)&timing_1.nopx, (ftnlen)sizeof(a_int));
+        do_fio(&c__1, (char *)&timing_1.nbx, (ftnlen)sizeof(a_int));
+        do_fio(&c__1, (char *)&timing_1.nrorth, (ftnlen)sizeof(a_int));
+        do_fio(&c__1, (char *)&timing_1.nitref, (ftnlen)sizeof(a_int));
+        do_fio(&c__1, (char *)&timing_1.nrstrt, (ftnlen)sizeof(a_int));
+        do_fio(&c__1, (char *)&timing_1.tmvopx, (ftnlen)sizeof(float));
+        do_fio(&c__1, (char *)&timing_1.tmvbx, (ftnlen)sizeof(float));
+        do_fio(&c__1, (char *)&timing_1.tsaupd, (ftnlen)sizeof(float));
+        do_fio(&c__1, (char *)&timing_1.tsaup2, (ftnlen)sizeof(float));
+        do_fio(&c__1, (char *)&timing_1.tsaitr, (ftnlen)sizeof(float));
+        do_fio(&c__1, (char *)&timing_1.titref, (ftnlen)sizeof(float));
+        do_fio(&c__1, (char *)&timing_1.tgetv0, (ftnlen)sizeof(float));
+        do_fio(&c__1, (char *)&timing_1.tseigt, (ftnlen)sizeof(float));
+        do_fio(&c__1, (char *)&timing_1.tsgets, (ftnlen)sizeof(float));
+        do_fio(&c__1, (char *)&timing_1.tsapps, (ftnlen)sizeof(float));
+        do_fio(&c__1, (char *)&timing_1.tsconv, (ftnlen)sizeof(float));
         e_wsfe();
     }
 

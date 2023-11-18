@@ -62,21 +62,21 @@
 
 /* ----------------------------------------------------------------------- */
 
-int zsortc_(char *which, logical *apply, integer *n, doublecomplex *x, doublecomplex *y, ftnlen which_len)
+int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y, ftnlen which_len)
 {
     /* System generated locals */
-    integer i__1, i__2, i__3;
-    doublereal d__1, d__2;
+    a_int i__1, i__2, i__3;
+    double d__1, d__2;
 
     /* Builtin functions */
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
-    double d_imag(doublecomplex *);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
+    double d_imag(a_dcomplex *);
 
     /* Local variables */
-    integer i__, j, igap;
-    doublecomplex temp;
-    doublereal temp1, temp2;
-    extern doublereal dlapy2_(doublereal *, doublereal *);
+    a_int i__, j, igap;
+    a_dcomplex temp;
+    double temp1, temp2;
+    extern double dlapy2_(double *, double *);
 
     /*     %------------------% */
     /*     | Scalar Arguments | */

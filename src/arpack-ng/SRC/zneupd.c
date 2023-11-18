@@ -4,11 +4,11 @@
 
 /* Table of constant values */
 
-static doublecomplex c_b1 = {1., 0.};
-static doublecomplex c_b2 = {0., 0.};
-static doublereal c_b5 = .66666666666666663;
-static integer c__1 = 1;
-static logical c_true = TRUE_;
+static a_dcomplex c_b1 = {1., 0.};
+static a_dcomplex c_b2 = {0., 0.};
+static double c_b5 = .66666666666666663;
+static a_int c__1 = 1;
+static a_bool c_true = TRUE_;
 
 /* \BeginDoc */
 
@@ -257,50 +257,50 @@ static logical c_true = TRUE_;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int zneupd_(logical *rvec, char *howmny, logical *select, doublecomplex *d__, doublecomplex *z__, integer *ldz, doublecomplex *sigma, doublecomplex *workev, char *bmat, integer *n, char *which, integer *nev, doublereal *tol, doublecomplex *resid, integer *ncv, doublecomplex *v, integer *ldv, integer *iparam, integer *ipntr, doublecomplex *workd, doublecomplex *workl, integer *lworkl, doublereal *rwork, integer *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
+int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d__, a_dcomplex *z__, a_int *ldz, a_dcomplex *sigma, a_dcomplex *workev, char *bmat, a_int *n, char *which, a_int *nev, double *tol, a_dcomplex *resid, a_int *ncv, a_dcomplex *v, a_int *ldv, a_int *iparam, a_int *ipntr, a_dcomplex *workd, a_dcomplex *workl, a_int *lworkl, double *rwork, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
-    integer v_dim1, v_offset, z_dim1, z_offset, i__1, i__2;
-    doublereal d__1, d__2, d__3, d__4;
-    doublecomplex z__1, z__2;
+    a_int v_dim1, v_offset, z_dim1, z_offset, i__1, i__2;
+    double d__1, d__2, d__3, d__4;
+    a_dcomplex z__1, z__2;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    double pow_dd(double *, double *);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
     int s_copy(char *, char *, ftnlen, ftnlen);
-    double d_imag(doublecomplex *);
-    void z_div(doublecomplex *, doublecomplex *, doublecomplex *);
+    double d_imag(a_dcomplex *);
+    void z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
-    integer j, k, ih, jj, iq, np;
-    doublecomplex vl[1];
-    integer wr, ibd, ldh, ldq;
-    doublereal sep;
-    integer irz, mode;
-    doublereal eps23;
-    integer ierr;
-    doublecomplex temp;
-    integer iwev;
+    a_int j, k, ih, jj, iq, np;
+    a_dcomplex vl[1];
+    a_int wr, ibd, ldh, ldq;
+    double sep;
+    a_int irz, mode;
+    double eps23;
+    a_int ierr;
+    a_dcomplex temp;
+    a_int iwev;
     char type__[6];
-    integer ritz, iheig, ihbds;
-    doublereal conds;
-    logical reord;
-    extern int zscal_(integer *, doublecomplex *, doublecomplex *, integer *);
-    integer nconv;
-    doublereal rtemp;
-    doublecomplex rnorm;
-    extern int zgeru_(integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *), zcopy_(integer *, doublecomplex *, integer *, doublecomplex *, integer *), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), ztrmm_(char *, char *, char *, char *, integer *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, ftnlen, ftnlen, ftnlen, ftnlen), zmout_(integer *, integer *, integer *, doublecomplex *, integer *, integer *, char *, ftnlen),
-        zvout_(integer *, integer *, doublecomplex *, integer *, char *, ftnlen);
-    extern doublereal dlapy2_(doublereal *, doublereal *);
-    integer nconv2;
-    extern int zgeqr2_(integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *);
-    extern doublereal dznrm2_(integer *, doublecomplex *, integer *), dlamch_(char *, ftnlen);
-    extern int zunm2r_(char *, char *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, doublecomplex *, integer *, doublecomplex *, integer *, ftnlen, ftnlen);
-    integer bounds, invsub, iuptri, msglvl, outncv, numcnv, ishift;
-    extern int zlacpy_(char *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, ftnlen), zlahqr_(logical *, logical *, integer *, integer *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, doublecomplex *, integer *, integer *);
-    extern /* Double Complex */ VOID zzdotc_(doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *);
-    extern int zngets_(integer *, char *, integer *, integer *, doublecomplex *, doublecomplex *, ftnlen), zlaset_(char *, integer *, integer *, doublecomplex *, doublecomplex *, doublecomplex *, integer *, ftnlen), ztrsen_(char *, char *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublereal *, doublereal *, doublecomplex *, integer *, integer *, ftnlen, ftnlen),
-        ztrevc_(char *, char *, logical *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, doublecomplex *, integer *, integer *, integer *, doublecomplex *, doublereal *, integer *, ftnlen, ftnlen), zdscal_(integer *, doublereal *, doublecomplex *, integer *);
+    a_int ritz, iheig, ihbds;
+    double conds;
+    a_bool reord;
+    extern int zscal_(a_int *, a_dcomplex *, a_dcomplex *, a_int *);
+    a_int nconv;
+    double rtemp;
+    a_dcomplex rnorm;
+    extern int zgeru_(a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), ztrmm_(char *, char *, char *, char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, ftnlen, ftnlen, ftnlen, ftnlen), zmout_(a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, char *, ftnlen),
+        zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen);
+    extern double dlapy2_(double *, double *);
+    a_int nconv2;
+    extern int zgeqr2_(a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *);
+    extern double dznrm2_(a_int *, a_dcomplex *, a_int *), dlamch_(char *, ftnlen);
+    extern int zunm2r_(char *, char *, a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, ftnlen, ftnlen);
+    a_int bounds, invsub, iuptri, msglvl, outncv, numcnv, ishift;
+    extern int zlacpy_(char *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, ftnlen), zlahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *);
+    extern void zzdotc_(a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *);
+    extern int zngets_(a_int *, char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, ftnlen), zlaset_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen), ztrsen_(char *, char *, a_bool *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, double *, double *, a_dcomplex *, a_int *, a_int *, ftnlen, ftnlen),
+        ztrevc_(char *, char *, a_bool *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, double *, a_int *, ftnlen, ftnlen), zdscal_(a_int *, double *, a_dcomplex *, a_int *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -549,7 +549,7 @@ int zneupd_(logical *rvec, char *howmny, logical *select, doublecomplex *d__, do
         for (j = 1; j <= i__1; ++j)
         {
             i__2 = bounds + j - 1;
-            workl[i__2].r = (doublereal)j, workl[i__2].i = 0.;
+            workl[i__2].r = (double)j, workl[i__2].i = 0.;
             select[j] = FALSE_;
             /* L10: */
         }
@@ -593,7 +593,7 @@ int zneupd_(logical *rvec, char *howmny, logical *select, doublecomplex *d__, do
             d__1 = eps23, d__2 = dlapy2_(&d__3, &d__4);
             rtemp = max(d__1, d__2);
             i__2 = bounds + *ncv - j;
-            jj = (integer)workl[i__2].r;
+            jj = (a_int)workl[i__2].r;
             i__2 = ibd + jj - 1;
             d__1 = workl[i__2].r;
             d__2 = d_imag(&workl[ibd + jj - 1]);

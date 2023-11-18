@@ -5,15 +5,15 @@
 /* Double Complex */ VOID zzdotc_(doublecomplex *ret_val, integer *n, doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy)
 {
     /* System generated locals */
-    integer i__1, i__2;
-    doublecomplex z__1, z__2, z__3;
+    a_int i__1, i__2;
+    a_dcomplex z__1, z__2, z__3;
 
     /* Builtin functions */
-    void d_cnjg(doublecomplex *, doublecomplex *);
+    void d_cnjg(a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
-    integer i__, ix, iy;
-    doublecomplex ztemp;
+    a_int i__, ix, iy;
+    a_dcomplex ztemp;
 
     /*     forms the dot product of a vector. */
     /*     jack dongarra, 3/11/78. */

@@ -4,11 +4,11 @@
 
 /* Table of constant values */
 
-static integer c__9 = 9;
-static integer c__1 = 1;
-static doublereal c_b50 = 1.;
-static doublereal c_b52 = 0.;
-static integer c__3 = 3;
+static a_int c__9 = 9;
+static a_int c__1 = 1;
+static double c_b50 = 1.;
+static double c_b52 = 0.;
+static a_int c__3 = 3;
 
 /* \BeginDoc */
 
@@ -343,20 +343,20 @@ static integer c__3 = 3;
 
 /* --------------------------------------------------------------------- */
 
-int dsband_(logical *rvec, char *howmny, logical *select, doublereal *d__, doublereal *z__, integer *ldz, doublereal *sigma, integer *n, doublereal *ab, doublereal *mb, integer *lda, doublereal *rfac, integer *kl, integer *ku, char *which, char *bmat, integer *nev, doublereal *tol, doublereal *resid, integer *ncv, doublereal *v, integer *ldv, integer *iparam, doublereal *workd, doublereal *workl, integer *lworkl, integer *iwork, integer *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
+int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d__, double *z__, a_int *ldz, double *sigma, a_int *n, double *ab, double *mb, a_int *lda, double *rfac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, double *workd, double *workl, a_int *lworkl, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
 {
     /* System generated locals */
-    integer v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, rfac_dim1, rfac_offset, i__1, i__2;
+    a_int v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, rfac_dim1, rfac_offset, i__1, i__2;
 
     /* Builtin functions */
-    integer s_wsle(cilist *), do_lio(integer *, integer *, char *, ftnlen), e_wsle(void);
+    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
 
     /* Local variables */
-    integer i__, j, ido, imid, ibot, ierr, itop, type__;
-    extern int dgbmv_(char *, integer *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, doublereal *, doublereal *, integer *, ftnlen), dcopy_(integer *, doublereal *, integer *, doublereal *, integer *), daxpy_(integer *, doublereal *, doublereal *, integer *, doublereal *, integer *);
-    integer ipntr[14];
-    extern int dgbtrf_(integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, integer *), dlacpy_(char *, integer *, integer *, doublereal *, integer *, doublereal *, integer *, ftnlen), dsaupd_(integer *, char *, integer *, char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, ftnlen, ftnlen),
-        dseupd_(logical *, char *, logical *, doublereal *, doublereal *, integer *, doublereal *, char *, integer *, char *, integer *, doublereal *, doublereal *, integer *, doublereal *, integer *, integer *, integer *, doublereal *, doublereal *, integer *, integer *, ftnlen, ftnlen, ftnlen), dgbtrs_(char *, integer *, integer *, integer *, integer *, doublereal *, integer *, integer *, doublereal *, integer *, integer *, ftnlen);
+    a_int i__, j, ido, imid, ibot, ierr, itop, type__;
+    extern int dgbmv_(char *, a_int *, a_int *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen), dcopy_(a_int *, double *, a_int *, double *, a_int *), daxpy_(a_int *, double *, double *, a_int *, double *, a_int *);
+    a_int ipntr[14];
+    extern int dgbtrf_(a_int *, a_int *, a_int *, a_int *, double *, a_int *, a_int *, a_int *), dlacpy_(char *, a_int *, a_int *, double *, a_int *, double *, a_int *, ftnlen), dsaupd_(a_int *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen),
+        dseupd_(a_bool *, char *, a_bool *, double *, double *, a_int *, double *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen, ftnlen), dgbtrs_(char *, a_int *, a_int *, a_int *, a_int *, double *, a_int *, a_int *, double *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___2 = {0, 6, 0, 0, 0};
@@ -977,7 +977,7 @@ L90:
             e_wsle();
             s_wsle(&io___50);
             do_lio(&c__9, &c__1, " Error with _saupd info = ", (ftnlen)26);
-            do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
+            do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(a_int));
             e_wsle();
             s_wsle(&io___51);
             do_lio(&c__9, &c__1, " Check the documentation of _saupd ", (ftnlen)35);
@@ -1036,7 +1036,7 @@ L90:
                     e_wsle();
                     s_wsle(&io___60);
                     do_lio(&c__9, &c__1, " Error with _neupd = ", (ftnlen)21);
-                    do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(integer));
+                    do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(a_int));
                     e_wsle();
                     s_wsle(&io___61);
                     do_lio(&c__9, &c__1, " Check the documentation of _neupd ", (ftnlen)35);

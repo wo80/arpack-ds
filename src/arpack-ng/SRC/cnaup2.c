@@ -4,12 +4,12 @@
 
 /* Table of constant values */
 
-static doublereal c_b5 = .66666666666666663;
-static integer c__1 = 1;
-static integer c__0 = 0;
-static integer c__3 = 3;
-static logical c_true = TRUE_;
-static integer c__2 = 2;
+static double c_b5 = .66666666666666663;
+static a_int c__1 = 1;
+static a_int c__0 = 0;
+static a_int c__3 = 3;
+static a_bool c_true = TRUE_;
+static a_int c__2 = 2;
 
 /* \BeginDoc */
 
@@ -177,49 +177,49 @@ static integer c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int cnaup2_(integer *ido, char *bmat, integer *n, char *which, integer *nev, integer *np, real *tol, complex *resid, integer *mode, integer *iupd, integer *ishift, integer *mxiter, complex *v, integer *ldv, complex *h__, integer *ldh, complex *ritz, complex *bounds, complex *q, integer *ldq, complex *workl, integer *ipntr, complex *workd, real *rwork, integer *info, ftnlen bmat_len, ftnlen which_len)
+int cnaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np, float *tol, a_fcomplex *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter, a_fcomplex *v, a_int *ldv, a_fcomplex *h__, a_int *ldh, a_fcomplex *ritz, a_fcomplex *bounds, a_fcomplex *q, a_int *ldq, a_fcomplex *workl, a_int *ipntr, a_fcomplex *workd, float *rwork, a_int *info, ftnlen bmat_len, ftnlen which_len)
 {
     /* System generated locals */
-    integer h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3;
-    real r__1, r__2, r__3, r__4;
-    doublereal d__1;
-    complex q__1;
+    a_int h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3;
+    float r__1, r__2, r__3, r__4;
+    double d__1;
+    a_fcomplex q__1;
 
     /* Builtin functions */
-    double pow_dd(doublereal *, doublereal *), r_imag(complex *);
-    integer s_cmp(char *, char *, ftnlen, ftnlen);
+    double pow_dd(double *, double *), r_imag(a_fcomplex *);
+    a_int s_cmp(char *, char *, ftnlen, ftnlen);
     int s_copy(char *, char *, ftnlen, ftnlen);
-    double sqrt(doublereal);
+    double sqrt(double);
 
     /* Local variables */
-    integer i__, j;
-    static real t0, t1, t2, t3;
-    integer kp[3];
-    static integer np0, nev0;
-    static real eps23;
-    integer ierr;
-    static integer iter;
-    static logical getv0;
-    extern int ccopy_(integer *, complex *, integer *, complex *, integer *);
-    static logical cnorm;
-    static integer nconv;
-    real rtemp;
-    extern int cmout_(integer *, integer *, integer *, complex *, integer *, integer *, char *, ftnlen);
-    static logical initv;
-    static real rnorm;
-    extern int cvout_(integer *, integer *, complex *, integer *, char *, ftnlen), ivout_(integer *, integer *, integer *, integer *, char *, ftnlen), svout_(integer *, integer *, real *, integer *, char *, ftnlen), cgetv0_(integer *, char *, integer *, logical *, integer *, integer *, complex *, integer *, complex *, real *, integer *, complex *, integer *, ftnlen);
-    extern doublereal scnrm2_(integer *, complex *, integer *), slapy2_(real *, real *);
-    extern int cneigh_(real *, integer *, complex *, integer *, complex *, complex *, complex *, integer *, complex *, real *, integer *);
-    extern /* Complex */ VOID ccdotc_(complex *, integer *, complex *, integer *, complex *, integer *);
-    static integer nevbef;
-    extern doublereal slamch_(char *, ftnlen);
-    extern int arscnd_(real *);
-    static logical update, ushift;
-    static integer kplusp, msglvl;
-    integer nptemp;
+    a_int i__, j;
+    static float t0, t1, t2, t3;
+    a_int kp[3];
+    static a_int np0, nev0;
+    static float eps23;
+    a_int ierr;
+    static a_int iter;
+    static a_bool getv0;
+    extern int ccopy_(a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
+    static a_bool cnorm;
+    static a_int nconv;
+    float rtemp;
+    extern int cmout_(a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, char *, ftnlen);
+    static a_bool initv;
+    static float rnorm;
+    extern int cvout_(a_int *, a_int *, a_fcomplex *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen), cgetv0_(a_int *, char *, a_int *, a_bool *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, float *, a_int *, a_fcomplex *, a_int *, ftnlen);
+    extern double scnrm2_(a_int *, a_fcomplex *, a_int *), slapy2_(float *, float *);
+    extern int cneigh_(float *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, float *, a_int *);
+    extern void ccdotc_(a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
+    static a_int nevbef;
+    extern double slamch_(char *, ftnlen);
+    extern int arscnd_(float *);
+    static a_bool update, ushift;
+    static a_int kplusp, msglvl;
+    a_int nptemp;
     char wprime[2];
-    extern int cnaitr_(integer *, char *, integer *, integer *, integer *, integer *, complex *, real *, complex *, integer *, complex *, integer *, integer *, complex *, integer *, ftnlen), cngets_(integer *, char *, integer *, integer *, complex *, complex *, ftnlen), cnapps_(integer *, integer *, integer *, complex *, complex *, integer *, complex *, integer *, complex *, complex *, integer *, complex *, complex *), csortc_(char *, logical *, integer *, complex *, complex *, ftnlen);
-    complex cmpnorm;
+    extern int cnaitr_(a_int *, char *, a_int *, a_int *, a_int *, a_int *, a_fcomplex *, float *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_fcomplex *, a_int *, ftnlen), cngets_(a_int *, char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, ftnlen), cnapps_(a_int *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *), csortc_(char *, a_bool *, a_int *, a_fcomplex *, a_fcomplex *, ftnlen);
+    a_fcomplex cmpnorm;
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -322,7 +322,7 @@ int cnaup2_(integer *ido, char *bmat, integer *n, char *which, integer *nev, int
         /*        %---------------------------------% */
 
         eps23 = slamch_("Epsilon-Machine", (ftnlen)15);
-        d__1 = (doublereal)eps23;
+        d__1 = (double)eps23;
         eps23 = pow_dd(&d__1, &c_b5);
 
         /*        %---------------------------------------% */
