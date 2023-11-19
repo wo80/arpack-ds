@@ -69,7 +69,7 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
     double d__1, d__2;
 
     /* Builtin functions */
-    a_int s_cmp(char *, char *, ftnlen, ftnlen);
+
     double d_imag(a_dcomplex *);
 
     /* Local variables */
@@ -103,7 +103,7 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
 
     igap = *n / 2;
 
-    if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) == 0)
+    if (strcmp(which, "LM") == 0)
     {
 
         /*        %--------------------------------------------% */
@@ -168,7 +168,7 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
         igap /= 2;
         goto L10;
     }
-    else if (s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "SM") == 0)
     {
 
         /*        %--------------------------------------------% */
@@ -233,7 +233,7 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
         igap /= 2;
         goto L40;
     }
-    else if (s_cmp(which, "LR", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "LR") == 0)
     {
 
         /*        %------------------------------------------------% */
@@ -291,7 +291,7 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
         igap /= 2;
         goto L70;
     }
-    else if (s_cmp(which, "SR", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "SR") == 0)
     {
 
         /*        %------------------------------------------------% */
@@ -348,7 +348,7 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
         igap /= 2;
         goto L100;
     }
-    else if (s_cmp(which, "LI", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "LI") == 0)
     {
 
         /*        %--------------------------------------------% */
@@ -403,7 +403,7 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
         igap /= 2;
         goto L130;
     }
-    else if (s_cmp(which, "SI", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "SI") == 0)
     {
 
         /*        %---------------------------------------------% */

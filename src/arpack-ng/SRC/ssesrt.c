@@ -80,7 +80,6 @@ int ssesrt_(char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a,
     float r__1, r__2;
 
     /* Builtin functions */
-    a_int s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     a_int i, j, igap;
@@ -114,7 +113,7 @@ int ssesrt_(char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a,
     /* Function Body */
     igap = *n / 2;
 
-    if (s_cmp(which, "SA", (ftnlen)2, (ftnlen)2) == 0)
+    if (strcmp(which, "SA") == 0)
     {
 
         /*        X is sorted into decreasing order of algebraic. */
@@ -156,7 +155,7 @@ int ssesrt_(char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a,
         igap /= 2;
         goto L10;
     }
-    else if (s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "SM") == 0)
     {
 
         /*        X is sorted into decreasing order of magnitude. */
@@ -198,7 +197,7 @@ int ssesrt_(char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a,
         igap /= 2;
         goto L40;
     }
-    else if (s_cmp(which, "LA", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "LA") == 0)
     {
 
         /*        X is sorted into increasing order of algebraic. */
@@ -240,7 +239,7 @@ int ssesrt_(char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a,
         igap /= 2;
         goto L70;
     }
-    else if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "LM") == 0)
     {
 
         /*        X is sorted into increasing order of magnitude. */

@@ -276,7 +276,7 @@ int dgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
             *ido = -1;
             goto L9000;
         }
-        else if (*itry > 1 && *(unsigned char *)bmat == 'G')
+        else if (*itry > 1 && *bmat == 'G')
         {
             dcopy_(n, &resid[1], &i_one, &workd[*n + 1], &i_one);
         }
@@ -300,7 +300,7 @@ int dgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
         goto L40;
     }
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvopx += t3 - t2;
@@ -317,7 +317,7 @@ int dgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
     {
         dcopy_(n, &workd[*n + 1], &i_one, &resid[1], &i_one);
     }
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         ipntr[1] = *n + 1;
@@ -325,26 +325,26 @@ int dgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
         *ido = 2;
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         dcopy_(n, &resid[1], &i_one, &workd[1], &i_one);
     }
 
 L20:
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
     }
 
     first = FALSE_;
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         rnorm0 = ddot_(n, &resid[1], &i_one, &workd[1], &i_one);
         rnorm0 = sqrt((abs(rnorm0)));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         rnorm0 = dnrm2_(n, &resid[1], &i_one);
     }
@@ -384,7 +384,7 @@ L30:
     /*     %----------------------------------------------------------% */
 
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         dcopy_(n, &resid[1], &i_one, &workd[*n + 1], &i_one);
@@ -393,25 +393,25 @@ L30:
         *ido = 2;
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         dcopy_(n, &resid[1], &i_one, &workd[1], &i_one);
     }
 
 L40:
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
     }
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         *rnorm = ddot_(n, &resid[1], &i_one, &workd[1], &i_one);
         *rnorm = sqrt((abs(*rnorm)));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         *rnorm = dnrm2_(n, &resid[1], &i_one);
     }

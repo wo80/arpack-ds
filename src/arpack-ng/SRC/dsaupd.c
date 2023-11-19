@@ -446,7 +446,6 @@ int dsaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
     a_int v_dim1, v_offset, i__1, i__2;
 
     /* Builtin functions */
-    a_int s_cmp(char *, char *, ftnlen, ftnlen), s_wsfe(cilist *), e_wsfe(void), do_fio(a_int *, char *, ftnlen);
 
     /* Local variables */
     a_int j;
@@ -568,11 +567,11 @@ int dsaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
         {
             ierr = -4;
         }
-        if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "LA", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "SA", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) != 0)
+        if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LA") != 0 && strcmp(which, "SA") != 0 && strcmp(which, "BE") != 0)
         {
             ierr = -5;
         }
-        if (*(unsigned char *)bmat != 'I' && *(unsigned char *)bmat != 'G')
+        if (*bmat != 'I' && *bmat != 'G')
         {
             ierr = -6;
         }
@@ -587,7 +586,7 @@ int dsaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
         {
             ierr = -10;
         }
-        else if (mode == 1 && *(unsigned char *)bmat == 'G')
+        else if (mode == 1 && *bmat == 'G')
         {
             ierr = -11;
         }
@@ -595,7 +594,7 @@ int dsaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
         {
             ierr = -12;
         }
-        else if (*nev == 1 && s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) == 0)
+        else if (*nev == 1 && strcmp(which, "BE") == 0)
         {
             ierr = -13;
         }
@@ -621,7 +620,7 @@ int dsaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
         }
         if (*tol <= 0.)
         {
-            *tol = dlamch_("EpsMach", (ftnlen)7);
+            *tol = dlamch_("EpsMach");
         }
 
         /*        %----------------------------------------------% */

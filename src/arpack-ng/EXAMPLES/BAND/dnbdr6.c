@@ -23,7 +23,6 @@ static a_int c_n6 = -6;
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     double a[50000] /* was [50][1000] */, d[150] /* was [50][3] */, h;
@@ -204,8 +203,8 @@ static a_int c_n6 = -6;
         e_wsle();
         goto L9000;
     }
-    *(unsigned char *)bmat = 'G';
-    s_copy(which, "LM", (ftnlen)2, (ftnlen)2);
+    *bmat = 'G';
+    strcpy(which, "LM");
     sigmar = .4;
     sigmai = .6;
 

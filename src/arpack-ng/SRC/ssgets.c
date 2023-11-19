@@ -106,7 +106,6 @@ int ssgets_(a_int *ishift, char *which, a_int *kev, a_int *np, float *ritz, floa
     a_int i__1;
 
     /* Builtin functions */
-    a_int s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     static float t0, t1;
@@ -173,7 +172,7 @@ int ssgets_(a_int *ishift, char *which, a_int *kev, a_int *np, float *ritz, floa
     arscnd_(&t0);
     msglvl = debug_1.msgets;
 
-    if (s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) == 0)
+    if (strcmp(which, "BE") == 0)
     {
 
         /*        %-----------------------------------------------------% */

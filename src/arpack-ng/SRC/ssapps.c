@@ -232,7 +232,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
 
     if (first)
     {
-        epsmch = slamch_("Epsilon-Machine", (ftnlen)15);
+        epsmch = slamch_("Epsilon-Machine");
         first = FALSE_;
     }
     itop = 1;

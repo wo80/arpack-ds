@@ -23,7 +23,6 @@ static a_fcomplex c_b151 = {4.f, 0.f};
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    int s_copy(char *, char *, ftnlen, ftnlen);
     double r_imag(a_fcomplex *);
 
     /* Local variables */
@@ -202,8 +201,8 @@ static a_fcomplex c_b151 = {4.f, 0.f};
         e_wsle();
         goto L9000;
     }
-    *(unsigned char *)bmat = 'I';
-    s_copy(which, "LM", (ftnlen)2, (ftnlen)2);
+    *bmat = 'I';
+    strcpy(which, "LM");
 
     /*     %---------------------------------------------------% */
     /*     | The work array WORKL is used in CNAUPD as         | */

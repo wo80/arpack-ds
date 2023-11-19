@@ -270,7 +270,7 @@ int zgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
             *ido = -1;
             goto L9000;
         }
-        else if (*itry > 1 && *(unsigned char *)bmat == 'G')
+        else if (*itry > 1 && *bmat == 'G')
         {
             zcopy_(n, &resid[1], &i_one, &workd[*n + 1], &i_one);
         }
@@ -308,7 +308,7 @@ int zgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
     {
         zcopy_(n, &workd[*n + 1], &i_one, &resid[1], &i_one);
     }
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         ipntr[1] = *n + 1;
@@ -316,21 +316,21 @@ int zgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
         *ido = 2;
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         zcopy_(n, &resid[1], &i_one, &workd[1], &i_one);
     }
 
 L20:
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
     }
 
     first = FALSE_;
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         zzdotc_(&z__1, n, &resid[1], &i_one, &workd[1], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
@@ -338,7 +338,7 @@ L20:
         d__2 = d_imag(&cnorm);
         rnorm0 = sqrt(dlapy2_(&d__1, &d__2));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         rnorm0 = dznrm2_(n, &resid[1], &i_one);
     }
@@ -379,7 +379,7 @@ L30:
     /*     %----------------------------------------------------------% */
 
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         zcopy_(n, &resid[1], &i_one, &workd[*n + 1], &i_one);
@@ -388,20 +388,20 @@ L30:
         *ido = 2;
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         zcopy_(n, &resid[1], &i_one, &workd[1], &i_one);
     }
 
 L40:
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
     }
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         zzdotc_(&z__1, n, &resid[1], &i_one, &workd[1], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
@@ -409,7 +409,7 @@ L40:
         d__2 = d_imag(&cnorm);
         *rnorm = sqrt(dlapy2_(&d__1, &d__2));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         *rnorm = dznrm2_(n, &resid[1], &i_one);
     }

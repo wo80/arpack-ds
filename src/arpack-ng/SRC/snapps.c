@@ -261,10 +261,10 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         /*        | REFERENCE: LAPACK subroutine slahqr           | */
         /*        %-----------------------------------------------% */
 
-        unfl = slamch_("safe minimum", (ftnlen)12);
+        unfl = slamch_("safe minimum");
         ovfl = 1.f / unfl;
         slabad_(&unfl, &ovfl);
-        ulp = slamch_("precision", (ftnlen)9);
+        ulp = slamch_("precision");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -381,7 +381,7 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             if (tst1 == 0.f)
             {
                 i__3 = kplusp - jj + 1;
-                tst1 = slanhs_("1", &i__3, &h[h_offset], ldh, &workl[1], (ftnlen)1);
+                tst1 = slanhs_("1", &i__3, &h[h_offset], ldh, &workl[1]);
             }
             /* Computing MAX */
             r__2 = ulp * tst1;
@@ -674,7 +674,7 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         tst1 = (r__1 = h[i + i * h_dim1], dabs(r__1)) + (r__2 = h[i + 1 + (i + 1) * h_dim1], dabs(r__2));
         if (tst1 == 0.f)
         {
-            tst1 = slanhs_("1", kev, &h[h_offset], ldh, &workl[1], (ftnlen)1);
+            tst1 = slanhs_("1", kev, &h[h_offset], ldh, &workl[1]);
         }
         /* Computing MAX */
         r__1 = ulp * tst1;

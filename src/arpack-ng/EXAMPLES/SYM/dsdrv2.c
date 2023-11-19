@@ -22,7 +22,6 @@ static a_int c__5 = 5;
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     double d[50] /* was [25][2] */;
@@ -204,8 +203,8 @@ static a_int c__5 = 5;
         goto L9000;
     }
 
-    *(unsigned char *)bmat = 'I';
-    s_copy(which, "LM", (ftnlen)2, (ftnlen)2);
+    *bmat = 'I';
+    strcpy(which, "LM");
     sigma = 0.;
 
     /*     %--------------------------------------------------% */

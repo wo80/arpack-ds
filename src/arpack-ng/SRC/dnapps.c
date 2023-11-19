@@ -261,10 +261,10 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
         /*        | REFERENCE: LAPACK subroutine dlahqr           | */
         /*        %-----------------------------------------------% */
 
-        unfl = dlamch_("safe minimum", (ftnlen)12);
+        unfl = dlamch_("safe minimum");
         ovfl = 1. / unfl;
         dlabad_(&unfl, &ovfl);
-        ulp = dlamch_("precision", (ftnlen)9);
+        ulp = dlamch_("precision");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -381,7 +381,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
             if (tst1 == 0.)
             {
                 i__3 = kplusp - jj + 1;
-                tst1 = dlanhs_("1", &i__3, &h[h_offset], ldh, &workl[1], (ftnlen)1);
+                tst1 = dlanhs_("1", &i__3, &h[h_offset], ldh, &workl[1]);
             }
             /* Computing MAX */
             d__2 = ulp * tst1;
@@ -674,7 +674,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
         tst1 = (d__1 = h[i + i * h_dim1], abs(d__1)) + (d__2 = h[i + 1 + (i + 1) * h_dim1], abs(d__2));
         if (tst1 == 0.)
         {
-            tst1 = dlanhs_("1", kev, &h[h_offset], ldh, &workl[1], (ftnlen)1);
+            tst1 = dlanhs_("1", kev, &h[h_offset], ldh, &workl[1]);
         }
         /* Computing MAX */
         d__1 = ulp * tst1;

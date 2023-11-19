@@ -447,7 +447,6 @@ int dnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
     a_int v_dim1, v_offset, i__1, i__2;
 
     /* Builtin functions */
-    a_int s_cmp(char *, char *, ftnlen, ftnlen), s_wsfe(cilist *), e_wsfe(void), do_fio(a_int *, char *, ftnlen);
 
     /* Local variables */
     a_int j;
@@ -565,11 +564,11 @@ int dnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
         {
             ierr = -4;
         }
-        else if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "LR", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "SR", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "LI", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "SI", (ftnlen)2, (ftnlen)2) != 0)
+        else if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LR") != 0 && strcmp(which, "SR") != 0 && strcmp(which, "LI") != 0 && strcmp(which, "SI") != 0)
         {
             ierr = -5;
         }
-        else if (*(unsigned char *)bmat != 'I' && *(unsigned char *)bmat != 'G')
+        else if (*bmat != 'I' && *bmat != 'G')
         {
             ierr = -6;
         }
@@ -585,7 +584,7 @@ int dnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
             {
                 ierr = -10;
             }
-            else if (mode == 1 && *(unsigned char *)bmat == 'G')
+            else if (mode == 1 && *bmat == 'G')
             {
                 ierr = -11;
             }
@@ -616,7 +615,7 @@ int dnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
         }
         if (*tol <= 0.)
         {
-            *tol = dlamch_("EpsMach", (ftnlen)7);
+            *tol = dlamch_("EpsMach");
         }
 
         /*        %----------------------------------------------% */

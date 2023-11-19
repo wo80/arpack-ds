@@ -22,7 +22,6 @@ static a_dcomplex c_b151 = {4., 0.};
     a_dcomplex z__1;
 
     /* Builtin functions */
-    int s_copy(char *, char *, ftnlen, ftnlen);
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
     double d_imag(a_dcomplex *);
 
@@ -262,8 +261,8 @@ static a_dcomplex c_b151 = {4., 0.};
 
     nev = 4;
     ncv = 20;
-    *(unsigned char *)bmat = 'I';
-    s_copy(which, "LM", (ftnlen)2, (ftnlen)2);
+    *bmat = 'I';
+    strcpy(which, "LM");
 
     if (n > 256)
     {

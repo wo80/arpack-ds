@@ -127,7 +127,7 @@ int dsconv_(a_int *n, double *ritz, double *bounds, double *tol, a_int *nconv)
     /* Function Body */
     arscnd_(&t0);
 
-    eps23 = dlamch_("Epsilon-Machine", (ftnlen)15);
+    eps23 = dlamch_("Epsilon-Machine");
     eps23 = pow_dd(&eps23, &TWO_THIRDS);
 
     *nconv = 0;

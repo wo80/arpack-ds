@@ -234,8 +234,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     double d__1, d__2, d__3;
 
     /* Builtin functions */
-    a_int s_cmp(char *, char *, ftnlen, ftnlen);
-    int s_copy(char *, char *, ftnlen, ftnlen);
+
     double pow_dd(double *, double *);
 
     /* Local variables */
@@ -356,19 +355,19 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     {
         ierr = -3;
     }
-    if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "LA", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "SA", (ftnlen)2, (ftnlen)2) != 0 && s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) != 0)
+    if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LA") != 0 && strcmp(which, "SA") != 0 && strcmp(which, "BE") != 0)
     {
         ierr = -5;
     }
-    if (*(unsigned char *)bmat != 'I' && *(unsigned char *)bmat != 'G')
+    if (*bmat != 'I' && *bmat != 'G')
     {
         ierr = -6;
     }
-    if (*(unsigned char *)howmny != 'A' && *(unsigned char *)howmny != 'P' && *(unsigned char *)howmny != 'S' && *rvec)
+    if (*howmny != 'A' && *howmny != 'P' && *howmny != 'S' && *rvec)
     {
         ierr = -15;
     }
-    if (*rvec && *(unsigned char *)howmny == 'S')
+    if (*rvec && *howmny == 'S')
     {
         ierr = -16;
     }
@@ -382,29 +381,29 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
 
     if (mode == 1 || mode == 2)
     {
-        s_copy(type__, "REGULR", (ftnlen)6, (ftnlen)6);
+        strcpy(type__, "REGULR");
     }
     else if (mode == 3)
     {
-        s_copy(type__, "SHIFTI", (ftnlen)6, (ftnlen)6);
+        strcpy(type__, "SHIFTI");
     }
     else if (mode == 4)
     {
-        s_copy(type__, "BUCKLE", (ftnlen)6, (ftnlen)6);
+        strcpy(type__, "BUCKLE");
     }
     else if (mode == 5)
     {
-        s_copy(type__, "CAYLEY", (ftnlen)6, (ftnlen)6);
+        strcpy(type__, "CAYLEY");
     }
     else
     {
         ierr = -10;
     }
-    if (mode == 1 && *(unsigned char *)bmat == 'G')
+    if (mode == 1 && *bmat == 'G')
     {
         ierr = -11;
     }
-    if (*nev == 1 && s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) == 0)
+    if (*nev == 1 && strcmp(which, "BE") == 0)
     {
         ierr = -12;
     }
@@ -491,7 +490,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     /*     | Set machine dependent constant. | */
     /*     %---------------------------------% */
 
-    eps23 = dlamch_("Epsilon-Machine", (ftnlen)15);
+    eps23 = dlamch_("Epsilon-Machine");
     eps23 = pow_dd(&eps23, &TWO_THIRDS);
 
     /*     %---------------------------------------% */
@@ -502,11 +501,11 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     /*     %---------------------------------------% */
 
     rnorm = workl[ih];
-    if (*(unsigned char *)bmat == 'I')
+    if (*bmat == 'I')
     {
         bnorm2 = rnorm;
     }
-    else if (*(unsigned char *)bmat == 'G')
+    else if (*bmat == 'G')
     {
         bnorm2 = dnrm2_(n, &workd[1], &i_one);
     }
@@ -721,7 +720,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     /*     | (and corresponding data) are returned in ascending order.        | */
     /*     %------------------------------------------------------------------% */
 
-    if (s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) == 0)
+    if (strcmp(type__, "REGULR") == 0)
     {
 
         /*        %---------------------------------------------------------% */
@@ -757,7 +756,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
         /*        %-------------------------------------------------------------% */
 
         dcopy_(ncv, &workl[ihd], &i_one, &workl[iw], &i_one);
-        if (s_cmp(type__, "SHIFTI", (ftnlen)6, (ftnlen)6) == 0)
+        if (strcmp(type__, "SHIFTI") == 0)
         {
             i__1 = *ncv;
             for (k = 1; k <= i__1; ++k)
@@ -766,7 +765,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
                 /* L40: */
             }
         }
-        else if (s_cmp(type__, "BUCKLE", (ftnlen)6, (ftnlen)6) == 0)
+        else if (strcmp(type__, "BUCKLE") == 0)
         {
             i__1 = *ncv;
             for (k = 1; k <= i__1; ++k)
@@ -775,7 +774,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
                 /* L50: */
             }
         }
-        else if (s_cmp(type__, "CAYLEY", (ftnlen)6, (ftnlen)6) == 0)
+        else if (strcmp(type__, "CAYLEY") == 0)
         {
             i__1 = *ncv;
             for (k = 1; k <= i__1; ++k)
@@ -821,7 +820,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     /*     | the Lanczos basis matrix V.                    | */
     /*     %------------------------------------------------% */
 
-    if (*rvec && *(unsigned char *)howmny == 'A')
+    if (*rvec && *howmny == 'A')
     {
 
         /*        %----------------------------------------------------------% */
@@ -871,13 +870,13 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
             /* L67: */
         }
     }
-    else if (*rvec && *(unsigned char *)howmny == 'S')
+    else if (*rvec && *howmny == 'S')
     {
 
         /*     Not yet implemented. See remark 2 above. */
     }
 
-    if (s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) == 0 && *rvec)
+    if (strcmp(type__, "REGULR") == 0 && *rvec)
     {
 
         i__1 = *ncv;
@@ -887,7 +886,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
             /* L70: */
         }
     }
-    else if (s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) != 0 && *rvec)
+    else if (strcmp(type__, "REGULR") != 0 && *rvec)
     {
 
         /*        %-------------------------------------------------% */
@@ -900,7 +899,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
         /*        %-------------------------------------------------% */
 
         dscal_(ncv, &bnorm2, &workl[ihb], &i_one);
-        if (s_cmp(type__, "SHIFTI", (ftnlen)6, (ftnlen)6) == 0)
+        if (strcmp(type__, "SHIFTI") == 0)
         {
 
             i__1 = *ncv;
@@ -912,7 +911,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
                 /* L80: */
             }
         }
-        else if (s_cmp(type__, "BUCKLE", (ftnlen)6, (ftnlen)6) == 0)
+        else if (strcmp(type__, "BUCKLE") == 0)
         {
 
             i__1 = *ncv;
@@ -924,7 +923,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
                 /* L90: */
             }
         }
-        else if (s_cmp(type__, "CAYLEY", (ftnlen)6, (ftnlen)6) == 0)
+        else if (strcmp(type__, "CAYLEY") == 0)
         {
 
             i__1 = *ncv;
@@ -936,7 +935,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
         }
     }
 
-    if (s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) != 0 && msglvl > 1)
+    if (strcmp(type__, "REGULR") != 0 && msglvl > 1)
     {
         dvout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,"_seupd: Untransformed converged Ritz values");
         dvout_(&debug_1.logfil, &nconv, &workl[ihb], &debug_1.ndigit,"_seupd: Ritz estimates of the untransformed Ritz values");
@@ -953,7 +952,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     /*     | for MODE = 3,4,5. See reference 7               | */
     /*     %-------------------------------------------------% */
 
-    if (*rvec && (s_cmp(type__, "SHIFTI", (ftnlen)6, (ftnlen)6) == 0 || s_cmp(type__, "CAYLEY", (ftnlen)6, (ftnlen)6) == 0))
+    if (*rvec && (strcmp(type__, "SHIFTI") == 0 || strcmp(type__, "CAYLEY") == 0))
     {
 
         i__1 = nconv - 1;
@@ -963,7 +962,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
             /* L110: */
         }
     }
-    else if (*rvec && s_cmp(type__, "BUCKLE", (ftnlen)6, (ftnlen)6) == 0)
+    else if (*rvec && strcmp(type__, "BUCKLE") == 0)
     {
 
         i__1 = nconv - 1;
@@ -974,7 +973,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
         }
     }
 
-    if (*rvec && s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) != 0)
+    if (*rvec && strcmp(type__, "REGULR") != 0)
     {
         dger_(n, &nconv, &d_one, &resid[1], &i_one, &workl[iw], &i_one, &z[z_offset], ldz);
     }

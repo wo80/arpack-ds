@@ -339,11 +339,11 @@ int cnaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_
         /*        | REFERENCE: LAPACK subroutine clahqr     | */
         /*        %-----------------------------------------% */
 
-        unfl = slamch_("safe minimum", (ftnlen)12);
+        unfl = slamch_("safe minimum");
         q__1.r = 1.f / unfl, q__1.i = 0.f / unfl;
         ovfl = q__1.r;
         slabad_(&unfl, &ovfl);
-        ulp = slamch_("precision", (ftnlen)9);
+        ulp = slamch_("precision");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -566,7 +566,7 @@ L50:
     /*        %---------------------------------------% */
 
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         step4 = TRUE_;
@@ -580,7 +580,7 @@ L50:
 
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         ccopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
@@ -592,7 +592,7 @@ L60:
     /*        | if step4 = .true.                | */
     /*        %----------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
@@ -605,7 +605,7 @@ L60:
     /*        | Compute the B-norm of OP*v_{j}.     | */
     /*        %-------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ccdotc_(&q__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = q__1.r, cnorm.i = q__1.i;
@@ -613,7 +613,7 @@ L60:
         r__2 = r_imag(&cnorm);
         wnorm = sqrt(slapy2_(&r__1, &r__2));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         wnorm = scnrm2_(n, &resid[1], &i_one);
     }
@@ -653,7 +653,7 @@ L60:
     orth1 = TRUE_;
 
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         ccopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
@@ -667,7 +667,7 @@ L60:
 
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         ccopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
@@ -678,7 +678,7 @@ L70:
     /*        | WORKD(IPJ:IPJ+N-1) := B*r_{j}.                    | */
     /*        %---------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
@@ -690,7 +690,7 @@ L70:
     /*        | Compute the B-norm of r_{j}. | */
     /*        %------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ccdotc_(&q__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = q__1.r, cnorm.i = q__1.i;
@@ -698,7 +698,7 @@ L70:
         r__2 = r_imag(&cnorm);
         *rnorm = sqrt(slapy2_(&r__1, &r__2));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         *rnorm = scnrm2_(n, &resid[1], &i_one);
     }
@@ -766,7 +766,7 @@ L80:
 
     orth2 = TRUE_;
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         ccopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
@@ -781,7 +781,7 @@ L80:
 
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         ccopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
@@ -791,7 +791,7 @@ L90:
     /*        | Back from reverse communication if ORTH2 = .true. | */
     /*        %---------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
@@ -801,7 +801,7 @@ L90:
     /*        | Compute the B-norm of the corrected residual r_{j}. | */
     /*        %-----------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ccdotc_(&q__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = q__1.r, cnorm.i = q__1.i;
@@ -809,7 +809,7 @@ L90:
         r__2 = r_imag(&cnorm);
         rnorm1 = sqrt(slapy2_(&r__1, &r__2));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         rnorm1 = scnrm2_(n, &resid[1], &i_one);
     }
@@ -919,7 +919,7 @@ L100:
             if (tst1 == 0.f)
             {
                 i__2 = *k + *np;
-                tst1 = clanhs_("1", &i__2, &h[h_offset], ldh, &workd[*n + 1], (ftnlen)1);
+                tst1 = clanhs_("1", &i__2, &h[h_offset], ldh, &workd[*n + 1]);
             }
             i__2 = i + 1 + i * h_dim1;
             r__1 = h[i__2].r;

@@ -128,7 +128,7 @@ int ssconv_(a_int *n, float *ritz, float *bounds, float *tol, a_int *nconv)
     /* Function Body */
     arscnd_(&t0);
 
-    eps23 = slamch_("Epsilon-Machine", (ftnlen)15);
+    eps23 = slamch_("Epsilon-Machine");
     d__1 = (double)eps23;
     eps23 = pow_dd(&d__1, &TWO_THIRDS);
 

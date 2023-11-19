@@ -20,7 +20,6 @@ static a_int c__5 = 5;
     double d__1;
 
     /* Builtin functions */
-    int s_copy(char *, char *, ftnlen, ftnlen);
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
 
     /* Local variables */
@@ -271,8 +270,8 @@ static a_int c__5 = 5;
 
     nev = 4;
     ncv = 20;
-    *(unsigned char *)bmat = 'I';
-    s_copy(which, "LM", (ftnlen)2, (ftnlen)2);
+    *bmat = 'I';
+    strcpy(which, "LM");
 
     if (n > 256)
     {

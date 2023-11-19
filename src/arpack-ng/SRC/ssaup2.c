@@ -201,8 +201,7 @@ int ssaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
 
     /* Builtin functions */
     double pow_dd(double *, double *);
-    a_int s_cmp(char *, char *, ftnlen, ftnlen);
-    int s_copy(char *, char *, ftnlen, ftnlen);
+
     double sqrt(double);
 
     /* Local variables */
@@ -311,7 +310,7 @@ int ssaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
         /*        | Set machine dependent constant. | */
         /*        %---------------------------------% */
 
-        eps23 = slamch_("Epsilon-Machine", (ftnlen)15);
+        eps23 = slamch_("Epsilon-Machine");
         d__1 = (double)eps23;
         eps23 = pow_dd(&d__1, &TWO_THIRDS);
 
@@ -599,7 +598,7 @@ L20:
         /*           | swap overlapping locations.                    | */
         /*           %------------------------------------------------% */
 
-        if (s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "BE") == 0)
         {
 
             /*              %-----------------------------------------------------% */
@@ -611,7 +610,7 @@ L20:
             /*              | overlapping locations.                              | */
             /*              %-----------------------------------------------------% */
 
-            s_copy(wprime, "SA", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "SA");
             ssortr_(wprime, &b_true, &kplusp, &ritz[1], &bounds[1]);
             nevd2 = nev0 / 2;
             nevm2 = nev0 - nevd2;
@@ -639,21 +638,21 @@ L20:
             /*              | NEV locations.                                   | */
             /*              %--------------------------------------------------% */
 
-            if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) == 0)
+            if (strcmp(which, "LM") == 0)
             {
-                s_copy(wprime, "SM", (ftnlen)2, (ftnlen)2);
+                strcpy(wprime, "SM");
             }
-            if (s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) == 0)
+            if (strcmp(which, "SM") == 0)
             {
-                s_copy(wprime, "LM", (ftnlen)2, (ftnlen)2);
+                strcpy(wprime, "LM");
             }
-            if (s_cmp(which, "LA", (ftnlen)2, (ftnlen)2) == 0)
+            if (strcmp(which, "LA") == 0)
             {
-                s_copy(wprime, "SA", (ftnlen)2, (ftnlen)2);
+                strcpy(wprime, "SA");
             }
-            if (s_cmp(which, "SA", (ftnlen)2, (ftnlen)2) == 0)
+            if (strcmp(which, "SA") == 0)
             {
-                s_copy(wprime, "LA", (ftnlen)2, (ftnlen)2);
+                strcpy(wprime, "LA");
             }
 
             ssortr_(wprime, &b_true, &kplusp, &ritz[1], &bounds[1]);
@@ -681,7 +680,7 @@ L20:
         /*           | (in the case when NCONV < NEV.)                    | */
         /*           %----------------------------------------------------% */
 
-        s_copy(wprime, "LA", (ftnlen)2, (ftnlen)2);
+        strcpy(wprime, "LA");
         ssortr_(wprime, &b_true, &nev0, &bounds[1], &ritz[1]);
 
         /*           %----------------------------------------------% */
@@ -706,7 +705,7 @@ L20:
         /*           | ritz and bound.                                  | */
         /*           %--------------------------------------------------% */
 
-        if (s_cmp(which, "BE", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "BE") == 0)
         {
 
             /*              %------------------------------------------------% */
@@ -715,7 +714,7 @@ L20:
             /*              | middle.                                        | */
             /*              %------------------------------------------------% */
 
-            s_copy(wprime, "LA", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "LA");
             ssortr_(wprime, &b_true, &nconv, &ritz[1], &bounds[1]);
         }
         else
@@ -874,7 +873,7 @@ L50:
 
     cnorm = TRUE_;
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         scopy_(n, &resid[1], &i_one, &workd[*n + 1], &i_one);
@@ -888,7 +887,7 @@ L50:
 
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         scopy_(n, &resid[1], &i_one, &workd[1], &i_one);
     }
@@ -900,18 +899,18 @@ L100:
     /*        | WORKD(1:N) := B*RESID            | */
     /*        %----------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
     }
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         rnorm = sdot_(n, &resid[1], &i_one, &workd[1], &i_one);
         rnorm = sqrt((dabs(rnorm)));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         rnorm = snrm2_(n, &resid[1], &i_one);
     }

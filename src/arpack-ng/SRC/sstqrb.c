@@ -215,11 +215,11 @@ int sstqrb_(a_int *n, float *d, float *e, float *z, float *work, a_int *info)
 
     /*     determine the unit roundoff and over/underflow thresholds. */
 
-    eps = slamch_("e", (ftnlen)1);
+    eps = slamch_("e");
     /* Computing 2nd power */
     r__1 = eps;
     eps2 = r__1 * r__1;
-    safmin = slamch_("s", (ftnlen)1);
+    safmin = slamch_("s");
     safmax = 1.f / safmin;
     ssfmax = sqrt(safmax) / 3.f;
     ssfmin = sqrt(safmin) / eps2;
@@ -297,7 +297,7 @@ L30:
     /*     scale submatrix in rows and columns l to lend */
 
     i__1 = lend - l + 1;
-    anorm = slanst_("i", &i__1, &d[l], &e[l], (ftnlen)1);
+    anorm = slanst_("i", &i__1, &d[l], &e[l]);
     iscale = 0;
     if (anorm == 0.f)
     {

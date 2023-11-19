@@ -257,11 +257,11 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         /*        | REFERENCE: LAPACK subroutine clahqr           | */
         /*        %-----------------------------------------------% */
 
-        unfl = slamch_("safe minimum", (ftnlen)12);
+        unfl = slamch_("safe minimum");
         q__1.r = 1.f / unfl, q__1.i = 0.f / unfl;
         ovfl = q__1.r;
         slabad_(&unfl, &ovfl);
-        ulp = slamch_("precision", (ftnlen)9);
+        ulp = slamch_("precision");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -329,7 +329,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
             if (tst1 == 0.f)
             {
                 i__3 = kplusp - jj + 1;
-                tst1 = clanhs_("1", &i__3, &h[h_offset], ldh, &workl[1], (ftnlen)1);
+                tst1 = clanhs_("1", &i__3, &h[h_offset], ldh, &workl[1]);
             }
             i__3 = i + 1 + i * h_dim1;
             /* Computing MAX */
@@ -573,7 +573,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         tst1 = (r__1 = h[i__2].r, dabs(r__1)) + (r__2 = r_imag(&h[i + i * h_dim1]), dabs(r__2)) + ((r__3 = h[i__3].r, dabs(r__3)) + (r__4 = r_imag(&h[i + 1 + (i + 1) * h_dim1]), dabs(r__4)));
         if (tst1 == 0.f)
         {
-            tst1 = clanhs_("1", kev, &h[h_offset], ldh, &workl[1], (ftnlen)1);
+            tst1 = clanhs_("1", kev, &h[h_offset], ldh, &workl[1]);
         }
         i__2 = i + 1 + i * h_dim1;
         /* Computing MAX */

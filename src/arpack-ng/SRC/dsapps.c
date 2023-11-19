@@ -232,7 +232,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
 
     if (first)
     {
-        epsmch = dlamch_("Epsilon-Machine", (ftnlen)15);
+        epsmch = dlamch_("Epsilon-Machine");
         first = FALSE_;
     }
     itop = 1;

@@ -24,7 +24,6 @@ static a_dcomplex c_b164 = {10., 0.};
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    int s_copy(char *, char *, ftnlen, ftnlen);
     void z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
     double d_imag(a_dcomplex *);
 
@@ -210,8 +209,8 @@ static a_dcomplex c_b164 = {10., 0.};
         e_wsle();
         goto L9000;
     }
-    *(unsigned char *)bmat = 'G';
-    s_copy(which, "LM", (ftnlen)2, (ftnlen)2);
+    *bmat = 'G';
+    strcpy(which, "LM");
     sigma.r = 0., sigma.i = 0.;
 
     /*     %-----------------------------------------------------% */

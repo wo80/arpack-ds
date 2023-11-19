@@ -22,7 +22,6 @@ static a_int c__4 = 4;
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    int s_copy(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     float d[50] /* was [25][2] */, h;
@@ -209,8 +208,8 @@ static a_int c__4 = 4;
         e_wsle();
         goto L9000;
     }
-    *(unsigned char *)bmat = 'G';
-    s_copy(which, "LM", (ftnlen)2, (ftnlen)2);
+    *bmat = 'G';
+    strcpy(which, "LM");
 
     /*     %--------------------------------------------------% */
     /*     | The work array WORKL is used in SSAUPD as        | */

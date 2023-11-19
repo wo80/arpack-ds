@@ -110,13 +110,13 @@ int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit
     i__1 = lll;
     for (i = 1; i <= i__1; ++i)
     {
-        *(unsigned char *)&line[i - 1] = '-';
+        *&line[i - 1] = '-';
         /* L10: */
     }
 
     for (i = lll + 1; i <= 80; ++i)
     {
-        *(unsigned char *)&line[i - 1] = ' ';
+        *&line[i - 1] = ' ';
         /* L20: */
     }
 

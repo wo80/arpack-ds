@@ -338,10 +338,10 @@ int snaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, fl
         /*        | REFERENCE: LAPACK subroutine slahqr     | */
         /*        %-----------------------------------------% */
 
-        unfl = slamch_("safe minimum", (ftnlen)12);
+        unfl = slamch_("safe minimum");
         ovfl = 1.f / unfl;
         slabad_(&unfl, &ovfl);
-        ulp = slamch_("precision", (ftnlen)9);
+        ulp = slamch_("precision");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -564,7 +564,7 @@ L50:
     /*        %---------------------------------------% */
 
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         step4 = TRUE_;
@@ -578,7 +578,7 @@ L50:
 
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         scopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
@@ -590,7 +590,7 @@ L60:
     /*        | if step4 = .true.                | */
     /*        %----------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
@@ -603,12 +603,12 @@ L60:
     /*        | Compute the B-norm of OP*v_{j}.     | */
     /*        %-------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         wnorm = sdot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         wnorm = sqrt((dabs(wnorm)));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         wnorm = snrm2_(n, &resid[1], &i_one);
     }
@@ -645,7 +645,7 @@ L60:
     orth1 = TRUE_;
 
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         scopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
@@ -659,7 +659,7 @@ L60:
 
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         scopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
@@ -670,7 +670,7 @@ L70:
     /*        | WORKD(IPJ:IPJ+N-1) := B*r_{j}.                    | */
     /*        %---------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
@@ -682,12 +682,12 @@ L70:
     /*        | Compute the B-norm of r_{j}. | */
     /*        %------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         *rnorm = sdot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         *rnorm = sqrt((dabs(*rnorm)));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         *rnorm = snrm2_(n, &resid[1], &i_one);
     }
@@ -753,7 +753,7 @@ L80:
 
     orth2 = TRUE_;
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         scopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
@@ -768,7 +768,7 @@ L80:
 
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         scopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
@@ -778,7 +778,7 @@ L90:
     /*        | Back from reverse communication if ORTH2 = .true. | */
     /*        %---------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
@@ -788,12 +788,12 @@ L90:
     /*        | Compute the B-norm of the corrected residual r_{j}. | */
     /*        %-----------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         rnorm1 = sdot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         rnorm1 = sqrt((dabs(rnorm1)));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         rnorm1 = snrm2_(n, &resid[1], &i_one);
     }
@@ -896,7 +896,7 @@ L100:
             if (tst1 == 0.f)
             {
                 i__2 = *k + *np;
-                tst1 = slanhs_("1", &i__2, &h[h_offset], ldh, &workd[*n + 1], (ftnlen)1);
+                tst1 = slanhs_("1", &i__2, &h[h_offset], ldh, &workd[*n + 1]);
             }
             /* Computing MAX */
             r__2 = ulp * tst1;

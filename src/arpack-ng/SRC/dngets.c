@@ -107,7 +107,6 @@ int dngets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritzr, do
     a_int i__1;
 
     /* Builtin functions */
-    a_int s_cmp(char *, char *, ftnlen, ftnlen);
 
     /* Local variables */
     static float t0, t1;
@@ -185,32 +184,32 @@ int dngets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritzr, do
     /*     | complex conjugate pairs together                   | */
     /*     %----------------------------------------------------% */
 
-    if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) == 0)
+    if (strcmp(which, "LM") == 0)
     {
         i__1 = *kev + *np;
         dsortc_("LR", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
     }
-    else if (s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "SM") == 0)
     {
         i__1 = *kev + *np;
         dsortc_("SR", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
     }
-    else if (s_cmp(which, "LR", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "LR") == 0)
     {
         i__1 = *kev + *np;
         dsortc_("LM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
     }
-    else if (s_cmp(which, "SR", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "SR") == 0)
     {
         i__1 = *kev + *np;
         dsortc_("SM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
     }
-    else if (s_cmp(which, "LI", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "LI") == 0)
     {
         i__1 = *kev + *np;
         dsortc_("LM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
     }
-    else if (s_cmp(which, "SI", (ftnlen)2, (ftnlen)2) == 0)
+    else if (strcmp(which, "SI") == 0)
     {
         i__1 = *kev + *np;
         dsortc_("SM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);

@@ -25,7 +25,6 @@ static a_int c_n6 = -6;
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    int s_copy(char *, char *, ftnlen, ftnlen);
     void c_div(a_fcomplex *, a_fcomplex *, a_fcomplex *);
     double r_imag(a_fcomplex *);
 
@@ -201,8 +200,8 @@ static a_int c_n6 = -6;
         e_wsle();
         goto L9000;
     }
-    *(unsigned char *)bmat = 'I';
-    s_copy(which, "LM", (ftnlen)2, (ftnlen)2);
+    *bmat = 'I';
+    strcpy(which, "LM");
     sigma.r = 0.f, sigma.i = 0.f;
 
     /*     %-----------------------------------------------------% */

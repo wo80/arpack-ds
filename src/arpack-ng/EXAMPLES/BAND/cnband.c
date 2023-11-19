@@ -463,7 +463,7 @@ int cnband_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d, a_fcomple
     else if (mode == 3)
     {
 
-        if (*(unsigned char *)bmat == 'I')
+        if (*bmat == 'I')
         {
 
             /*            %-------------------------% */
@@ -637,7 +637,7 @@ L40:
         else if (mode == 3)
         {
 
-            if (*(unsigned char *)bmat == 'I')
+            if (*bmat == 'I')
             {
 
                 /*              %----------------------------------% */

@@ -321,7 +321,7 @@ int ssaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *mode, 
         /*        | that 1/sfmin does not overflow | */
         /*        %--------------------------------% */
 
-        safmin = slamch_("safmin", (ftnlen)6);
+        safmin = slamch_("safmin");
     }
 
     if (*ido == 0)
@@ -560,7 +560,7 @@ L50:
         goto L65;
     }
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         step4 = TRUE_;
@@ -574,7 +574,7 @@ L50:
 
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         scopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
@@ -585,7 +585,7 @@ L60:
     /*        | WORKD(IPJ:IPJ+N-1) := B*OP*v_{j}. | */
     /*        %-----------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
@@ -610,12 +610,12 @@ L65:
         wnorm = sdot_(n, &resid[1], &i_one, &workd[ivj], &i_one);
         wnorm = sqrt((dabs(wnorm)));
     }
-    else if (*(unsigned char *)bmat == 'G')
+    else if (*bmat == 'G')
     {
         wnorm = sdot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         wnorm = sqrt((dabs(wnorm)));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         wnorm = snrm2_(n, &resid[1], &i_one);
     }
@@ -668,7 +668,7 @@ L65:
     iter = 0;
 
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         scopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
@@ -682,7 +682,7 @@ L65:
 
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         scopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
@@ -693,7 +693,7 @@ L70:
     /*        | WORKD(IPJ:IPJ+N-1) := B*r_{j}.                    | */
     /*        %---------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
@@ -705,12 +705,12 @@ L70:
     /*        | Compute the B-norm of r_{j}. | */
     /*        %------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         *rnorm = sdot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         *rnorm = sqrt((dabs(*rnorm)));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         *rnorm = snrm2_(n, &resid[1], &i_one);
     }
@@ -777,7 +777,7 @@ L80:
 
     orth2 = TRUE_;
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         scopy_(n, &resid[1], &i_one, &workd[irj], &i_one);
@@ -792,7 +792,7 @@ L80:
 
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         scopy_(n, &resid[1], &i_one, &workd[ipj], &i_one);
     }
@@ -802,7 +802,7 @@ L90:
     /*        | Back from reverse communication if ORTH2 = .true. | */
     /*        %---------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
@@ -812,12 +812,12 @@ L90:
     /*        | Compute the B-norm of the corrected residual r_{j}. | */
     /*        %-----------------------------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         rnorm1 = sdot_(n, &resid[1], &i_one, &workd[ipj], &i_one);
         rnorm1 = sqrt((dabs(rnorm1)));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         rnorm1 = snrm2_(n, &resid[1], &i_one);
     }

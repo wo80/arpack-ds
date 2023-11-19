@@ -478,7 +478,7 @@ int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     {
         type__ = 1;
     }
-    else if (iparam[7] == 3 && *(unsigned char *)bmat == 'I')
+    else if (iparam[7] == 3 && *bmat == 'I')
     {
         type__ = 2;
     }
@@ -486,7 +486,7 @@ int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     {
         type__ = 3;
     }
-    else if (iparam[7] == 3 && *(unsigned char *)bmat == 'G')
+    else if (iparam[7] == 3 && *bmat == 'G')
     {
         type__ = 4;
     }
@@ -537,7 +537,7 @@ int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     imid = *kl + *ku + 1;
     ibot = (*kl << 1) + *ku + 1;
 
-    if (type__ == 2 || type__ == 6 && *(unsigned char *)bmat == 'I')
+    if (type__ == 2 || type__ == 6 && *bmat == 'I')
     {
 
         /*         %----------------------------------% */
@@ -593,7 +593,7 @@ int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
             goto L9000;
         }
     }
-    else if (type__ == 4 || type__ == 5 || type__ == 6 && *(unsigned char *)bmat == 'G')
+    else if (type__ == 4 || type__ == 5 || type__ == 6 && *bmat == 'G')
     {
 
         /*        %-------------------------------------------% */
@@ -768,7 +768,7 @@ L90:
             /*           | range of OP.                          | */
             /*           %---------------------------------------% */
 
-            if (*(unsigned char *)bmat == 'G')
+            if (*bmat == 'G')
             {
                 dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
                 dgbmv_("Notranspose", n, n, kl, ku, sigma, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b50, &workd[ipntr[1]], &c__1);
@@ -917,7 +917,7 @@ L90:
             /*           | workd(ipntr(3)).                | */
             /*           %---------------------------------% */
 
-            if (*(unsigned char *)bmat == 'G')
+            if (*bmat == 'G')
             {
                 dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
                 daxpy_(n, sigma, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);

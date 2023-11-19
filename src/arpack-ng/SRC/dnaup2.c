@@ -195,8 +195,7 @@ int dnaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
 
     /* Builtin functions */
     double pow_dd(double *, double *);
-    a_int s_cmp(char *, char *, ftnlen, ftnlen);
-    int s_copy(char *, char *, ftnlen, ftnlen);
+
     double sqrt(double);
 
     /* Local variables */
@@ -304,7 +303,7 @@ int dnaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
         /*        | Get the machine dependent constant. | */
         /*        %-------------------------------------% */
 
-        eps23 = dlamch_("Epsilon-Machine", (ftnlen)15);
+        eps23 = dlamch_("Epsilon-Machine");
         eps23 = pow_dd(&eps23, &TWO_THIRDS);
 
         nev0 = *nev;
@@ -626,29 +625,29 @@ L20:
         /*           | order.                                       | */
         /*           %----------------------------------------------% */
 
-        if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "LM") == 0)
         {
-            s_copy(wprime, "SR", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "SR");
         }
-        if (s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "SM") == 0)
         {
-            s_copy(wprime, "LR", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "LR");
         }
-        if (s_cmp(which, "LR", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "LR") == 0)
         {
-            s_copy(wprime, "SM", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "SM");
         }
-        if (s_cmp(which, "SR", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "SR") == 0)
         {
-            s_copy(wprime, "LM", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "LM");
         }
-        if (s_cmp(which, "LI", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "LI") == 0)
         {
-            s_copy(wprime, "SM", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "SM");
         }
-        if (s_cmp(which, "SI", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "SI") == 0)
         {
-            s_copy(wprime, "LM", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "LM");
         }
 
         dsortc_(wprime, &b_true, &kplusp, &ritzr[1], &ritzi[1], &bounds[1]);
@@ -660,29 +659,29 @@ L20:
         /*           | desired one appears at the front.            | */
         /*           %----------------------------------------------% */
 
-        if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "LM") == 0)
         {
-            s_copy(wprime, "SM", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "SM");
         }
-        if (s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "SM") == 0)
         {
-            s_copy(wprime, "LM", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "LM");
         }
-        if (s_cmp(which, "LR", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "LR") == 0)
         {
-            s_copy(wprime, "SR", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "SR");
         }
-        if (s_cmp(which, "SR", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "SR") == 0)
         {
-            s_copy(wprime, "LR", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "LR");
         }
-        if (s_cmp(which, "LI", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "LI") == 0)
         {
-            s_copy(wprime, "SI", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "SI");
         }
-        if (s_cmp(which, "SI", (ftnlen)2, (ftnlen)2) == 0)
+        if (strcmp(which, "SI") == 0)
         {
-            s_copy(wprime, "LI", (ftnlen)2, (ftnlen)2);
+            strcpy(wprime, "LI");
         }
 
         dsortc_(wprime, &b_true, &kplusp, &ritzr[1], &ritzi[1], &bounds[1]);
@@ -709,7 +708,7 @@ L20:
         /*           | (in the case when NCONV < NEV.)                    | */
         /*           %----------------------------------------------------% */
 
-        s_copy(wprime, "LR", (ftnlen)2, (ftnlen)2);
+        strcpy(wprime, "LR");
         dsortc_(wprime, &b_true, &numcnv, &bounds[1], &ritzr[1], &ritzi[1]);
 
         /*           %----------------------------------------------% */
@@ -888,7 +887,7 @@ L50:
 
     cnorm = TRUE_;
     arscnd_(&t2);
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         ++timing_1.nbx;
         dcopy_(n, &resid[1], &i_one, &workd[*n + 1], &i_one);
@@ -902,7 +901,7 @@ L50:
 
         goto L9000;
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         dcopy_(n, &resid[1], &i_one, &workd[1], &i_one);
     }
@@ -914,18 +913,18 @@ L100:
     /*        | WORKD(1:N) := B*RESID            | */
     /*        %----------------------------------% */
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
     }
 
-    if (*(unsigned char *)bmat == 'G')
+    if (*bmat == 'G')
     {
         rnorm = ddot_(n, &resid[1], &i_one, &workd[1], &i_one);
         rnorm = sqrt((abs(rnorm)));
     }
-    else if (*(unsigned char *)bmat == 'I')
+    else if (*bmat == 'I')
     {
         rnorm = dnrm2_(n, &resid[1], &i_one);
     }

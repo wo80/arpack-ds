@@ -583,7 +583,7 @@ int dnband_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
     {
         type__ = 1;
     }
-    else if (iparam[7] == 3 && *(unsigned char *)bmat == 'I')
+    else if (iparam[7] == 3 && *bmat == 'I')
     {
         type__ = 2;
     }
@@ -591,15 +591,15 @@ int dnband_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
     {
         type__ = 3;
     }
-    else if (iparam[7] == 3 && *(unsigned char *)bmat == 'G')
+    else if (iparam[7] == 3 && *bmat == 'G')
     {
         type__ = 4;
     }
-    else if (iparam[7] == 4 && *(unsigned char *)bmat == 'I')
+    else if (iparam[7] == 4 && *bmat == 'I')
     {
         type__ = 5;
     }
-    else if (iparam[7] == 4 && *(unsigned char *)bmat == 'G')
+    else if (iparam[7] == 4 && *bmat == 'G')
     {
         type__ = 6;
     }

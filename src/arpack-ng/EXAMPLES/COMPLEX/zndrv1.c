@@ -23,7 +23,6 @@ static a_dcomplex c_b151 = {4., 0.};
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    int s_copy(char *, char *, ftnlen, ftnlen);
     double d_imag(a_dcomplex *);
 
     /* Local variables */
@@ -204,8 +203,8 @@ static a_dcomplex c_b151 = {4., 0.};
         e_wsle();
         goto L9000;
     }
-    *(unsigned char *)bmat = 'I';
-    s_copy(which, "LM", (ftnlen)2, (ftnlen)2);
+    *bmat = 'I';
+    strcpy(which, "LM");
 
     /*     %---------------------------------------------------% */
     /*     | The work array WORKL is used in ZNAUPD  as         | */

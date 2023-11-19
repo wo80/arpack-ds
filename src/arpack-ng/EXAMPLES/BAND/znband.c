@@ -463,7 +463,7 @@ int znband_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
     else if (mode == 3)
     {
 
-        if (*(unsigned char *)bmat == 'I')
+        if (*bmat == 'I')
         {
 
             /*            %-------------------------% */
@@ -637,7 +637,7 @@ L40:
         else if (mode == 3)
         {
 
-            if (*(unsigned char *)bmat == 'I')
+            if (*bmat == 'I')
             {
 
                 /*              %----------------------------------% */
