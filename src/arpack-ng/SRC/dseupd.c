@@ -224,7 +224,10 @@ static double d_one = 1.;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_int *ldz, double *sigma, char *bmat, a_int *n, char *which, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, a_int *ipntr, double *workd, double *workl, a_int *lworkl, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
+int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_int *ldz,
+     double *sigma, char *bmat, a_int *n, char *which, a_int *nev, double *tol, double *resid,
+     a_int *ncv, double *v, a_int *ldv, a_int *iparam, a_int *ipntr, double *workd,
+     double *workl, a_int *lworkl, a_int *info)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, i__1;
@@ -237,7 +240,6 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
 
     /* Local variables */
     a_int j, k, ih, jj, iq, np, iw, ibd, ihb, ihd, ldh, ldq, irz;
-    extern int dger_(a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, a_int *);
     a_int mode;
     double eps23;
     a_int ierr;
@@ -245,19 +247,12 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     a_int next;
     char type__[6];
     a_int ritz;
-    extern double dnrm2_(a_int *, double *, a_int *);
     double temp1;
-    extern int dscal_(a_int *, double *, double *, a_int *);
     a_bool reord;
-    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *);
     a_int nconv;
     double rnorm;
-    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), dgeqr2_(a_int *, a_int *, double *, a_int *, double *, double *, a_int *);
     double bnorm2;
-    extern int dorm2r_(char *, char *, a_int *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, double *, a_int *, ftnlen, ftnlen);
-    extern double dlamch_(char *, ftnlen);
     a_int bounds, msglvl, ishift, numcnv;
-    extern int dlacpy_(char *, a_int *, a_int *, double *, a_int *, double *, a_int *, ftnlen), dsesrt_(char *, a_bool *, a_int *, double *, a_int *, double *, a_int *, ftnlen), dsteqr_(char *, a_int *, double *, double *, double *, a_int *, double *, a_int *, ftnlen), dsortr_(char *, a_bool *, a_int *, double *, double *, ftnlen), dsgets_(a_int *, char *, a_int *, a_int *, double *, double *, double *, ftnlen);
     a_int leftptr, rghtptr;
 
     /*     %----------------------------------------------------% */
@@ -518,14 +513,8 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
 
     if (msglvl > 2)
     {
-        dvout_(&debug_1.logfil, ncv, &workl[irz], &debug_1.ndigit,
-               "_seupd: "
-               "Ritz values passed in from _SAUPD.",
-               (ftnlen)42);
-        dvout_(&debug_1.logfil, ncv, &workl[ibd], &debug_1.ndigit,
-               "_seupd: "
-               "Ritz estimates passed in from _SAUPD.",
-               (ftnlen)45);
+        dvout_(&debug_1.logfil, ncv, &workl[irz], &debug_1.ndigit,"_seupd: Ritz values passed in from _SAUPD.");
+        dvout_(&debug_1.logfil, ncv, &workl[ibd], &debug_1.ndigit,"_seupd: Ritz estimates passed in from _SAUPD.");
     }
 
     if (*rvec)
@@ -558,15 +547,12 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
 
         np = *ncv - *nev;
         ishift = 0;
-        dsgets_(&ishift, which, nev, &np, &workl[irz], &workl[bounds], &workl[1], (ftnlen)2);
+        dsgets_(&ishift, which, nev, &np, &workl[irz], &workl[bounds], &workl[1]);
 
         if (msglvl > 2)
         {
-            dvout_(&debug_1.logfil, ncv, &workl[irz], &debug_1.ndigit,
-                   "_seu"
-                   "pd: Ritz values after calling _SGETS.",
-                   (ftnlen)41);
-            dvout_(&debug_1.logfil, ncv, &workl[bounds], &debug_1.ndigit, "_seupd: Ritz value indices after calling _SGETS.", (ftnlen)48);
+            dvout_(&debug_1.logfil, ncv, &workl[irz], &debug_1.ndigit,"_seupd: Ritz values after calling _SGETS.");
+            dvout_(&debug_1.logfil, ncv, &workl[bounds], &debug_1.ndigit, "_seupd: Ritz value indices after calling _SGETS.");
         }
 
         /*        %-----------------------------------------------------% */
@@ -603,14 +589,8 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &i_one, &numcnv, &debug_1.ndigit,
-                   "_seupd"
-                   ": Number of specified eigenvalues",
-                   (ftnlen)39);
-            ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,
-                   "_seupd:"
-                   " Number of \"converged\" eigenvalues",
-                   (ftnlen)41);
+            ivout_(&debug_1.logfil, &i_one, &numcnv, &debug_1.ndigit,"_seupd: Number of specified eigenvalues");
+            ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,"_seupd: Number of \"converged\" eigenvalues");
         }
 
         if (numcnv != nconv)
@@ -629,7 +609,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
         dcopy_(&i__1, &workl[ih + 1], &i_one, &workl[ihb], &i_one);
         dcopy_(ncv, &workl[ih + ldh], &i_one, &workl[ihd], &i_one);
 
-        dsteqr_("Identity", ncv, &workl[ihd], &workl[ihb], &workl[iq], &ldq, &workl[iw], &ierr, (ftnlen)8);
+        dsteqr_("Identity", ncv, &workl[ihd], &workl[ihb], &workl[iq], &ldq, &workl[iw], &ierr);
 
         if (ierr != 0)
         {
@@ -640,14 +620,8 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
         if (msglvl > 1)
         {
             dcopy_(ncv, &workl[iq + *ncv - 1], &ldq, &workl[iw], &i_one);
-            dvout_(&debug_1.logfil, ncv, &workl[ihd], &debug_1.ndigit,
-                   "_seu"
-                   "pd: NCV Ritz values of the final H matrix",
-                   (ftnlen)45);
-            dvout_(&debug_1.logfil, ncv, &workl[iw], &debug_1.ndigit,
-                   "_seup"
-                   "d: last row of the eigenvector matrix for H",
-                   (ftnlen)48);
+            dvout_(&debug_1.logfil, ncv, &workl[ihd], &debug_1.ndigit,"_seupd: NCV Ritz values of the final H matrix");
+            dvout_(&debug_1.logfil, ncv, &workl[iw], &debug_1.ndigit,"_seupd: last row of the eigenvector matrix for H");
         }
 
         if (reord)
@@ -721,10 +695,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     L30:
         if (msglvl > 2)
         {
-            dvout_(&debug_1.logfil, ncv, &workl[ihd], &debug_1.ndigit,
-                   "_seu"
-                   "pd: The eigenvalues of H--reordered",
-                   (ftnlen)39);
+            dvout_(&debug_1.logfil, ncv, &workl[ihd], &debug_1.ndigit,"_seupd: The eigenvalues of H--reordered");
         }
 
         /*        %----------------------------------------% */
@@ -760,7 +731,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
 
         if (*rvec)
         {
-            dsesrt_("LA", rvec, &nconv, &d[1], ncv, &workl[iq], &ldq, (ftnlen)2);
+            dsesrt_("LA", rvec, &nconv, &d[1], ncv, &workl[iq], &ldq);
         }
         else
         {
@@ -830,17 +801,17 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
         /*        %-------------------------------------------------------------% */
 
         dcopy_(&nconv, &workl[ihd], &i_one, &d[1], &i_one);
-        dsortr_("LA", &b_true, &nconv, &workl[ihd], &workl[iw], (ftnlen)2);
+        dsortr_("LA", &b_true, &nconv, &workl[ihd], &workl[iw]);
         if (*rvec)
         {
-            dsesrt_("LA", rvec, &nconv, &d[1], ncv, &workl[iq], &ldq, (ftnlen)2);
+            dsesrt_("LA", rvec, &nconv, &d[1], ncv, &workl[iq], &ldq);
         }
         else
         {
             dcopy_(ncv, &workl[bounds], &i_one, &workl[ihb], &i_one);
             d__1 = bnorm2 / rnorm;
             dscal_(ncv, &d__1, &workl[ihb], &i_one);
-            dsortr_("LA", &b_true, &nconv, &d[1], &workl[ihb], (ftnlen)2);
+            dsortr_("LA", &b_true, &nconv, &d[1], &workl[ihb]);
         }
     }
 
@@ -869,8 +840,8 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
         /*        | the Ritz values in workl(ihd).                         | */
         /*        %--------------------------------------------------------% */
 
-        dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[iq], &ldq, &workl[iw + *ncv], &v[v_offset], ldv, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
-        dlacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz, (ftnlen)3);
+        dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[iq], &ldq, &workl[iw + *ncv], &v[v_offset], ldv, &workd[*n + 1], &ierr);
+        dlacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
 
         /*        %-----------------------------------------------------% */
         /*        | In order to compute the Ritz estimates for the Ritz | */
@@ -885,7 +856,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
             /* L65: */
         }
         workl[ihb + *ncv - 1] = 1.;
-        dorm2r_("Left", "Transpose", ncv, &i_one, &nconv, &workl[iq], &ldq, &workl[iw + *ncv], &workl[ihb], ncv, &temp, &ierr, (ftnlen)4, (ftnlen)9);
+        dorm2r_("Left", "Transpose", ncv, &i_one, &nconv, &workl[iq], &ldq, &workl[iw + *ncv], &workl[ihb], ncv, &temp, &ierr);
 
         /*        %-----------------------------------------------------% */
         /*        | Make a copy of the last row into                    | */
@@ -967,25 +938,13 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
 
     if (s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) != 0 && msglvl > 1)
     {
-        dvout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,
-               "_seupd: U"
-               "ntransformed converged Ritz values",
-               (ftnlen)43);
-        dvout_(&debug_1.logfil, &nconv, &workl[ihb], &debug_1.ndigit,
-               "_seup"
-               "d: Ritz estimates of the untransformed Ritz values",
-               (ftnlen)55);
+        dvout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,"_seupd: Untransformed converged Ritz values");
+        dvout_(&debug_1.logfil, &nconv, &workl[ihb], &debug_1.ndigit,"_seupd: Ritz estimates of the untransformed Ritz values");
     }
     else if (msglvl > 1)
     {
-        dvout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,
-               "_seupd: C"
-               "onverged Ritz values",
-               (ftnlen)29);
-        dvout_(&debug_1.logfil, &nconv, &workl[ihb], &debug_1.ndigit,
-               "_seup"
-               "d: Associated Ritz estimates",
-               (ftnlen)33);
+        dvout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,"_seupd: Converged Ritz values");
+        dvout_(&debug_1.logfil, &nconv, &workl[ihb], &debug_1.ndigit,"_seupd: Associated Ritz estimates");
     }
 
     /*     %-------------------------------------------------% */

@@ -117,15 +117,9 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
     a_int i, j;
     static float t0, t1;
     double vl[1], temp;
-    extern double dnrm2_(a_int *, double *, a_int *);
-    extern int dscal_(a_int *, double *, double *, a_int *);
     a_int iconj;
-    extern int dgemv_(char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen), dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen), dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen);
-    extern double dlapy2_(double *, double *);
-    extern int arscnd_(float *), dlahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, a_int *, double *, a_int *, a_int *);
     a_bool select[1];
     a_int msglvl;
-    extern int dlacpy_(char *, a_int *, a_int *, double *, a_int *, double *, a_int *, ftnlen), dtrevc_(char *, char *, a_bool *, a_int *, double *, a_int *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, a_int *, ftnlen, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -200,7 +194,7 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
 
     if (msglvl > 2)
     {
-        dmout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
+        dmout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ");
     }
 
     /*     %-----------------------------------------------------------% */
@@ -211,7 +205,7 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
     /*     | and the last components of the Schur vectors in BOUNDS.   | */
     /*     %-----------------------------------------------------------% */
 
-    dlacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n, (ftnlen)3);
+    dlacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n);
     i__1 = *n - 1;
     for (j = 1; j <= i__1; ++j)
     {
@@ -227,10 +221,7 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
 
     if (msglvl > 1)
     {
-        dvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
-               "_neigh: las"
-               "t row of the Schur matrix for H",
-               (ftnlen)42);
+        dvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_neigh: last row of the Schur matrix for H");
     }
 
     /*     %-----------------------------------------------------------% */
@@ -243,7 +234,7 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
     /*     | columns of Q.                                             | */
     /*     %-----------------------------------------------------------% */
 
-    dtrevc_("R", "A", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], ierr, (ftnlen)1, (ftnlen)1);
+    dtrevc_("R", "A", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], ierr);
 
     if (*ierr != 0)
     {
@@ -304,14 +295,11 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
         /* L10: */
     }
 
-    dgemv_("T", n, n, &d_one, &q[q_offset], ldq, &bounds[1], &i_one, &d_zero, &workl[1], &i_one, (ftnlen)1);
+    dgemv_("T", n, n, &d_one, &q[q_offset], ldq, &bounds[1], &i_one, &d_zero, &workl[1], &i_one);
 
     if (msglvl > 1)
     {
-        dvout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,
-               "_neigh: Last"
-               " row of the eigenvector matrix for H",
-               (ftnlen)48);
+        dvout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,"_neigh: Last row of the eigenvector matrix for H");
     }
 
     /*     %----------------------------% */
@@ -358,18 +346,9 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
 
     if (msglvl > 2)
     {
-        dvout_(&debug_1.logfil, n, &ritzr[1], &debug_1.ndigit,
-               "_neigh: Real"
-               " part of the eigenvalues of H",
-               (ftnlen)41);
-        dvout_(&debug_1.logfil, n, &ritzi[1], &debug_1.ndigit,
-               "_neigh: Imag"
-               "inary part of the eigenvalues of H",
-               (ftnlen)46);
-        dvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
-               "_neigh: Rit"
-               "z estimates for the eigenvalues of H",
-               (ftnlen)47);
+        dvout_(&debug_1.logfil, n, &ritzr[1], &debug_1.ndigit,"_neigh: Real part of the eigenvalues of H");
+        dvout_(&debug_1.logfil, n, &ritzi[1], &debug_1.ndigit,"_neigh: Imaginary part of the eigenvalues of H");
+        dvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_neigh: Ritz estimates for the eigenvalues of H");
     }
 
     arscnd_(&t1);

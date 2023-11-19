@@ -28,9 +28,7 @@ static a_int c__4 = 4;
     float d[50] /* was [25][2] */, h;
     a_int j, n;
     float v[6400] /* was [256][25] */, r1, r2, ad[256];
-    extern int av_(a_int *, float *, float *);
     float ax[256];
-    extern int mv_(a_int *, float *, float *);
     float mx[256], adl[256], adu[256];
     a_int ido, ncv, nev;
     float tol, adu2[256];
@@ -40,25 +38,18 @@ static a_int c__4 = 4;
     a_int ierr;
     float temp[256];
     a_int ipiv[256];
-    extern double snrm2_(a_int *, float *, a_int *);
     float sigma;
     char which[2];
     float resid[256];
     a_int nconv;
     float workd[768];
     a_int ipntr[11];
-    extern int scopy_(a_int *, float *, a_int *, float *, a_int *);
     float workl[825];
-    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
     a_int iparam[11];
     a_bool select[25];
-    extern int ssaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen);
     a_int ishfts;
-    extern int sseupd_(a_bool *, char *, a_bool *, float *, float *, a_int *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int maxitr;
-    extern int sgttrf_(a_int *, float *, float *, float *, float *, a_int *, a_int *);
     a_int lworkl;
-    extern int sgttrs_(char *, a_int *, a_int *, float *, float *, float *, float *, a_int *, float *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___4 = {0, 6, 0, 0, 0};
@@ -317,7 +308,7 @@ L10:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    ssaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info, (ftnlen)1, (ftnlen)2);
+    ssaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info);
 
     if (ido == -1)
     {
@@ -336,7 +327,7 @@ L10:
         mv_(&n, &workd[ipntr[0] - 1], temp);
         saxpy_(&n, &sigma, temp, &c__1, &workd[ipntr[1] - 1], &c__1);
 
-        sgttrs_("Notranspose", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr, (ftnlen)11);
+        sgttrs_("Notranspose", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___37);
@@ -374,7 +365,7 @@ L10:
 
         av_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
         saxpy_(&n, &sigma, &workd[ipntr[2] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
-        sgttrs_("Notranspose", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr, (ftnlen)11);
+        sgttrs_("Notranspose", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___40);
@@ -456,7 +447,7 @@ L10:
 
         rvec = TRUE_;
 
-        sseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)3, (ftnlen)1, (ftnlen)2);
+        sseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /*        %----------------------------------------------% */
         /*        | Eigenvalues are returned in the first column | */
@@ -520,10 +511,7 @@ L10:
                 /* L30: */
             }
 
-            smout_(&c__6, &nconv, &c__2, d, &c__25, &c_n6,
-                   "Ritz values an"
-                   "d relative residuals",
-                   (ftnlen)34);
+            smout_(&c__6, &nconv, &c__2, d, &c__25, &c_n6,"Ritz values and relative residuals");
         }
 
         /*        %------------------------------------------% */
@@ -630,7 +618,6 @@ int mv_(a_int *n, float *v, float *w)
     /* Local variables */
     float h;
     a_int j;
-    extern int sscal_(a_int *, float *, float *, a_int *);
 
     /* Parameter adjustments */
     --w;
@@ -670,7 +657,6 @@ int av_(a_int *n, float *v, float *w)
     /* Local variables */
     float h;
     a_int j;
-    extern int sscal_(a_int *, float *, float *, a_int *);
 
     /* Parameter adjustments */
     --w;

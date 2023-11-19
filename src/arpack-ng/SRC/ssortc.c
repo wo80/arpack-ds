@@ -67,7 +67,7 @@
 
 /* ----------------------------------------------------------------------- */
 
-int ssortc_(char *which, a_bool *apply, a_int *n, float *xfloat, float *ximag, float *y, ftnlen which_len)
+int ssortc_(char *which, a_bool *apply, a_int *n, float *xfloat, float *ximag, float *y)
 {
     /* System generated locals */
     a_int i__1;
@@ -79,7 +79,6 @@ int ssortc_(char *which, a_bool *apply, a_int *n, float *xfloat, float *ximag, f
     /* Local variables */
     a_int i, j, igap;
     float temp, temp1, temp2;
-    extern double slapy2_(float *, float *);
 
     /*     %------------------% */
     /*     | Scalar Arguments | */

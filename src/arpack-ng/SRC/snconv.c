@@ -84,8 +84,6 @@ int snconv_(a_int *n, float *ritzr, float *ritzi, float *bounds, float *tol, a_i
     a_int i;
     static float t0, t1;
     float eps23, temp;
-    extern double slapy2_(float *, float *), slamch_(char *, ftnlen);
-    extern int arscnd_(float *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

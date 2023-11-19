@@ -122,7 +122,9 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int zgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j, a_dcomplex *v, a_int *ldv, a_dcomplex *resid, double *rnorm, a_int *ipntr, a_dcomplex *workd, a_int *ierr, ftnlen bmat_len)
+int zgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j,
+     a_dcomplex *v, a_int *ldv, a_dcomplex *resid, double *rnorm, a_int *ipntr, a_dcomplex *workd,
+     a_int *ierr)
 {
     /* Initialized data */
 
@@ -145,13 +147,8 @@ int zgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
     a_int idist;
     a_dcomplex cnorm;
     static a_bool first;
-    extern int zgemv_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen), dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen);
-    extern double dlapy2_(double *, double *), dznrm2_(a_int *, a_dcomplex *, a_int *);
     static double rnorm0;
-    extern int arscnd_(float *);
     static a_int msglvl;
-    extern int zlarnv_(a_int *, a_int *, a_int *, a_dcomplex *);
-    extern void zzdotc_(a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -372,10 +369,10 @@ L20:
 L30:
 
     i__1 = *j - 1;
-    zgemv_("C", n, &i__1, &z_one, &v[v_offset], ldv, &workd[1], &i_one, &z_zero, &workd[*n + 1], &i_one, (ftnlen)1);
+    zgemv_("C", n, &i__1, &z_one, &v[v_offset], ldv, &workd[1], &i_one, &z_zero, &workd[*n + 1], &i_one);
     i__1 = *j - 1;
     z__1.r = -1., z__1.i = -0.;
-    zgemv_("N", n, &i__1, &z__1, &v[v_offset], ldv, &workd[*n + 1], &i_one, &z_one, &resid[1], &i_one, (ftnlen)1);
+    zgemv_("N", n, &i__1, &z__1, &v[v_offset], ldv, &workd[*n + 1], &i_one, &z_one, &resid[1], &i_one);
 
     /*     %----------------------------------------------------------% */
     /*     | Compute the B-norm of the orthogonalized starting vector | */
@@ -423,14 +420,8 @@ L40:
 
     if (msglvl > 2)
     {
-        dvout_(&debug_1.logfil, &i_one, &rnorm0, &debug_1.ndigit,
-               "_getv0: re"
-               "-orthonalization ; rnorm0 is",
-               (ftnlen)38);
-        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
-               "_getv0: re-o"
-               "rthonalization ; rnorm is",
-               (ftnlen)37);
+        dvout_(&debug_1.logfil, &i_one, &rnorm0, &debug_1.ndigit,"_getv0: re-orthonalization ; rnorm0 is");
+        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,"_getv0: re-orthonalization ; rnorm is");
     }
 
     if (*rnorm > rnorm0 * .717f)
@@ -471,17 +462,11 @@ L50:
 
     if (msglvl > 0)
     {
-        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
-               "_getv0: B-no"
-               "rm of initial / restarted starting vector",
-               (ftnlen)53);
+        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,"_getv0: B-norm of initial / restarted starting vector");
     }
     if (msglvl > 2)
     {
-        zvout_(&debug_1.logfil, n, &resid[1], &debug_1.ndigit,
-               "_getv0: init"
-               "ial / restarted starting vector",
-               (ftnlen)43);
+        zvout_(&debug_1.logfil, n, &resid[1], &debug_1.ndigit,"_getv0: initial / restarted starting vector");
     }
     *ido = 99;
 

@@ -77,8 +77,6 @@ int dsconv_(a_int *n, double *ritz, double *bounds, double *tol, a_int *nconv)
     a_int i;
     static float t0, t1;
     double eps23, temp;
-    extern double dlamch_(char *, ftnlen);
-    extern int arscnd_(float *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

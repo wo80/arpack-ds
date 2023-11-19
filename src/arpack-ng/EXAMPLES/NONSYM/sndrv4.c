@@ -36,9 +36,7 @@ static a_int c__4 = 4;
     float d[75] /* was [25][3] */, h;
     a_int j, n;
     float s, v[6400] /* was [256][25] */, s1, s2, s3, dd[256], dl[256];
-    extern int av_(a_int *, float *, float *);
     float ax[256], du[256];
-    extern int mv_(a_int *, float *, float *);
     float mx[256], du2[256];
     a_int ido, ncv, nev;
     float tol;
@@ -46,27 +44,20 @@ static a_int c__4 = 4;
     a_int mode, info;
     a_bool rvec;
     a_int ierr, ipiv[256];
-    extern double snrm2_(a_int *, float *, a_int *);
     char which[2];
     float resid[256];
     a_int nconv;
     float workd[768];
     a_bool first;
     a_int ipntr[14];
-    extern int scopy_(a_int *, float *, a_int *, float *, a_int *);
     float workl[2025];
-    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
-    extern double slapy2_(float *, float *);
     a_int iparam[11];
     float sigmai;
     a_bool select[25];
     float sigmar;
-    extern int snaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen), sneupd_(a_bool *, char *, a_bool *, float *, float *, float *, a_int *, float *, float *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int ishfts, maxitr;
-    extern int sgttrf_(a_int *, float *, float *, float *, float *, a_int *, a_int *);
     a_int lworkl;
     float workev[75];
-    extern int sgttrs_(char *, a_int *, a_int *, float *, float *, float *, float *, a_int *, float *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___4 = {0, 6, 0, 0, 0};
@@ -335,7 +326,7 @@ L20:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    snaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info, (ftnlen)1, (ftnlen)2);
+    snaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info);
 
     if (ido == -1)
     {
@@ -353,7 +344,7 @@ L20:
         /*           %-------------------------------------------% */
 
         mv_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
-        sgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr, (ftnlen)1);
+        sgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___39);
@@ -387,7 +378,7 @@ L20:
         /*           %-----------------------------------------% */
 
         scopy_(&n, &workd[ipntr[2] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
-        sgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr, (ftnlen)1);
+        sgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___42);
@@ -468,7 +459,7 @@ L20:
         /*        %-------------------------------------------% */
 
         rvec = TRUE_;
-        sneupd_(&rvec, "A", select, d, &d[25], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+        sneupd_(&rvec, "A", select, d, &d[25], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /*        %-----------------------------------------------% */
         /*        | The real part of the eigenvalue is returned   | */
@@ -582,10 +573,7 @@ L20:
             /*            | Display computed residuals. | */
             /*            %-----------------------------% */
 
-            smout_(&c__6, &nconv, &c__3, d, &c__25, &c_n6,
-                   "Ritz values (R"
-                   "eal,Imag) and relative residuals",
-                   (ftnlen)46);
+            smout_(&c__6, &nconv, &c__3, d, &c__25, &c_n6,"Ritz values (Real,Imag) and relative residuals");
         }
 
         /*        %-------------------------------------------% */
@@ -690,7 +678,6 @@ int mv_(a_int *n, float *v, float *w)
     /* Local variables */
     float h;
     a_int j;
-    extern int sscal_(a_int *, float *, float *, a_int *);
 
     /*     Compute the matrix vector multiplication y<---M*x */
     /*     where M is mass matrix formed by using piecewise linear elements */

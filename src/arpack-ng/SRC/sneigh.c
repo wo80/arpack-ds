@@ -117,14 +117,9 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
     a_int i, j;
     static float t0, t1;
     float vl[1], temp;
-    extern double snrm2_(a_int *, float *, a_int *);
     a_int iconj;
-    extern int sscal_(a_int *, float *, float *, a_int *), sgemv_(char *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen);
-    extern double slapy2_(float *, float *);
-    extern int arscnd_(float *);
     a_bool select[1];
     a_int msglvl;
-    extern int slacpy_(char *, a_int *, a_int *, float *, a_int *, float *, a_int *, ftnlen), slahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, float *, a_int *, float *, float *, a_int *, a_int *, float *, a_int *, a_int *), strevc_(char *, char *, a_bool *, a_int *, float *, a_int *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, a_int *, ftnlen, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -199,7 +194,7 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
 
     if (msglvl > 2)
     {
-        smout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
+        smout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ");
     }
 
     /*     %-----------------------------------------------------------% */
@@ -210,7 +205,7 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
     /*     | and the last components of the Schur vectors in BOUNDS.   | */
     /*     %-----------------------------------------------------------% */
 
-    slacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n, (ftnlen)3);
+    slacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n);
     i__1 = *n - 1;
     for (j = 1; j <= i__1; ++j)
     {
@@ -226,10 +221,7 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
 
     if (msglvl > 1)
     {
-        svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
-               "_neigh: las"
-               "t row of the Schur matrix for H",
-               (ftnlen)42);
+        svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_neigh: last row of the Schur matrix for H");
     }
 
     /*     %-----------------------------------------------------------% */
@@ -242,7 +234,7 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
     /*     | columns of Q.                                             | */
     /*     %-----------------------------------------------------------% */
 
-    strevc_("R", "A", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], ierr, (ftnlen)1, (ftnlen)1);
+    strevc_("R", "A", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], ierr);
 
     if (*ierr != 0)
     {
@@ -303,14 +295,11 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
         /* L10: */
     }
 
-    sgemv_("T", n, n, &s_one, &q[q_offset], ldq, &bounds[1], &i_one, &s_zero, &workl[1], &i_one, (ftnlen)1);
+    sgemv_("T", n, n, &s_one, &q[q_offset], ldq, &bounds[1], &i_one, &s_zero, &workl[1], &i_one);
 
     if (msglvl > 1)
     {
-        svout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,
-               "_neigh: Last"
-               " row of the eigenvector matrix for H",
-               (ftnlen)48);
+        svout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,"_neigh: Last row of the eigenvector matrix for H");
     }
 
     /*     %----------------------------% */
@@ -357,18 +346,9 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
 
     if (msglvl > 2)
     {
-        svout_(&debug_1.logfil, n, &ritzr[1], &debug_1.ndigit,
-               "_neigh: Real"
-               " part of the eigenvalues of H",
-               (ftnlen)41);
-        svout_(&debug_1.logfil, n, &ritzi[1], &debug_1.ndigit,
-               "_neigh: Imag"
-               "inary part of the eigenvalues of H",
-               (ftnlen)46);
-        svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
-               "_neigh: Rit"
-               "z estimates for the eigenvalues of H",
-               (ftnlen)47);
+        svout_(&debug_1.logfil, n, &ritzr[1], &debug_1.ndigit,"_neigh: Real part of the eigenvalues of H");
+        svout_(&debug_1.logfil, n, &ritzi[1], &debug_1.ndigit,"_neigh: Imaginary part of the eigenvalues of H");
+        svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_neigh: Ritz estimates for the eigenvalues of H");
     }
 
     arscnd_(&t1);

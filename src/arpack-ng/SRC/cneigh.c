@@ -118,12 +118,8 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
     static float t0, t1;
     a_fcomplex vl[1];
     float temp;
-    extern int ccopy_(a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *), cmout_(a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, char *, ftnlen), cvout_(a_int *, a_int *, a_fcomplex *, a_int *, char *, ftnlen);
-    extern double scnrm2_(a_int *, a_fcomplex *, a_int *);
-    extern int csscal_(a_int *, float *, a_fcomplex *, a_int *), clahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *), clacpy_(char *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, ftnlen);
     a_bool select[1];
     a_int msglvl;
-    extern int ctrevc_(char *, char *, a_bool *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *, a_fcomplex *, float *, a_int *, ftnlen, ftnlen), arscnd_(float *), claset_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -194,7 +190,7 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
 
     if (msglvl > 2)
     {
-        cmout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
+        cmout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ");
     }
 
     /*     %----------------------------------------------------------% */
@@ -205,8 +201,8 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
     /*     |    in WORKL(1:N**2), and the Schur vectors in q.         | */
     /*     %----------------------------------------------------------% */
 
-    clacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n, (ftnlen)3);
-    claset_("All", n, n, &c_zero, &c_one, &q[q_offset], ldq, (ftnlen)3);
+    clacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n);
+    claset_("All", n, n, &c_zero, &c_one, &q[q_offset], ldq);
     clahqr_(&b_true, &b_true, n, &i_one, n, &workl[1], ldh, &ritz[1], &i_one, n, &q[q_offset], ldq, ierr);
     if (*ierr != 0)
     {
@@ -216,10 +212,7 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
     ccopy_(n, &q[*n - 1 + q_dim1], ldq, &bounds[1], &i_one);
     if (msglvl > 1)
     {
-        cvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
-               "_neigh: las"
-               "t row of the Schur matrix for H",
-               (ftnlen)42);
+        cvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_neigh: last row of the Schur matrix for H");
     }
 
     /*     %----------------------------------------------------------% */
@@ -228,7 +221,7 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
     /*     |    eigenvectors.                                         | */
     /*     %----------------------------------------------------------% */
 
-    ctrevc_("Right", "Back", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], &rwork[1], ierr, (ftnlen)5, (ftnlen)4);
+    ctrevc_("Right", "Back", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], &rwork[1], ierr);
 
     if (*ierr != 0)
     {
@@ -256,10 +249,7 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
     if (msglvl > 1)
     {
         ccopy_(n, &q[*n + q_dim1], ldq, &workl[1], &i_one);
-        cvout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,
-               "_neigh: Last"
-               " row of the eigenvector matrix for H",
-               (ftnlen)48);
+        cvout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,"_neigh: Last row of the eigenvector matrix for H");
     }
 
     /*     %----------------------------% */
@@ -271,14 +261,8 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
 
     if (msglvl > 2)
     {
-        cvout_(&debug_1.logfil, n, &ritz[1], &debug_1.ndigit,
-               "_neigh: The e"
-               "igenvalues of H",
-               (ftnlen)28);
-        cvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
-               "_neigh: Rit"
-               "z estimates for the eigenvalues of H",
-               (ftnlen)47);
+        cvout_(&debug_1.logfil, n, &ritz[1], &debug_1.ndigit,"_neigh: The eigenvalues of H");
+        cvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_neigh: Ritz estimates for the eigenvalues of H");
     }
 
     arscnd_(&t1);

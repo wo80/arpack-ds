@@ -312,7 +312,10 @@ static double d_n1 = -1.;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, double *z, a_int *ldz, double *sigmar, double *sigmai, double *workev, char *bmat, a_int *n, char *which, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, a_int *ipntr, double *workd, double *workl, a_int *lworkl, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
+int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, double *z,
+     a_int *ldz, double *sigmar, double *sigmai, double *workev, char *bmat, a_int *n,
+     char *which, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv,
+     a_int *iparam, a_int *ipntr, double *workd, double *workl, a_int *lworkl, a_int *info)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, i__1;
@@ -329,36 +332,23 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
     a_int ibd, ldh, ldq, iri;
     double sep;
     a_int irr, wri, wrr;
-    extern int dger_(a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, a_int *);
     a_int mode;
     double eps23;
     a_int ierr;
     double temp;
     a_int iwev;
     char type__[6];
-    extern double dnrm2_(a_int *, double *, a_int *);
     double temp1;
-    extern int dscal_(a_int *, double *, double *, a_int *);
     a_int ihbds, iconj;
-    extern int dgemv_(char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen);
     double conds;
     a_bool reord;
-    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *);
     a_int nconv;
-    extern int dtrmm_(char *, char *, char *, char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, ftnlen, ftnlen, ftnlen, ftnlen), dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
     a_int iwork[1];
     double rnorm;
     a_int ritzi;
-    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen);
     a_int ritzr;
-    extern int dgeqr2_(a_int *, a_int *, double *, a_int *, double *, double *, a_int *);
-    extern double dlapy2_(double *, double *);
     a_int nconv2;
-    extern int dorm2r_(char *, char *, a_int *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, double *, a_int *, ftnlen, ftnlen);
-    extern double dlamch_(char *, ftnlen);
     a_int iheigi, iheigr, bounds, invsub, iuptri, msglvl, outncv, ishift, numcnv;
-    extern int dlacpy_(char *, a_int *, a_int *, double *, a_int *, double *, a_int *, ftnlen), dlahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, a_int *, double *, a_int *, a_int *), dlaset_(char *, a_int *, a_int *, double *, double *, double *, a_int *, ftnlen), dtrevc_(char *, char *, a_bool *, a_int *, double *, a_int *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, a_int *, ftnlen, ftnlen),
-        dtrsen_(char *, char *, a_bool *, a_int *, double *, a_int *, double *, a_int *, double *, double *, a_int *, double *, double *, double *, a_int *, a_int *, a_int *, a_int *, ftnlen, ftnlen), dngets_(a_int *, char *, a_int *, a_int *, double *, double *, double *, double *, double *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -599,18 +589,9 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
 
     if (msglvl > 2)
     {
-        dvout_(&debug_1.logfil, ncv, &workl[irr], &debug_1.ndigit,
-               "_neupd: "
-               "Real part of Ritz values passed in from _NAUPD.",
-               (ftnlen)55);
-        dvout_(&debug_1.logfil, ncv, &workl[iri], &debug_1.ndigit,
-               "_neupd: "
-               "Imag part of Ritz values passed in from _NAUPD.",
-               (ftnlen)55);
-        dvout_(&debug_1.logfil, ncv, &workl[ibd], &debug_1.ndigit,
-               "_neupd: "
-               "Ritz estimates passed in from _NAUPD.",
-               (ftnlen)45);
+        dvout_(&debug_1.logfil, ncv, &workl[irr], &debug_1.ndigit,"_neupd: Real part of Ritz values passed in from _NAUPD.");
+        dvout_(&debug_1.logfil, ncv, &workl[iri], &debug_1.ndigit,"_neupd: Imag part of Ritz values passed in from _NAUPD.");
+        dvout_(&debug_1.logfil, ncv, &workl[ibd], &debug_1.ndigit,"_neupd: Ritz estimates passed in from _NAUPD.");
     }
 
     if (*rvec)
@@ -643,19 +624,13 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
 
         np = *ncv - *nev;
         ishift = 0;
-        dngets_(&ishift, which, nev, &np, &workl[irr], &workl[iri], &workl[bounds], &workl[1], &workl[np + 1], (ftnlen)2);
+        dngets_(&ishift, which, nev, &np, &workl[irr], &workl[iri], &workl[bounds], &workl[1], &workl[np + 1]);
 
         if (msglvl > 2)
         {
-            dvout_(&debug_1.logfil, ncv, &workl[irr], &debug_1.ndigit,
-                   "_neu"
-                   "pd: Real part of Ritz values after calling _NGETS.",
-                   (ftnlen)54);
-            dvout_(&debug_1.logfil, ncv, &workl[iri], &debug_1.ndigit,
-                   "_neu"
-                   "pd: Imag part of Ritz values after calling _NGETS.",
-                   (ftnlen)54);
-            dvout_(&debug_1.logfil, ncv, &workl[bounds], &debug_1.ndigit, "_neupd: Ritz value indices after calling _NGETS.", (ftnlen)48);
+            dvout_(&debug_1.logfil, ncv, &workl[irr], &debug_1.ndigit,"_neupd: Real part of Ritz values after calling _NGETS.");
+            dvout_(&debug_1.logfil, ncv, &workl[iri], &debug_1.ndigit,"_neupd: Imag part of Ritz values after calling _NGETS.");
+            dvout_(&debug_1.logfil, ncv, &workl[bounds], &debug_1.ndigit, "_neupd: Ritz value indices after calling _NGETS.");
         }
 
         /*        %-----------------------------------------------------% */
@@ -692,14 +667,8 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &i_one, &numcnv, &debug_1.ndigit,
-                   "_neupd"
-                   ": Number of specified eigenvalues",
-                   (ftnlen)39);
-            ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,
-                   "_neupd:"
-                   " Number of \"converged\" eigenvalues",
-                   (ftnlen)41);
+            ivout_(&debug_1.logfil, &i_one, &numcnv, &debug_1.ndigit,"_neupd: Number of specified eigenvalues");
+            ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,"_neupd: Number of \"converged\" eigenvalues");
         }
 
         if (numcnv != nconv)
@@ -717,7 +686,7 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
 
         i__1 = ldh * *ncv;
         dcopy_(&i__1, &workl[ih], &i_one, &workl[iuptri], &i_one);
-        dlaset_("All", ncv, ncv, &d_zero, &d_one, &workl[invsub], &ldq, (ftnlen)3);
+        dlaset_("All", ncv, ncv, &d_zero, &d_one, &workl[invsub], &ldq);
         dlahqr_(&b_true, &b_true, ncv, &i_one, ncv, &workl[iuptri], &ldh, &workl[iheigr], &workl[iheigi], &i_one, ncv, &workl[invsub], &ldq, &ierr);
         dcopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
 
@@ -729,15 +698,12 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
 
         if (msglvl > 1)
         {
-            dvout_(&debug_1.logfil, ncv, &workl[iheigr], &debug_1.ndigit, "_neupd: Real part of the eigenvalues of H", (ftnlen)41);
-            dvout_(&debug_1.logfil, ncv, &workl[iheigi], &debug_1.ndigit, "_neupd: Imaginary part of the Eigenvalues of H", (ftnlen)46);
-            dvout_(&debug_1.logfil, ncv, &workl[ihbds], &debug_1.ndigit, "_neupd: Last row of the Schur vector matrix", (ftnlen)43);
+            dvout_(&debug_1.logfil, ncv, &workl[iheigr], &debug_1.ndigit, "_neupd: Real part of the eigenvalues of H");
+            dvout_(&debug_1.logfil, ncv, &workl[iheigi], &debug_1.ndigit, "_neupd: Imaginary part of the Eigenvalues of H");
+            dvout_(&debug_1.logfil, ncv, &workl[ihbds], &debug_1.ndigit, "_neupd: Last row of the Schur vector matrix");
             if (msglvl > 3)
             {
-                dmout_(&debug_1.logfil, ncv, ncv, &workl[iuptri], &ldh, &debug_1.ndigit,
-                       "_neupd: The upper quasi-triangular "
-                       "matrix ",
-                       (ftnlen)42);
+                dmout_(&debug_1.logfil, ncv, ncv, &workl[iuptri], &ldh, &debug_1.ndigit,"_neupd: The upper quasi-triangular matrix ");
             }
         }
 
@@ -748,7 +714,7 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
             /*           | Reorder the computed upper quasi-triangular matrix. | */
             /*           %-----------------------------------------------------% */
 
-            dtrsen_("None", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheigr], &workl[iheigi], &nconv2, &conds, &sep, &workl[ihbds], ncv, iwork, &i_one, &ierr, (ftnlen)4, (ftnlen)1);
+            dtrsen_("None", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheigr], &workl[iheigi], &nconv2, &conds, &sep, &workl[ihbds], ncv, iwork, &i_one, &ierr);
 
             if (nconv2 < nconv)
             {
@@ -762,14 +728,11 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
 
             if (msglvl > 2)
             {
-                dvout_(&debug_1.logfil, ncv, &workl[iheigr], &debug_1.ndigit, "_neupd: Real part of the eigenvalues of H--reordered", (ftnlen)52);
-                dvout_(&debug_1.logfil, ncv, &workl[iheigi], &debug_1.ndigit, "_neupd: Imag part of the eigenvalues of H--reordered", (ftnlen)52);
+                dvout_(&debug_1.logfil, ncv, &workl[iheigr], &debug_1.ndigit, "_neupd: Real part of the eigenvalues of H--reordered");
+                dvout_(&debug_1.logfil, ncv, &workl[iheigi], &debug_1.ndigit, "_neupd: Imag part of the eigenvalues of H--reordered");
                 if (msglvl > 3)
                 {
-                    dmout_(&debug_1.logfil, ncv, ncv, &workl[iuptri], &ldq, &debug_1.ndigit,
-                           "_neupd: Quasi-triangular matrix"
-                           " after re-ordering",
-                           (ftnlen)49);
+                    dmout_(&debug_1.logfil, ncv, ncv, &workl[iuptri], &ldq, &debug_1.ndigit,"_neupd: Quasi-triangular matrix after re-ordering");
                 }
             }
         }
@@ -814,8 +777,8 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
         /*        | matrix of order NCONV in workl(iuptri)                  | */
         /*        %---------------------------------------------------------% */
 
-        dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
-        dlacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz, (ftnlen)3);
+        dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr);
+        dlacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
 
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
@@ -861,7 +824,7 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
                 /* L30: */
             }
 
-            dtrevc_("Right", "Select", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &ierr, (ftnlen)5, (ftnlen)6);
+            dtrevc_("Right", "Select", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &ierr);
 
             if (ierr != 0)
             {
@@ -924,7 +887,7 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
                 /* L40: */
             }
 
-            dgemv_("T", ncv, &nconv, &d_one, &workl[invsub], &ldq, &workl[ihbds], &i_one, &d_zero, &workev[1], &i_one, (ftnlen)1);
+            dgemv_("T", ncv, &nconv, &d_one, &workl[invsub], &ldq, &workl[ihbds], &i_one, &d_zero, &workev[1], &i_one);
 
             iconj = 0;
             i__1 = nconv;
@@ -956,13 +919,10 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
             if (msglvl > 2)
             {
                 dcopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
-                dvout_(&debug_1.logfil, ncv, &workl[ihbds], &debug_1.ndigit, "_neupd: Last row of the eigenvector matrix for T", (ftnlen)48);
+                dvout_(&debug_1.logfil, ncv, &workl[ihbds], &debug_1.ndigit, "_neupd: Last row of the eigenvector matrix for T");
                 if (msglvl > 3)
                 {
-                    dmout_(&debug_1.logfil, ncv, ncv, &workl[invsub], &ldq, &debug_1.ndigit,
-                           "_neupd: The eigenvector matrix "
-                           "for T",
-                           (ftnlen)36);
+                    dmout_(&debug_1.logfil, ncv, ncv, &workl[invsub], &ldq, &debug_1.ndigit,"_neupd: The eigenvector matrix for T");
                 }
             }
 
@@ -988,9 +948,9 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
             /*           | in workl(iheigr) and workl(iheigi).          | */
             /*           %----------------------------------------------% */
 
-            dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &z[z_offset], ldz, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
+            dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &z[z_offset], ldz, &workd[*n + 1], &ierr);
 
-            dtrmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &d_one, &workl[invsub], &ldq, &z[z_offset], ldz, (ftnlen)5, (ftnlen)5, (ftnlen)12, (ftnlen)8);
+            dtrmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &d_one, &workl[invsub], &ldq, &z[z_offset], ldz);
         }
     }
     else
@@ -1101,33 +1061,15 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
 
     if (s_cmp(type__, "SHIFTI", (ftnlen)6, (ftnlen)6) == 0 && msglvl > 1)
     {
-        dvout_(&debug_1.logfil, &nconv, &dr[1], &debug_1.ndigit,
-               "_neupd: Un"
-               "transformed float part of the Ritz values.",
-               (ftnlen)51);
-        dvout_(&debug_1.logfil, &nconv, &di[1], &debug_1.ndigit,
-               "_neupd: Un"
-               "transformed imag part of the Ritz values.",
-               (ftnlen)51);
-        dvout_(&debug_1.logfil, &nconv, &workl[ihbds], &debug_1.ndigit,
-               "_ne"
-               "upd: Ritz estimates of untransformed Ritz values.",
-               (ftnlen)52);
+        dvout_(&debug_1.logfil, &nconv, &dr[1], &debug_1.ndigit,"_neupd: Untransformed float part of the Ritz values.");
+        dvout_(&debug_1.logfil, &nconv, &di[1], &debug_1.ndigit,"_neupd: Untransformed imag part of the Ritz values.");
+        dvout_(&debug_1.logfil, &nconv, &workl[ihbds], &debug_1.ndigit,"_neupd: Ritz estimates of untransformed Ritz values.");
     }
     else if (s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) == 0 && msglvl > 1)
     {
-        dvout_(&debug_1.logfil, &nconv, &dr[1], &debug_1.ndigit,
-               "_neupd: Re"
-               "al parts of converged Ritz values.",
-               (ftnlen)44);
-        dvout_(&debug_1.logfil, &nconv, &di[1], &debug_1.ndigit,
-               "_neupd: Im"
-               "ag parts of converged Ritz values.",
-               (ftnlen)44);
-        dvout_(&debug_1.logfil, &nconv, &workl[ihbds], &debug_1.ndigit,
-               "_ne"
-               "upd: Associated Ritz estimates.",
-               (ftnlen)34);
+        dvout_(&debug_1.logfil, &nconv, &dr[1], &debug_1.ndigit,"_neupd: Real parts of converged Ritz values.");
+        dvout_(&debug_1.logfil, &nconv, &di[1], &debug_1.ndigit,"_neupd: Imag parts of converged Ritz values.");
+        dvout_(&debug_1.logfil, &nconv, &workl[ihbds], &debug_1.ndigit,"_neupd: Associated Ritz estimates.");
     }
 
     /*     %-------------------------------------------------% */

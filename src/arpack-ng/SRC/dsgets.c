@@ -99,7 +99,8 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, double *bounds, double *shifts, ftnlen which_len)
+int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, double *bounds,
+     double *shifts)
 {
     /* System generated locals */
     a_int i__1;
@@ -110,9 +111,7 @@ int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, dou
     /* Local variables */
     static float t0, t1;
     a_int kevd2;
-    extern int dswap_(a_int *, double *, a_int *, double *, a_int *), dcopy_(a_int *, double *, a_int *, double *, a_int *), dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), arscnd_(float *);
     a_int msglvl;
-    extern int dsortr_(char *, a_bool *, a_int *, double *, double *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -187,7 +186,7 @@ int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, dou
         /*        %-----------------------------------------------------% */
 
         i__1 = *kev + *np;
-        dsortr_("LA", &b_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
+        dsortr_("LA", &b_true, &i__1, &ritz[1], &bounds[1]);
         kevd2 = *kev / 2;
         if (*kev > 1)
         {
@@ -209,7 +208,7 @@ int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, dou
         /*        %----------------------------------------------------% */
 
         i__1 = *kev + *np;
-        dsortr_(which, &b_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
+        dsortr_(which, &b_true, &i__1, &ritz[1], &bounds[1]);
     }
 
     if (*ishift == 1 && *np > 0)
@@ -223,7 +222,7 @@ int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, dou
         /*        | are applied in subroutine dsapps.                     | */
         /*        %-------------------------------------------------------% */
 
-        dsortr_("SM", &b_true, np, &bounds[1], &ritz[1], (ftnlen)2);
+        dsortr_("SM", &b_true, np, &bounds[1], &ritz[1]);
         dcopy_(np, &ritz[1], &i_one, &shifts[1], &i_one);
     }
 
@@ -232,18 +231,12 @@ int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, dou
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit, "_sgets: KEV is", (ftnlen)14);
-        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit, "_sgets: NP is", (ftnlen)13);
+        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit, "_sgets: KEV is");
+        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit, "_sgets: NP is");
         i__1 = *kev + *np;
-        dvout_(&debug_1.logfil, &i__1, &ritz[1], &debug_1.ndigit,
-               "_sgets: E"
-               "igenvalues of current H matrix",
-               (ftnlen)39);
+        dvout_(&debug_1.logfil, &i__1, &ritz[1], &debug_1.ndigit,"_sgets: Eigenvalues of current H matrix");
         i__1 = *kev + *np;
-        dvout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit,
-               "_sgets:"
-               " Associated Ritz estimates",
-               (ftnlen)33);
+        dvout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit,"_sgets: Associated Ritz estimates");
     }
 
     return 0;

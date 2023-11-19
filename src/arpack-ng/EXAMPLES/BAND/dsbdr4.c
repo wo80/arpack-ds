@@ -42,21 +42,15 @@ static a_int c_n6 = -6;
     a_int mode, info;
     a_bool rvec;
     a_int isub, isup;
-    extern double dnrm2_(a_int *, double *, a_int *);
     a_int idiag;
-    extern int dgbmv_(char *, a_int *, a_int *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen);
     double sigma;
     char which[2];
     double resid[1000];
     a_int nconv;
-    extern int daxpy_(a_int *, double *, double *, a_int *, double *, a_int *);
     double workd[3000];
-    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
     a_int iwork[1000];
     double workl[2900];
-    extern int dsband_(a_bool *, char *, a_bool *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, char *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, double *, double *, a_int *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int iparam[11];
-    extern int dlaset_(char *, a_int *, a_int *, double *, double *, double *, a_int *, ftnlen);
     a_bool select[50];
     a_int maxitr, lworkl;
 
@@ -238,9 +232,9 @@ static a_int c_n6 = -6;
     /*     | Zero out the workspace for banded matrices. | */
     /*     %---------------------------------------------% */
 
-    dlaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50, (ftnlen)1);
-    dlaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50, (ftnlen)1);
-    dlaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50, (ftnlen)1);
+    dlaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50);
+    dlaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50);
+    dlaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50);
 
     /*     %-------------------------------------% */
     /*     | KU, KL are number of superdiagonals | */
@@ -293,7 +287,7 @@ static a_int c_n6 = -6;
     /*     %-------------------------------------% */
 
     rvec = TRUE_;
-    dsband_(&rvec, "A", select, d, v, &c__1000, &sigma, &n, a, m, &c__50, rfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
+    dsband_(&rvec, "A", select, d, v, &c__1000, &sigma, &n, a, m, &c__50, rfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, iwork, &info);
 
     if (info == 0)
     {
@@ -362,8 +356,8 @@ static a_int c_n6 = -6;
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
         {
-            dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
-            dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
+            dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+            dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
             d__1 = -d[j - 1];
             daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
             d[j + 49] = dnrm2_(&n, ax, &c__1);
@@ -371,10 +365,7 @@ static a_int c_n6 = -6;
 
             /* L90: */
         }
-        dmout_(&c__6, &nconv, &c__2, d, &c__50, &c_n6,
-               "Ritz values and re"
-               "lative residuals",
-               (ftnlen)34);
+        dmout_(&c__6, &nconv, &c__2, d, &c__50, &c_n6,"Ritz values and relative residuals");
     }
     else
     {

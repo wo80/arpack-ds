@@ -42,9 +42,7 @@ static a_int c__5 = 5;
     a_int j, n;
     a_dcomplex s, v[6400] /* was [256][25] */, s1, s2, s3, dd[256], dl[256];
     double rd[75] /* was [25][3] */;
-    extern int av_(a_int *, a_dcomplex *, a_dcomplex *);
     a_dcomplex ax[256], du[256];
-    extern int mv_(a_int *, a_dcomplex *, a_dcomplex *);
     a_dcomplex mx[256], du2[256];
     a_int ido, ncv, nev;
     double tol;
@@ -57,21 +55,15 @@ static a_int c__5 = 5;
     a_dcomplex resid[256];
     a_int nconv;
     a_dcomplex workd[768];
-    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
     a_int ipntr[14];
     a_dcomplex workl[2000];
     double rwork[256];
-    extern int zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), zaxpy_(a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *);
-    extern double dlapy2_(double *, double *), dznrm2_(a_int *, a_dcomplex *, a_int *);
     a_int iparam[11];
     a_bool select[25];
     a_int ishfts;
-    extern int znaupd_(a_int *, char *, a_int *, char *, a_int *, double *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, double *, a_int *, ftnlen, ftnlen);
     a_int maxitr;
-    extern int zneupd_(a_bool *, char *, a_bool *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, char *, a_int *, char *, a_int *, double *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, double *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int lworkl;
     a_dcomplex workev[50];
-    extern int zgttrf_(a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, a_int *), zgttrs_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___4 = {0, 6, 0, 0, 0};
@@ -359,7 +351,7 @@ L20:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    znaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &info, (ftnlen)1, (ftnlen)2);
+    znaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
     if (ido == -1)
     {
@@ -377,7 +369,7 @@ L20:
         /*           %-------------------------------------------% */
 
         mv_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
-        zgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr, (ftnlen)1);
+        zgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___39);
@@ -411,7 +403,7 @@ L20:
         /*           %-----------------------------------------% */
 
         zcopy_(&n, &workd[ipntr[2] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
-        zgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr, (ftnlen)1);
+        zgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___42);
@@ -493,7 +485,7 @@ L20:
 
         rvec = TRUE_;
 
-        zneupd_(&rvec, "A", select, d, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+        zneupd_(&rvec, "A", select, d, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr);
 
         /*        %----------------------------------------------% */
         /*        | Eigenvalues are returned in the one          | */
@@ -553,10 +545,7 @@ L20:
             /*            | Display computed residuals. | */
             /*            %-----------------------------% */
 
-            dmout_(&c__6, &nconv, &c__3, rd, &c__25, &c_n6,
-                   "Ritz values (Re"
-                   "al, Imag) and direct residuals",
-                   (ftnlen)45);
+            dmout_(&c__6, &nconv, &c__3, rd, &c__25, &c_n6,"Ritz values (Real, Imag) and direct residuals");
         }
 
         /*        %-------------------------------------------% */
@@ -661,7 +650,6 @@ int mv_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     /* Local variables */
     a_dcomplex h;
     a_int j;
-    extern int zscal_(a_int *, a_dcomplex *, a_dcomplex *, a_int *);
 
     /*     Compute the matrix vector multiplication y<---M*x */
     /*     where M is a n by n symmetric tridiagonal matrix with 4 on the */

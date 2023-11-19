@@ -118,13 +118,8 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
     static float t0, t1;
     a_dcomplex vl[1];
     double temp;
-    extern int zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), zmout_(a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, char *, ftnlen), zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen);
-    extern double dznrm2_(a_int *, a_dcomplex *, a_int *);
-    extern int arscnd_(float *);
     a_bool select[1];
     a_int msglvl;
-    extern int zlacpy_(char *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, ftnlen), zlahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *), ztrevc_(char *, char *, a_bool *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, double *, a_int *, ftnlen, ftnlen), zdscal_(a_int *, double *, a_dcomplex *, a_int *),
-        zlaset_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -195,7 +190,7 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
 
     if (msglvl > 2)
     {
-        zmout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ", (ftnlen)43);
+        zmout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ");
     }
 
     /*     %----------------------------------------------------------% */
@@ -206,8 +201,8 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
     /*     |    in WORKL(1:N**2), and the Schur vectors in q.         | */
     /*     %----------------------------------------------------------% */
 
-    zlacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n, (ftnlen)3);
-    zlaset_("All", n, n, &z_zero, &z_one, &q[q_offset], ldq, (ftnlen)3);
+    zlacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n);
+    zlaset_("All", n, n, &z_zero, &z_one, &q[q_offset], ldq);
     zlahqr_(&b_true, &b_true, n, &i_one, n, &workl[1], ldh, &ritz[1], &i_one, n, &q[q_offset], ldq, ierr);
     if (*ierr != 0)
     {
@@ -217,10 +212,7 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
     zcopy_(n, &q[*n - 1 + q_dim1], ldq, &bounds[1], &i_one);
     if (msglvl > 1)
     {
-        zvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
-               "_neigh: las"
-               "t row of the Schur matrix for H",
-               (ftnlen)42);
+        zvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_neigh: last row of the Schur matrix for H");
     }
 
     /*     %----------------------------------------------------------% */
@@ -229,7 +221,7 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
     /*     |    eigenvectors.                                         | */
     /*     %----------------------------------------------------------% */
 
-    ztrevc_("Right", "Back", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], &rwork[1], ierr, (ftnlen)5, (ftnlen)4);
+    ztrevc_("Right", "Back", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], &rwork[1], ierr);
 
     if (*ierr != 0)
     {
@@ -257,10 +249,7 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
     if (msglvl > 1)
     {
         zcopy_(n, &q[*n + q_dim1], ldq, &workl[1], &i_one);
-        zvout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,
-               "_neigh: Last"
-               " row of the eigenvector matrix for H",
-               (ftnlen)48);
+        zvout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,"_neigh: Last row of the eigenvector matrix for H");
     }
 
     /*     %----------------------------% */
@@ -272,14 +261,8 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
 
     if (msglvl > 2)
     {
-        zvout_(&debug_1.logfil, n, &ritz[1], &debug_1.ndigit,
-               "_neigh: The e"
-               "igenvalues of H",
-               (ftnlen)28);
-        zvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
-               "_neigh: Rit"
-               "z estimates for the eigenvalues of H",
-               (ftnlen)47);
+        zvout_(&debug_1.logfil, n, &ritz[1], &debug_1.ndigit,"_neigh: The eigenvalues of H");
+        zvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_neigh: Ritz estimates for the eigenvalues of H");
     }
 
     arscnd_(&t1);

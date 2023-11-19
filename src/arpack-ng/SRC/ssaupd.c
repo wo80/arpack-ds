@@ -411,7 +411,9 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int ssaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, a_int *ipntr, float *workd, float *workl, a_int *lworkl, a_int *info, ftnlen bmat_len, ftnlen which_len)
+int ssaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *tol,
+     float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, a_int *ipntr, float *workd,
+     float *workl, a_int *lworkl, a_int *info)
 {
     /* Format strings */
     static char fmt_1000[] = "(//,5x,\002==================================="
@@ -450,11 +452,7 @@ int ssaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *to
     a_int j;
     static float t0, t1;
     static a_int nb, ih, iq, np, iw, ldh, ldq, nev0, mode, ierr, iupd, next, ritz;
-    extern int ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen), ssaup2_(a_int *, char *, a_int *, char *, a_int *, a_int *, float *, float *, a_int *, a_int *, a_int *, a_int *, float *, a_int *, float *, a_int *, float *, float *, float *, a_int *, float *, a_int *, float *, a_int *, ftnlen, ftnlen);
-    extern double slamch_(char *, ftnlen);
-    extern int arscnd_(float *);
     static a_int bounds, ishift, msglvl, mxiter;
-    extern int sstats_(void);
 
     /* Fortran I/O blocks */
     static cilist io___21 = {0, 6, 0, fmt_1000, 0};
@@ -683,7 +681,7 @@ int ssaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *to
     /*     | Carry out the Implicitly restarted Lanczos Iteration. | */
     /*     %-------------------------------------------------------% */
 
-    ssaup2_(ido, bmat, n, which, &nev0, &np, tol, &resid[1], &mode, &iupd, &ishift, &mxiter, &v[v_offset], ldv, &workl[ih], &ldh, &workl[ritz], &workl[bounds], &workl[iq], &ldq, &workl[iw], &ipntr[1], &workd[1], info, (ftnlen)1, (ftnlen)2);
+    ssaup2_(ido, bmat, n, which, &nev0, &np, tol, &resid[1], &mode, &iupd, &ishift, &mxiter, &v[v_offset], ldv, &workl[ih], &ldh, &workl[ritz], &workl[bounds], &workl[iq], &ldq, &workl[iw], &ipntr[1], &workd[1], info);
 
     /*     %--------------------------------------------------% */
     /*     | ido .ne. 99 implies use of reverse communication | */
@@ -721,22 +719,10 @@ int ssaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *to
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &mxiter, &debug_1.ndigit,
-               "_saupd: nu"
-               "mber of update iterations taken",
-               (ftnlen)41);
-        ivout_(&debug_1.logfil, &i_one, &np, &debug_1.ndigit,
-               "_saupd: number"
-               " of \"converged\" Ritz values",
-               (ftnlen)41);
-        svout_(&debug_1.logfil, &np, &workl[ritz], &debug_1.ndigit,
-               "_saupd:"
-               " final Ritz values",
-               (ftnlen)25);
-        svout_(&debug_1.logfil, &np, &workl[bounds], &debug_1.ndigit,
-               "_saup"
-               "d: corresponding error bounds",
-               (ftnlen)34);
+        ivout_(&debug_1.logfil, &i_one, &mxiter, &debug_1.ndigit,"_saupd: number of update iterations taken");
+        ivout_(&debug_1.logfil, &i_one, &np, &debug_1.ndigit,"_saupd: number of \"converged\" Ritz values");
+        svout_(&debug_1.logfil, &np, &workl[ritz], &debug_1.ndigit,"_saupd: final Ritz values");
+        svout_(&debug_1.logfil, &np, &workl[bounds], &debug_1.ndigit,"_saupd: corresponding error bounds");
     }
 
     arscnd_(&t1);

@@ -40,21 +40,16 @@ static a_int c_n6 = -6;
     a_int mode, info;
     a_bool rvec;
     a_int isub, isup;
-    extern double snrm2_(a_int *, float *, a_int *);
     a_int idiag;
     float sigma;
     char which[2];
     float resid[1000];
-    extern int sgbmv_(char *, a_int *, a_int *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen);
     a_int nconv;
     float workd[3000];
     a_int iwork[1000];
     float workl[2900];
-    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
     a_int iparam[11];
-    extern int ssband_(a_bool *, char *, a_bool *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, char *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, float *, float *, a_int *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_bool select[50];
-    extern int slaset_(char *, a_int *, a_int *, float *, float *, float *, a_int *, ftnlen);
     a_int maxitr, lworkl;
 
     /* Fortran I/O blocks */
@@ -241,9 +236,9 @@ static a_int c_n6 = -6;
     /*     | Zero out the workspace for banded matrices. | */
     /*     %---------------------------------------------% */
 
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50, (ftnlen)1);
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50, (ftnlen)1);
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50, (ftnlen)1);
+    slaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50);
+    slaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50);
+    slaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50);
 
     /*     %-------------------------------------% */
     /*     | KU, KL are number of superdiagonals | */
@@ -318,7 +313,7 @@ static a_int c_n6 = -6;
     /*     %-------------------------------------% */
 
     rvec = TRUE_;
-    ssband_(&rvec, "A", select, d, v, &c__1000, &sigma, &n, a, m, &c__50, rfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
+    ssband_(&rvec, "A", select, d, v, &c__1000, &sigma, &n, a, m, &c__50, rfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, iwork, &info);
 
     if (info == 0)
     {
@@ -387,7 +382,7 @@ static a_int c_n6 = -6;
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
         {
-            sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b100, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
+            sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b100, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
             r__1 = -d[j - 1];
             saxpy_(&n, &r__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
             d[j + 49] = snrm2_(&n, ax, &c__1);
@@ -395,10 +390,7 @@ static a_int c_n6 = -6;
 
             /* L90: */
         }
-        smout_(&c__6, &nconv, &c__2, d, &c__50, &c_n6,
-               "Ritz values and re"
-               "lative residuals",
-               (ftnlen)34);
+        smout_(&c__6, &nconv, &c__2, d, &c__50, &c_n6,"Ritz values and relative residuals");
     }
     else
     {

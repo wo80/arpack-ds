@@ -52,18 +52,12 @@ static a_int c_n6 = -6;
     char which[2];
     a_dcomplex resid[1000];
     a_int nconv;
-    extern int zgbmv_(char *, a_int *, a_int *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen);
     a_dcomplex workd[3000];
-    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
     a_int iwork[1000];
     a_dcomplex workl[7750];
     double rwork[1000];
-    extern int zaxpy_(a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *);
-    extern double dlapy2_(double *, double *), dznrm2_(a_int *, a_dcomplex *, a_int *);
     a_int iparam[11];
-    extern int znband_(a_bool *, char *, a_bool *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, char *, char *, a_int *, double *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, double *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_bool select[50];
-    extern int zlaset_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen);
     a_int maxitr, lworkl;
     a_dcomplex workev[100];
 
@@ -250,9 +244,9 @@ static a_int c_n6 = -6;
     /*     | Zero out the workspace for banded matrices. | */
     /*     %---------------------------------------------% */
 
-    zlaset_("A", &c__50, &n, &c_b2, &c_b2, a, &c__50, (ftnlen)1);
-    zlaset_("A", &c__50, &n, &c_b2, &c_b2, m, &c__50, (ftnlen)1);
-    zlaset_("A", &c__50, &n, &c_b2, &c_b2, fac, &c__50, (ftnlen)1);
+    zlaset_("A", &c__50, &n, &c_b2, &c_b2, a, &c__50);
+    zlaset_("A", &c__50, &n, &c_b2, &c_b2, m, &c__50);
+    zlaset_("A", &c__50, &n, &c_b2, &c_b2, fac, &c__50);
 
     /*     %-------------------------------------% */
     /*     | KU, KL are number of superdiagonals | */
@@ -353,7 +347,7 @@ static a_int c_n6 = -6;
     /*     %-----------------------------------------------% */
 
     rvec = TRUE_;
-    znband_(&rvec, "A", select, d, v, &c__1000, &sigma, workev, &n, a, m, &c__50, fac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, rwork, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
+    znband_(&rvec, "A", select, d, v, &c__1000, &sigma, workev, &n, a, m, &c__50, fac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, rwork, iwork, &info);
 
     if (info == 0)
     {
@@ -428,7 +422,7 @@ static a_int c_n6 = -6;
             /*           |   ||  A*x - lambda*x ||   | */
             /*           %---------------------------% */
 
-            zgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, ax, &c__1, (ftnlen)11);
+            zgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, ax, &c__1);
             i__2 = j - 1;
             z__1.r = -d[i__2].r, z__1.i = -d[i__2].i;
             zaxpy_(&n, &z__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
@@ -439,10 +433,7 @@ static a_int c_n6 = -6;
             rd[j + 99] /= dlapy2_(&rd[j - 1], &rd[j + 49]);
             /* L90: */
         }
-        dmout_(&c__6, &nconv, &c__3, rd, &c__50, &c_n6,
-               "Ritz values (Real,I"
-               "mag) and relative residuals",
-               (ftnlen)46);
+        dmout_(&c__6, &nconv, &c__3, rd, &c__50, &c_n6,"Ritz values (Real,Imag) and relative residuals");
     }
     else
     {

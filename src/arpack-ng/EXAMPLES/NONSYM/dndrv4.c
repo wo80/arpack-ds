@@ -36,9 +36,7 @@ static a_int c__5 = 5;
     double d[75] /* was [25][3] */, h;
     a_int j, n;
     double s, v[6400] /* was [256][25] */, s1, s2, s3, dd[256], dl[256];
-    extern int av_(a_int *, double *, double *);
     double ax[256], du[256];
-    extern int mv_(a_int *, double *, double *);
     double mx[256], du2[256];
     a_int ido, ncv, nev;
     double tol;
@@ -46,27 +44,18 @@ static a_int c__5 = 5;
     a_int mode, info;
     a_bool rvec;
     a_int ierr, ipiv[256];
-    extern double dnrm2_(a_int *, double *, a_int *);
     char which[2];
     double resid[256];
-    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *);
     a_int nconv;
-    extern int daxpy_(a_int *, double *, double *, a_int *, double *, a_int *);
     double workd[768];
     a_bool first;
-    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
     a_int ipntr[14];
     double workl[2025];
-    extern double dlapy2_(double *, double *);
     a_int iparam[11];
     double sigmai;
-    extern int dnaupd_(a_int *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen);
     a_bool select[25];
-    extern int dneupd_(a_bool *, char *, a_bool *, double *, double *, double *, a_int *, double *, double *, double *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     double sigmar;
-    extern int dgttrf_(a_int *, double *, double *, double *, double *, a_int *, a_int *);
     a_int ishfts, maxitr;
-    extern int dgttrs_(char *, a_int *, a_int *, double *, double *, double *, double *, a_int *, double *, a_int *, a_int *, ftnlen);
     a_int lworkl;
     double workev[75];
 
@@ -337,7 +326,7 @@ L20:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    dnaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info, (ftnlen)1, (ftnlen)2);
+    dnaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info);
 
     if (ido == -1)
     {
@@ -355,7 +344,7 @@ L20:
         /*           %-------------------------------------------% */
 
         mv_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
-        dgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr, (ftnlen)1);
+        dgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___39);
@@ -389,7 +378,7 @@ L20:
         /*           %-----------------------------------------% */
 
         dcopy_(&n, &workd[ipntr[2] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
-        dgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr, (ftnlen)1);
+        dgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___42);
@@ -470,7 +459,7 @@ L20:
         /*        %-------------------------------------------% */
 
         rvec = TRUE_;
-        dneupd_(&rvec, "A", select, d, &d[25], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+        dneupd_(&rvec, "A", select, d, &d[25], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /*        %-----------------------------------------------% */
         /*        | The real part of the eigenvalue is returned   | */
@@ -584,10 +573,7 @@ L20:
             /*            | Display computed residuals. | */
             /*            %-----------------------------% */
 
-            dmout_(&c__6, &nconv, &c__3, d, &c__25, &c_n6,
-                   "Ritz values (R"
-                   "eal,Imag) and relative residuals",
-                   (ftnlen)46);
+            dmout_(&c__6, &nconv, &c__3, d, &c__25, &c_n6,"Ritz values (Real,Imag) and relative residuals");
         }
 
         /*        %-------------------------------------------% */
@@ -692,7 +678,6 @@ int mv_(a_int *n, double *v, double *w)
     /* Local variables */
     double h;
     a_int j;
-    extern int dscal_(a_int *, double *, double *, a_int *);
 
     /*     Compute the matrix vector multiplication y<---M*x */
     /*     where M is mass matrix formed by using piecewise linear elements */

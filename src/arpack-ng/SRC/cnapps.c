@@ -168,17 +168,9 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     float tst1;
     a_int iend;
     static float unfl, ovfl;
-    extern int cscal_(a_int *, a_fcomplex *, a_fcomplex *, a_int *);
     a_fcomplex sigma;
-    extern int cgemv_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen), ccopy_(a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *), caxpy_(a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *), cmout_(a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, char *, ftnlen), cvout_(a_int *, a_int *, a_fcomplex *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen);
-    extern double slapy2_(float *, float *);
-    extern int slabad_(float *, float *);
-    extern double clanhs_(char *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, ftnlen);
-    extern int arscnd_(float *), clacpy_(char *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, ftnlen);
     a_int istart, kplusp, msglvl;
     static float smlnum;
-    extern int clartg_(a_fcomplex *, a_fcomplex *, float *, a_fcomplex *, a_fcomplex *), claset_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen);
-    extern double slamch_(char *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -289,7 +281,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     /*     | the rotations and reflections              | */
     /*     %--------------------------------------------% */
 
-    claset_("All", &kplusp, &kplusp, &c_zero, &c_one, &q[q_offset], ldq, (ftnlen)3);
+    claset_("All", &kplusp, &kplusp, &c_zero, &c_one, &q[q_offset], ldq);
 
     /*     %----------------------------------------------% */
     /*     | Quick return if there are no shifts to apply | */
@@ -314,14 +306,8 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit,
-                   "_napps: sh"
-                   "ift number.",
-                   (ftnlen)21);
-            cvout_(&debug_1.logfil, &i_one, &sigma, &debug_1.ndigit,
-                   "_napps:"
-                   " Value of the shift ",
-                   (ftnlen)27);
+            ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit,"_napps: shift number.");
+            cvout_(&debug_1.logfil, &i_one, &sigma, &debug_1.ndigit,"_napps: Value of the shift ");
         }
 
         istart = 1;
@@ -352,12 +338,9 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit, "_napps: matrix splitting at row/column no.", (ftnlen)42);
-                    ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_napps: matrix splitting with shift number.", (ftnlen)43);
-                    cvout_(&debug_1.logfil, &i_one, &h[i + 1 + i * h_dim1], &debug_1.ndigit,
-                           "_napps: off diagonal "
-                           "element.",
-                           (ftnlen)29);
+                    ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit, "_napps: matrix splitting at row/column no.");
+                    ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_napps: matrix splitting with shift number.");
+                    cvout_(&debug_1.logfil, &i_one, &h[i + 1 + i * h_dim1], &debug_1.ndigit,"_napps: off diagonal element.");
                 }
                 iend = i;
                 i__3 = i + 1 + i * h_dim1;
@@ -371,14 +354,8 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &i_one, &istart, &debug_1.ndigit,
-                   "_napps"
-                   ": Start of current block ",
-                   (ftnlen)31);
-            ivout_(&debug_1.logfil, &i_one, &iend, &debug_1.ndigit,
-                   "_napps: "
-                   "End of current block ",
-                   (ftnlen)29);
+            ivout_(&debug_1.logfil, &i_one, &istart, &debug_1.ndigit,"_napps: Start of current block ");
+            ivout_(&debug_1.logfil, &i_one, &iend, &debug_1.ndigit,"_napps: End of current block ");
         }
 
         /*        %------------------------------------------------% */
@@ -620,7 +597,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     i__1 = *kev + 1 + *kev * h_dim1;
     if (h[i__1].r > 0.f)
     {
-        cgemv_("N", n, &kplusp, &c_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &c_zero, &workd[*n + 1], &i_one, (ftnlen)1);
+        cgemv_("N", n, &kplusp, &c_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &c_zero, &workd[*n + 1], &i_one);
     }
 
     /*     %----------------------------------------------------------% */
@@ -632,7 +609,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     for (i = 1; i <= i__1; ++i)
     {
         i__2 = kplusp - i + 1;
-        cgemv_("N", n, &i__2, &c_one, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &c_zero, &workd[1], &i_one, (ftnlen)1);
+        cgemv_("N", n, &i__2, &c_one, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &c_zero, &workd[1], &i_one);
         ccopy_(n, &workd[1], &i_one, &v[(kplusp - i + 1) * v_dim1 + 1], &i_one);
         /* L140: */
     }
@@ -641,7 +618,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     /*     |  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). | */
     /*     %-------------------------------------------------% */
 
-    clacpy_("A", n, kev, &v[(kplusp - *kev + 1) * v_dim1 + 1], ldv, &v[v_offset], ldv, (ftnlen)1);
+    clacpy_("A", n, kev, &v[(kplusp - *kev + 1) * v_dim1 + 1], ldv, &v[v_offset], ldv);
 
     /*     %--------------------------------------------------------------% */
     /*     | Copy the (kev+1)-st column of (V*Q) in the appropriate place | */
@@ -670,18 +647,12 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
 
     if (msglvl > 1)
     {
-        cvout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}", (ftnlen)40);
-        cvout_(&debug_1.logfil, &i_one, &h[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}", (ftnlen)37);
-        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit,
-               "_napps: Order "
-               "of the final Hessenberg matrix ",
-               (ftnlen)45);
+        cvout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}");
+        cvout_(&debug_1.logfil, &i_one, &h[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}");
+        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit,"_napps: Order of the final Hessenberg matrix ");
         if (msglvl > 2)
         {
-            cmout_(&debug_1.logfil, kev, kev, &h[h_offset], ldh, &debug_1.ndigit,
-                   "_napps: updated Hessenberg matrix H for"
-                   " next iteration",
-                   (ftnlen)54);
+            cmout_(&debug_1.logfil, kev, kev, &h[h_offset], ldh, &debug_1.ndigit,"_napps: updated Hessenberg matrix H for next iteration");
         }
     }
 

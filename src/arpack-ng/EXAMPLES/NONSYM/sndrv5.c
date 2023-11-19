@@ -29,9 +29,7 @@ static a_int c__4 = 4;
     a_int j, n;
     float v[6400] /* was [256][25] */;
     a_fcomplex c1, c2, c3;
-    extern int av_(a_int *, float *, float *);
     float ax[256];
-    extern int mv_(a_int *, float *, float *);
     float mx[256];
     a_fcomplex cdd[256], cdl[256], cdu[256];
     a_int ido, ncv, nev;
@@ -45,9 +43,7 @@ static a_int c__4 = 4;
     a_bool rvec;
     a_int ierr, ipiv[256];
     float numi;
-    extern double sdot_(a_int *, float *, a_int *, float *, a_int *);
     float numr;
-    extern double snrm2_(a_int *, float *, a_int *);
     char which[2];
     float resid[256];
     a_fcomplex ctemp[256];
@@ -56,15 +52,11 @@ static a_int c__4 = 4;
     a_bool first;
     a_int ipntr[14];
     float workl[2025];
-    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
-    extern double slapy2_(float *, float *);
     a_int iparam[11];
     float sigmai;
     a_bool select[25];
     float sigmar;
-    extern int cgttrf_(a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, a_int *), snaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen), sneupd_(a_bool *, char *, a_bool *, float *, float *, float *, a_int *, float *, float *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int ishfts, maxitr;
-    extern int cgttrs_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, ftnlen);
     a_int lworkl;
     float workev[75];
 
@@ -337,7 +329,7 @@ L20:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    snaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info, (ftnlen)1, (ftnlen)2);
+    snaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info);
 
     if (ido == -1)
     {
@@ -365,7 +357,7 @@ L20:
             /* L30: */
         }
 
-        cgttrs_("N", &n, &c__1, cdl, cdd, cdu, cdu2, ipiv, ctemp, &n, &ierr, (ftnlen)1);
+        cgttrs_("N", &n, &c__1, cdl, cdd, cdu, cdu2, ipiv, ctemp, &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___38);
@@ -414,7 +406,7 @@ L20:
             ctemp[i__2].r = q__1.r, ctemp[i__2].i = q__1.i;
             /* L50: */
         }
-        cgttrs_("N", &n, &c__1, cdl, cdd, cdu, cdu2, ipiv, ctemp, &n, &ierr, (ftnlen)1);
+        cgttrs_("N", &n, &c__1, cdl, cdd, cdu, cdu2, ipiv, ctemp, &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___41);
@@ -502,7 +494,7 @@ L20:
         /*        %-------------------------------------------% */
 
         rvec = TRUE_;
-        sneupd_(&rvec, "A", select, d, &d[25], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+        sneupd_(&rvec, "A", select, d, &d[25], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /*        %-----------------------------------------------% */
         /*        | The real part of the eigenvalue is returned   | */
@@ -696,10 +688,7 @@ L20:
             /*            | Display computed residuals. | */
             /*            %-----------------------------% */
 
-            smout_(&c__6, &nconv, &c__3, d, &c__25, &c_n6,
-                   "Ritz values (R"
-                   "eal,Imag) and relative residuals",
-                   (ftnlen)46);
+            smout_(&c__6, &nconv, &c__3, d, &c__25, &c_n6,"Ritz values (Real,Imag) and relative residuals");
         }
 
         /*        %-------------------------------------------% */

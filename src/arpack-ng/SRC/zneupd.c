@@ -257,7 +257,11 @@ static a_bool b_true = TRUE_;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomplex *z, a_int *ldz, a_dcomplex *sigma, a_dcomplex *workev, char *bmat, a_int *n, char *which, a_int *nev, double *tol, a_dcomplex *resid, a_int *ncv, a_dcomplex *v, a_int *ldv, a_int *iparam, a_int *ipntr, a_dcomplex *workd, a_dcomplex *workl, a_int *lworkl, double *rwork, a_int *info, ftnlen howmny_len, ftnlen bmat_len, ftnlen which_len)
+int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomplex *z,
+     a_int *ldz, a_dcomplex *sigma, a_dcomplex *workev, char *bmat, a_int *n, char *which,
+     a_int *nev, double *tol, a_dcomplex *resid, a_int *ncv, a_dcomplex *v, a_int *ldv,
+     a_int *iparam, a_int *ipntr, a_dcomplex *workd, a_dcomplex *workl, a_int *lworkl,
+     double *rwork, a_int *info)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, i__1, i__2;
@@ -285,22 +289,11 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
     a_int ritz, iheig, ihbds;
     double conds;
     a_bool reord;
-    extern int zscal_(a_int *, a_dcomplex *, a_dcomplex *, a_int *);
     a_int nconv;
     double rtemp;
     a_dcomplex rnorm;
-    extern int zgeru_(a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), ztrmm_(char *, char *, char *, char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, ftnlen, ftnlen, ftnlen, ftnlen), zmout_(a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, char *, ftnlen),
-        zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen);
-    extern double dlapy2_(double *, double *);
     a_int nconv2;
-    extern int zgeqr2_(a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *);
-    extern double dznrm2_(a_int *, a_dcomplex *, a_int *), dlamch_(char *, ftnlen);
-    extern int zunm2r_(char *, char *, a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, ftnlen, ftnlen);
     a_int bounds, invsub, iuptri, msglvl, outncv, numcnv, ishift;
-    extern int zlacpy_(char *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, ftnlen), zlahqr_(a_bool *, a_bool *, a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *);
-    extern void zzdotc_(a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *);
-    extern int zngets_(a_int *, char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, ftnlen), zlaset_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen), ztrsen_(char *, char *, a_bool *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, double *, double *, a_dcomplex *, a_int *, a_int *, ftnlen, ftnlen),
-        ztrevc_(char *, char *, a_bool *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, double *, a_int *, ftnlen, ftnlen), zdscal_(a_int *, double *, a_dcomplex *, a_int *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -525,14 +518,8 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
 
     if (msglvl > 2)
     {
-        zvout_(&debug_1.logfil, ncv, &workl[irz], &debug_1.ndigit,
-               "_neupd: "
-               "Ritz values passed in from _NAUPD.",
-               (ftnlen)42);
-        zvout_(&debug_1.logfil, ncv, &workl[ibd], &debug_1.ndigit,
-               "_neupd: "
-               "Ritz estimates passed in from _NAUPD.",
-               (ftnlen)45);
+        zvout_(&debug_1.logfil, ncv, &workl[irz], &debug_1.ndigit,"_neupd: Ritz values passed in from _NAUPD.");
+        zvout_(&debug_1.logfil, ncv, &workl[ibd], &debug_1.ndigit,"_neupd: Ritz estimates passed in from _NAUPD.");
     }
 
     if (*rvec)
@@ -566,15 +553,12 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
 
         np = *ncv - *nev;
         ishift = 0;
-        zngets_(&ishift, which, nev, &np, &workl[irz], &workl[bounds], (ftnlen)2);
+        zngets_(&ishift, which, nev, &np, &workl[irz], &workl[bounds]);
 
         if (msglvl > 2)
         {
-            zvout_(&debug_1.logfil, ncv, &workl[irz], &debug_1.ndigit,
-                   "_neu"
-                   "pd: Ritz values after calling _NGETS.",
-                   (ftnlen)41);
-            zvout_(&debug_1.logfil, ncv, &workl[bounds], &debug_1.ndigit, "_neupd: Ritz value indices after calling _NGETS.", (ftnlen)48);
+            zvout_(&debug_1.logfil, ncv, &workl[irz], &debug_1.ndigit,"_neupd: Ritz values after calling _NGETS.");
+            zvout_(&debug_1.logfil, ncv, &workl[bounds], &debug_1.ndigit, "_neupd: Ritz value indices after calling _NGETS.");
         }
 
         /*        %-----------------------------------------------------% */
@@ -618,14 +602,8 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &i_one, &numcnv, &debug_1.ndigit,
-                   "_neupd"
-                   ": Number of specified eigenvalues",
-                   (ftnlen)39);
-            ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,
-                   "_neupd:"
-                   " Number of \"converged\" eigenvalues",
-                   (ftnlen)41);
+            ivout_(&debug_1.logfil, &i_one, &numcnv, &debug_1.ndigit,"_neupd: Number of specified eigenvalues");
+            ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,"_neupd: Number of \"converged\" eigenvalues");
         }
 
         if (numcnv != nconv)
@@ -643,7 +621,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
 
         i__1 = ldh * *ncv;
         zcopy_(&i__1, &workl[ih], &i_one, &workl[iuptri], &i_one);
-        zlaset_("All", ncv, ncv, &z_zero, &z_one, &workl[invsub], &ldq, (ftnlen)3);
+        zlaset_("All", ncv, ncv, &z_zero, &z_one, &workl[invsub], &ldq);
         zlahqr_(&b_true, &b_true, ncv, &i_one, ncv, &workl[iuptri], &ldh, &workl[iheig], &i_one, ncv, &workl[invsub], &ldq, &ierr);
         zcopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
 
@@ -655,11 +633,11 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
 
         if (msglvl > 1)
         {
-            zvout_(&debug_1.logfil, ncv, &workl[iheig], &debug_1.ndigit, "_neupd: Eigenvalues of H", (ftnlen)24);
-            zvout_(&debug_1.logfil, ncv, &workl[ihbds], &debug_1.ndigit, "_neupd: Last row of the Schur vector matrix", (ftnlen)43);
+            zvout_(&debug_1.logfil, ncv, &workl[iheig], &debug_1.ndigit, "_neupd: Eigenvalues of H");
+            zvout_(&debug_1.logfil, ncv, &workl[ihbds], &debug_1.ndigit, "_neupd: Last row of the Schur vector matrix");
             if (msglvl > 3)
             {
-                zmout_(&debug_1.logfil, ncv, ncv, &workl[iuptri], &ldh, &debug_1.ndigit, "_neupd: The upper triangular matrix ", (ftnlen)36);
+                zmout_(&debug_1.logfil, ncv, ncv, &workl[iuptri], &ldh, &debug_1.ndigit, "_neupd: The upper triangular matrix ");
             }
         }
 
@@ -670,7 +648,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
             /*           | Reorder the computed upper triangular matrix. | */
             /*           %-----------------------------------------------% */
 
-            ztrsen_("None", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheig], &nconv2, &conds, &sep, &workev[1], ncv, &ierr, (ftnlen)4, (ftnlen)1);
+            ztrsen_("None", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheig], &nconv2, &conds, &sep, &workev[1], ncv, &ierr);
 
             if (nconv2 < nconv)
             {
@@ -684,13 +662,10 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
 
             if (msglvl > 2)
             {
-                zvout_(&debug_1.logfil, ncv, &workl[iheig], &debug_1.ndigit, "_neupd: Eigenvalues of H--reordered", (ftnlen)35);
+                zvout_(&debug_1.logfil, ncv, &workl[iheig], &debug_1.ndigit, "_neupd: Eigenvalues of H--reordered");
                 if (msglvl > 3)
                 {
-                    zmout_(&debug_1.logfil, ncv, ncv, &workl[iuptri], &ldq, &debug_1.ndigit,
-                           "_neupd: Triangular matrix after"
-                           " re-ordering",
-                           (ftnlen)43);
+                    zmout_(&debug_1.logfil, ncv, ncv, &workl[iuptri], &ldq, &debug_1.ndigit,"_neupd: Triangular matrix after re-ordering");
                 }
             }
         }
@@ -734,8 +709,8 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
         /*        | NCONV in workl(iuptri).                                | */
         /*        %--------------------------------------------------------% */
 
-        zunm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr, (ftnlen)5, (ftnlen)11);
-        zlacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz, (ftnlen)3);
+        zunm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr);
+        zlacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
 
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
@@ -784,7 +759,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
                 /* L30: */
             }
 
-            ztrevc_("Right", "Select", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &rwork[1], &ierr, (ftnlen)5, (ftnlen)6);
+            ztrevc_("Right", "Select", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &rwork[1], &ierr);
 
             if (ierr != 0)
             {
@@ -825,16 +800,10 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
             if (msglvl > 2)
             {
                 zcopy_(&nconv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
-                zvout_(&debug_1.logfil, &nconv, &workl[ihbds], &debug_1.ndigit,
-                       "_neupd: Last row of the eigenvector"
-                       " matrix for T",
-                       (ftnlen)48);
+                zvout_(&debug_1.logfil, &nconv, &workl[ihbds], &debug_1.ndigit,"_neupd: Last row of the eigenvector matrix for T");
                 if (msglvl > 3)
                 {
-                    zmout_(&debug_1.logfil, ncv, ncv, &workl[invsub], &ldq, &debug_1.ndigit,
-                           "_neupd: The eigenvector matrix "
-                           "for T",
-                           (ftnlen)36);
+                    zmout_(&debug_1.logfil, ncv, ncv, &workl[invsub], &ldq, &debug_1.ndigit,"_neupd: The eigenvector matrix for T");
                 }
             }
 
@@ -849,7 +818,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
             /*           | Form Z*Q.                                    | */
             /*           %----------------------------------------------% */
 
-            ztrmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &z_one, &workl[invsub], &ldq, &z[z_offset], ldz, (ftnlen)5, (ftnlen)5, (ftnlen)12, (ftnlen)8);
+            ztrmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &z_one, &workl[invsub], &ldq, &z[z_offset], ldz);
         }
     }
     else
@@ -929,25 +898,13 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
 
     if (s_cmp(type__, "REGULR", (ftnlen)6, (ftnlen)6) != 0 && msglvl > 1)
     {
-        zvout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,
-               "_neupd: U"
-               "ntransformed Ritz values.",
-               (ftnlen)34);
-        zvout_(&debug_1.logfil, &nconv, &workl[ihbds], &debug_1.ndigit,
-               "_ne"
-               "upd: Ritz estimates of the untransformed Ritz values.",
-               (ftnlen)56);
+        zvout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,"_neupd: Untransformed Ritz values.");
+        zvout_(&debug_1.logfil, &nconv, &workl[ihbds], &debug_1.ndigit,"_neupd: Ritz estimates of the untransformed Ritz values.");
     }
     else if (msglvl > 1)
     {
-        zvout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,
-               "_neupd: C"
-               "onverged Ritz values.",
-               (ftnlen)30);
-        zvout_(&debug_1.logfil, &nconv, &workl[ihbds], &debug_1.ndigit,
-               "_ne"
-               "upd: Associated Ritz estimates.",
-               (ftnlen)34);
+        zvout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,"_neupd: Converged Ritz values.");
+        zvout_(&debug_1.logfil, &nconv, &workl[ihbds], &debug_1.ndigit,"_neupd: Associated Ritz estimates.");
     }
 
     /*     %-------------------------------------------------% */

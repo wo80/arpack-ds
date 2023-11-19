@@ -62,7 +62,7 @@
 
 /* ----------------------------------------------------------------------- */
 
-int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y, ftnlen which_len)
+int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
 {
     /* System generated locals */
     a_int i__1, i__2, i__3;
@@ -76,7 +76,6 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y, 
     a_int i, j, igap;
     a_dcomplex temp;
     double temp1, temp2;
-    extern double dlapy2_(double *, double *);
 
     /*     %------------------% */
     /*     | Scalar Arguments | */

@@ -33,9 +33,7 @@ static a_fcomplex c_b164 = {10.f, 0.f};
     a_int j, n;
     a_fcomplex v[6400] /* was [256][25] */, dd[256], dl[256];
     float rd[75] /* was [25][3] */;
-    extern int av_(a_int *, a_fcomplex *, a_fcomplex *);
     a_fcomplex ax[256], du[256];
-    extern int mv_(a_int *, a_fcomplex *, a_fcomplex *);
     a_fcomplex mx[256], du2[256];
     a_int ido, ncv, nev;
     float tol;
@@ -47,19 +45,13 @@ static a_fcomplex c_b164 = {10.f, 0.f};
     char which[2];
     a_fcomplex resid[256];
     a_int nconv;
-    extern int caxpy_(a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
     a_fcomplex workd[768];
     a_int ipntr[14];
     a_fcomplex workl[2000];
     float rwork[256];
-    extern int smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
-    extern double scnrm2_(a_int *, a_fcomplex *, a_int *), slapy2_(float *, float *);
     a_int iparam[11];
-    extern int cnaupd_(a_int *, char *, a_int *, char *, a_int *, float *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, float *, a_int *, ftnlen, ftnlen), cneupd_(a_bool *, char *, a_bool *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, char *, a_int *, char *, a_int *, float *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, float *, a_int *, ftnlen, ftnlen, ftnlen);
     a_bool select[25];
-    extern int cgttrf_(a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, a_int *);
     a_int ishfts, maxitr;
-    extern int cgttrs_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, ftnlen);
     a_int lworkl;
     a_fcomplex workev[50];
 
@@ -314,7 +306,7 @@ L10:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    cnaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &info, (ftnlen)1, (ftnlen)2);
+    cnaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
     if (ido == -1 || ido == 1)
     {
@@ -330,7 +322,7 @@ L10:
         /*           %----------------------------------------% */
 
         av_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
-        cgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr, (ftnlen)1);
+        cgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___35);
@@ -413,7 +405,7 @@ L10:
 
         rvec = TRUE_;
 
-        cneupd_(&rvec, "A", select, d, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+        cneupd_(&rvec, "A", select, d, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr);
 
         /*        %----------------------------------------------% */
         /*        | Eigenvalues are returned in the one          | */
@@ -486,10 +478,7 @@ L10:
             /*           | Display computed residuals. | */
             /*           %-----------------------------% */
 
-            smout_(&c__6, &nconv, &c__3, rd, &c__25, &c_n6,
-                   "Ritz values (Re"
-                   "al, Imag) and relative residuals",
-                   (ftnlen)47);
+            smout_(&c__6, &nconv, &c__3, rd, &c__25, &c_n6,"Ritz values (Real, Imag) and relative residuals");
         }
 
         /*        %------------------------------------------% */
@@ -664,7 +653,6 @@ int mv_(a_int *n, a_fcomplex *v, a_fcomplex *w)
     /* Local variables */
     a_fcomplex h;
     a_int j;
-    extern int cscal_(a_int *, a_fcomplex *, a_fcomplex *, a_int *);
 
     /*     Compute the matrix vector multiplication y<---M*x */
     /*     where M is the mass matrix formed by using piecewise linear elements */

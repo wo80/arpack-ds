@@ -122,7 +122,9 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int cgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j, a_fcomplex *v, a_int *ldv, a_fcomplex *resid, float *rnorm, a_int *ipntr, a_fcomplex *workd, a_int *ierr, ftnlen bmat_len)
+int cgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j,
+     a_fcomplex *v, a_int *ldv, a_fcomplex *resid, float *rnorm, a_int *ipntr, a_fcomplex *workd,
+     a_int *ierr)
 {
     /* Initialized data */
 
@@ -142,16 +144,10 @@ int cgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
     static a_int iter;
     static a_bool orth;
     static a_int iseed[4];
-    extern int cgemv_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen);
     a_int idist;
-    extern int ccopy_(a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
     a_fcomplex cnorm;
     static a_bool first;
-    extern int cvout_(a_int *, a_int *, a_fcomplex *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen);
-    extern double scnrm2_(a_int *, a_fcomplex *, a_int *), slapy2_(float *, float *);
     static float rnorm0;
-    extern void ccdotc_(a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
-    extern int arscnd_(float *), clarnv_(a_int *, a_int *, a_int *, a_fcomplex *);
     static a_int msglvl;
 
     /*     %----------------------------------------------------% */
@@ -373,10 +369,10 @@ L20:
 L30:
 
     i__1 = *j - 1;
-    cgemv_("C", n, &i__1, &c_one, &v[v_offset], ldv, &workd[1], &i_one, &c_zero, &workd[*n + 1], &i_one, (ftnlen)1);
+    cgemv_("C", n, &i__1, &c_one, &v[v_offset], ldv, &workd[1], &i_one, &c_zero, &workd[*n + 1], &i_one);
     i__1 = *j - 1;
     q__1.r = -1.f, q__1.i = -0.f;
-    cgemv_("N", n, &i__1, &q__1, &v[v_offset], ldv, &workd[*n + 1], &i_one, &c_one, &resid[1], &i_one, (ftnlen)1);
+    cgemv_("N", n, &i__1, &q__1, &v[v_offset], ldv, &workd[*n + 1], &i_one, &c_one, &resid[1], &i_one);
 
     /*     %----------------------------------------------------------% */
     /*     | Compute the B-norm of the orthogonalized starting vector | */
@@ -424,14 +420,8 @@ L40:
 
     if (msglvl > 2)
     {
-        svout_(&debug_1.logfil, &i_one, &rnorm0, &debug_1.ndigit,
-               "_getv0: re"
-               "-orthonalization ; rnorm0 is",
-               (ftnlen)38);
-        svout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
-               "_getv0: re-o"
-               "rthonalization ; rnorm is",
-               (ftnlen)37);
+        svout_(&debug_1.logfil, &i_one, &rnorm0, &debug_1.ndigit,"_getv0: re-orthonalization ; rnorm0 is");
+        svout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,"_getv0: re-orthonalization ; rnorm is");
     }
 
     if (*rnorm > rnorm0 * .717f)
@@ -472,17 +462,11 @@ L50:
 
     if (msglvl > 0)
     {
-        svout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
-               "_getv0: B-no"
-               "rm of initial / restarted starting vector",
-               (ftnlen)53);
+        svout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,"_getv0: B-norm of initial / restarted starting vector");
     }
     if (msglvl > 2)
     {
-        cvout_(&debug_1.logfil, n, &resid[1], &debug_1.ndigit,
-               "_getv0: init"
-               "ial / restarted starting vector",
-               (ftnlen)43);
+        cvout_(&debug_1.logfil, n, &resid[1], &debug_1.ndigit,"_getv0: initial / restarted starting vector");
     }
     *ido = 99;
 

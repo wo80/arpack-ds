@@ -23,7 +23,7 @@ static a_int c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int dvout_(a_int *lout, a_int *n, double *sx, a_int *idigit, char *ifmt, ftnlen ifmt_len)
+int dvout_(a_int *lout, a_int *n, double *sx, a_int *idigit, char *ifmt)
 {
     /* Format strings */
     static char fmt_9999[] = "(/1x,a,/1x,a)";

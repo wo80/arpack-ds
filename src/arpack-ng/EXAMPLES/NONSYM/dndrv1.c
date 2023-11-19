@@ -27,7 +27,6 @@ static a_int c__5 = 5;
     double d[90] /* was [30][3] */;
     a_int j, n;
     double v[7680] /* was [256][30] */;
-    extern int av_(a_int *, double *, double *);
     double ax[256];
     a_int nx, ido, ncv, nev;
     double tol;
@@ -35,22 +34,16 @@ static a_int c__5 = 5;
     a_int mode, info;
     a_bool rvec;
     a_int ierr;
-    extern double dnrm2_(a_int *, double *, a_int *);
     char which[2];
     double resid[256];
     a_int nconv;
-    extern int daxpy_(a_int *, double *, double *, a_int *, double *, a_int *);
     double workd[768];
     a_bool first;
-    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
     a_int ipntr[14];
     double workl[2880];
-    extern double dlapy2_(double *, double *);
     a_int iparam[11];
     double sigmai;
-    extern int dnaupd_(a_int *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen);
     a_bool select[30];
-    extern int dneupd_(a_bool *, char *, a_bool *, double *, double *, double *, a_int *, double *, double *, double *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     double sigmar;
     a_int ishfts, maxitr, lworkl;
     double workev[90];
@@ -266,7 +259,7 @@ L10:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    dnaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info, (ftnlen)1, (ftnlen)2);
+    dnaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info);
 
     if (ido == -1 || ido == 1)
     {
@@ -332,7 +325,7 @@ L10:
 
         rvec = TRUE_;
 
-        dneupd_(&rvec, "A", select, d, &d[30], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+        dneupd_(&rvec, "A", select, d, &d[30], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /*        %-----------------------------------------------% */
         /*        | The real part of the eigenvalue is returned   | */
@@ -441,10 +434,7 @@ L10:
             /*            | Display computed residuals. | */
             /*            %-----------------------------% */
 
-            dmout_(&c__6, &nconv, &c__3, d, &c__30, &c_n6,
-                   "Ritz values (R"
-                   "eal,Imag) and relative residuals",
-                   (ftnlen)46);
+            dmout_(&c__6, &nconv, &c__3, d, &c__30, &c_n6,"Ritz values (Real,Imag) and relative residuals");
         }
 
         /*        %-------------------------------------------% */
@@ -554,7 +544,6 @@ int av_(a_int *nx, double *v, double *w)
     a_int j;
     double h2;
     a_int lo;
-    extern int tv_(a_int *, double *, double *), daxpy_(a_int *, double *, double *, a_int *, double *, a_int *);
 
     /*     Computes w <--- OP*v, where OP is the nx*nx by nx*nx block */
     /*     tridiagonal matrix */

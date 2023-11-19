@@ -321,10 +321,7 @@ int znband_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
 
     /* Local variables */
     a_int i, j, ido, imid, mode, ibot, ierr, itop;
-    extern int zgbmv_(char *, a_int *, a_int *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen);
     a_int ipntr[14];
-    extern int zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), zgbtrf_(a_int *, a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *), znaupd_(a_int *, char *, a_int *, char *, a_int *, double *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, double *, a_int *, ftnlen, ftnlen), zlacpy_(char *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, ftnlen),
-        zneupd_(a_bool *, char *, a_bool *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, char *, a_int *, char *, a_int *, double *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, double *, a_int *, ftnlen, ftnlen, ftnlen), zgbtrs_(char *, a_int *, a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___7 = {0, 6, 0, 0, 0};
@@ -447,7 +444,7 @@ int znband_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
         /*         | to factor M.                                  | */
         /*         %-----------------------------------------------% */
 
-        zlacpy_("A", &ibot, n, &mb[mb_offset], lda, &fac[fac_offset], lda, (ftnlen)1);
+        zlacpy_("A", &ibot, n, &mb[mb_offset], lda, &fac[fac_offset], lda);
         zgbtrf_(n, n, kl, ku, &fac[fac_offset], lda, &iwork[1], &ierr);
         if (ierr != 0)
         {
@@ -473,7 +470,7 @@ int znband_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
             /*            | Construct (A - sigma*I) | */
             /*            %-------------------------% */
 
-            zlacpy_("A", &ibot, n, &ab[ab_offset], lda, &fac[fac_offset], lda, (ftnlen)1);
+            zlacpy_("A", &ibot, n, &ab[ab_offset], lda, &fac[fac_offset], lda);
             i__1 = *n;
             for (j = 1; j <= i__1; ++j)
             {
@@ -535,7 +532,7 @@ int znband_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
 
 L40:
 
-    znaupd_(&ido, bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, &rwork[1], info, (ftnlen)1, (ftnlen)2);
+    znaupd_(&ido, bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, &rwork[1], info);
 
     if (ido == -1)
     {
@@ -547,7 +544,7 @@ L40:
             /*           | Perform  y <--- OP*x = A*x | */
             /*           %----------------------------% */
 
-            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
+            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
         }
         else if (mode == 2)
         {
@@ -556,9 +553,9 @@ L40:
             /*           | Perform  y <--- OP*x = inv[M]*A*x | */
             /*           %-----------------------------------% */
 
-            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
+            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
 
-            zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+            zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 s_wsle(&io___16);
@@ -583,9 +580,9 @@ L40:
             /*           | range of OP.                            | */
             /*           %-----------------------------------------% */
 
-            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
+            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
 
-            zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+            zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 s_wsle(&io___19);
@@ -611,7 +608,7 @@ L40:
             /*           | Perform  y <--- OP*x = A*x | */
             /*           %----------------------------% */
 
-            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
+            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
         }
         else if (mode == 2)
         {
@@ -620,9 +617,9 @@ L40:
             /*           | Perform  y <--- OP*x = inv[M]*A*x | */
             /*           %-----------------------------------% */
 
-            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
+            zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
 
-            zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], ldv, &ierr, (ftnlen)11);
+            zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], ldv, &ierr);
             if (ierr != 0)
             {
                 s_wsle(&io___22);
@@ -648,7 +645,7 @@ L40:
                 /*              %----------------------------------% */
 
                 zcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+                zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     s_wsle(&io___25);
@@ -673,7 +670,7 @@ L40:
                 /*              %--------------------------------------% */
 
                 zcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-                zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+                zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     s_wsle(&io___28);
@@ -697,7 +694,7 @@ L40:
         /*        | Perform y <-- M*x  | */
         /*        %--------------------% */
 
-        zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1, (ftnlen)11);
+        zgbmv_("Notranspose", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
     }
     else
     {
@@ -732,7 +729,7 @@ L40:
         else
         {
 
-            zneupd_(rvec, howmny, &select[1], &d[1], &z[z_offset], ldz, sigma, &workev[1], bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, &rwork[1], info, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+            zneupd_(rvec, howmny, &select[1], &d[1], &z[z_offset], ldz, sigma, &workev[1], bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, &rwork[1], info);
 
             if (*info != 0)
             {

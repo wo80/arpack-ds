@@ -214,7 +214,9 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int dsaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *mode, double *resid, double *rnorm, double *v, a_int *ldv, double *h, a_int *ldh, a_int *ipntr, double *workd, a_int *info, ftnlen bmat_len)
+int dsaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *mode, double *resid,
+     double *rnorm, double *v, a_int *ldv, double *h, a_int *ldh, a_int *ipntr, double *workd,
+     a_int *info)
 {
     /* Initialized data */
 
@@ -232,21 +234,13 @@ int dsaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *mode, 
     static float t0, t1, t2, t3, t4, t5;
     a_int jj;
     static a_int ipj, irj, ivj;
-    extern double ddot_(a_int *, double *, a_int *, double *, a_int *);
     static a_int ierr, iter, itry;
-    extern double dnrm2_(a_int *, double *, a_int *);
     double temp1;
     static a_bool orth1, orth2, step3, step4;
-    extern int dscal_(a_int *, double *, double *, a_int *), dgemv_(char *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen);
     a_int infol;
-    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *);
     double xtemp[2];
-    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen);
     static double wnorm;
-    extern int ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), dgetv0_(a_int *, char *, a_int *, a_bool *, a_int *, a_int *, double *, a_int *, double *, double *, a_int *, double *, a_int *, ftnlen);
     static double rnorm1;
-    extern double dlamch_(char *, ftnlen);
-    extern int dlascl_(char *, a_int *, a_int *, double *, double *, a_int *, a_int *, double *, a_int *, a_int *, ftnlen), arscnd_(float *);
     static double safmin;
     static a_bool rstart;
     static a_int msglvl;
@@ -418,14 +412,8 @@ L1000:
 
     if (msglvl > 2)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
-               "_saitr: generat"
-               "ing Arnoldi vector no.",
-               (ftnlen)37);
-        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
-               "_saitr: B-no"
-               "rm of the current residual =",
-               (ftnlen)40);
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_saitr: generating Arnoldi vector no.");
+        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,"_saitr: B-norm of the current residual =");
     }
 
     /*        %---------------------------------------------------------% */
@@ -446,10 +434,7 @@ L1000:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
-               "_saitr: ****** "
-               "restart at step ******",
-               (ftnlen)37);
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_saitr: ****** restart at step ******");
     }
 
     /*           %---------------------------------------------% */
@@ -470,7 +455,7 @@ L30:
     /*           | RSTART = .true. flow returns here.   | */
     /*           %--------------------------------------% */
 
-    dgetv0_(ido, bmat, &itry, &b_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr, (ftnlen)1);
+    dgetv0_(ido, bmat, &itry, &b_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr);
     if (*ido != 99)
     {
         goto L9000;
@@ -520,8 +505,8 @@ L40:
         /*            | use LAPACK routine SLASCL               | */
         /*            %-----------------------------------------% */
 
-        dlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
-        dlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol, (ftnlen)7);
+        dlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol);
+        dlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol);
     }
 
     /*        %------------------------------------------------------% */
@@ -650,11 +635,11 @@ L65:
 
     if (*mode != 2)
     {
-        dgemv_("T", n, &j, &d_one, &v[v_offset], ldv, &workd[ipj], &i_one, &d_zero, &workd[irj], &i_one, (ftnlen)1);
+        dgemv_("T", n, &j, &d_one, &v[v_offset], ldv, &workd[ipj], &i_one, &d_zero, &workd[irj], &i_one);
     }
     else if (*mode == 2)
     {
-        dgemv_("T", n, &j, &d_one, &v[v_offset], ldv, &workd[ivj], &i_one, &d_zero, &workd[irj], &i_one, (ftnlen)1);
+        dgemv_("T", n, &j, &d_one, &v[v_offset], ldv, &workd[ivj], &i_one, &d_zero, &workd[irj], &i_one);
     }
 
     /*        %--------------------------------------% */
@@ -662,7 +647,7 @@ L65:
     /*        | RESID contains OP*v_{j}. See STEP 3. | */
     /*        %--------------------------------------% */
 
-    dgemv_("N", n, &j, &d_n1, &v[v_offset], ldv, &workd[irj], &i_one, &d_one, &resid[1], &i_one, (ftnlen)1);
+    dgemv_("N", n, &j, &d_n1, &v[v_offset], ldv, &workd[irj], &i_one, &d_one, &resid[1], &i_one);
 
     /*        %--------------------------------------% */
     /*        | Extend H to have j rows and columns. | */
@@ -764,10 +749,7 @@ L80:
     {
         xtemp[0] = wnorm;
         xtemp[1] = *rnorm;
-        dvout_(&debug_1.logfil, &i_two, xtemp, &debug_1.ndigit,
-               "_saitr: re-o"
-               "rthonalization ; wnorm and rnorm are",
-               (ftnlen)48);
+        dvout_(&debug_1.logfil, &i_two, xtemp, &debug_1.ndigit,"_saitr: re-orthonalization ; wnorm and rnorm are");
     }
 
     /*        %----------------------------------------------------% */
@@ -775,7 +757,7 @@ L80:
     /*        | WORKD(IRJ:IRJ+J-1) = v(:,1:J)'*WORKD(IPJ:IPJ+N-1). | */
     /*        %----------------------------------------------------% */
 
-    dgemv_("T", n, &j, &d_one, &v[v_offset], ldv, &workd[ipj], &i_one, &d_zero, &workd[irj], &i_one, (ftnlen)1);
+    dgemv_("T", n, &j, &d_one, &v[v_offset], ldv, &workd[ipj], &i_one, &d_zero, &workd[irj], &i_one);
 
     /*        %----------------------------------------------% */
     /*        | Compute the correction to the residual:      | */
@@ -785,7 +767,7 @@ L80:
     /*        | H(j,j) is updated.                           | */
     /*        %----------------------------------------------% */
 
-    dgemv_("N", n, &j, &d_n1, &v[v_offset], ldv, &workd[irj], &i_one, &d_one, &resid[1], &i_one, (ftnlen)1);
+    dgemv_("N", n, &j, &d_n1, &v[v_offset], ldv, &workd[irj], &i_one, &d_one, &resid[1], &i_one);
 
     if (j == 1 || rstart)
     {
@@ -842,18 +824,12 @@ L90:
 
     if (msglvl > 0 && iter > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
-               "_saitr: Iterati"
-               "ve refinement for Arnoldi residual",
-               (ftnlen)49);
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_saitr: Iterative refinement for Arnoldi residual");
         if (msglvl > 2)
         {
             xtemp[0] = *rnorm;
             xtemp[1] = rnorm1;
-            dvout_(&debug_1.logfil, &i_two, xtemp, &debug_1.ndigit,
-                   "_saitr: "
-                   "iterative refinement ; rnorm and rnorm1 are",
-                   (ftnlen)51);
+            dvout_(&debug_1.logfil, &i_two, xtemp, &debug_1.ndigit,"_saitr: iterative refinement ; rnorm and rnorm1 are");
         }
     }
 
@@ -947,17 +923,11 @@ L100:
         if (msglvl > 1)
         {
             i__1 = *k + *np;
-            dvout_(&debug_1.logfil, &i__1, &h[(h_dim1 << 1) + 1], &debug_1.ndigit,
-                   "_saitr: main diagonal of matrix H of st"
-                   "ep K+NP.",
-                   (ftnlen)47);
+            dvout_(&debug_1.logfil, &i__1, &h[(h_dim1 << 1) + 1], &debug_1.ndigit,"_saitr: main diagonal of matrix H of step K+NP.");
             if (*k + *np > 1)
             {
                 i__1 = *k + *np - 1;
-                dvout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit,
-                       "_saitr: sub diagonal of matrix H of"
-                       " step K+NP.",
-                       (ftnlen)46);
+                dvout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit,"_saitr: sub diagonal of matrix H of step K+NP.");
             }
         }
 

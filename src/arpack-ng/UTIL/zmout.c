@@ -30,7 +30,7 @@ static a_int c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int zmout_(a_int *lout, a_int *m, a_int *n, a_dcomplex *a, a_int *lda, a_int *idigit, char *ifmt, ftnlen ifmt_len)
+int zmout_(a_int *lout, a_int *m, a_int *n, a_dcomplex *a, a_int *lda, a_int *idigit, char *ifmt)
 {
     /* Initialized data */
 

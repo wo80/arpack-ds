@@ -43,25 +43,19 @@ static a_int c_n6 = -6;
     a_int mode, info;
     a_bool rvec;
     a_int isub, isup;
-    extern double snrm2_(a_int *, float *, a_int *);
     a_int idiag;
     char which[2];
     float resid[1000];
-    extern int sgbmv_(char *, a_int *, a_int *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen);
     a_int nconv;
     a_fcomplex workc[1000];
     float workd[3000];
     a_bool first;
     a_int iwork[1000];
     float workl[7800];
-    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
-    extern double slapy2_(float *, float *);
-    extern int snband_(a_bool *, char *, a_bool *, float *, float *, float *, a_int *, float *, float *, float *, a_int *, float *, float *, a_int *, float *, a_fcomplex *, a_int *, a_int *, char *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, float *, float *, a_int *, a_fcomplex *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int iparam[11];
     float sigmai;
     a_bool select[50];
     float sigmar;
-    extern int slaset_(char *, a_int *, a_int *, float *, float *, float *, a_int *, ftnlen);
     a_int maxitr, lworkl;
     float workev[150];
 
@@ -246,9 +240,9 @@ static a_int c_n6 = -6;
     /*     | Zero out the workspace for banded matrices. | */
     /*     %---------------------------------------------% */
 
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50, (ftnlen)1);
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50, (ftnlen)1);
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50, (ftnlen)1);
+    slaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50);
+    slaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50);
+    slaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50);
 
     /*     %-------------------------------------% */
     /*     | KU, KL are number of superdiagonals | */
@@ -301,7 +295,7 @@ static a_int c_n6 = -6;
     /*     %------------------------------------------------% */
 
     rvec = TRUE_;
-    snband_(&rvec, "A", select, d, &d[50], v, &c__1000, &sigmar, &sigmai, workev, &n, a, m, &c__50, rfac, cfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, workc, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
+    snband_(&rvec, "A", select, d, &d[50], v, &c__1000, &sigmar, &sigmai, workev, &n, a, m, &c__50, rfac, cfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, workc, iwork, &info);
 
     if (info == 0)
     {
@@ -379,8 +373,8 @@ static a_int c_n6 = -6;
                 /*              | Ritz value is real | */
                 /*              %--------------------% */
 
-                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
-                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
+                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 r__1 = -d[j - 1];
                 saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
                 d[j + 99] = snrm2_(&n, ax, &c__1);
@@ -396,18 +390,18 @@ static a_int c_n6 = -6;
                 /*              | pair is computed.      | */
                 /*              %------------------------% */
 
-                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
-                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
+                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 r__1 = -d[j - 1];
                 saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
-                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
+                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 saxpy_(&n, &d[j + 49], mx, &c__1, ax, &c__1);
                 d[j + 99] = snrm2_(&n, ax, &c__1);
-                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
-                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
+                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 r__1 = -d[j - 1];
                 saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
-                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
+                sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 r__1 = -d[j + 49];
                 saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
                 r__1 = snrm2_(&n, ax, &c__1);
@@ -423,10 +417,7 @@ static a_int c_n6 = -6;
 
             /* L90: */
         }
-        smout_(&c__6, &nconv, &c__3, d, &c__50, &c_n6,
-               "Ritz values (Real,"
-               "Imag) and relative residuals",
-               (ftnlen)46);
+        smout_(&c__6, &nconv, &c__3, d, &c__50, &c_n6,"Ritz values (Real,Imag) and relative residuals");
     }
     else
     {

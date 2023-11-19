@@ -27,7 +27,7 @@ static a_int c__3 = 3;
 
 /* ----------------------------------------------------------------------- */
 
-int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit, char *ifmt, ftnlen ifmt_len)
+int dmout_(a_int *lout, a_int *m, a_int *n, double *a, a_int *lda, a_int *idigit, char *ifmt)
 {
     /* Initialized data */
 

@@ -29,10 +29,8 @@ static a_int c__4 = 4;
     a_int j, m, n;
     float s[50] /* was [25][2] */, u[5000] /* was [500][10] */, v[6250]
         /* was [250][25] */;
-    extern int av_(a_int *, a_int *, float *, float *);
     float ax[500];
     a_int ido, ncv, nev;
-    extern int atv_(a_int *, a_int *, float *, float *);
     float tol;
     char bmat[1];
     a_int info;
@@ -40,21 +38,16 @@ static a_int c__4 = 4;
     a_int ierr;
     float temp;
     a_int mode1;
-    extern double snrm2_(a_int *, float *, a_int *);
     float sigma;
     char which[2];
-    extern int sscal_(a_int *, float *, float *, a_int *);
     float resid[250];
     a_int nconv;
     float workd[750];
     a_int ipntr[11];
-    extern int scopy_(a_int *, float *, a_int *, float *, a_int *);
     float workl[825];
-    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
     a_int iparam[11];
     a_bool select[25];
     a_int ishfts, maxitr;
-    extern int ssaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen), sseupd_(a_bool *, char *, a_bool *, float *, float *, a_int *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int lworkl;
 
     /* Fortran I/O blocks */
@@ -406,7 +399,7 @@ L10:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    ssaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__250, iparam, ipntr, workd, workl, &lworkl, &info, (ftnlen)1, (ftnlen)2);
+    ssaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__250, iparam, ipntr, workd, workl, &lworkl, &info);
 
     if (ido == -1 || ido == 1)
     {
@@ -477,7 +470,7 @@ L10:
 
         rvec = TRUE_;
 
-        sseupd_(&rvec, "All", select, s, v, &c__250, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__250, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)3, (ftnlen)1, (ftnlen)2);
+        sseupd_(&rvec, "All", select, s, v, &c__250, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__250, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /*        %-----------------------------------------------% */
         /*        | Singular values are returned in the first     | */
@@ -561,10 +554,7 @@ L10:
             /*           | Display computed residuals    | */
             /*           %-------------------------------% */
 
-            smout_(&c__6, &nconv, &c__2, s, &c__25, &c_n6,
-                   "Singular values "
-                   "and direct residuals",
-                   (ftnlen)36);
+            smout_(&c__6, &nconv, &c__2, s, &c__25, &c_n6,"Singular values and direct residuals");
         }
 
         /*        %------------------------------------------% */

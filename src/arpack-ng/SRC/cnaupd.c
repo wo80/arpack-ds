@@ -381,7 +381,9 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int cnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *tol, a_fcomplex *resid, a_int *ncv, a_fcomplex *v, a_int *ldv, a_int *iparam, a_int *ipntr, a_fcomplex *workd, a_fcomplex *workl, a_int *lworkl, float *rwork, a_int *info, ftnlen bmat_len, ftnlen which_len)
+int cnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *tol,
+     a_fcomplex *resid, a_int *ncv, a_fcomplex *v, a_int *ldv, a_int *iparam, a_int *ipntr,
+     a_fcomplex *workd, a_fcomplex *workl, a_int *lworkl, float *rwork, a_int *info)
 {
     /* Format strings */
     static char fmt_1000[] = "(//,5x,\002==================================="
@@ -423,11 +425,7 @@ int cnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *to
     static a_int nb, ih, iq, np, iw, ldh, ldq, nev0, mode;
     a_int ierr;
     static a_int iupd, next, ritz;
-    extern int cvout_(a_int *, a_int *, a_fcomplex *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), cnaup2_(a_int *, char *, a_int *, char *, a_int *, a_int *, float *, a_fcomplex *, a_int *, a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, float *, a_int *, ftnlen, ftnlen);
-    extern double slamch_(char *, ftnlen);
-    extern int arscnd_(float *);
     static a_int bounds, ishift, msglvl, mxiter;
-    extern int cstatn_(void);
 
     /* Fortran I/O blocks */
     static cilist io___21 = {0, 6, 0, fmt_1000, 0};
@@ -654,7 +652,7 @@ int cnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *to
     /*     | Carry out the Implicitly restarted Arnoldi Iteration. | */
     /*     %-------------------------------------------------------% */
 
-    cnaup2_(ido, bmat, n, which, &nev0, &np, tol, &resid[1], &mode, &iupd, &ishift, &mxiter, &v[v_offset], ldv, &workl[ih], &ldh, &workl[ritz], &workl[bounds], &workl[iq], &ldq, &workl[iw], &ipntr[1], &workd[1], &rwork[1], info, (ftnlen)1, (ftnlen)2);
+    cnaup2_(ido, bmat, n, which, &nev0, &np, tol, &resid[1], &mode, &iupd, &ishift, &mxiter, &v[v_offset], ldv, &workl[ih], &ldh, &workl[ritz], &workl[bounds], &workl[iq], &ldq, &workl[iw], &ipntr[1], &workd[1], &rwork[1], info);
 
     /*     %--------------------------------------------------% */
     /*     | ido .ne. 99 implies use of reverse communication | */
@@ -692,22 +690,10 @@ int cnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *to
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &mxiter, &debug_1.ndigit,
-               "_naupd: Nu"
-               "mber of update iterations taken",
-               (ftnlen)41);
-        ivout_(&debug_1.logfil, &i_one, &np, &debug_1.ndigit,
-               "_naupd: Number"
-               " of wanted \"converged\" Ritz values",
-               (ftnlen)48);
-        cvout_(&debug_1.logfil, &np, &workl[ritz], &debug_1.ndigit,
-               "_naupd:"
-               " The final Ritz values",
-               (ftnlen)29);
-        cvout_(&debug_1.logfil, &np, &workl[bounds], &debug_1.ndigit,
-               "_naup"
-               "d: Associated Ritz estimates",
-               (ftnlen)33);
+        ivout_(&debug_1.logfil, &i_one, &mxiter, &debug_1.ndigit,"_naupd: Number of update iterations taken");
+        ivout_(&debug_1.logfil, &i_one, &np, &debug_1.ndigit,"_naupd: Number of wanted \"converged\" Ritz values");
+        cvout_(&debug_1.logfil, &np, &workl[ritz], &debug_1.ndigit,"_naupd: The final Ritz values");
+        cvout_(&debug_1.logfil, &np, &workl[bounds], &debug_1.ndigit,"_naupd: Associated Ritz estimates");
     }
 
     arscnd_(&t1);

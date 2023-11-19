@@ -100,7 +100,8 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int sngets_(a_int *ishift, char *which, a_int *kev, a_int *np, float *ritzr, float *ritzi, float *bounds, float *shiftr, float *shifti, ftnlen which_len)
+int sngets_(a_int *ishift, char *which, a_int *kev, a_int *np, float *ritzr, float *ritzi,
+     float *bounds, float *shiftr, float *shifti)
 {
     /* System generated locals */
     a_int i__1;
@@ -110,9 +111,7 @@ int sngets_(a_int *ishift, char *which, a_int *kev, a_int *np, float *ritzr, flo
 
     /* Local variables */
     static float t0, t1;
-    extern int ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen), arscnd_(float *);
     a_int msglvl;
-    extern int ssortc_(char *, a_bool *, a_int *, float *, float *, float *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -189,36 +188,36 @@ int sngets_(a_int *ishift, char *which, a_int *kev, a_int *np, float *ritzr, flo
     if (s_cmp(which, "LM", (ftnlen)2, (ftnlen)2) == 0)
     {
         i__1 = *kev + *np;
-        ssortc_("LR", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_("LR", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
     }
     else if (s_cmp(which, "SM", (ftnlen)2, (ftnlen)2) == 0)
     {
         i__1 = *kev + *np;
-        ssortc_("SR", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_("SR", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
     }
     else if (s_cmp(which, "LR", (ftnlen)2, (ftnlen)2) == 0)
     {
         i__1 = *kev + *np;
-        ssortc_("LM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_("LM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
     }
     else if (s_cmp(which, "SR", (ftnlen)2, (ftnlen)2) == 0)
     {
         i__1 = *kev + *np;
-        ssortc_("SM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_("SM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
     }
     else if (s_cmp(which, "LI", (ftnlen)2, (ftnlen)2) == 0)
     {
         i__1 = *kev + *np;
-        ssortc_("LM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_("LM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
     }
     else if (s_cmp(which, "SI", (ftnlen)2, (ftnlen)2) == 0)
     {
         i__1 = *kev + *np;
-        ssortc_("SM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_("SM", &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
     }
 
     i__1 = *kev + *np;
-    ssortc_(which, &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+    ssortc_(which, &b_true, &i__1, &ritzr[1], &ritzi[1], &bounds[1]);
 
     /*     %-------------------------------------------------------% */
     /*     | Increase KEV by one if the ( ritzr(np),ritzi(np) )    | */
@@ -245,7 +244,7 @@ int sngets_(a_int *ishift, char *which, a_int *kev, a_int *np, float *ritzr, flo
         /*        | Be careful and use 'SR' since we want to sort BOUNDS! | */
         /*        %-------------------------------------------------------% */
 
-        ssortc_("SR", &b_true, np, &bounds[1], &ritzr[1], &ritzi[1], (ftnlen)2);
+        ssortc_("SR", &b_true, np, &bounds[1], &ritzr[1], &ritzi[1]);
     }
 
     arscnd_(&t1);
@@ -253,23 +252,14 @@ int sngets_(a_int *ishift, char *which, a_int *kev, a_int *np, float *ritzr, flo
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit, "_ngets: KEV is", (ftnlen)14);
-        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit, "_ngets: NP is", (ftnlen)13);
+        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit, "_ngets: KEV is");
+        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit, "_ngets: NP is");
         i__1 = *kev + *np;
-        svout_(&debug_1.logfil, &i__1, &ritzr[1], &debug_1.ndigit,
-               "_ngets: "
-               "Eigenvalues of current H matrix -- float part",
-               (ftnlen)52);
+        svout_(&debug_1.logfil, &i__1, &ritzr[1], &debug_1.ndigit,"_ngets: Eigenvalues of current H matrix -- float part");
         i__1 = *kev + *np;
-        svout_(&debug_1.logfil, &i__1, &ritzi[1], &debug_1.ndigit,
-               "_ngets: "
-               "Eigenvalues of current H matrix -- imag part",
-               (ftnlen)52);
+        svout_(&debug_1.logfil, &i__1, &ritzi[1], &debug_1.ndigit,"_ngets: Eigenvalues of current H matrix -- imag part");
         i__1 = *kev + *np;
-        svout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit,
-               "_ngets:"
-               " Ritz estimates of the current KEV+NP Ritz values",
-               (ftnlen)56);
+        svout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit,"_ngets: Ritz estimates of the current KEV+NP Ritz values");
     }
 
     return 0;

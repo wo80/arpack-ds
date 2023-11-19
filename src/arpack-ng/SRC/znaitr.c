@@ -218,7 +218,9 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int znaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_dcomplex *resid, double *rnorm, a_dcomplex *v, a_int *ldv, a_dcomplex *h, a_int *ldh, a_int *ipntr, a_dcomplex *workd, a_int *info, ftnlen bmat_len)
+int znaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_dcomplex *resid,
+     double *rnorm, a_dcomplex *v, a_int *ldv, a_dcomplex *h, a_int *ldh, a_int *ipntr,
+     a_dcomplex *workd, a_int *info)
 {
     /* Initialized data */
 
@@ -249,22 +251,11 @@ int znaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_
     a_int infol;
     a_dcomplex cnorm;
     double rtemp[2];
-    extern int zgemv_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen);
     static double wnorm;
-    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), zaxpy_(a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), zmout_(a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, char *, ftnlen), zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen);
-    extern double dlapy2_(double *, double *);
-    extern int dlabad_(double *, double *);
-    extern double dznrm2_(a_int *, a_dcomplex *, a_int *);
     static double rnorm1;
-    extern int zgetv0_(a_int *, char *, a_int *, a_bool *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, double *, a_int *, a_dcomplex *, a_int *, ftnlen);
-    extern double dlamch_(char *, ftnlen);
-    extern int arscnd_(float *), zdscal_(a_int *, double *, a_dcomplex *, a_int *);
     static a_bool rstart;
     static a_int msglvl;
     static double smlnum;
-    extern void zzdotc_(a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *);
-    extern double zlanhs_(char *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, ftnlen);
-    extern int zlascl_(char *, a_int *, a_int *, double *, double *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -432,14 +423,8 @@ L1000:
 
     if (msglvl > 1)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
-               "_naitr: generat"
-               "ing Arnoldi vector number",
-               (ftnlen)40);
-        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
-               "_naitr: B-no"
-               "rm of the current residual is",
-               (ftnlen)41);
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_naitr: generating Arnoldi vector number");
+        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,"_naitr: B-norm of the current residual is");
     }
 
     /*        %---------------------------------------------------% */
@@ -462,10 +447,7 @@ L1000:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
-               "_naitr: ****** "
-               "RESTART AT STEP ******",
-               (ftnlen)37);
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_naitr: ****** RESTART AT STEP ******");
     }
 
     /*           %---------------------------------------------% */
@@ -487,7 +469,7 @@ L30:
     /*           | RSTART = .true. flow returns here.   | */
     /*           %--------------------------------------% */
 
-    zgetv0_(ido, bmat, &itry, &b_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr, (ftnlen)1);
+    zgetv0_(ido, bmat, &itry, &b_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr);
     if (*ido != 99)
     {
         goto L9000;
@@ -537,8 +519,8 @@ L40:
         /*            | use LAPACK routine zlascl               | */
         /*            %-----------------------------------------% */
 
-        zlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol, (ftnlen)7);
-        zlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol, (ftnlen)7);
+        zlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol);
+        zlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol);
     }
 
     /*        %------------------------------------------------------% */
@@ -649,7 +631,7 @@ L60:
     /*        | WORKD(IPJ:IPJ+N-1) contains B*OP*v_{j}.  | */
     /*        %------------------------------------------% */
 
-    zgemv_("C", n, &j, &z_one, &v[v_offset], ldv, &workd[ipj], &i_one, &z_zero, &h[j * h_dim1 + 1], &i_one, (ftnlen)1);
+    zgemv_("C", n, &j, &z_one, &v[v_offset], ldv, &workd[ipj], &i_one, &z_zero, &h[j * h_dim1 + 1], &i_one);
 
     /*        %--------------------------------------% */
     /*        | Orthogonalize r_{j} against V_{j}.   | */
@@ -657,7 +639,7 @@ L60:
     /*        %--------------------------------------% */
 
     z__1.r = -1., z__1.i = -0.;
-    zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &h[j * h_dim1 + 1], &i_one, &z_one, &resid[1], &i_one, (ftnlen)1);
+    zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &h[j * h_dim1 + 1], &i_one, &z_one, &resid[1], &i_one);
 
     if (j > 1)
     {
@@ -760,11 +742,8 @@ L80:
     {
         rtemp[0] = wnorm;
         rtemp[1] = *rnorm;
-        dvout_(&debug_1.logfil, &i_two, rtemp, &debug_1.ndigit,
-               "_naitr: re-o"
-               "rthogonalization; wnorm and rnorm are",
-               (ftnlen)49);
-        zvout_(&debug_1.logfil, &j, &h[j * h_dim1 + 1], &debug_1.ndigit, "_naitr: j-th column of H", (ftnlen)24);
+        dvout_(&debug_1.logfil, &i_two, rtemp, &debug_1.ndigit,"_naitr: re-orthogonalization; wnorm and rnorm are");
+        zvout_(&debug_1.logfil, &j, &h[j * h_dim1 + 1], &debug_1.ndigit, "_naitr: j-th column of H");
     }
 
     /*        %----------------------------------------------------% */
@@ -772,7 +751,7 @@ L80:
     /*        | WORKD(IRJ:IRJ+J-1) = v(:,1:J)'*WORKD(IPJ:IPJ+N-1). | */
     /*        %----------------------------------------------------% */
 
-    zgemv_("C", n, &j, &z_one, &v[v_offset], ldv, &workd[ipj], &i_one, &z_zero, &workd[irj], &i_one, (ftnlen)1);
+    zgemv_("C", n, &j, &z_one, &v[v_offset], ldv, &workd[ipj], &i_one, &z_zero, &workd[irj], &i_one);
 
     /*        %---------------------------------------------% */
     /*        | Compute the correction to the residual:     | */
@@ -782,7 +761,7 @@ L80:
     /*        %---------------------------------------------% */
 
     z__1.r = -1., z__1.i = -0.;
-    zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &workd[irj], &i_one, &z_one, &resid[1], &i_one, (ftnlen)1);
+    zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &workd[irj], &i_one, &z_one, &resid[1], &i_one);
     zaxpy_(&j, &z_one, &workd[irj], &i_one, &h[j * h_dim1 + 1], &i_one);
 
     orth2 = TRUE_;
@@ -837,18 +816,12 @@ L90:
 
     if (msglvl > 0 && iter > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,
-               "_naitr: Iterati"
-               "ve refinement for Arnoldi residual",
-               (ftnlen)49);
+        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_naitr: Iterative refinement for Arnoldi residual");
         if (msglvl > 2)
         {
             rtemp[0] = *rnorm;
             rtemp[1] = rnorm1;
-            dvout_(&debug_1.logfil, &i_two, rtemp, &debug_1.ndigit,
-                   "_naitr: "
-                   "iterative refinement ; rnorm and rnorm1 are",
-                   (ftnlen)51);
+            dvout_(&debug_1.logfil, &i_two, rtemp, &debug_1.ndigit,"_naitr: iterative refinement ; rnorm and rnorm1 are");
         }
     }
 
@@ -965,10 +938,7 @@ L100:
         {
             i__1 = *k + *np;
             i__2 = *k + *np;
-            zmout_(&debug_1.logfil, &i__1, &i__2, &h[h_offset], ldh, &debug_1.ndigit,
-                   "_naitr: Final upper Hessenberg matrix H"
-                   " of order K+NP",
-                   (ftnlen)53);
+            zmout_(&debug_1.logfil, &i__1, &i__2, &h[h_offset], ldh, &debug_1.ndigit,"_naitr: Final upper Hessenberg matrix H of order K+NP");
         }
 
         goto L9000;

@@ -23,7 +23,7 @@ static a_int c__1 = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int ivout_(a_int *lout, a_int *n, a_int *ix, a_int *idigit, char *ifmt, ftnlen ifmt_len)
+int ivout_(a_int *lout, a_int *n, a_int *ix, a_int *idigit, char *ifmt)
 {
     /* Format strings */
     static char fmt_2000[] = "(/1x,a/1x,a)";

@@ -60,7 +60,7 @@
 
 /* ----------------------------------------------------------------------- */
 
-int dsortr_(char *which, a_bool *apply, a_int *n, double *x1, double *x2, ftnlen which_len)
+int dsortr_(char *which, a_bool *apply, a_int *n, double *x1, double *x2)
 {
     /* System generated locals */
     a_int i__1;

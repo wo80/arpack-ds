@@ -31,7 +31,6 @@ static a_fcomplex c_b151 = {4.f, 0.f};
     a_int j, n;
     a_fcomplex v[7680] /* was [256][30] */;
     float rd[90] /* was [30][3] */;
-    extern int av_(a_int *, a_fcomplex *, a_fcomplex *);
     a_fcomplex ax[256];
     a_int nx, ido, ncv, nev;
     float tol;
@@ -43,17 +42,12 @@ static a_fcomplex c_b151 = {4.f, 0.f};
     char which[2];
     a_fcomplex resid[256];
     a_int nconv;
-    extern int caxpy_(a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
     a_fcomplex workd[768];
     a_int ipntr[14];
     a_fcomplex workl[2850];
     float rwork[30];
-    extern int smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
-    extern double scnrm2_(a_int *, a_fcomplex *, a_int *), slapy2_(float *, float *);
     a_int iparam[11];
-    extern int cnaupd_(a_int *, char *, a_int *, char *, a_int *, float *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, float *, a_int *, ftnlen, ftnlen);
     a_bool select[30];
-    extern int cneupd_(a_bool *, char *, a_bool *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, char *, a_int *, char *, a_int *, float *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, float *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int ishfts, maxitr, lworkl;
     a_fcomplex workev[60];
 
@@ -370,7 +364,7 @@ L10:
     /*        | either convergence is indicated or maxitr   | */
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
-    cnaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &info, (ftnlen)1, (ftnlen)2);
+    cnaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
     if (ido == -1 || ido == 1)
     {
@@ -445,7 +439,7 @@ L10:
 
         rvec = TRUE_;
 
-        cneupd_(&rvec, "A", select, d, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+        cneupd_(&rvec, "A", select, d, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr);
 
         /*        %-----------------------------------------------% */
         /*        | Eigenvalues are returned in the one           | */
@@ -517,10 +511,7 @@ L10:
             /*            | Display computed residuals. | */
             /*            %-----------------------------% */
 
-            smout_(&c__6, &nconv, &c__3, rd, &c__30, &c_n6,
-                   "Ritz values (Re"
-                   "al, Imag) and relative residuals",
-                   (ftnlen)47);
+            smout_(&c__6, &nconv, &c__3, rd, &c__30, &c_n6,"Ritz values (Real, Imag) and relative residuals");
         }
 
         /*        %-------------------------------------------% */
@@ -633,7 +624,6 @@ int av_(a_int *nx, a_fcomplex *v, a_fcomplex *w)
     a_int j;
     a_fcomplex h2;
     a_int lo;
-    extern int tv_(a_int *, a_fcomplex *, a_fcomplex *), caxpy_(a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
 
     /*     Computes w <--- OP*v, where OP is the nx*nx by nx*nx block */
     /*     tridiagonal matrix */

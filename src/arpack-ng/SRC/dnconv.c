@@ -83,8 +83,6 @@ int dnconv_(a_int *n, double *ritzr, double *ritzi, double *bounds, double *tol,
     a_int i;
     static float t0, t1;
     double eps23, temp;
-    extern double dlapy2_(double *, double *), dlamch_(char *, ftnlen);
-    extern int arscnd_(float *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */

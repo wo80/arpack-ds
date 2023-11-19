@@ -169,16 +169,8 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     a_int iend;
     static double unfl, ovfl;
     a_dcomplex sigma;
-    extern int zscal_(a_int *, a_dcomplex *, a_dcomplex *, a_int *), zgemv_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen), zcopy_(a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), zaxpy_(a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *), zmout_(a_int *, a_int *, a_int *, a_dcomplex *, a_int *, a_int *, char *, ftnlen),
-        zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen);
-    extern double dlapy2_(double *, double *);
-    extern int dlabad_(double *, double *);
-    extern double dlamch_(char *, ftnlen);
-    extern int arscnd_(float *);
     a_int istart, kplusp, msglvl;
     static double smlnum;
-    extern int zlacpy_(char *, a_int *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, ftnlen), zlartg_(a_dcomplex *, a_dcomplex *, double *, a_dcomplex *, a_dcomplex *), zlaset_(char *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_dcomplex *, a_int *, ftnlen);
-    extern double zlanhs_(char *, a_int *, a_dcomplex *, a_int *, a_dcomplex *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -289,7 +281,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     /*     | the rotations and reflections              | */
     /*     %--------------------------------------------% */
 
-    zlaset_("All", &kplusp, &kplusp, &z_zero, &z_one, &q[q_offset], ldq, (ftnlen)3);
+    zlaset_("All", &kplusp, &kplusp, &z_zero, &z_one, &q[q_offset], ldq);
 
     /*     %----------------------------------------------% */
     /*     | Quick return if there are no shifts to apply | */
@@ -314,14 +306,8 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit,
-                   "_napps: sh"
-                   "ift number.",
-                   (ftnlen)21);
-            zvout_(&debug_1.logfil, &i_one, &sigma, &debug_1.ndigit,
-                   "_napps:"
-                   " Value of the shift ",
-                   (ftnlen)27);
+            ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit,"_napps: shift number.");
+            zvout_(&debug_1.logfil, &i_one, &sigma, &debug_1.ndigit,"_napps: Value of the shift ");
         }
 
         istart = 1;
@@ -352,12 +338,9 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit, "_napps: matrix splitting at row/column no.", (ftnlen)42);
-                    ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_napps: matrix splitting with shift number.", (ftnlen)43);
-                    zvout_(&debug_1.logfil, &i_one, &h[i + 1 + i * h_dim1], &debug_1.ndigit,
-                           "_napps: off diagonal "
-                           "element.",
-                           (ftnlen)29);
+                    ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit, "_napps: matrix splitting at row/column no.");
+                    ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_napps: matrix splitting with shift number.");
+                    zvout_(&debug_1.logfil, &i_one, &h[i + 1 + i * h_dim1], &debug_1.ndigit,"_napps: off diagonal element.");
                 }
                 iend = i;
                 i__3 = i + 1 + i * h_dim1;
@@ -371,14 +354,8 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &i_one, &istart, &debug_1.ndigit,
-                   "_napps"
-                   ": Start of current block ",
-                   (ftnlen)31);
-            ivout_(&debug_1.logfil, &i_one, &iend, &debug_1.ndigit,
-                   "_napps: "
-                   "End of current block ",
-                   (ftnlen)29);
+            ivout_(&debug_1.logfil, &i_one, &istart, &debug_1.ndigit,"_napps: Start of current block ");
+            ivout_(&debug_1.logfil, &i_one, &iend, &debug_1.ndigit,"_napps: End of current block ");
         }
 
         /*        %------------------------------------------------% */
@@ -620,7 +597,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     i__1 = *kev + 1 + *kev * h_dim1;
     if (h[i__1].r > 0.)
     {
-        zgemv_("N", n, &kplusp, &z_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &z_zero, &workd[*n + 1], &i_one, (ftnlen)1);
+        zgemv_("N", n, &kplusp, &z_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &z_zero, &workd[*n + 1], &i_one);
     }
 
     /*     %----------------------------------------------------------% */
@@ -632,7 +609,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     for (i = 1; i <= i__1; ++i)
     {
         i__2 = kplusp - i + 1;
-        zgemv_("N", n, &i__2, &z_one, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &z_zero, &workd[1], &i_one, (ftnlen)1);
+        zgemv_("N", n, &i__2, &z_one, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &z_zero, &workd[1], &i_one);
         zcopy_(n, &workd[1], &i_one, &v[(kplusp - i + 1) * v_dim1 + 1], &i_one);
         /* L140: */
     }
@@ -641,7 +618,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     /*     |  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). | */
     /*     %-------------------------------------------------% */
 
-    zlacpy_("A", n, kev, &v[(kplusp - *kev + 1) * v_dim1 + 1], ldv, &v[v_offset], ldv, (ftnlen)1);
+    zlacpy_("A", n, kev, &v[(kplusp - *kev + 1) * v_dim1 + 1], ldv, &v[v_offset], ldv);
 
     /*     %--------------------------------------------------------------% */
     /*     | Copy the (kev+1)-st column of (V*Q) in the appropriate place | */
@@ -670,18 +647,12 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
 
     if (msglvl > 1)
     {
-        zvout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}", (ftnlen)40);
-        zvout_(&debug_1.logfil, &i_one, &h[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}", (ftnlen)37);
-        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit,
-               "_napps: Order "
-               "of the final Hessenberg matrix ",
-               (ftnlen)45);
+        zvout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}");
+        zvout_(&debug_1.logfil, &i_one, &h[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}");
+        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit,"_napps: Order of the final Hessenberg matrix ");
         if (msglvl > 2)
         {
-            zmout_(&debug_1.logfil, kev, kev, &h[h_offset], ldh, &debug_1.ndigit,
-                   "_napps: updated Hessenberg matrix H for"
-                   " next iteration",
-                   (ftnlen)54);
+            zmout_(&debug_1.logfil, kev, kev, &h[h_offset], ldh, &debug_1.ndigit,"_napps: updated Hessenberg matrix H for next iteration");
         }
     }
 

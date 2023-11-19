@@ -43,23 +43,17 @@ static a_int c_n6 = -6;
     a_int mode, info;
     a_bool rvec;
     a_int isub, isup;
-    extern double dnrm2_(a_int *, double *, a_int *);
     a_int idiag;
-    extern int dgbmv_(char *, a_int *, a_int *, a_int *, a_int *, double *, double *, a_int *, double *, a_int *, double *, double *, a_int *, ftnlen);
     char which[2];
     double resid[1000];
     a_int nconv;
     a_dcomplex workc[1000];
     double workd[3000];
     a_bool first;
-    extern int daxpy_(a_int *, double *, double *, a_int *, double *, a_int *), dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
     a_int iwork[1000];
     double workl[7800];
-    extern double dlapy2_(double *, double *);
-    extern int dnband_(a_bool *, char *, a_bool *, double *, double *, double *, a_int *, double *, double *, double *, a_int *, double *, double *, a_int *, double *, a_dcomplex *, a_int *, a_int *, char *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, double *, double *, a_int *, a_dcomplex *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int iparam[11];
     double sigmai;
-    extern int dlaset_(char *, a_int *, a_int *, double *, double *, double *, a_int *, ftnlen);
     a_bool select[50];
     double sigmar;
     a_int maxitr, lworkl;
@@ -256,9 +250,9 @@ static a_int c_n6 = -6;
     /*     | Zero out the workspace for banded matrices. | */
     /*     %---------------------------------------------% */
 
-    dlaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50, (ftnlen)1);
-    dlaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50, (ftnlen)1);
-    dlaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50, (ftnlen)1);
+    dlaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50);
+    dlaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50);
+    dlaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50);
 
     /*     %-------------------------------------% */
     /*     | KU, KL are number of superdiagonals | */
@@ -343,7 +337,7 @@ static a_int c_n6 = -6;
     /*     %------------------------------------------------% */
 
     rvec = TRUE_;
-    dnband_(&rvec, "A", select, d, &d[50], v, &c__1000, &sigmar, &sigmai, workev, &n, a, m, &c__50, rfac, cfac, &ku, &kl, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, workc, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
+    dnband_(&rvec, "A", select, d, &d[50], v, &c__1000, &sigmar, &sigmai, workev, &n, a, m, &c__50, rfac, cfac, &ku, &kl, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, workc, iwork, &info);
 
     if (info == 0)
     {
@@ -421,8 +415,8 @@ static a_int c_n6 = -6;
                 /*              | Ritz value is real | */
                 /*              %--------------------% */
 
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
+                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
                 d[j + 99] = dnrm2_(&n, ax, &c__1);
@@ -438,18 +432,18 @@ static a_int c_n6 = -6;
                 /*              | pair is computed.      | */
                 /*              %------------------------% */
 
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
+                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
+                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 daxpy_(&n, &d[j + 49], mx, &c__1, ax, &c__1);
                 d[j + 99] = dnrm2_(&n, ax, &c__1);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, ax, &c__1, (ftnlen)11);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
+                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1, (ftnlen)11);
+                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 d__1 = -d[j + 49];
                 daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
                 d__1 = dnrm2_(&n, ax, &c__1);
@@ -465,10 +459,7 @@ static a_int c_n6 = -6;
 
             /* L90: */
         }
-        dmout_(&c__6, &nconv, &c__3, d, &c__50, &c_n6,
-               "Ritz values (Real,"
-               "Imag) and relative residuals",
-               (ftnlen)46);
+        dmout_(&c__6, &nconv, &c__3, d, &c__50, &c_n6,"Ritz values (Real,Imag) and relative residuals");
     }
     else
     {

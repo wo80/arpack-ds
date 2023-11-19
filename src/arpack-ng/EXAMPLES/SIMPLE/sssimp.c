@@ -29,7 +29,6 @@ static float c_b138 = -1.f;
     float d[50] /* was [25][2] */;
     a_int j, n;
     float v[6400] /* was [256][25] */;
-    extern int av_(a_int *, float *, float *);
     float ax[256];
     a_int nx, ido, ncv, nev;
     float tol;
@@ -37,7 +36,6 @@ static float c_b138 = -1.f;
     a_int info;
     a_bool rvec;
     a_int ierr, mode1;
-    extern double snrm2_(a_int *, float *, a_int *);
     float sigma;
     char which[2];
     float resid[256];
@@ -45,11 +43,9 @@ static float c_b138 = -1.f;
     float workd[768];
     a_int ipntr[11];
     float workl[825];
-    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
     a_int iparam[11];
     a_bool select[25];
     a_int ishfts, maxitr;
-    extern int ssaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen), sseupd_(a_bool *, char *, a_bool *, float *, float *, a_int *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int lworkl;
 
     /* Fortran I/O blocks */
@@ -371,7 +367,7 @@ L10:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    ssaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info, (ftnlen)1, (ftnlen)2);
+    ssaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info);
 
     if (ido == -1 || ido == 1)
     {
@@ -443,7 +439,7 @@ L10:
 
         rvec = TRUE_;
 
-        sseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)3, (ftnlen)1, (ftnlen)2);
+        sseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /*         %----------------------------------------------% */
         /*         | Eigenvalues are returned in the first column | */
@@ -512,10 +508,7 @@ L10:
             /*            | Display computed residuals. | */
             /*            %-----------------------------% */
 
-            smout_(&c__6, &nconv, &c__2, d, &c__25, &c_n6,
-                   "Ritz values an"
-                   "d relative residuals",
-                   (ftnlen)34);
+            smout_(&c__6, &nconv, &c__2, d, &c__25, &c_n6,"Ritz values and relative residuals");
         }
 
         /*         %-------------------------------------------% */
@@ -635,7 +628,6 @@ int av_(a_int *nx, float *v, float *w)
     a_int j;
     float h2;
     a_int n2, lo;
-    extern int tv_(a_int *, float *, float *), sscal_(a_int *, float *, float *, a_int *), saxpy_(a_int *, float *, float *, a_int *, float *, a_int *);
 
     /* Parameter adjustments */
     --w;

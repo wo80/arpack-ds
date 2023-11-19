@@ -30,7 +30,7 @@ static a_int c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int cmout_(a_int *lout, a_int *m, a_int *n, a_fcomplex *a, a_int *lda, a_int *idigit, char *ifmt, ftnlen ifmt_len)
+int cmout_(a_int *lout, a_int *m, a_int *n, a_fcomplex *a, a_int *lda, a_int *idigit, char *ifmt)
 {
     /* Initialized data */
 

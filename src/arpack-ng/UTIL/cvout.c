@@ -29,7 +29,7 @@ static a_int c__2 = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int cvout_(a_int *lout, a_int *n, a_fcomplex *cx, a_int *idigit, char *ifmt, ftnlen ifmt_len)
+int cvout_(a_int *lout, a_int *n, a_fcomplex *cx, a_int *idigit, char *ifmt)
 {
     /* Format strings */
     static char fmt_9999[] = "(/1x,a/1x,a)";

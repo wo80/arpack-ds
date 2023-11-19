@@ -28,7 +28,6 @@ static a_int c__5 = 5;
     double d[50] /* was [25][2] */;
     a_int j, n;
     double v[6400] /* was [256][25] */, h2, ad[256];
-    extern int av_(a_int *, double *, double *);
     double ax[256], adl[256], adu[256];
     a_int ido, ncv, nev;
     double tol, adu2[256];
@@ -36,23 +35,16 @@ static a_int c__5 = 5;
     a_int mode, info;
     a_bool rvec;
     a_int ierr, ipiv[256];
-    extern double dnrm2_(a_int *, double *, a_int *);
     double sigma;
     char which[2];
     double resid[256];
-    extern int dcopy_(a_int *, double *, a_int *, double *, a_int *);
     a_int nconv;
-    extern int daxpy_(a_int *, double *, double *, a_int *, double *, a_int *);
     double workd[768];
-    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
     a_int ipntr[11];
     double workl[825];
     a_int iparam[11];
     a_bool select[25];
-    extern int dsaupd_(a_int *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen), dseupd_(a_bool *, char *, a_bool *, double *, double *, a_int *, double *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen, ftnlen),
-        dgttrf_(a_int *, double *, double *, double *, double *, a_int *, a_int *);
     a_int ishfts, maxitr;
-    extern int dgttrs_(char *, a_int *, a_int *, double *, double *, double *, double *, a_int *, double *, a_int *, a_int *, ftnlen);
     a_int lworkl;
 
     /* Fortran I/O blocks */
@@ -293,7 +285,7 @@ L10:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    dsaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info, (ftnlen)1, (ftnlen)2);
+    dsaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info);
 
     if (ido == -1 || ido == 1)
     {
@@ -308,7 +300,7 @@ L10:
 
         dcopy_(&n, &workd[ipntr[0] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
 
-        dgttrs_("Notranspose", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr, (ftnlen)11);
+        dgttrs_("Notranspose", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             s_wsle(&io___34);
@@ -372,7 +364,7 @@ L10:
 
         rvec = TRUE_;
 
-        dseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)3, (ftnlen)1, (ftnlen)2);
+        dseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /*        %----------------------------------------------% */
         /*        | Eigenvalues are returned in the first column | */
@@ -440,10 +432,7 @@ L10:
             /*           | Display computed residuals    | */
             /*           %-------------------------------% */
 
-            dmout_(&c__6, &nconv, &c__2, d, &c__25, &c_n6,
-                   "Ritz values an"
-                   "d relative residuals",
-                   (ftnlen)34);
+            dmout_(&c__6, &nconv, &c__2, d, &c__25, &c_n6,"Ritz values and relative residuals");
         }
 
         /*        %------------------------------------------% */
@@ -550,7 +539,6 @@ int av_(a_int *n, double *v, double *w)
     /* Local variables */
     a_int j;
     double h2;
-    extern int dscal_(a_int *, double *, double *, a_int *);
 
     /* Parameter adjustments */
     --w;

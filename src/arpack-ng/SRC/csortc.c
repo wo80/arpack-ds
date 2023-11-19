@@ -62,7 +62,7 @@
 
 /* ----------------------------------------------------------------------- */
 
-int csortc_(char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomplex *y, ftnlen which_len)
+int csortc_(char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomplex *y)
 {
     /* System generated locals */
     a_int i__1, i__2, i__3;
@@ -76,7 +76,6 @@ int csortc_(char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomplex *y, 
     a_int i, j, igap;
     a_fcomplex temp;
     float temp1, temp2;
-    extern double slapy2_(float *, float *);
 
     /*     %------------------% */
     /*     | Scalar Arguments | */

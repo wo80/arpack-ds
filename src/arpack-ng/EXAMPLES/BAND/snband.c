@@ -414,20 +414,12 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
     a_int imid;
     float denr;
     a_int ibot, ierr;
-    extern double sdot_(a_int *, float *, a_int *, float *, a_int *);
     a_int itop, type__;
     float numr;
-    extern double snrm2_(a_int *, float *, a_int *);
     float dmdul;
-    extern int sgbmv_(char *, a_int *, a_int *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen);
     a_bool first;
     a_int ipntr[14];
-    extern int scopy_(a_int *, float *, a_int *, float *, a_int *);
-    extern double slapy2_(float *, float *), slamch_(char *, ftnlen);
-    extern int cgbtrf_(a_int *, a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, a_int *);
     float safmin;
-    extern int cgbtrs_(char *, a_int *, a_int *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, a_fcomplex *, a_int *, a_int *, ftnlen), sgbtrf_(a_int *, a_int *, a_int *, a_int *, float *, a_int *, a_int *, a_int *), snaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen), slacpy_(char *, a_int *, a_int *, float *, a_int *, float *, a_int *, ftnlen),
-        sneupd_(a_bool *, char *, a_bool *, float *, float *, float *, a_int *, float *, float *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen), sgbtrs_(char *, a_int *, a_int *, a_int *, a_int *, float *, a_int *, a_int *, float *, a_int *, a_int *, ftnlen);
 
     /* Fortran I/O blocks */
     static cilist io___3 = {0, 6, 0, 0, 0};
@@ -639,10 +631,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
             do_lio(&c__9, &c__1, " ", (ftnlen)1);
             e_wsle();
             s_wsle(&io___7);
-            do_lio(&c__9, &c__1,
-                   "_NBAND: sigmai must be nonzero when type 5"
-                   " or 6                   is used. ",
-                   (ftnlen)75);
+            do_lio(&c__9, &c__1,"_NBAND: sigmai must be nonzero when type 5 or 6                   is used. ",(ftnlen)75);
             e_wsle();
             s_wsle(&io___8);
             do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -693,7 +682,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
             /*            | in real arithmetic.               | */
             /*            %-----------------------------------% */
 
-            slacpy_("A", &ibot, n, &ab[ab_offset], lda, &rfac[rfac_offset], lda, (ftnlen)1);
+            slacpy_("A", &ibot, n, &ab[ab_offset], lda, &rfac[rfac_offset], lda);
             i__1 = *n;
             for (j = 1; j <= i__1; ++j)
             {
@@ -774,7 +763,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
         /*        | routine sgbtrf to factor M.                   | */
         /*        %-----------------------------------------------% */
 
-        slacpy_("A", &ibot, n, &mb[mb_offset], lda, &rfac[rfac_offset], lda, (ftnlen)1);
+        slacpy_("A", &ibot, n, &mb[mb_offset], lda, &rfac[rfac_offset], lda);
         sgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
         if (ierr != 0)
         {
@@ -880,7 +869,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
 
 L90:
 
-    snaupd_(&ido, bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info, (ftnlen)1, (ftnlen)2);
+    snaupd_(&ido, bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info);
 
     if (ido == -1)
     {
@@ -892,7 +881,7 @@ L90:
             /*           | Perform  y <--- OP*x = A*x | */
             /*           %----------------------------% */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
         }
         else if (type__ == 2)
         {
@@ -908,7 +897,7 @@ L90:
                 /*              %----------------------------------% */
 
                 scopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     s_wsle(&io___32);
@@ -943,7 +932,7 @@ L90:
                     /* L100: */
                 }
 
-                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     s_wsle(&io___35);
@@ -976,9 +965,9 @@ L90:
             /*           | the range of OP.                  | */
             /*           %-----------------------------------% */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
 
-            sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+            sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 s_wsle(&io___38);
@@ -1003,7 +992,7 @@ L90:
             /*           | range of OP.                            | */
             /*           %-----------------------------------------% */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
 
             if (*sigmai == 0.f)
             {
@@ -1013,7 +1002,7 @@ L90:
                 /*              | in real arithmetic. | */
                 /*              %---------------------% */
 
-                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     s_wsle(&io___41);
@@ -1045,7 +1034,7 @@ L90:
                     /* L120: */
                 }
 
-                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     s_wsle(&io___44);
@@ -1089,7 +1078,7 @@ L90:
                 /* L140: */
             }
 
-            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 s_wsle(&io___47);
@@ -1121,7 +1110,7 @@ L90:
             /*           | range of OP.                           | */
             /*           %----------------------------------------% */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
 
             i__1 = *n;
             for (i = 1; i <= i__1; ++i)
@@ -1133,7 +1122,7 @@ L90:
                 /* L160: */
             }
 
-            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 s_wsle(&io___50);
@@ -1166,7 +1155,7 @@ L90:
             /*           | Perform  y <--- OP*x = A*x | */
             /*           %----------------------------% */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
         }
         else if (type__ == 2)
         {
@@ -1180,7 +1169,7 @@ L90:
                 /*              %----------------------------------% */
 
                 scopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             }
             else
             {
@@ -1201,7 +1190,7 @@ L90:
                     /* L180: */
                 }
 
-                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     s_wsle(&io___53);
@@ -1232,9 +1221,9 @@ L90:
             /*           | Perform  y <--- OP*x = inv[M]*A*x | */
             /*           %-----------------------------------% */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
 
-            sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+            sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 s_wsle(&io___56);
@@ -1267,7 +1256,7 @@ L90:
                 /*              %------------------------% */
 
                 scopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr, (ftnlen)11);
+                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     s_wsle(&io___59);
@@ -1299,7 +1288,7 @@ L90:
                     /* L200: */
                 }
 
-                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     s_wsle(&io___62);
@@ -1341,7 +1330,7 @@ L90:
                 /* L220: */
             }
 
-            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 s_wsle(&io___65);
@@ -1381,7 +1370,7 @@ L90:
                 /* L240: */
             }
 
-            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr, (ftnlen)11);
+            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 s_wsle(&io___68);
@@ -1413,7 +1402,7 @@ L90:
         /*        | type = 1,2.        | */
         /*        %--------------------% */
 
-        sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1, (ftnlen)11);
+        sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
     }
     else
     {
@@ -1467,10 +1456,7 @@ L90:
                 do_lio(&c__9, &c__1, " ", (ftnlen)1);
                 e_wsle();
                 s_wsle(&io___79);
-                do_lio(&c__9, &c__1,
-                       " No shifts could be applied during imp"
-                       "licit",
-                       (ftnlen)43);
+                do_lio(&c__9, &c__1," No shifts could be applied during implicit",(ftnlen)43);
                 do_lio(&c__9, &c__1, " Arnoldi update, try increasing NCV.", (ftnlen)36);
                 e_wsle();
                 s_wsle(&io___80);
@@ -1481,7 +1467,7 @@ L90:
             if (iparam[5] > 0)
             {
 
-                sneupd_(rvec, "A", &select[1], &dr[1], &di[1], &z[z_offset], ldz, sigmar, sigmai, &workev[1], bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+                sneupd_(rvec, "A", &select[1], &dr[1], &di[1], &z[z_offset], ldz, sigmar, sigmai, &workev[1], bmat, n, which, nev, tol, &resid[1], ncv, &v[v_offset], ldv, &iparam[1], ipntr, &workd[1], &workl[1], lworkl, info);
 
                 if (*info != 0)
                 {
@@ -1530,7 +1516,7 @@ L90:
                                 /*                       | d = (x'*inv[A-sigma*M]*M*x) / (x'*x) | */
                                 /*                       %--------------------------------------% */
 
-                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1, (ftnlen)12);
+                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1539,7 +1525,7 @@ L90:
                                     q__1.r = workd[i__4], q__1.i = 0.f;
                                     workc[i__3].r = q__1.r, workc[i__3].i = q__1.i;
                                 }
-                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info, (ftnlen)11);
+                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1585,8 +1571,8 @@ L90:
                                 /*                       | Compute M*x | */
                                 /*                       %-------------% */
 
-                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1, (ftnlen)12);
-                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[(j + 1) * z_dim1 + 1], &c__1, &c_b85, &workd[*n + 1], &c__1, (ftnlen)12);
+                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1);
+                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[(j + 1) * z_dim1 + 1], &c__1, &c_b85, &workd[*n + 1], &c__1);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1601,7 +1587,7 @@ L90:
                                 /*                       | Compute inv(A-sigma*M)*M*x | */
                                 /*                       %----------------------------% */
 
-                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info, (ftnlen)11);
+                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
 
                                 /*                       %-------------------------------% */
                                 /*                       | Compute x'*inv(A-sigma*M)*M*x | */
@@ -1703,7 +1689,7 @@ L90:
                                     q__1.r = z[i__4], q__1.i = 0.f;
                                     workc[i__3].r = q__1.r, workc[i__3].i = q__1.i;
                                 }
-                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info, (ftnlen)11);
+                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1759,7 +1745,7 @@ L90:
                                 /*                       | Compute inv[A-sigma*I]*x. | */
                                 /*                       %---------------------------% */
 
-                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info, (ftnlen)11);
+                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
 
                                 /*                       %-----------------------------% */
                                 /*                       | Compute x'*inv(A-sigma*I)*x | */

@@ -73,7 +73,8 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int dsesrt_(char *which, a_bool *apply, a_int *n, double *x, a_int *na, double *a, a_int *lda, ftnlen which_len)
+int dsesrt_(char *which, a_bool *apply, a_int *n, double *x, a_int *na, double *a,
+     a_int *lda)
 {
     /* System generated locals */
     a_int a_dim1, a_offset, i__1;
@@ -85,7 +86,6 @@ int dsesrt_(char *which, a_bool *apply, a_int *n, double *x, a_int *na, double *
     /* Local variables */
     a_int i, j, igap;
     double temp;
-    extern int dswap_(a_int *, double *, a_int *, double *, a_int *);
 
     /*     %------------------% */
     /*     | Scalar Arguments | */

@@ -27,7 +27,6 @@ static a_int c__4 = 4;
     float d[90] /* was [30][3] */;
     a_int j, n;
     float v[7680] /* was [256][30] */;
-    extern int av_(a_int *, float *, float *);
     float ax[256];
     a_int nx, ido, ncv, nev;
     float tol;
@@ -35,7 +34,6 @@ static a_int c__4 = 4;
     a_int mode, info;
     a_bool rvec;
     a_int ierr;
-    extern double snrm2_(a_int *, float *, a_int *);
     char which[2];
     float resid[256];
     a_int nconv;
@@ -43,13 +41,10 @@ static a_int c__4 = 4;
     a_bool first;
     a_int ipntr[14];
     float workl[2880];
-    extern int saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
-    extern double slapy2_(float *, float *);
     a_int iparam[11];
     float sigmai;
     a_bool select[30];
     float sigmar;
-    extern int snaupd_(a_int *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen), sneupd_(a_bool *, char *, a_bool *, float *, float *, float *, a_int *, float *, float *, float *, char *, a_int *, char *, a_int *, float *, float *, a_int *, float *, a_int *, a_int *, a_int *, float *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int ishfts, maxitr, lworkl;
     float workev[90];
 
@@ -264,7 +259,7 @@ L10:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    snaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info, (ftnlen)1, (ftnlen)2);
+    snaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info);
 
     if (ido == -1 || ido == 1)
     {
@@ -330,7 +325,7 @@ L10:
 
         rvec = TRUE_;
 
-        sneupd_(&rvec, "A", select, d, &d[30], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+        sneupd_(&rvec, "A", select, d, &d[30], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /*        %-----------------------------------------------% */
         /*        | The real part of the eigenvalue is returned   | */
@@ -439,10 +434,7 @@ L10:
             /*            | Display computed residuals. | */
             /*            %-----------------------------% */
 
-            smout_(&c__6, &nconv, &c__3, d, &c__30, &c_n6,
-                   "Ritz values (R"
-                   "eal,Imag) and relative residuals",
-                   (ftnlen)46);
+            smout_(&c__6, &nconv, &c__3, d, &c__30, &c_n6,"Ritz values (Real,Imag) and relative residuals");
         }
 
         /*        %-------------------------------------------% */
@@ -552,7 +544,6 @@ int av_(a_int *nx, float *v, float *w)
     a_int j;
     float h2;
     a_int lo;
-    extern int tv_(a_int *, float *, float *), saxpy_(a_int *, float *, float *, a_int *, float *, a_int *);
 
     /*     Computes w <--- OP*v, where OP is the nx*nx by nx*nx block */
     /*     tridiagonal matrix */

@@ -67,7 +67,7 @@
 
 /* ----------------------------------------------------------------------- */
 
-int dsortc_(char *which, a_bool *apply, a_int *n, double *xfloat, double *ximag, double *y, ftnlen which_len)
+int dsortc_(char *which, a_bool *apply, a_int *n, double *xfloat, double *ximag, double *y)
 {
     /* System generated locals */
     a_int i__1;
@@ -79,7 +79,6 @@ int dsortc_(char *which, a_bool *apply, a_int *n, double *xfloat, double *ximag,
     /* Local variables */
     a_int i, j, igap;
     double temp, temp1, temp2;
-    extern double dlapy2_(double *, double *);
 
     /*     %------------------% */
     /*     | Scalar Arguments | */

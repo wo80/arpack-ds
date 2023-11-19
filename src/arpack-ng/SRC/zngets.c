@@ -92,16 +92,14 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int zngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_dcomplex *ritz, a_dcomplex *bounds, ftnlen which_len)
+int zngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_dcomplex *ritz, a_dcomplex *bounds)
 {
     /* System generated locals */
     a_int i__1;
 
     /* Local variables */
     static float t0, t1;
-    extern int ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), zvout_(a_int *, a_int *, a_dcomplex *, a_int *, char *, ftnlen), arscnd_(float *);
     a_int msglvl;
-    extern int zsortc_(char *, a_bool *, a_int *, a_dcomplex *, a_dcomplex *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -159,7 +157,7 @@ int zngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_dcomplex *ritz,
     msglvl = debug_1.mcgets;
 
     i__1 = *kev + *np;
-    zsortc_(which, &b_true, &i__1, &ritz[1], &bounds[1], (ftnlen)2);
+    zsortc_(which, &b_true, &i__1, &ritz[1], &bounds[1]);
 
     if (*ishift == 1)
     {
@@ -173,7 +171,7 @@ int zngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_dcomplex *ritz,
         /*        | Be careful and use 'SM' since we want to sort BOUNDS! | */
         /*        %-------------------------------------------------------% */
 
-        zsortc_("SM", &b_true, np, &bounds[1], &ritz[1], (ftnlen)2);
+        zsortc_("SM", &b_true, np, &bounds[1], &ritz[1]);
     }
 
     arscnd_(&t1);
@@ -181,18 +179,12 @@ int zngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_dcomplex *ritz,
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit, "_ngets: KEV is", (ftnlen)14);
-        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit, "_ngets: NP is", (ftnlen)13);
+        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit, "_ngets: KEV is");
+        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit, "_ngets: NP is");
         i__1 = *kev + *np;
-        zvout_(&debug_1.logfil, &i__1, &ritz[1], &debug_1.ndigit,
-               "_ngets: E"
-               "igenvalues of current H matrix ",
-               (ftnlen)40);
+        zvout_(&debug_1.logfil, &i__1, &ritz[1], &debug_1.ndigit,"_ngets: Eigenvalues of current H matrix ");
         i__1 = *kev + *np;
-        zvout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit,
-               "_ngets:"
-               " Ritz estimates of the current KEV+NP Ritz values",
-               (ftnlen)56);
+        zvout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit,"_ngets: Ritz estimates of the current KEV+NP Ritz values");
     }
 
     return 0;

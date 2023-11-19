@@ -29,7 +29,6 @@ static double c_b138 = -1.;
     double d[50] /* was [25][2] */;
     a_int j, n;
     double v[6400] /* was [256][25] */;
-    extern int av_(a_int *, double *, double *);
     double ax[256];
     a_int nx, ido, ncv, nev;
     double tol;
@@ -37,19 +36,15 @@ static double c_b138 = -1.;
     a_int mode, info;
     a_bool rvec;
     a_int ierr;
-    extern double dnrm2_(a_int *, double *, a_int *);
     double sigma;
     char which[2];
     double resid[256];
     a_int nconv;
-    extern int daxpy_(a_int *, double *, double *, a_int *, double *, a_int *);
     double workd[768];
-    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
     a_int ipntr[11];
     double workl[825];
     a_int iparam[11];
     a_bool select[25];
-    extern int dsaupd_(a_int *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen), dseupd_(a_bool *, char *, a_bool *, double *, double *, a_int *, double *, char *, a_int *, char *, a_int *, double *, double *, a_int *, double *, a_int *, a_int *, a_int *, double *, double *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int ishfts, maxitr, lworkl;
 
     /* Fortran I/O blocks */
@@ -259,7 +254,7 @@ L10:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    dsaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info, (ftnlen)1, (ftnlen)2);
+    dsaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info);
 
     if (ido == -1 || ido == 1)
     {
@@ -325,7 +320,7 @@ L10:
 
         rvec = TRUE_;
 
-        dseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr, (ftnlen)3, (ftnlen)1, (ftnlen)2);
+        dseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
         /*        %----------------------------------------------% */
         /*        | Eigenvalues are returned in the first column | */
         /*        | of the two dimensional array D and the       | */
@@ -393,10 +388,7 @@ L10:
             /*            | Display computed residuals    | */
             /*            %-------------------------------% */
 
-            dmout_(&c__6, &nconv, &c__2, d, &c__25, &c_n6,
-                   "Ritz values an"
-                   "d relative residuals",
-                   (ftnlen)34);
+            dmout_(&c__6, &nconv, &c__2, d, &c__25, &c_n6,"Ritz values and relative residuals");
         }
 
         /*        %------------------------------------------% */
@@ -516,7 +508,6 @@ int av_(a_int *nx, double *v, double *w)
     a_int j;
     double h2;
     a_int n2, lo;
-    extern int tv_(a_int *, double *, double *), dscal_(a_int *, double *, double *, a_int *), daxpy_(a_int *, double *, double *, a_int *, double *, a_int *);
 
     /* Parameter adjustments */
     --w;

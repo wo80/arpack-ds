@@ -48,21 +48,15 @@ static a_int c_n6 = -6;
     a_int mode, info;
     a_bool rvec;
     a_int isub, isup, idiag;
-    extern int cgbmv_(char *, a_int *, a_int *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen);
     a_fcomplex sigma;
     char which[2];
     a_fcomplex resid[1000];
     a_int nconv;
-    extern int caxpy_(a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *);
     a_fcomplex workd[3000];
     a_int iwork[1000];
     a_fcomplex workl[7750];
     float rwork[1000];
-    extern int smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen);
-    extern double scnrm2_(a_int *, a_fcomplex *, a_int *), slapy2_(float *, float *);
-    extern int cnband_(a_bool *, char *, a_bool *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, char *, char *, a_int *, float *, a_fcomplex *, a_int *, a_fcomplex *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_int *, float *, a_int *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int iparam[11];
-    extern int claset_(char *, a_int *, a_int *, a_fcomplex *, a_fcomplex *, a_fcomplex *, a_int *, ftnlen);
     a_bool select[50];
     a_int maxitr, lworkl;
     a_fcomplex workev[100];
@@ -250,9 +244,9 @@ static a_int c_n6 = -6;
     /*     | Zero out the workspace for banded matrices. | */
     /*     %---------------------------------------------% */
 
-    claset_("A", &c__50, &n, &c_b2, &c_b2, a, &c__50, (ftnlen)1);
-    claset_("A", &c__50, &n, &c_b2, &c_b2, m, &c__50, (ftnlen)1);
-    claset_("A", &c__50, &n, &c_b2, &c_b2, fac, &c__50, (ftnlen)1);
+    claset_("A", &c__50, &n, &c_b2, &c_b2, a, &c__50);
+    claset_("A", &c__50, &n, &c_b2, &c_b2, m, &c__50);
+    claset_("A", &c__50, &n, &c_b2, &c_b2, fac, &c__50);
 
     /*     %-------------------------------------% */
     /*     | KU, KL are number of superdiagonals | */
@@ -353,7 +347,7 @@ static a_int c_n6 = -6;
     /*     %-----------------------------------------------% */
 
     rvec = TRUE_;
-    cnband_(&rvec, "A", select, d, v, &c__1000, &sigma, workev, &n, a, m, &c__50, fac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, rwork, iwork, &info, (ftnlen)1, (ftnlen)2, (ftnlen)1);
+    cnband_(&rvec, "A", select, d, v, &c__1000, &sigma, workev, &n, a, m, &c__50, fac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, rwork, iwork, &info);
 
     if (info == 0)
     {
@@ -428,7 +422,7 @@ static a_int c_n6 = -6;
             /*           |   ||  A*x - lambda*x ||   | */
             /*           %---------------------------% */
 
-            cgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, ax, &c__1, (ftnlen)11);
+            cgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, ax, &c__1);
             i__2 = j - 1;
             q__1.r = -d[i__2].r, q__1.i = -d[i__2].i;
             caxpy_(&n, &q__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
@@ -439,10 +433,7 @@ static a_int c_n6 = -6;
             rd[j + 99] /= slapy2_(&rd[j - 1], &rd[j + 49]);
             /* L90: */
         }
-        smout_(&c__6, &nconv, &c__3, rd, &c__50, &c_n6,
-               "Ritz values (Real,I"
-               "mag) and relative residuals",
-               (ftnlen)46);
+        smout_(&c__6, &nconv, &c__3, rd, &c__50, &c_n6,"Ritz values (Real,Imag) and relative residuals");
     }
     else
     {

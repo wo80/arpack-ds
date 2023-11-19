@@ -157,12 +157,8 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     a_int jj;
     float big;
     a_int iend, itop;
-    extern int sscal_(a_int *, float *, float *, a_int *), sgemv_(char *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen), scopy_(a_int *, float *, a_int *, float *, a_int *), saxpy_(a_int *, float *, float *, a_int *, float *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen);
-    extern double slamch_(char *, ftnlen);
-    extern int arscnd_(float *);
     static float epsmch;
     a_int istart, kplusp, msglvl;
-    extern int slacpy_(char *, a_int *, a_int *, float *, a_int *, float *, a_int *, ftnlen), slartg_(float *, float *, float *, float *, float *), slaset_(char *, a_int *, a_int *, float *, float *, float *, a_int *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -256,7 +252,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     /*     | kplusp used to accumulate the rotations.     | */
     /*     %----------------------------------------------% */
 
-    slaset_("All", &kplusp, &kplusp, &s_zero, &s_one, &q[q_offset], ldq, (ftnlen)3);
+    slaset_("All", &kplusp, &kplusp, &s_zero, &s_one, &q[q_offset], ldq);
 
     /*     %----------------------------------------------% */
     /*     | Quick return if there are no shifts to apply | */
@@ -303,12 +299,9 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit, "_sapps: deflation at row/column no.", (ftnlen)35);
-                    ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_sapps: occurred before shift number.", (ftnlen)37);
-                    svout_(&debug_1.logfil, &i_one, &h[i + 1 + h_dim1], &debug_1.ndigit,
-                           "_sapps: the corresponding off d"
-                           "iagonal element",
-                           (ftnlen)46);
+                    ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit, "_sapps: deflation at row/column no.");
+                    ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_sapps: occurred before shift number.");
+                    svout_(&debug_1.logfil, &i_one, &h[i + 1 + h_dim1], &debug_1.ndigit,"_sapps: the corresponding off diagonal element");
                 }
                 h[i + 1 + h_dim1] = 0.f;
                 iend = i;
@@ -503,14 +496,8 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
         {
             if (msglvl > 0)
             {
-                ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit,
-                       "_sapp"
-                       "s: deflation at row/column no.",
-                       (ftnlen)35);
-                svout_(&debug_1.logfil, &i_one, &h[i + 1 + h_dim1], &debug_1.ndigit,
-                       "_sapps: the corresponding off diago"
-                       "nal element",
-                       (ftnlen)46);
+                ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit,"_sapps: deflation at row/column no.");
+                svout_(&debug_1.logfil, &i_one, &h[i + 1 + h_dim1], &debug_1.ndigit,"_sapps: the corresponding off diagonal element");
             }
             h[i + 1 + h_dim1] = 0.f;
         }
@@ -525,7 +512,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
 
     if (h[*kev + 1 + h_dim1] > 0.f)
     {
-        sgemv_("N", n, &kplusp, &s_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[*n + 1], &i_one, (ftnlen)1);
+        sgemv_("N", n, &kplusp, &s_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[*n + 1], &i_one);
     }
 
     /*     %-------------------------------------------------------% */
@@ -539,7 +526,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     for (i = 1; i <= i__1; ++i)
     {
         i__2 = kplusp - i + 1;
-        sgemv_("N", n, &i__2, &s_one, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[1], &i_one, (ftnlen)1);
+        sgemv_("N", n, &i__2, &s_one, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[1], &i_one);
         scopy_(n, &workd[1], &i_one, &v[(kplusp - i + 1) * v_dim1 + 1], &i_one);
         /* L130: */
     }
@@ -548,7 +535,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     /*     |  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). | */
     /*     %-------------------------------------------------% */
 
-    slacpy_("All", n, kev, &v[(*np + 1) * v_dim1 + 1], ldv, &v[v_offset], ldv, (ftnlen)3);
+    slacpy_("All", n, kev, &v[(*np + 1) * v_dim1 + 1], ldv, &v[v_offset], ldv);
 
     /*     %--------------------------------------------% */
     /*     | Copy the (kev+1)-st column of (V*Q) in the | */
@@ -576,16 +563,13 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
 
     if (msglvl > 1)
     {
-        svout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit,
-               "_sapps: sigmak of the updated residual vect"
-               "or",
-               (ftnlen)45);
-        svout_(&debug_1.logfil, &i_one, &h[*kev + 1 + h_dim1], &debug_1.ndigit, "_sapps: betak of the updated residual vector", (ftnlen)44);
-        svout_(&debug_1.logfil, kev, &h[(h_dim1 << 1) + 1], &debug_1.ndigit, "_sapps: updated main diagonal of H for next iteration", (ftnlen)53);
+        svout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit,"_sapps: sigmak of the updated residual vector");
+        svout_(&debug_1.logfil, &i_one, &h[*kev + 1 + h_dim1], &debug_1.ndigit, "_sapps: betak of the updated residual vector");
+        svout_(&debug_1.logfil, kev, &h[(h_dim1 << 1) + 1], &debug_1.ndigit, "_sapps: updated main diagonal of H for next iteration");
         if (*kev > 1)
         {
             i__1 = *kev - 1;
-            svout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit, "_sapps: updated sub diagonal of H for next iteration", (ftnlen)52);
+            svout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit, "_sapps: updated sub diagonal of H for next iteration");
         }
     }
 

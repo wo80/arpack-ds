@@ -130,23 +130,14 @@ int sstqrb_(a_int *n, float *d, float *e, float *z, float *work, a_int *info)
     a_int lsv;
     float tst, eps2;
     a_int lend, jtot;
-    extern int slae2_(float *, float *, float *, float *, float *);
     float anorm;
-    extern int slasr_(char *, char *, char *, a_int *, a_int *, float *, float *, float *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int lendm1, lendp1;
-    extern int slaev2_(float *, float *, float *, float *, float *, float *, float *);
-    extern double slapy2_(float *, float *);
     a_int iscale;
-    extern double slamch_(char *, ftnlen);
     float safmin, safmax;
-    extern int slascl_(char *, a_int *, a_int *, float *, float *, a_int *, a_int *, float *, a_int *, a_int *, ftnlen);
     a_int lendsv;
-    extern int slartg_(float *, float *, float *, float *, float *);
     float ssfmin;
     a_int nmaxit, icompz;
     float ssfmax;
-    extern double slanst_(char *, a_int *, float *, float *, ftnlen);
-    extern int slasrt_(char *, a_int *, float *, a_int *, ftnlen);
 
     /*     %------------------% */
     /*     | Scalar Arguments | */
@@ -316,17 +307,17 @@ L30:
     {
         iscale = 1;
         i__1 = lend - l + 1;
-        slascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &d[l], n, info, (ftnlen)1);
+        slascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &d[l], n, info);
         i__1 = lend - l;
-        slascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &e[l], n, info, (ftnlen)1);
+        slascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &e[l], n, info);
     }
     else if (anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
-        slascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &d[l], n, info, (ftnlen)1);
+        slascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &d[l], n, info);
         i__1 = lend - l;
-        slascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &e[l], n, info, (ftnlen)1);
+        slascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &e[l], n, info);
     }
 
     /*     choose between ql and qr iteration */
@@ -466,7 +457,7 @@ L30:
 
             /*             *** New starting with version 2.5 *** */
 
-            slasr_("r", "v", "b", &i_one, &mm, &work[l], &work[*n - 1 + l], &z[l], &i_one, (ftnlen)1, (ftnlen)1, (ftnlen)1);
+            slasr_("r", "v", "b", &i_one, &mm, &work[l], &work[*n - 1 + l], &z[l], &i_one);
             /*             ************************************* */
         }
 
@@ -615,7 +606,7 @@ L30:
 
             /*           *** New starting with version 2.5 *** */
 
-            slasr_("r", "v", "f", &i_one, &mm, &work[m], &work[*n - 1 + m], &z[m], &i_one, (ftnlen)1, (ftnlen)1, (ftnlen)1);
+            slasr_("r", "v", "f", &i_one, &mm, &work[m], &work[*n - 1 + m], &z[m], &i_one);
             /*           ************************************* */
         }
 
@@ -642,16 +633,16 @@ L140:
     if (iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
-        slascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &d[lsv], n, info, (ftnlen)1);
+        slascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &d[lsv], n, info);
         i__1 = lendsv - lsv;
-        slascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &e[lsv], n, info, (ftnlen)1);
+        slascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &e[lsv], n, info);
     }
     else if (iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
-        slascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &d[lsv], n, info, (ftnlen)1);
+        slascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &d[lsv], n, info);
         i__1 = lendsv - lsv;
-        slascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &e[lsv], n, info, (ftnlen)1);
+        slascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &e[lsv], n, info);
     }
 
     /*     check for no convergence to an eigenvalue after a total */
@@ -680,7 +671,7 @@ L160:
 
         /*        use quick sort */
 
-        slasrt_("i", n, &d[1], info, (ftnlen)1);
+        slasrt_("i", n, &d[1], info);
     }
     else
     {

@@ -411,7 +411,9 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int dnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, a_int *ipntr, double *workd, double *workl, a_int *lworkl, a_int *info, ftnlen bmat_len, ftnlen which_len)
+int dnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *tol,
+     double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, a_int *ipntr,
+     double *workd, double *workl, a_int *lworkl, a_int *info)
 {
     /* Format strings */
     static char fmt_1000[] = "(//,5x,\002==================================="
@@ -453,13 +455,8 @@ int dnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
     static a_int nb, ih, iq, np, iw, ldh, ldq, nev0, mode;
     a_int ierr;
     static a_int iupd, next, ritzi;
-    extern int dvout_(a_int *, a_int *, double *, a_int *, char *, ftnlen), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen);
     static a_int ritzr;
-    extern int dnaup2_(a_int *, char *, a_int *, char *, a_int *, a_int *, double *, double *, a_int *, a_int *, a_int *, a_int *, double *, a_int *, double *, a_int *, double *, double *, double *, double *, a_int *, double *, a_int *, double *, a_int *, ftnlen, ftnlen);
-    extern double dlamch_(char *, ftnlen);
-    extern int arscnd_(float *);
     static a_int bounds, ishift, msglvl, mxiter;
-    extern int dstatn_(void);
 
     /* Fortran I/O blocks */
     static cilist io___22 = {0, 6, 0, fmt_1000, 0};
@@ -686,7 +683,7 @@ int dnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
     /*     | Carry out the Implicitly restarted Arnoldi Iteration. | */
     /*     %-------------------------------------------------------% */
 
-    dnaup2_(ido, bmat, n, which, &nev0, &np, tol, &resid[1], &mode, &iupd, &ishift, &mxiter, &v[v_offset], ldv, &workl[ih], &ldh, &workl[ritzr], &workl[ritzi], &workl[bounds], &workl[iq], &ldq, &workl[iw], &ipntr[1], &workd[1], info, (ftnlen)1, (ftnlen)2);
+    dnaup2_(ido, bmat, n, which, &nev0, &np, tol, &resid[1], &mode, &iupd, &ishift, &mxiter, &v[v_offset], ldv, &workl[ih], &ldh, &workl[ritzr], &workl[ritzi], &workl[bounds], &workl[iq], &ldq, &workl[iw], &ipntr[1], &workd[1], info);
 
     /*     %--------------------------------------------------% */
     /*     | ido .ne. 99 implies use of reverse communication | */
@@ -724,26 +721,11 @@ int dnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &mxiter, &debug_1.ndigit,
-               "_naupd: Nu"
-               "mber of update iterations taken",
-               (ftnlen)41);
-        ivout_(&debug_1.logfil, &i_one, &np, &debug_1.ndigit,
-               "_naupd: Number"
-               " of wanted \"converged\" Ritz values",
-               (ftnlen)48);
-        dvout_(&debug_1.logfil, &np, &workl[ritzr], &debug_1.ndigit,
-               "_naupd"
-               ": Real part of the final Ritz values",
-               (ftnlen)42);
-        dvout_(&debug_1.logfil, &np, &workl[ritzi], &debug_1.ndigit,
-               "_naupd"
-               ": Imaginary part of the final Ritz values",
-               (ftnlen)47);
-        dvout_(&debug_1.logfil, &np, &workl[bounds], &debug_1.ndigit,
-               "_naup"
-               "d: Associated Ritz estimates",
-               (ftnlen)33);
+        ivout_(&debug_1.logfil, &i_one, &mxiter, &debug_1.ndigit,"_naupd: Number of update iterations taken");
+        ivout_(&debug_1.logfil, &i_one, &np, &debug_1.ndigit,"_naupd: Number of wanted \"converged\" Ritz values");
+        dvout_(&debug_1.logfil, &np, &workl[ritzr], &debug_1.ndigit,"_naupd: Real part of the final Ritz values");
+        dvout_(&debug_1.logfil, &np, &workl[ritzi], &debug_1.ndigit,"_naupd: Imaginary part of the final Ritz values");
+        dvout_(&debug_1.logfil, &np, &workl[bounds], &debug_1.ndigit,"_naupd: Associated Ritz estimates");
     }
 
     arscnd_(&t1);

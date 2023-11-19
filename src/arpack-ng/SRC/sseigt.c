@@ -101,9 +101,7 @@ int sseigt_(float *rnorm, a_int *n, float *h, a_int *ldh, float *eig, float *bou
     /* Local variables */
     a_int k;
     static float t0, t1;
-    extern int scopy_(a_int *, float *, a_int *, float *, a_int *), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen), arscnd_(float *);
     a_int msglvl;
-    extern int sstqrb_(a_int *, float *, float *, float *, float *, a_int *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -166,11 +164,11 @@ int sseigt_(float *rnorm, a_int *n, float *h, a_int *ldh, float *eig, float *bou
 
     if (msglvl > 0)
     {
-        svout_(&debug_1.logfil, n, &h[(h_dim1 << 1) + 1], &debug_1.ndigit, "_seigt: main diagonal of matrix H", (ftnlen)33);
+        svout_(&debug_1.logfil, n, &h[(h_dim1 << 1) + 1], &debug_1.ndigit, "_seigt: main diagonal of matrix H");
         if (*n > 1)
         {
             i__1 = *n - 1;
-            svout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit, "_seigt: sub diagonal of matrix H", (ftnlen)32);
+            svout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit, "_seigt: sub diagonal of matrix H");
         }
     }
 
@@ -184,10 +182,7 @@ int sseigt_(float *rnorm, a_int *n, float *h, a_int *ldh, float *eig, float *bou
     }
     if (msglvl > 1)
     {
-        svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,
-               "_seigt: las"
-               "t row of the eigenvector matrix for H",
-               (ftnlen)48);
+        svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_seigt: last row of the eigenvector matrix for H");
     }
 
     /*     %-----------------------------------------------% */

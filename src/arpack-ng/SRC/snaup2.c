@@ -184,7 +184,10 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int snaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np, float *tol, float *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter, float *v, a_int *ldv, float *h, a_int *ldh, float *ritzr, float *ritzi, float *bounds, float *q, a_int *ldq, float *workl, a_int *ipntr, float *workd, a_int *info, ftnlen bmat_len, ftnlen which_len)
+int snaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np,
+     float *tol, float *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter,
+     float *v, a_int *ldv, float *h, a_int *ldh, float *ritzr, float *ritzi, float *bounds,
+     float *q, a_int *ldq, float *workl, a_int *ipntr, float *workd, a_int *info)
 {
     /* System generated locals */
     a_int h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2;
@@ -206,26 +209,18 @@ int snaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
     a_int ierr;
     static a_int iter;
     float temp;
-    extern double sdot_(a_int *, float *, a_int *, float *, a_int *);
     static a_bool getv0;
-    extern double snrm2_(a_int *, float *, a_int *);
     static a_bool cnorm;
     static a_int nconv;
     static a_bool initv;
     static float rnorm;
-    extern int scopy_(a_int *, float *, a_int *, float *, a_int *), ivout_(a_int *, a_int *, a_int *, a_int *, char *, ftnlen), smout_(a_int *, a_int *, a_int *, float *, a_int *, a_int *, char *, ftnlen), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen), sgetv0_(a_int *, char *, a_int *, a_bool *, a_int *, a_int *, float *, a_int *, float *, float *, a_int *, float *, a_int *, ftnlen);
-    extern double slapy2_(float *, float *);
     static a_int nevbef;
-    extern double slamch_(char *, ftnlen);
-    extern int arscnd_(float *);
     static a_bool update;
     char wprime[2];
     static a_bool ushift;
     static a_int kplusp, msglvl;
     a_int nptemp;
     static a_int numcnv;
-    extern int snaitr_(a_int *, char *, a_int *, a_int *, a_int *, a_int *, float *, float *, float *, a_int *, float *, a_int *, a_int *, float *, a_int *, ftnlen), snconv_(a_int *, float *, float *, float *, float *, a_int *), sneigh_(float *, a_int *, float *, a_int *, float *, float *, float *, float *, a_int *, float *, a_int *), sngets_(a_int *, char *, a_int *, a_int *, float *, float *, float *, float *, float *, ftnlen), snapps_(a_int *, a_int *, a_int *, float *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, float *, float *),
-        ssortc_(char *, a_bool *, a_int *, float *, float *, float *, ftnlen);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -366,7 +361,7 @@ int snaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
 
     if (getv0)
     {
-        sgetv0_(ido, bmat, &i_one, &initv, n, &i_one, &v[v_offset], ldv, &resid[1], &rnorm, &ipntr[1], &workd[1], info, (ftnlen)1);
+        sgetv0_(ido, bmat, &i_one, &initv, n, &i_one, &v[v_offset], ldv, &resid[1], &rnorm, &ipntr[1], &workd[1], info);
 
         if (*ido != 99)
         {
@@ -420,7 +415,7 @@ int snaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
     /*     | Compute the first NEV steps of the Arnoldi factorization | */
     /*     %----------------------------------------------------------% */
 
-    snaitr_(ido, bmat, n, &i_zero, nev, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
+    snaitr_(ido, bmat, n, &i_zero, nev, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h[h_offset], ldh, &ipntr[1], &workd[1], info);
 
     /*     %---------------------------------------------------% */
     /*     | ido .ne. 99 implies use of reverse communication  | */
@@ -454,10 +449,7 @@ L1000:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &iter, &debug_1.ndigit,
-               "_naup2: ****"
-               " Start of major iteration number ****",
-               (ftnlen)49);
+        ivout_(&debug_1.logfil, &i_one, &iter, &debug_1.ndigit,"_naup2: **** Start of major iteration number ****");
     }
 
     /*        %-----------------------------------------------------------% */
@@ -470,14 +462,8 @@ L1000:
 
     if (msglvl > 1)
     {
-        ivout_(&debug_1.logfil, &i_one, nev, &debug_1.ndigit,
-               "_naup2: The le"
-               "ngth of the current Arnoldi factorization",
-               (ftnlen)55);
-        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit,
-               "_naup2: Extend "
-               "the Arnoldi factorization by",
-               (ftnlen)43);
+        ivout_(&debug_1.logfil, &i_one, nev, &debug_1.ndigit,"_naup2: The length of the current Arnoldi factorization");
+        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit,"_naup2: Extend the Arnoldi factorization by");
     }
 
     /*        %-----------------------------------------------------------% */
@@ -488,7 +474,7 @@ L1000:
 L20:
     update = TRUE_;
 
-    snaitr_(ido, bmat, n, nev, np, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h[h_offset], ldh, &ipntr[1], &workd[1], info, (ftnlen)1);
+    snaitr_(ido, bmat, n, nev, np, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h[h_offset], ldh, &ipntr[1], &workd[1], info);
 
     /*        %---------------------------------------------------% */
     /*        | ido .ne. 99 implies use of reverse communication  | */
@@ -511,10 +497,7 @@ L20:
 
     if (msglvl > 1)
     {
-        svout_(&debug_1.logfil, &i_one, &rnorm, &debug_1.ndigit,
-               "_naup2: Cor"
-               "responding B-norm of the residual",
-               (ftnlen)44);
+        svout_(&debug_1.logfil, &i_one, &rnorm, &debug_1.ndigit,"_naup2: Corresponding B-norm of the residual");
     }
 
     /*        %--------------------------------------------------------% */
@@ -561,7 +544,7 @@ L20:
     *nev = nev0;
     *np = np0;
     numcnv = *nev;
-    sngets_(ishift, which, nev, np, &ritzr[1], &ritzi[1], &bounds[1], &workl[1], &workl[*np + 1], (ftnlen)2);
+    sngets_(ishift, which, nev, np, &ritzr[1], &ritzi[1], &bounds[1], &workl[1], &workl[*np + 1]);
     if (*nev == nev0 + 1)
     {
         numcnv = nev0 + 1;
@@ -580,22 +563,10 @@ L20:
         kp[1] = *np;
         kp[2] = numcnv;
         kp[3] = nconv;
-        ivout_(&debug_1.logfil, &i_four, kp, &debug_1.ndigit,
-               "_naup2: NEV, NP"
-               ", NUMCNV, NCONV are",
-               (ftnlen)34);
-        svout_(&debug_1.logfil, &kplusp, &ritzr[1], &debug_1.ndigit,
-               "_naup2"
-               ": Real part of the eigenvalues of H",
-               (ftnlen)41);
-        svout_(&debug_1.logfil, &kplusp, &ritzi[1], &debug_1.ndigit,
-               "_naup2"
-               ": Imaginary part of the eigenvalues of H",
-               (ftnlen)46);
-        svout_(&debug_1.logfil, &kplusp, &bounds[1], &debug_1.ndigit,
-               "_naup"
-               "2: Ritz estimates of the current NCV Ritz values",
-               (ftnlen)53);
+        ivout_(&debug_1.logfil, &i_four, kp, &debug_1.ndigit,"_naup2: NEV, NP, NUMCNV, NCONV are");
+        svout_(&debug_1.logfil, &kplusp, &ritzr[1], &debug_1.ndigit,"_naup2: Real part of the eigenvalues of H");
+        svout_(&debug_1.logfil, &kplusp, &ritzi[1], &debug_1.ndigit,"_naup2: Imaginary part of the eigenvalues of H");
+        svout_(&debug_1.logfil, &kplusp, &bounds[1], &debug_1.ndigit,"_naup2: Ritz estimates of the current NCV Ritz values");
     }
 
     /*        %---------------------------------------------------------% */
@@ -627,22 +598,13 @@ L20:
         {
             /* Computing 2nd power */
             i__1 = kplusp;
-            svout_(&debug_1.logfil, &kplusp, &workl[i__1 * i__1 + 1], &debug_1.ndigit,
-                   "_naup2: Real part of the eig computed b"
-                   "y _neigh:",
-                   (ftnlen)48);
+            svout_(&debug_1.logfil, &kplusp, &workl[i__1 * i__1 + 1], &debug_1.ndigit,"_naup2: Real part of the eig computed by _neigh:");
             /* Computing 2nd power */
             i__1 = kplusp;
-            svout_(&debug_1.logfil, &kplusp, &workl[i__1 * i__1 + kplusp + 1], &debug_1.ndigit,
-                   "_naup2: Imag part of the eig computed"
-                   " by _neigh:",
-                   (ftnlen)48);
+            svout_(&debug_1.logfil, &kplusp, &workl[i__1 * i__1 + kplusp + 1], &debug_1.ndigit,"_naup2: Imag part of the eig computed by _neigh:");
             /* Computing 2nd power */
             i__1 = kplusp;
-            svout_(&debug_1.logfil, &kplusp, &workl[i__1 * i__1 + (kplusp << 1) + 1], &debug_1.ndigit,
-                   "_naup2: Ritz eistmates comput"
-                   "ed by _neigh:",
-                   (ftnlen)42);
+            svout_(&debug_1.logfil, &kplusp, &workl[i__1 * i__1 + (kplusp << 1) + 1], &debug_1.ndigit,"_naup2: Ritz eistmates computed by _neigh:");
         }
 
         /*           %------------------------------------------------% */
@@ -692,7 +654,7 @@ L20:
             s_copy(wprime, "LM", (ftnlen)2, (ftnlen)2);
         }
 
-        ssortc_(wprime, &b_true, &kplusp, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_(wprime, &b_true, &kplusp, &ritzr[1], &ritzi[1], &bounds[1]);
 
         /*           %----------------------------------------------% */
         /*           | Now sort Ritz values so that converged Ritz  | */
@@ -726,7 +688,7 @@ L20:
             s_copy(wprime, "LI", (ftnlen)2, (ftnlen)2);
         }
 
-        ssortc_(wprime, &b_true, &kplusp, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_(wprime, &b_true, &kplusp, &ritzr[1], &ritzi[1], &bounds[1]);
 
         /*           %--------------------------------------------------% */
         /*           | Scale the Ritz estimate of each Ritz value       | */
@@ -751,7 +713,7 @@ L20:
         /*           %----------------------------------------------------% */
 
         s_copy(wprime, "LR", (ftnlen)2, (ftnlen)2);
-        ssortc_(wprime, &b_true, &numcnv, &bounds[1], &ritzr[1], &ritzi[1], (ftnlen)2);
+        ssortc_(wprime, &b_true, &numcnv, &bounds[1], &ritzr[1], &ritzi[1]);
 
         /*           %----------------------------------------------% */
         /*           | Scale the Ritz estimate back to its original | */
@@ -774,13 +736,13 @@ L20:
         /*           | ritzr, ritzi and bound.                        | */
         /*           %------------------------------------------------% */
 
-        ssortc_(which, &b_true, &nconv, &ritzr[1], &ritzi[1], &bounds[1], (ftnlen)2);
+        ssortc_(which, &b_true, &nconv, &ritzr[1], &ritzi[1], &bounds[1]);
 
         if (msglvl > 1)
         {
-            svout_(&debug_1.logfil, &kplusp, &ritzr[1], &debug_1.ndigit, "_naup2: Sorted float part of the eigenvalues", (ftnlen)43);
-            svout_(&debug_1.logfil, &kplusp, &ritzi[1], &debug_1.ndigit, "_naup2: Sorted imaginary part of the eigenvalues", (ftnlen)48);
-            svout_(&debug_1.logfil, &kplusp, &bounds[1], &debug_1.ndigit, "_naup2: Sorted ritz estimates.", (ftnlen)30);
+            svout_(&debug_1.logfil, &kplusp, &ritzr[1], &debug_1.ndigit, "_naup2: Sorted float part of the eigenvalues");
+            svout_(&debug_1.logfil, &kplusp, &ritzi[1], &debug_1.ndigit, "_naup2: Sorted imaginary part of the eigenvalues");
+            svout_(&debug_1.logfil, &kplusp, &bounds[1], &debug_1.ndigit, "_naup2: Sorted ritz estimates.");
         }
 
         /*           %------------------------------------% */
@@ -846,27 +808,21 @@ L20:
 
         if (nevbef < *nev)
         {
-            sngets_(ishift, which, nev, np, &ritzr[1], &ritzi[1], &bounds[1], &workl[1], &workl[*np + 1], (ftnlen)2);
+            sngets_(ishift, which, nev, np, &ritzr[1], &ritzi[1], &bounds[1], &workl[1], &workl[*np + 1]);
         }
     }
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,
-               "_naup2: no."
-               " of \"converged\" Ritz values at this iter.",
-               (ftnlen)52);
+        ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,"_naup2: no. of \"converged\" Ritz values at this iter.");
         if (msglvl > 1)
         {
             kp[0] = *nev;
             kp[1] = *np;
-            ivout_(&debug_1.logfil, &i_two, kp, &debug_1.ndigit,
-                   "_naup2: NEV"
-                   " and NP are",
-                   (ftnlen)22);
-            svout_(&debug_1.logfil, nev, &ritzr[*np + 1], &debug_1.ndigit, "_naup2: \"wanted\" Ritz values -- float part", (ftnlen)41);
-            svout_(&debug_1.logfil, nev, &ritzi[*np + 1], &debug_1.ndigit, "_naup2: \"wanted\" Ritz values -- imag part", (ftnlen)41);
-            svout_(&debug_1.logfil, nev, &bounds[*np + 1], &debug_1.ndigit, "_naup2: Ritz estimates of the \"wanted\" values ", (ftnlen)46);
+            ivout_(&debug_1.logfil, &i_two, kp, &debug_1.ndigit,"_naup2: NEV and NP are");
+            svout_(&debug_1.logfil, nev, &ritzr[*np + 1], &debug_1.ndigit, "_naup2: \"wanted\" Ritz values -- float part");
+            svout_(&debug_1.logfil, nev, &ritzi[*np + 1], &debug_1.ndigit, "_naup2: \"wanted\" Ritz values -- imag part");
+            svout_(&debug_1.logfil, nev, &bounds[*np + 1], &debug_1.ndigit, "_naup2: Ritz estimates of the \"wanted\" values ");
         }
     }
 
@@ -909,24 +865,12 @@ L50:
 
     if (msglvl > 2)
     {
-        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit,
-               "_naup2: The num"
-               "ber of shifts to apply ",
-               (ftnlen)38);
-        svout_(&debug_1.logfil, np, &ritzr[1], &debug_1.ndigit,
-               "_naup2: Rea"
-               "l part of the shifts",
-               (ftnlen)31);
-        svout_(&debug_1.logfil, np, &ritzi[1], &debug_1.ndigit,
-               "_naup2: Ima"
-               "ginary part of the shifts",
-               (ftnlen)36);
+        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit,"_naup2: The number of shifts to apply ");
+        svout_(&debug_1.logfil, np, &ritzr[1], &debug_1.ndigit,"_naup2: Real part of the shifts");
+        svout_(&debug_1.logfil, np, &ritzi[1], &debug_1.ndigit,"_naup2: Imaginary part of the shifts");
         if (*ishift == 1)
         {
-            svout_(&debug_1.logfil, np, &bounds[1], &debug_1.ndigit,
-                   "_naup2"
-                   ": Ritz estimates of the shifts",
-                   (ftnlen)36);
+            svout_(&debug_1.logfil, np, &bounds[1], &debug_1.ndigit,"_naup2: Ritz estimates of the shifts");
         }
     }
 
@@ -992,11 +936,8 @@ L100:
 
     if (msglvl > 2)
     {
-        svout_(&debug_1.logfil, &i_one, &rnorm, &debug_1.ndigit,
-               "_naup2: B-n"
-               "orm of residual for compressed factorization",
-               (ftnlen)55);
-        smout_(&debug_1.logfil, nev, nev, &h[h_offset], ldh, &debug_1.ndigit, "_naup2: Compressed upper Hessenberg matrix H", (ftnlen)44);
+        svout_(&debug_1.logfil, &i_one, &rnorm, &debug_1.ndigit,"_naup2: B-norm of residual for compressed factorization");
+        smout_(&debug_1.logfil, nev, nev, &h[h_offset], ldh, &debug_1.ndigit, "_naup2: Compressed upper Hessenberg matrix H");
     }
 
     goto L1000;

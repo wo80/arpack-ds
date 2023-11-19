@@ -31,7 +31,6 @@ static a_dcomplex c_b151 = {4., 0.};
     a_int j, n;
     a_dcomplex v[7680] /* was [256][30] */;
     double rd[90] /* was [30][3] */;
-    extern int av_(a_int *, a_dcomplex *, a_dcomplex *);
     a_dcomplex ax[256];
     a_int nx, ido, ncv, nev;
     double tol;
@@ -44,18 +43,13 @@ static a_dcomplex c_b151 = {4., 0.};
     a_dcomplex resid[256];
     a_int nconv;
     a_dcomplex workd[768];
-    extern int dmout_(a_int *, a_int *, a_int *, double *, a_int *, a_int *, char *, ftnlen);
     a_int ipntr[14];
     a_dcomplex workl[2850];
     double rwork[30];
-    extern int zaxpy_(a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *);
-    extern double dlapy2_(double *, double *), dznrm2_(a_int *, a_dcomplex *, a_int *);
     a_int iparam[11];
     a_bool select[30];
     a_int ishfts;
-    extern int znaupd_(a_int *, char *, a_int *, char *, a_int *, double *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, double *, a_int *, ftnlen, ftnlen);
     a_int maxitr;
-    extern int zneupd_(a_bool *, char *, a_bool *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_dcomplex *, char *, a_int *, char *, a_int *, double *, a_dcomplex *, a_int *, a_dcomplex *, a_int *, a_int *, a_int *, a_dcomplex *, a_dcomplex *, a_int *, double *, a_int *, ftnlen, ftnlen, ftnlen);
     a_int lworkl;
     a_dcomplex workev[90];
 
@@ -262,7 +256,7 @@ L10:
     /*        | has been exceeded.                          | */
     /*        %---------------------------------------------% */
 
-    znaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &info, (ftnlen)1, (ftnlen)2);
+    znaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
     if (ido == -1 || ido == 1)
     {
@@ -328,7 +322,7 @@ L10:
 
         rvec = TRUE_;
 
-        zneupd_(&rvec, "A", select, d, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr, (ftnlen)1, (ftnlen)1, (ftnlen)2);
+        zneupd_(&rvec, "A", select, d, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr);
 
         /*        %----------------------------------------------% */
         /*        | Eigenvalues are returned in the one          | */
@@ -400,10 +394,7 @@ L10:
             /*            | Display computed residuals. | */
             /*            %-----------------------------% */
 
-            dmout_(&c__6, &nconv, &c__3, rd, &c__30, &c_n6,
-                   "Ritz values (Re"
-                   "al, Imag) and relative residuals",
-                   (ftnlen)47);
+            dmout_(&c__6, &nconv, &c__3, rd, &c__30, &c_n6,"Ritz values (Real, Imag) and relative residuals");
         }
 
         /*        %-------------------------------------------% */
@@ -516,7 +507,6 @@ int av_(a_int *nx, a_dcomplex *v, a_dcomplex *w)
     a_int j;
     a_dcomplex h2;
     a_int lo;
-    extern int tv_(a_int *, a_dcomplex *, a_dcomplex *), zaxpy_(a_int *, a_dcomplex *, a_dcomplex *, a_int *, a_dcomplex *, a_int *);
 
     /*     Computes w <--- OP*v, where OP is the nx*nx by nx*nx block */
     /*     tridiagonal matrix */

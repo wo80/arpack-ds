@@ -130,18 +130,11 @@ int dstqrb_(a_int *n, double *d, double *e, double *z, double *work, a_int *info
     a_int lsv;
     double tst, eps2;
     a_int lend, jtot;
-    extern int dlae2_(double *, double *, double *, double *, double *), dlasr_(char *, char *, char *, a_int *, a_int *, double *, double *, double *, a_int *, ftnlen, ftnlen, ftnlen);
     double anorm;
-    extern int dlaev2_(double *, double *, double *, double *, double *, double *, double *);
     a_int lendm1, lendp1;
-    extern double dlapy2_(double *, double *), dlamch_(char *, ftnlen);
     a_int iscale;
-    extern int dlascl_(char *, a_int *, a_int *, double *, double *, a_int *, a_int *, double *, a_int *, a_int *, ftnlen);
     double safmin;
-    extern int dlartg_(double *, double *, double *, double *, double *);
     double safmax;
-    extern double dlanst_(char *, a_int *, double *, double *, ftnlen);
-    extern int dlasrt_(char *, a_int *, double *, a_int *, ftnlen);
     a_int lendsv, nmaxit, icompz;
     double ssfmax, ssfmin;
 
@@ -313,17 +306,17 @@ L30:
     {
         iscale = 1;
         i__1 = lend - l + 1;
-        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &d[l], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &d[l], n, info);
         i__1 = lend - l;
-        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &e[l], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &e[l], n, info);
     }
     else if (anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
-        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &d[l], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &d[l], n, info);
         i__1 = lend - l;
-        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &e[l], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &e[l], n, info);
     }
 
     /*     choose between ql and qr iteration */
@@ -463,7 +456,7 @@ L30:
 
             /*             *** New starting with version 2.5 *** */
 
-            dlasr_("r", "v", "b", &i_one, &mm, &work[l], &work[*n - 1 + l], &z[l], &i_one, (ftnlen)1, (ftnlen)1, (ftnlen)1);
+            dlasr_("r", "v", "b", &i_one, &mm, &work[l], &work[*n - 1 + l], &z[l], &i_one);
             /*             ************************************* */
         }
 
@@ -612,7 +605,7 @@ L30:
 
             /*           *** New starting with version 2.5 *** */
 
-            dlasr_("r", "v", "f", &i_one, &mm, &work[m], &work[*n - 1 + m], &z[m], &i_one, (ftnlen)1, (ftnlen)1, (ftnlen)1);
+            dlasr_("r", "v", "f", &i_one, &mm, &work[m], &work[*n - 1 + m], &z[m], &i_one);
             /*           ************************************* */
         }
 
@@ -639,16 +632,16 @@ L140:
     if (iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &d[lsv], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &d[lsv], n, info);
         i__1 = lendsv - lsv;
-        dlascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &e[lsv], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &e[lsv], n, info);
     }
     else if (iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &d[lsv], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &d[lsv], n, info);
         i__1 = lendsv - lsv;
-        dlascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &e[lsv], n, info, (ftnlen)1);
+        dlascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &e[lsv], n, info);
     }
 
     /*     check for no convergence to an eigenvalue after a total */
@@ -677,7 +670,7 @@ L160:
 
         /*        use quick sort */
 
-        dlasrt_("i", n, &d[1], info, (ftnlen)1);
+        dlasrt_("i", n, &d[1], info);
     }
     else
     {

@@ -127,7 +127,8 @@ static float s_n1 = -1.f;
 
 /* ----------------------------------------------------------------------- */
 
-int sgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j, float *v, a_int *ldv, float *resid, float *rnorm, a_int *ipntr, float *workd, a_int *ierr, ftnlen bmat_len)
+int sgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j,
+     float *v, a_int *ldv, float *resid, float *rnorm, a_int *ipntr, float *workd, a_int *ierr)
 {
     /* Initialized data */
 
@@ -143,18 +144,12 @@ int sgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
     static float t0, t1, t2, t3;
     a_int jj;
     static a_int iter;
-    extern double sdot_(a_int *, float *, a_int *, float *, a_int *);
     static a_bool orth;
-    extern double snrm2_(a_int *, float *, a_int *);
     static a_int iseed[4];
     a_int idist;
-    extern int sgemv_(char *, a_int *, a_int *, float *, float *, a_int *, float *, a_int *, float *, float *, a_int *, ftnlen);
     static a_bool first;
-    extern int scopy_(a_int *, float *, a_int *, float *, a_int *), svout_(a_int *, a_int *, float *, a_int *, char *, ftnlen);
     static float rnorm0;
-    extern int arscnd_(float *);
     static a_int msglvl;
-    extern int slarnv_(a_int *, a_int *, a_int *, float *);
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -379,9 +374,9 @@ L20:
 L30:
 
     i__1 = *j - 1;
-    sgemv_("T", n, &i__1, &s_one, &v[v_offset], ldv, &workd[1], &i_one, &s_zero, &workd[*n + 1], &i_one, (ftnlen)1);
+    sgemv_("T", n, &i__1, &s_one, &v[v_offset], ldv, &workd[1], &i_one, &s_zero, &workd[*n + 1], &i_one);
     i__1 = *j - 1;
-    sgemv_("N", n, &i__1, &s_n1, &v[v_offset], ldv, &workd[*n + 1], &i_one, &s_one, &resid[1], &i_one, (ftnlen)1);
+    sgemv_("N", n, &i__1, &s_n1, &v[v_offset], ldv, &workd[*n + 1], &i_one, &s_one, &resid[1], &i_one);
 
     /*     %----------------------------------------------------------% */
     /*     | Compute the B-norm of the orthogonalized starting vector | */
@@ -426,14 +421,8 @@ L40:
 
     if (msglvl > 2)
     {
-        svout_(&debug_1.logfil, &i_one, &rnorm0, &debug_1.ndigit,
-               "_getv0: re"
-               "-orthonalization ; rnorm0 is",
-               (ftnlen)38);
-        svout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
-               "_getv0: re-o"
-               "rthonalization ; rnorm is",
-               (ftnlen)37);
+        svout_(&debug_1.logfil, &i_one, &rnorm0, &debug_1.ndigit,"_getv0: re-orthonalization ; rnorm0 is");
+        svout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,"_getv0: re-orthonalization ; rnorm is");
     }
 
     if (*rnorm > rnorm0 * .717f)
@@ -473,17 +462,11 @@ L50:
 
     if (msglvl > 0)
     {
-        svout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,
-               "_getv0: B-no"
-               "rm of initial / restarted starting vector",
-               (ftnlen)53);
+        svout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,"_getv0: B-norm of initial / restarted starting vector");
     }
     if (msglvl > 3)
     {
-        svout_(&debug_1.logfil, n, &resid[1], &debug_1.ndigit,
-               "_getv0: init"
-               "ial / restarted starting vector",
-               (ftnlen)43);
+        svout_(&debug_1.logfil, n, &resid[1], &debug_1.ndigit,"_getv0: initial / restarted starting vector");
     }
     *ido = 99;
 
