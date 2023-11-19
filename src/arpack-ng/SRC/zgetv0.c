@@ -335,7 +335,7 @@ L20:
         zzdotc_(&z__1, n, &resid[1], &i_one, &workd[1], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
         d__1 = cnorm.r;
-        d__2 = d_imag(&cnorm);
+        d__2 = cnorm.i;
         rnorm0 = sqrt(dlapy2_(&d__1, &d__2));
     }
     else if (*bmat == 'I')
@@ -406,7 +406,7 @@ L40:
         zzdotc_(&z__1, n, &resid[1], &i_one, &workd[1], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
         d__1 = cnorm.r;
-        d__2 = d_imag(&cnorm);
+        d__2 = cnorm.i;
         *rnorm = sqrt(dlapy2_(&d__1, &d__2));
     }
     else if (*bmat == 'I')

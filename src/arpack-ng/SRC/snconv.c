@@ -4,8 +4,6 @@
 
 /* Table of constant values */
 
-static double TWO_THIRDS = .66666666666666663;
-
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
 
@@ -78,7 +76,6 @@ int snconv_(a_int *n, float *ritzr, float *ritzi, float *bounds, float *tol, a_i
     double d__1;
 
     /* Builtin functions */
-    double pow_dd(double *, double *);
 
     /* Local variables */
     a_int i;
@@ -148,8 +145,7 @@ int snconv_(a_int *n, float *ritzr, float *ritzi, float *bounds, float *tol, a_i
     /*     %---------------------------------% */
 
     eps23 = slamch_("Epsilon-Machine");
-    d__1 = (double)eps23;
-    eps23 = pow_dd(&d__1, &TWO_THIRDS);
+    eps23 = pow((double)eps23, TWO_THIRDS);
 
     *nconv = 0;
     i__1 = *n;

@@ -4,7 +4,6 @@
 
 /* Table of constant values */
 
-static double TWO_THIRDS = .66666666666666663;
 static a_int i_one = 1;
 static a_bool b_true = TRUE_;
 static double d_one = 1.;
@@ -234,8 +233,6 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     double d__1, d__2, d__3;
 
     /* Builtin functions */
-
-    double pow_dd(double *, double *);
 
     /* Local variables */
     a_int j, k, ih, jj, iq, np, iw, ibd, ihb, ihd, ldh, ldq, irz;
@@ -491,7 +488,7 @@ int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     /*     %---------------------------------% */
 
     eps23 = dlamch_("Epsilon-Machine");
-    eps23 = pow_dd(&eps23, &TWO_THIRDS);
+    eps23 = pow(eps23, TWO_THIRDS);
 
     /*     %---------------------------------------% */
     /*     | RNORM is B-norm of the RESID(1:N).    | */

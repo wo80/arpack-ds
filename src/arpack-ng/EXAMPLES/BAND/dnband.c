@@ -406,7 +406,6 @@ int dnband_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    double d_imag(a_dcomplex *);
 
     /* Local variables */
     a_int i, j, ido;
@@ -1095,7 +1094,7 @@ L90:
             i__1 = *n;
             for (j = 1; j <= i__1; ++j)
             {
-                workd[ipntr[1] + j - 1] = d_imag(&workc[j]);
+                workd[ipntr[1] + j - 1] = workc[j].i;
                 /* L150: */
             }
         }
@@ -1139,7 +1138,7 @@ L90:
             i__1 = *n;
             for (i = 1; i <= i__1; ++i)
             {
-                workd[ipntr[1] + i - 1] = d_imag(&workc[i]);
+                workd[ipntr[1] + i - 1] = workc[i].i;
                 /* L170: */
             }
         }
@@ -1347,7 +1346,7 @@ L90:
             i__1 = *n;
             for (j = 1; j <= i__1; ++j)
             {
-                workd[ipntr[1] + j - 1] = d_imag(&workc[j]);
+                workd[ipntr[1] + j - 1] = workc[j].i;
                 /* L230: */
             }
         }
@@ -1387,7 +1386,7 @@ L90:
             i__1 = *n;
             for (i = 1; i <= i__1; ++i)
             {
-                workd[ipntr[1] + i - 1] = d_imag(&workc[i]);
+                workd[ipntr[1] + i - 1] = workc[i].i;
                 /* L250: */
             }
         }
@@ -1530,7 +1529,7 @@ L90:
                                 {
                                     i__3 = i;
                                     workd[i] = workc[i__3].r;
-                                    workd[i + *n] = d_imag(&workc[i]);
+                                    workd[i + *n] = workc[i].i;
                                 }
                                 denr = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
                                 deni = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
@@ -1597,7 +1596,7 @@ L90:
                                 {
                                     i__3 = i;
                                     workd[i] = workc[i__3].r;
-                                    workd[i + *n] = d_imag(&workc[i]);
+                                    workd[i + *n] = workc[i].i;
                                 }
                                 denr = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
                                 denr += ddot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
@@ -1694,7 +1693,7 @@ L90:
                                 {
                                     i__3 = i;
                                     workd[i] = workc[i__3].r;
-                                    workd[i + *n] = d_imag(&workc[i]);
+                                    workd[i + *n] = workc[i].i;
                                 }
                                 denr = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
                                 deni = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
@@ -1755,7 +1754,7 @@ L90:
                                 {
                                     i__3 = i;
                                     workd[i] = workc[i__3].r;
-                                    workd[i + *n] = d_imag(&workc[i]);
+                                    workd[i + *n] = workc[i].i;
                                 }
                                 denr = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
                                 denr += ddot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);

@@ -153,8 +153,6 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     a_dcomplex z__1, z__2, z__3, z__4, z__5;
 
     /* Builtin functions */
-    double d_imag(a_dcomplex *);
-    void d_cnjg(a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
     double c;
@@ -408,7 +406,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
                 z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
                 t.r = z__1.r, t.i = z__1.i;
                 i__4 = i + 1 + j * h_dim1;
-                d_cnjg(&z__4, &s);
+                ar_d_cnjg(&z__4, &s);
                 z__3.r = -z__4.r, z__3.i = -z__4.i;
                 i__5 = i + j * h_dim1;
                 z__2.r = z__3.r * h[i__5].r - z__3.i * h[i__5].i, z__2.i = z__3.r * h[i__5].i + z__3.i * h[i__5].r;
@@ -432,7 +430,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
             {
                 i__4 = j + i * h_dim1;
                 z__2.r = c * h[i__4].r, z__2.i = c * h[i__4].i;
-                d_cnjg(&z__4, &s);
+                ar_d_cnjg(&z__4, &s);
                 i__5 = j + (i + 1) * h_dim1;
                 z__3.r = z__4.r * h[i__5].r - z__4.i * h[i__5].i, z__3.i = z__4.r * h[i__5].i + z__4.i * h[i__5].r;
                 z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
@@ -461,7 +459,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
             {
                 i__4 = j + i * q_dim1;
                 z__2.r = c * q[i__4].r, z__2.i = c * q[i__4].i;
-                d_cnjg(&z__4, &s);
+                ar_d_cnjg(&z__4, &s);
                 i__5 = j + (i + 1) * q_dim1;
                 z__3.r = z__4.r * q[i__5].r - z__4.i * q[i__5].i, z__3.i = z__4.r * q[i__5].i + z__4.i * q[i__5].r;
                 z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
@@ -531,12 +529,12 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
             i__2 = j + 1 + j * h_dim1;
             i__3 = j + 1 + j * h_dim1;
             d__2 = h[i__3].r;
-            d__3 = d_imag(&h[j + 1 + j * h_dim1]);
+            d__3 = h[j + 1 + j * h_dim1].i;
             d__1 = dlapy2_(&d__2, &d__3);
             z__1.r = h[i__2].r / d__1, z__1.i = h[i__2].i / d__1;
             t.r = z__1.r, t.i = z__1.i;
             i__2 = kplusp - j + 1;
-            d_cnjg(&z__1, &t);
+            ar_d_cnjg(&z__1, &t);
             zscal_(&i__2, &z__1, &h[j + 1 + j * h_dim1], ldh);
             /* Computing MIN */
             i__3 = j + 2;

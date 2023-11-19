@@ -22,7 +22,6 @@ static a_int c__5 = 5;
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    double sqrt(double);
 
     /* Local variables */
     a_int j, m, n;

@@ -610,7 +610,7 @@ L60:
         zzdotc_(&z__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
         d__1 = cnorm.r;
-        d__2 = d_imag(&cnorm);
+        d__2 = cnorm.i;
         wnorm = sqrt(dlapy2_(&d__1, &d__2));
     }
     else if (*bmat == 'I')
@@ -695,7 +695,7 @@ L70:
         zzdotc_(&z__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
         d__1 = cnorm.r;
-        d__2 = d_imag(&cnorm);
+        d__2 = cnorm.i;
         *rnorm = sqrt(dlapy2_(&d__1, &d__2));
     }
     else if (*bmat == 'I')
@@ -806,7 +806,7 @@ L90:
         zzdotc_(&z__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = z__1.r, cnorm.i = z__1.i;
         d__1 = cnorm.r;
-        d__2 = d_imag(&cnorm);
+        d__2 = cnorm.i;
         rnorm1 = sqrt(dlapy2_(&d__1, &d__2));
     }
     else if (*bmat == 'I')
@@ -911,7 +911,7 @@ L100:
 
             i__2 = i + i * h_dim1;
             d__1 = h[i__2].r;
-            d__2 = d_imag(&h[i + i * h_dim1]);
+            d__2 = h[i + i * h_dim1].i;
             i__3 = i + 1 + (i + 1) * h_dim1;
             d__3 = h[i__3].r;
             d__4 = d_imag(&h[i + 1 + (i + 1) * h_dim1]);
@@ -923,7 +923,7 @@ L100:
             }
             i__2 = i + 1 + i * h_dim1;
             d__1 = h[i__2].r;
-            d__2 = d_imag(&h[i + 1 + i * h_dim1]);
+            d__2 = h[i + 1 + i * h_dim1].i;
             /* Computing MAX */
             d__3 = ulp * tst1;
             if (dlapy2_(&d__1, &d__2) <= max(d__3, smlnum))

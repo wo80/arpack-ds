@@ -6,7 +6,6 @@
 
 static a_dcomplex z_one = {1., 0.};
 static a_dcomplex z_zero = {0., 0.};
-static double TWO_THIRDS = .66666666666666663;
 static a_int i_one = 1;
 static a_bool b_true = TRUE_;
 
@@ -269,10 +268,6 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
     a_dcomplex z__1, z__2;
 
     /* Builtin functions */
-    double pow_dd(double *, double *);
-
-    double d_imag(a_dcomplex *);
-    void z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
     a_int j, k, ih, jj, iq, np;
@@ -372,7 +367,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
     /*     %---------------------------------% */
 
     eps23 = dlamch_("Epsilon-Machine");
-    eps23 = pow_dd(&eps23, &TWO_THIRDS);
+    eps23 = pow(eps23, TWO_THIRDS);
 
     /*     %-------------------------------% */
     /*     | Quick return                  | */
@@ -572,14 +567,14 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
             /* Computing MAX */
             i__2 = irz + *ncv - j;
             d__3 = workl[i__2].r;
-            d__4 = d_imag(&workl[irz + *ncv - j]);
+            d__4 = workl[irz + *ncv - j].i;
             d__1 = eps23, d__2 = dlapy2_(&d__3, &d__4);
             rtemp = max(d__1, d__2);
             i__2 = bounds + *ncv - j;
             jj = (a_int)workl[i__2].r;
             i__2 = ibd + jj - 1;
             d__1 = workl[i__2].r;
-            d__2 = d_imag(&workl[ibd + jj - 1]);
+            d__2 = workl[ibd + jj - 1].i;
             if (numcnv < nconv && dlapy2_(&d__1, &d__2) <= *tol * rtemp)
             {
                 select[jj] = TRUE_;
@@ -867,8 +862,8 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
             i__2 = iheig + k - 1;
             temp.r = workl[i__2].r, temp.i = workl[i__2].i;
             i__2 = ihbds + k - 1;
-            z_div(&z__2, &workl[ihbds + k - 1], &temp);
-            z_div(&z__1, &z__2, &temp);
+            ar_z_div(&z__2, &workl[ihbds + k - 1], &temp);
+            ar_z_div(&z__1, &z__2, &temp);
             workl[i__2].r = z__1.r, workl[i__2].i = z__1.i;
             /* L50: */
         }
@@ -888,7 +883,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
         for (k = 1; k <= i__1; ++k)
         {
             i__2 = k;
-            z_div(&z__2, &z_one, &workl[iheig + k - 1]);
+            ar_z_div(&z__2, &z_one, &workl[iheig + k - 1]);
             z__1.r = z__2.r + sigma->r, z__1.i = z__2.i + sigma->i;
             d[i__2].r = z__1.r, d[i__2].i = z__1.i;
             /* L60: */
@@ -931,7 +926,7 @@ int zneupd_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
             if (workl[i__2].r != 0. || workl[i__2].i != 0.)
             {
                 i__2 = j;
-                z_div(&z__1, &workl[invsub + (j - 1) * ldq + *ncv - 1], &workl[iheig + j - 1]);
+                ar_z_div(&z__1, &workl[invsub + (j - 1) * ldq + *ncv - 1], &workl[iheig + j - 1]);
                 workev[i__2].r = z__1.r, workev[i__2].i = z__1.i;
             }
             /* L100: */

@@ -139,7 +139,6 @@ int dgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int 
     a_int v_dim1, v_offset, i__1;
 
     /* Builtin functions */
-    double sqrt(double);
 
     /* Local variables */
     static float t0, t1, t2, t3;

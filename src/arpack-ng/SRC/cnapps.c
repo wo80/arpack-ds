@@ -153,8 +153,6 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     a_fcomplex q__1, q__2, q__3, q__4, q__5;
 
     /* Builtin functions */
-    double r_imag(a_fcomplex *);
-    void r_cnjg(a_fcomplex *, a_fcomplex *);
 
     /* Local variables */
     float c;
@@ -408,7 +406,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
                 q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
                 t.r = q__1.r, t.i = q__1.i;
                 i__4 = i + 1 + j * h_dim1;
-                r_cnjg(&q__4, &s);
+                ar_r_cnjg(&q__4, &s);
                 q__3.r = -q__4.r, q__3.i = -q__4.i;
                 i__5 = i + j * h_dim1;
                 q__2.r = q__3.r * h[i__5].r - q__3.i * h[i__5].i, q__2.i = q__3.r * h[i__5].i + q__3.i * h[i__5].r;
@@ -432,7 +430,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
             {
                 i__4 = j + i * h_dim1;
                 q__2.r = c * h[i__4].r, q__2.i = c * h[i__4].i;
-                r_cnjg(&q__4, &s);
+                ar_r_cnjg(&q__4, &s);
                 i__5 = j + (i + 1) * h_dim1;
                 q__3.r = q__4.r * h[i__5].r - q__4.i * h[i__5].i, q__3.i = q__4.r * h[i__5].i + q__4.i * h[i__5].r;
                 q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
@@ -461,7 +459,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
             {
                 i__4 = j + i * q_dim1;
                 q__2.r = c * q[i__4].r, q__2.i = c * q[i__4].i;
-                r_cnjg(&q__4, &s);
+                ar_r_cnjg(&q__4, &s);
                 i__5 = j + (i + 1) * q_dim1;
                 q__3.r = q__4.r * q[i__5].r - q__4.i * q[i__5].i, q__3.i = q__4.r * q[i__5].i + q__4.i * q[i__5].r;
                 q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
@@ -531,12 +529,12 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
             i__2 = j + 1 + j * h_dim1;
             i__3 = j + 1 + j * h_dim1;
             r__2 = h[i__3].r;
-            r__3 = r_imag(&h[j + 1 + j * h_dim1]);
+            r__3 = h[j + 1 + j * h_dim1].i;
             r__1 = slapy2_(&r__2, &r__3);
             q__1.r = h[i__2].r / r__1, q__1.i = h[i__2].i / r__1;
             t.r = q__1.r, t.i = q__1.i;
             i__2 = kplusp - j + 1;
-            r_cnjg(&q__1, &t);
+            ar_r_cnjg(&q__1, &t);
             cscal_(&i__2, &q__1, &h[j + 1 + j * h_dim1], ldh);
             /* Computing MIN */
             i__3 = j + 2;

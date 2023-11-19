@@ -70,8 +70,6 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
 
     /* Builtin functions */
 
-    double d_imag(a_dcomplex *);
-
     /* Local variables */
     a_int i, j, igap;
     a_dcomplex temp;
@@ -129,11 +127,11 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
 
             i__2 = j;
             d__1 = x[i__2].r;
-            d__2 = d_imag(&x[j]);
+            d__2 = x[j].i;
             temp1 = dlapy2_(&d__1, &d__2);
             i__2 = j + igap;
             d__1 = x[i__2].r;
-            d__2 = d_imag(&x[j + igap]);
+            d__2 = x[j + igap].i;
             temp2 = dlapy2_(&d__1, &d__2);
 
             if (temp1 > temp2)
@@ -194,11 +192,11 @@ int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
 
             i__2 = j;
             d__1 = x[i__2].r;
-            d__2 = d_imag(&x[j]);
+            d__2 = x[j].i;
             temp1 = dlapy2_(&d__1, &d__2);
             i__2 = j + igap;
             d__1 = x[i__2].r;
-            d__2 = d_imag(&x[j + igap]);
+            d__2 = x[j + igap].i;
             temp2 = dlapy2_(&d__1, &d__2);
 
             if (temp1 < temp2)

@@ -33,8 +33,6 @@ static a_int c__4 = 4;
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    void c_div(a_fcomplex *, a_fcomplex *, a_fcomplex *);
-    double r_imag(a_fcomplex *);
 
     /* Local variables */
     a_fcomplex d[25], h;
@@ -245,29 +243,29 @@ static a_int c__4 = 4;
     convct_1.rho.r = 10.f, convct_1.rho.i = 0.f;
     i__1 = n + 1;
     q__2.r = (float)i__1, q__2.i = 0.f;
-    c_div(&q__1, &c_b1, &q__2);
+    ar_c_div(&q__1, &c_b1, &q__2);
     h.r = q__1.r, h.i = q__1.i;
-    c_div(&q__1, &convct_1.rho, &c_b3);
+    ar_c_div(&q__1, &convct_1.rho, &c_b3);
     s.r = q__1.r, s.i = q__1.i;
 
     q__4.r = -1.f, q__4.i = -0.f;
-    c_div(&q__3, &q__4, &h);
+    ar_c_div(&q__3, &q__4, &h);
     q__2.r = q__3.r - s.r, q__2.i = q__3.i - s.i;
     q__6.r = sigma.r * h.r - sigma.i * h.i, q__6.i = sigma.r * h.i + sigma.i * h.r;
-    c_div(&q__5, &q__6, &c_b5);
+    ar_c_div(&q__5, &q__6, &c_b5);
     q__1.r = q__2.r - q__5.r, q__1.i = q__2.i - q__5.i;
     s1.r = q__1.r, s1.i = q__1.i;
-    c_div(&q__2, &c_b3, &h);
+    ar_c_div(&q__2, &c_b3, &h);
     q__5.r = sigma.r * 4.f - sigma.i * 0.f, q__5.i = sigma.i * 4.f + sigma.r * 0.f;
     q__4.r = q__5.r * h.r - q__5.i * h.i, q__4.i = q__5.r * h.i + q__5.i * h.r;
-    c_div(&q__3, &q__4, &c_b5);
+    ar_c_div(&q__3, &q__4, &c_b5);
     q__1.r = q__2.r - q__3.r, q__1.i = q__2.i - q__3.i;
     s2.r = q__1.r, s2.i = q__1.i;
     q__4.r = -1.f, q__4.i = -0.f;
-    c_div(&q__3, &q__4, &h);
+    ar_c_div(&q__3, &q__4, &h);
     q__2.r = q__3.r + s.r, q__2.i = q__3.i + s.i;
     q__6.r = sigma.r * h.r - sigma.i * h.i, q__6.i = sigma.r * h.i + sigma.i * h.r;
-    c_div(&q__5, &q__6, &c_b5);
+    ar_c_div(&q__5, &q__6, &c_b5);
     q__1.r = q__2.r - q__5.r, q__1.i = q__2.i - q__5.i;
     s3.r = q__1.r, s3.i = q__1.i;
 
@@ -533,7 +531,7 @@ L20:
                 caxpy_(&n, &q__1, mx, &c__1, ax, &c__1);
                 i__2 = j - 1;
                 rd[j - 1] = d[i__2].r;
-                rd[j + 24] = r_imag(&d[j - 1]);
+                rd[j + 24] = d[j - 1].i;
                 rd[j + 49] = scnrm2_(&n, ax, &c__1);
                 rd[j + 49] /= slapy2_(&rd[j - 1], &rd[j + 24]);
                 /* L80: */
@@ -643,7 +641,7 @@ int mv_(a_int *n, a_fcomplex *v, a_fcomplex *w)
     a_fcomplex q__1, q__2, q__3, q__4, q__5, q__6;
 
     /* Builtin functions */
-    void c_div(a_fcomplex *, a_fcomplex *, a_fcomplex *);
+    void ar_c_div(a_fcomplex *, a_fcomplex *, a_fcomplex *);
 
     /* Local variables */
     a_fcomplex h;
@@ -661,7 +659,7 @@ int mv_(a_int *n, a_fcomplex *v, a_fcomplex *w)
     q__3.r = v[1].r * 4.f - v[1].i * 0.f, q__3.i = v[1].i * 4.f + v[1].r * 0.f;
     q__4.r = v[2].r * 1.f - v[2].i * 0.f, q__4.i = v[2].i * 1.f + v[2].r * 0.f;
     q__2.r = q__3.r + q__4.r, q__2.i = q__3.i + q__4.i;
-    c_div(&q__1, &q__2, &c_b5);
+    ar_c_div(&q__1, &q__2, &c_b5);
     w[1].r = q__1.r, w[1].i = q__1.i;
     i__1 = *n - 1;
     for (j = 2; j <= i__1; ++j)
@@ -675,7 +673,7 @@ int mv_(a_int *n, a_fcomplex *v, a_fcomplex *w)
         i__5 = j + 1;
         q__6.r = v[i__5].r * 1.f - v[i__5].i * 0.f, q__6.i = v[i__5].i * 1.f + v[i__5].r * 0.f;
         q__2.r = q__3.r + q__6.r, q__2.i = q__3.i + q__6.i;
-        c_div(&q__1, &q__2, &c_b5);
+        ar_c_div(&q__1, &q__2, &c_b5);
         w[i__2].r = q__1.r, w[i__2].i = q__1.i;
         /* L40: */
     }
@@ -685,12 +683,12 @@ int mv_(a_int *n, a_fcomplex *v, a_fcomplex *w)
     i__3 = *n;
     q__4.r = v[i__3].r * 4.f - v[i__3].i * 0.f, q__4.i = v[i__3].i * 4.f + v[i__3].r * 0.f;
     q__2.r = q__3.r + q__4.r, q__2.i = q__3.i + q__4.i;
-    c_div(&q__1, &q__2, &c_b5);
+    ar_c_div(&q__1, &q__2, &c_b5);
     w[i__1].r = q__1.r, w[i__1].i = q__1.i;
 
     i__1 = *n + 1;
     q__2.r = (float)i__1, q__2.i = 0.f;
-    c_div(&q__1, &c_b1, &q__2);
+    ar_c_div(&q__1, &c_b1, &q__2);
     h.r = q__1.r, h.i = q__1.i;
     cscal_(n, &h, &w[1], &c__1);
     return 0;
@@ -704,7 +702,7 @@ int av_(a_int *n, a_fcomplex *v, a_fcomplex *w)
     a_fcomplex q__1, q__2, q__3, q__4, q__5;
 
     /* Builtin functions */
-    void c_div(a_fcomplex *, a_fcomplex *, a_fcomplex *);
+    void ar_c_div(a_fcomplex *, a_fcomplex *, a_fcomplex *);
 
     /* Local variables */
     a_fcomplex h;
@@ -718,18 +716,18 @@ int av_(a_int *n, a_fcomplex *v, a_fcomplex *w)
     /* Function Body */
     i__1 = *n + 1;
     q__2.r = (float)i__1, q__2.i = 0.f;
-    c_div(&q__1, &c_b1, &q__2);
+    ar_c_div(&q__1, &c_b1, &q__2);
     h.r = q__1.r, h.i = q__1.i;
-    c_div(&q__1, &convct_1.rho, &c_b3);
+    ar_c_div(&q__1, &convct_1.rho, &c_b3);
     s.r = q__1.r, s.i = q__1.i;
-    c_div(&q__1, &c_b3, &h);
+    ar_c_div(&q__1, &c_b3, &h);
     dd.r = q__1.r, dd.i = q__1.i;
     q__3.r = -1.f, q__3.i = -0.f;
-    c_div(&q__2, &q__3, &h);
+    ar_c_div(&q__2, &q__3, &h);
     q__1.r = q__2.r - s.r, q__1.i = q__2.i - s.i;
     dl.r = q__1.r, dl.i = q__1.i;
     q__3.r = -1.f, q__3.i = -0.f;
-    c_div(&q__2, &q__3, &h);
+    ar_c_div(&q__2, &q__3, &h);
     q__1.r = q__2.r + s.r, q__1.i = q__2.i + s.i;
     du.r = q__1.r, du.i = q__1.i;
 

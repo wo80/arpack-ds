@@ -32,8 +32,6 @@ static a_int c__5 = 5;
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    void z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
-    double d_imag(a_dcomplex *);
 
     /* Local variables */
     a_dcomplex d[25], h;
@@ -235,24 +233,24 @@ static a_int c__5 = 5;
     convct_1.rho.r = 10., convct_1.rho.i = 0.;
     i__1 = n + 1;
     z__2.r = (double)i__1, z__2.i = 0.;
-    z_div(&z__1, &c_b1, &z__2);
+    ar_z_div(&z__1, &c_b1, &z__2);
     h.r = z__1.r, h.i = z__1.i;
     z__1.r = h.r * h.r - h.i * h.i, z__1.i = h.r * h.i + h.i * h.r;
     h2.r = z__1.r, h2.i = z__1.i;
-    z_div(&z__1, &convct_1.rho, &c_b3);
+    ar_z_div(&z__1, &convct_1.rho, &c_b3);
     s.r = z__1.r, s.i = z__1.i;
 
     z__3.r = -1., z__3.i = -0.;
-    z_div(&z__2, &z__3, &h2);
-    z_div(&z__4, &s, &h);
+    ar_z_div(&z__2, &z__3, &h2);
+    ar_z_div(&z__4, &s, &h);
     z__1.r = z__2.r - z__4.r, z__1.i = z__2.i - z__4.i;
     s1.r = z__1.r, s1.i = z__1.i;
-    z_div(&z__2, &c_b3, &h2);
+    ar_z_div(&z__2, &c_b3, &h2);
     z__1.r = z__2.r - sigma.r, z__1.i = z__2.i - sigma.i;
     s2.r = z__1.r, s2.i = z__1.i;
     z__3.r = -1., z__3.i = -0.;
-    z_div(&z__2, &z__3, &h2);
-    z_div(&z__4, &s, &h);
+    ar_z_div(&z__2, &z__3, &h2);
+    ar_z_div(&z__4, &s, &h);
     z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
     s3.r = z__1.r, s3.i = z__1.i;
 
@@ -475,7 +473,7 @@ L20:
                 zaxpy_(&n, &z__1, &v[(j << 8) - 256], &c__1, ax, &c__1);
                 i__2 = j - 1;
                 rd[j - 1] = d[i__2].r;
-                rd[j + 24] = d_imag(&d[j - 1]);
+                rd[j + 24] = d[j - 1].i;
                 rd[j + 49] = dznrm2_(&n, ax, &c__1);
                 rd[j + 49] /= dlapy2_(&rd[j - 1], &rd[j + 24]);
                 /* L60: */
@@ -589,7 +587,7 @@ int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     a_dcomplex z__1, z__2, z__3, z__4, z__5;
 
     /* Builtin functions */
-    void z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
+    void ar_z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
     a_dcomplex h;
@@ -603,22 +601,22 @@ int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     /* Function Body */
     i__1 = *n + 1;
     z__2.r = (double)i__1, z__2.i = 0.;
-    z_div(&z__1, &c_b1, &z__2);
+    ar_z_div(&z__1, &c_b1, &z__2);
     h.r = z__1.r, h.i = z__1.i;
     z__1.r = h.r * h.r - h.i * h.i, z__1.i = h.r * h.i + h.i * h.r;
     h2.r = z__1.r, h2.i = z__1.i;
-    z_div(&z__1, &convct_1.rho, &c_b3);
+    ar_z_div(&z__1, &convct_1.rho, &c_b3);
     s.r = z__1.r, s.i = z__1.i;
-    z_div(&z__1, &c_b3, &h2);
+    ar_z_div(&z__1, &c_b3, &h2);
     dd.r = z__1.r, dd.i = z__1.i;
     z__3.r = -1., z__3.i = -0.;
-    z_div(&z__2, &z__3, &h2);
-    z_div(&z__4, &s, &h);
+    ar_z_div(&z__2, &z__3, &h2);
+    ar_z_div(&z__4, &s, &h);
     z__1.r = z__2.r - z__4.r, z__1.i = z__2.i - z__4.i;
     dl.r = z__1.r, dl.i = z__1.i;
     z__3.r = -1., z__3.i = -0.;
-    z_div(&z__2, &z__3, &h2);
-    z_div(&z__4, &s, &h);
+    ar_z_div(&z__2, &z__3, &h2);
+    ar_z_div(&z__4, &s, &h);
     z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
     du.r = z__1.r, du.i = z__1.i;
 

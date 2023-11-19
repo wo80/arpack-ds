@@ -226,7 +226,6 @@ int dsaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *mode, 
     a_int h_dim1, h_offset, v_dim1, v_offset, i__1;
 
     /* Builtin functions */
-    double sqrt(double);
 
     /* Local variables */
     a_int i;

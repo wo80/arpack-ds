@@ -4,7 +4,6 @@
 
 /* Table of constant values */
 
-static double TWO_THIRDS = .66666666666666663;
 static a_int i_one = 1;
 static a_int i_zero = 0;
 static a_int i_three = 3;
@@ -199,9 +198,6 @@ int dsaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
     double d__1, d__2, d__3;
 
     /* Builtin functions */
-    double pow_dd(double *, double *);
-
-    double sqrt(double);
 
     /* Local variables */
     a_int j;
@@ -310,7 +306,7 @@ int dsaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
         /*        %---------------------------------% */
 
         eps23 = dlamch_("Epsilon-Machine");
-        eps23 = pow_dd(&eps23, &TWO_THIRDS);
+        eps23 = pow(eps23, TWO_THIRDS);
 
         /*        %-------------------------------------% */
         /*        | nev0 and np0 are integer variables  | */

@@ -9,7 +9,6 @@
     a_dcomplex z__1, z__2, z__3;
 
     /* Builtin functions */
-    void d_cnjg(a_dcomplex *, a_dcomplex *);
 
     /* Local variables */
     a_int i, ix, iy;
@@ -51,7 +50,7 @@
     i__1 = *n;
     for (i = 1; i <= i__1; ++i)
     {
-        d_cnjg(&z__3, &zx[ix]);
+        ar_d_cnjg(&z__3, &zx[ix]);
         i__2 = iy;
         z__2.r = z__3.r * zy[i__2].r - z__3.i * zy[i__2].i, z__2.i = z__3.r * zy[i__2].i + z__3.i * zy[i__2].r;
         z__1.r = ztemp.r + z__2.r, z__1.i = ztemp.i + z__2.i;
@@ -69,7 +68,7 @@ L20:
     i__1 = *n;
     for (i = 1; i <= i__1; ++i)
     {
-        d_cnjg(&z__3, &zx[i]);
+        ar_d_cnjg(&z__3, &zx[i]);
         i__2 = i;
         z__2.r = z__3.r * zy[i__2].r - z__3.i * zy[i__2].i, z__2.i = z__3.r * zy[i__2].i + z__3.i * zy[i__2].r;
         z__1.r = ztemp.r + z__2.r, z__1.i = ztemp.i + z__2.i;

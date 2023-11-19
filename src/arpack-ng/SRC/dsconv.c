@@ -4,8 +4,6 @@
 
 /* Table of constant values */
 
-static double TWO_THIRDS = .66666666666666663;
-
 /* ----------------------------------------------------------------------- */
 /* \BeginDoc */
 
@@ -71,7 +69,6 @@ int dsconv_(a_int *n, double *ritz, double *bounds, double *tol, a_int *nconv)
     double d__1, d__2, d__3;
 
     /* Builtin functions */
-    double pow_dd(double *, double *);
 
     /* Local variables */
     a_int i;
@@ -128,7 +125,7 @@ int dsconv_(a_int *n, double *ritz, double *bounds, double *tol, a_int *nconv)
     arscnd_(&t0);
 
     eps23 = dlamch_("Epsilon-Machine");
-    eps23 = pow_dd(&eps23, &TWO_THIRDS);
+    eps23 = pow(eps23, TWO_THIRDS);
 
     *nconv = 0;
     i__1 = *n;

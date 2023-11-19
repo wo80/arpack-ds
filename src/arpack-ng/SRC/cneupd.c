@@ -6,7 +6,6 @@
 
 static a_fcomplex c_one = {1.f, 0.f};
 static a_fcomplex c_zero = {0.f, 0.f};
-static double TWO_THIRDS = .66666666666666663;
 static a_int i_one = 1;
 static a_bool b_true = TRUE_;
 
@@ -270,10 +269,6 @@ int cneupd_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d, a_fcomple
     a_fcomplex q__1, q__2;
 
     /* Builtin functions */
-    double pow_dd(double *, double *);
-
-    double r_imag(a_fcomplex *);
-    void c_div(a_fcomplex *, a_fcomplex *, a_fcomplex *);
 
     /* Local variables */
     a_int j, k, ih, jj, iq, np;
@@ -374,8 +369,7 @@ int cneupd_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d, a_fcomple
     /*     %---------------------------------% */
 
     eps23 = slamch_("Epsilon-Machine");
-    d__1 = (double)eps23;
-    eps23 = pow_dd(&d__1, &TWO_THIRDS);
+    eps23 = pow((double)eps23, TWO_THIRDS);
 
     /*     %-------------------------------% */
     /*     | Quick return                  | */
@@ -575,14 +569,14 @@ int cneupd_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d, a_fcomple
             /* Computing MAX */
             i__2 = irz + *ncv - j;
             r__3 = workl[i__2].r;
-            r__4 = r_imag(&workl[irz + *ncv - j]);
+            r__4 = workl[irz + *ncv - j].i;
             r__1 = eps23, r__2 = slapy2_(&r__3, &r__4);
             rtemp = dmax(r__1, r__2);
             i__2 = bounds + *ncv - j;
             jj = workl[i__2].r;
             i__2 = ibd + jj - 1;
             r__1 = workl[i__2].r;
-            r__2 = r_imag(&workl[ibd + jj - 1]);
+            r__2 = workl[ibd + jj - 1].i;
             if (numcnv < nconv && slapy2_(&r__1, &r__2) <= *tol * rtemp)
             {
                 select[jj] = TRUE_;
@@ -870,8 +864,8 @@ int cneupd_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d, a_fcomple
             i__2 = iheig + k - 1;
             temp.r = workl[i__2].r, temp.i = workl[i__2].i;
             i__2 = ihbds + k - 1;
-            c_div(&q__2, &workl[ihbds + k - 1], &temp);
-            c_div(&q__1, &q__2, &temp);
+            ar_c_div(&q__2, &workl[ihbds + k - 1], &temp);
+            ar_c_div(&q__1, &q__2, &temp);
             workl[i__2].r = q__1.r, workl[i__2].i = q__1.i;
             /* L50: */
         }
@@ -891,7 +885,7 @@ int cneupd_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d, a_fcomple
         for (k = 1; k <= i__1; ++k)
         {
             i__2 = k;
-            c_div(&q__2, &c_one, &workl[iheig + k - 1]);
+            ar_c_div(&q__2, &c_one, &workl[iheig + k - 1]);
             q__1.r = q__2.r + sigma->r, q__1.i = q__2.i + sigma->i;
             d[i__2].r = q__1.r, d[i__2].i = q__1.i;
             /* L60: */
@@ -934,7 +928,7 @@ int cneupd_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d, a_fcomple
             if (workl[i__2].r != 0.f || workl[i__2].i != 0.f)
             {
                 i__2 = j;
-                c_div(&q__1, &workl[invsub + (j - 1) * ldq + *ncv - 1], &workl[iheig + j - 1]);
+                ar_c_div(&q__1, &workl[invsub + (j - 1) * ldq + *ncv - 1], &workl[iheig + j - 1]);
                 workev[i__2].r = q__1.r, workev[i__2].i = q__1.i;
             }
             /* L100: */

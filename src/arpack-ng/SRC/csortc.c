@@ -70,8 +70,6 @@ int csortc_(char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomplex *y)
 
     /* Builtin functions */
 
-    double r_imag(a_fcomplex *);
-
     /* Local variables */
     a_int i, j, igap;
     a_fcomplex temp;
@@ -129,11 +127,11 @@ int csortc_(char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomplex *y)
 
             i__2 = j;
             r__1 = x[i__2].r;
-            r__2 = r_imag(&x[j]);
+            r__2 = x[j].i;
             temp1 = slapy2_(&r__1, &r__2);
             i__2 = j + igap;
             r__1 = x[i__2].r;
-            r__2 = r_imag(&x[j + igap]);
+            r__2 = x[j + igap].i;
             temp2 = slapy2_(&r__1, &r__2);
 
             if (temp1 > temp2)
@@ -194,11 +192,11 @@ int csortc_(char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomplex *y)
 
             i__2 = j;
             r__1 = x[i__2].r;
-            r__2 = r_imag(&x[j]);
+            r__2 = x[j].i;
             temp1 = slapy2_(&r__1, &r__2);
             i__2 = j + igap;
             r__1 = x[i__2].r;
-            r__2 = r_imag(&x[j + igap]);
+            r__2 = x[j + igap].i;
             temp2 = slapy2_(&r__1, &r__2);
 
             if (temp1 < temp2)

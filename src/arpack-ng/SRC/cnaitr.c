@@ -232,7 +232,6 @@ int cnaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_
     a_fcomplex q__1;
 
     /* Builtin functions */
-    double r_imag(a_fcomplex *), sqrt(double);
 
     /* Local variables */
     a_int i;
@@ -610,7 +609,7 @@ L60:
         ccdotc_(&q__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = q__1.r, cnorm.i = q__1.i;
         r__1 = cnorm.r;
-        r__2 = r_imag(&cnorm);
+        r__2 = cnorm.i;
         wnorm = sqrt(slapy2_(&r__1, &r__2));
     }
     else if (*bmat == 'I')
@@ -695,7 +694,7 @@ L70:
         ccdotc_(&q__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = q__1.r, cnorm.i = q__1.i;
         r__1 = cnorm.r;
-        r__2 = r_imag(&cnorm);
+        r__2 = cnorm.i;
         *rnorm = sqrt(slapy2_(&r__1, &r__2));
     }
     else if (*bmat == 'I')
@@ -806,7 +805,7 @@ L90:
         ccdotc_(&q__1, n, &resid[1], &i_one, &workd[ipj], &i_one);
         cnorm.r = q__1.r, cnorm.i = q__1.i;
         r__1 = cnorm.r;
-        r__2 = r_imag(&cnorm);
+        r__2 = cnorm.i;
         rnorm1 = sqrt(slapy2_(&r__1, &r__2));
     }
     else if (*bmat == 'I')
@@ -911,7 +910,7 @@ L100:
 
             i__2 = i + i * h_dim1;
             r__1 = h[i__2].r;
-            r__2 = r_imag(&h[i + i * h_dim1]);
+            r__2 = h[i + i * h_dim1].i;
             i__3 = i + 1 + (i + 1) * h_dim1;
             r__3 = h[i__3].r;
             r__4 = r_imag(&h[i + 1 + (i + 1) * h_dim1]);
@@ -923,7 +922,7 @@ L100:
             }
             i__2 = i + 1 + i * h_dim1;
             r__1 = h[i__2].r;
-            r__2 = r_imag(&h[i + 1 + i * h_dim1]);
+            r__2 = h[i + 1 + i * h_dim1].i;
             /* Computing MAX */
             r__3 = ulp * tst1;
             if (slapy2_(&r__1, &r__2) <= dmax(r__3, smlnum))

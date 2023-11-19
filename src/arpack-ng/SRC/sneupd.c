@@ -4,7 +4,6 @@
 
 /* Table of constant values */
 
-static double TWO_THIRDS = .66666666666666663;
 static a_int i_one = 1;
 static float s_zero = 0.f;
 static float s_one = 1.f;
@@ -323,7 +322,6 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
     double d__1;
 
     /* Builtin functions */
-    double pow_dd(double *, double *);
 
     /* Local variables */
     a_int j, k, ih, jj, np;
@@ -429,8 +427,7 @@ int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
     /*     %---------------------------------% */
 
     eps23 = slamch_("Epsilon-Machine");
-    d__1 = (double)eps23;
-    eps23 = pow_dd(&d__1, &TWO_THIRDS);
+    eps23 = pow((double)eps23, TWO_THIRDS);
 
     /*     %--------------% */
     /*     | Quick return | */

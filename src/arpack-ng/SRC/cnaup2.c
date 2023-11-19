@@ -4,7 +4,6 @@
 
 /* Table of constant values */
 
-static double TWO_THIRDS = .66666666666666663;
 static a_int i_one = 1;
 static a_int i_zero = 0;
 static a_int i_three = 3;
@@ -190,9 +189,6 @@ int cnaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
     a_fcomplex q__1;
 
     /* Builtin functions */
-    double pow_dd(double *, double *), r_imag(a_fcomplex *);
-
-    double sqrt(double);
 
     /* Local variables */
     a_int i, j;
@@ -316,8 +312,7 @@ int cnaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
         /*        %---------------------------------% */
 
         eps23 = slamch_("Epsilon-Machine");
-        d__1 = (double)eps23;
-        eps23 = pow_dd(&d__1, &TWO_THIRDS);
+        eps23 = pow((double)eps23, TWO_THIRDS);
 
         /*        %---------------------------------------% */
         /*        | Set flags for computing the first NEV | */
@@ -546,12 +541,12 @@ L20:
         /* Computing MAX */
         i__2 = *np + i;
         r__3 = ritz[i__2].r;
-        r__4 = r_imag(&ritz[*np + i]);
+        r__4 = ritz[*np + i].i;
         r__1 = eps23, r__2 = slapy2_(&r__3, &r__4);
         rtemp = dmax(r__1, r__2);
         i__2 = *np + i;
         r__1 = bounds[i__2].r;
-        r__2 = r_imag(&bounds[*np + i]);
+        r__2 = bounds[*np + i].i;
         if (slapy2_(&r__1, &r__2) <= *tol * rtemp)
         {
             ++nconv;
@@ -665,7 +660,7 @@ L20:
             /* Computing MAX */
             i__2 = j;
             r__3 = ritz[i__2].r;
-            r__4 = r_imag(&ritz[j]);
+            r__4 = ritz[j].i;
             r__1 = eps23, r__2 = slapy2_(&r__3, &r__4);
             rtemp = dmax(r__1, r__2);
             i__2 = j;
@@ -696,7 +691,7 @@ L20:
             /* Computing MAX */
             i__2 = j;
             r__3 = ritz[i__2].r;
-            r__4 = r_imag(&ritz[j]);
+            r__4 = ritz[j].i;
             r__1 = eps23, r__2 = slapy2_(&r__3, &r__4);
             rtemp = dmax(r__1, r__2);
             i__2 = j;
@@ -879,7 +874,7 @@ L100:
         ccdotc_(&q__1, n, &resid[1], &i_one, &workd[1], &i_one);
         cmpnorm.r = q__1.r, cmpnorm.i = q__1.i;
         r__1 = cmpnorm.r;
-        r__2 = r_imag(&cmpnorm);
+        r__2 = cmpnorm.i;
         rnorm = sqrt(slapy2_(&r__1, &r__2));
     }
     else if (*bmat == 'I')

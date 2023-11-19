@@ -4,7 +4,6 @@
 
 /* Table of constant values */
 
-static double TWO_THIRDS = .66666666666666663;
 static a_int i_one = 1;
 static a_int i_zero = 0;
 static a_int i_four = 4;
@@ -195,9 +194,6 @@ int snaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
     double d__1;
 
     /* Builtin functions */
-    double pow_dd(double *, double *);
-
-    double sqrt(double);
 
     /* Local variables */
     a_int j;
@@ -306,8 +302,7 @@ int snaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
         /*        %-------------------------------------% */
 
         eps23 = slamch_("Epsilon-Machine");
-        d__1 = (double)eps23;
-        eps23 = pow_dd(&d__1, &TWO_THIRDS);
+        eps23 = pow((double)eps23, TWO_THIRDS);
 
         nev0 = *nev;
         np0 = *np;

@@ -232,7 +232,6 @@ int snaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, fl
     float r__1, r__2;
 
     /* Builtin functions */
-    double sqrt(double);
 
     /* Local variables */
     a_int i;

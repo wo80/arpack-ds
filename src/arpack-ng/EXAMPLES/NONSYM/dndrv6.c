@@ -22,7 +22,6 @@ static a_int c__5 = 5;
 
     /* Builtin functions */
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-    double d_imag(a_dcomplex *);
 
     /* Local variables */
     double d[75] /* was [25][3] */;
@@ -371,7 +370,7 @@ L20:
         i__1 = n;
         for (j = 1; j <= i__1; ++j)
         {
-            workd[ipntr[1] + j - 2] = d_imag(&ctemp[j - 1]);
+            workd[ipntr[1] + j - 2] = ctemp[j - 1].i;
             /* L40: */
         }
 
@@ -419,7 +418,7 @@ L20:
         i__1 = n;
         for (j = 1; j <= i__1; ++j)
         {
-            workd[ipntr[1] + j - 2] = d_imag(&ctemp[j - 1]);
+            workd[ipntr[1] + j - 2] = ctemp[j - 1].i;
             /* L60: */
         }
 

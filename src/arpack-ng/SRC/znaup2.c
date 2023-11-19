@@ -4,7 +4,6 @@
 
 /* Table of constant values */
 
-static double TWO_THIRDS = .66666666666666663;
 static a_int i_one = 1;
 static a_int i_zero = 0;
 static a_int i_three = 3;
@@ -189,9 +188,6 @@ int znaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
     a_dcomplex z__1;
 
     /* Builtin functions */
-    double pow_dd(double *, double *), d_imag(a_dcomplex *);
-
-    double sqrt(double);
 
     /* Local variables */
     a_int i, j;
@@ -314,7 +310,7 @@ int znaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np
         /*        %---------------------------------% */
 
         eps23 = dlamch_("Epsilon-Machine");
-        eps23 = pow_dd(&eps23, &TWO_THIRDS);
+        eps23 = pow(eps23, TWO_THIRDS);
 
         /*        %---------------------------------------% */
         /*        | Set flags for computing the first NEV | */
@@ -543,12 +539,12 @@ L20:
         /* Computing MAX */
         i__2 = *np + i;
         d__3 = ritz[i__2].r;
-        d__4 = d_imag(&ritz[*np + i]);
+        d__4 = ritz[*np + i].i;
         d__1 = eps23, d__2 = dlapy2_(&d__3, &d__4);
         rtemp = max(d__1, d__2);
         i__2 = *np + i;
         d__1 = bounds[i__2].r;
-        d__2 = d_imag(&bounds[*np + i]);
+        d__2 = bounds[*np + i].i;
         if (dlapy2_(&d__1, &d__2) <= *tol * rtemp)
         {
             ++nconv;
@@ -662,7 +658,7 @@ L20:
             /* Computing MAX */
             i__2 = j;
             d__3 = ritz[i__2].r;
-            d__4 = d_imag(&ritz[j]);
+            d__4 = ritz[j].i;
             d__1 = eps23, d__2 = dlapy2_(&d__3, &d__4);
             rtemp = max(d__1, d__2);
             i__2 = j;
@@ -693,7 +689,7 @@ L20:
             /* Computing MAX */
             i__2 = j;
             d__3 = ritz[i__2].r;
-            d__4 = d_imag(&ritz[j]);
+            d__4 = ritz[j].i;
             d__1 = eps23, d__2 = dlapy2_(&d__3, &d__4);
             rtemp = max(d__1, d__2);
             i__2 = j;
@@ -876,7 +872,7 @@ L100:
         zzdotc_(&z__1, n, &resid[1], &i_one, &workd[1], &i_one);
         cmpnorm.r = z__1.r, cmpnorm.i = z__1.i;
         d__1 = cmpnorm.r;
-        d__2 = d_imag(&cmpnorm);
+        d__2 = cmpnorm.i;
         rnorm = sqrt(dlapy2_(&d__1, &d__2));
     }
     else if (*bmat == 'I')

@@ -4,7 +4,6 @@
 
 /* Table of constant values */
 
-static double TWO_THIRDS = .66666666666666663;
 static a_int i_one = 1;
 static double d_zero = 0.;
 static double d_one = 1.;
@@ -322,7 +321,6 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
     double d__1, d__2;
 
     /* Builtin functions */
-    double pow_dd(double *, double *);
 
     /* Local variables */
     a_int j, k, ih, jj, np;
@@ -430,7 +428,7 @@ int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
     /*     %---------------------------------% */
 
     eps23 = dlamch_("Epsilon-Machine");
-    eps23 = pow_dd(&eps23, &TWO_THIRDS);
+    eps23 = pow(eps23, TWO_THIRDS);
 
     /*     %--------------% */
     /*     | Quick return | */
