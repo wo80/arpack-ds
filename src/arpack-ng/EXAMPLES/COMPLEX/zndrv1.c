@@ -1,5 +1,6 @@
 /* EXAMPLES\COMPLEX\zndrv1.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -22,31 +23,15 @@ int main()
     a_dcomplex z__1;
 
     /* Local variables */
-    a_dcomplex d[30];
-    a_int j, n;
-    a_dcomplex v[7680] /* was [256][30] */;
-    double rd[90] /* was [30][3] */;
-    a_dcomplex ax[256];
-    a_int nx, ido, ncv, nev;
-    double tol;
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int ierr;
-    a_dcomplex sigma;
-    char* which;
-    a_dcomplex resid[256];
-    a_int nconv;
-    a_dcomplex workd[768];
-    a_int ipntr[14];
-    a_dcomplex workl[2850];
-    double rwork[30];
-    a_int iparam[11];
     a_bool select[30];
-    a_int ishfts;
-    a_int maxitr;
-    a_int lworkl;
-    a_dcomplex workev[90];
+    a_int iparam[11];
+    a_int ipntr[14];
+    a_bool rvec;
+    a_dcomplex sigma;
+    a_int j, n, nx, ido, ncv, nev, ierr = 0;
+    a_int info, mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    double tol;
 
     /*     Example program to illustrate the idea of reverse communication */
     /*     for a standard complex nonsymmetric eigenvalue problem. */
@@ -159,12 +144,20 @@ int main()
     /* generated to start the ARNOLDI iteration.         */
     /* ------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 5;
+    lworkl = ncv * ncv * 3 + ncv * 5;
     tol = 0.f;
     ido = 0;
     info = 0;
+
+    a_dcomplex* d = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 30);
+    a_dcomplex* v = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256 * 30);
+    a_dcomplex* ax = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    a_dcomplex* resid = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    a_dcomplex* workd = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 768);
+    a_dcomplex* workl = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 2850);
+    a_dcomplex* workev = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 90);
+    double* rd = (double*)malloc(sizeof(double) * 30 * 3);
+    double* rwork = (double*)malloc(sizeof(double) * 30);
 
     /* ------------------------------------------------- */
     /* This program uses exact shift with respect to     */
@@ -317,7 +310,7 @@ L10:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            dmout_(&nconv, &c__3, rd, &c__30, &c_n6,"Ritz values (Real, Imag) and relative residuals");
+            dmout_(nconv, 3, rd, 30, -6, "Ritz values (Real, Imag) and relative residuals");
         }
 
         /* ----------------------------------------- */
@@ -356,6 +349,16 @@ L10:
     /* ------------------------- */
     /* Done with program zndrv1 . */
     /* ------------------------- */
+
+    free(d);
+    free(v);
+    free(ax);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
+    free(rd);
+    free(rwork);
 
     return 0;
 }
@@ -436,7 +439,6 @@ int tv_(a_int *nx, a_dcomplex *x, a_dcomplex *y)
     /* System generated locals */
     a_int i__1, i__2, i__3, i__4, i__5;
     a_dcomplex z__1, z__2, z__3, z__4, z__5;
-
 
     /* Local variables */
     a_dcomplex h;

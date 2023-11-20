@@ -1,5 +1,6 @@
 /* EXAMPLES\BAND\dsbdr3.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -23,32 +24,14 @@ int main()
     double d__1;
 
     /* Local variables */
-    double a[50000] /* was [50][1000] */, d[100] /* was [50][2] */, h;
-    a_int j;
-    double m[50000] /* was [50][1000] */;
-    a_int n;
-    double v[50000] /* was [1000][50] */, r1, r2;
-    a_int kl;
-    double ax[1000];
-    a_int ku;
-    double mx[1000];
-    a_int ido, ncv, nev;
-    double tol, rfac[50000] /* was [50][1000] */;
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int isub, isup;
-    a_int idiag;
-    double sigma;
-    char* which;
-    double resid[1000];
-    a_int nconv;
-    double workd[3000];
-    a_int iwork[1000];
-    double workl[2900];
-    a_int iparam[11];
     a_bool select[50];
-    a_int maxitr, lworkl;
+    a_int iparam[11];
+    a_bool rvec;
+    a_int j, n, kl, ku, ido, ncv, nev;
+    a_int info, isub, isup, mode, idiag, nconv, lworkl;
+    a_int maxitr;
+    char *bmat, *which;
+    double h, r1, r2, tol, sigma;
 
     /*     ... Construct the matrix A in LAPACK-style band form. */
     /*         The matrix A is the 1-dimensional discrete Laplacian on [0,1] */
@@ -146,12 +129,22 @@ int main()
     /* generated in DSAUPD  to start the Arnoldi iteration. */
     /* --------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 + (ncv << 3);
+    lworkl = ncv * ncv + (ncv << 3);
     tol = 0.;
     ido = 0;
     info = 0;
+
+    a_int* iwork = (a_int*)malloc(sizeof(a_int) * 1000);
+    double* a = (double*)malloc(sizeof(double) * 50 * 1000);
+    double* d = (double*)malloc(sizeof(double) * 50 * 2);
+    double* m = (double*)malloc(sizeof(double) * 50 * 1000);
+    double* v = (double*)malloc(sizeof(double) * 1000 * 50);
+    double* ax = (double*)malloc(sizeof(double) * 1000);
+    double* mx = (double*)malloc(sizeof(double) * 1000);
+    double* rfac = (double*)malloc(sizeof(double) * 50 * 1000);
+    double* resid = (double*)malloc(sizeof(double) * 1000);
+    double* workd = (double*)malloc(sizeof(double) * 3000);
+    double* workl = (double*)malloc(sizeof(double) * 2900);
 
     /* ------------------------------------------------- */
     /* IPARAM(3) specifies the maximum number of Arnoldi */
@@ -273,7 +266,7 @@ int main()
 
             /* L90: */
         }
-        dmout_(&nconv, &c__2, d, &c__50, &c_n6,"Ritz values and relative residuals");
+        dmout_(nconv, 2, d, 50, -6, "Ritz values and relative residuals");
     }
     else
     {
@@ -291,5 +284,18 @@ int main()
     }
 
 L9000:
+
+    free(iwork);
+    free(a);
+    free(d);
+    free(m);
+    free(v);
+    free(ax);
+    free(mx);
+    free(rfac);
+    free(resid);
+    free(workd);
+    free(workl);
+
     return 0;
 }

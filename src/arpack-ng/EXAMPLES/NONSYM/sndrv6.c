@@ -1,5 +1,6 @@
 /* EXAMPLES\NONSYM\sndrv6.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -21,40 +22,15 @@ int main()
     a_fcomplex q__1;
 
     /* Local variables */
-    float d[75] /* was [25][3] */;
-    a_int j, n;
-    float v[6400] /* was [256][25] */;
-    a_fcomplex c1, c2, c3;
-    float ax[256];
-    float mx[256];
-    a_fcomplex cdd[256], cdl[256], cdu[256];
-    a_int ido, ncv, nev;
-    float tol;
-    a_fcomplex cdu2[256];
-    float deni;
-    char* bmat;
-    a_int mode;
-    float denr;
-    a_int info;
-    a_bool rvec;
-    a_int ierr, ipiv[256];
-    float numi;
-    float numr;
-    char* which;
-    float resid[256];
-    a_fcomplex ctemp[256];
-    a_int nconv;
-    float workd[768];
-    a_bool first;
-    a_int ipntr[14];
-    float workl[2025];
-    a_int iparam[11];
-    float sigmai;
     a_bool select[25];
-    float sigmar;
-    a_int ishfts, maxitr;
-    a_int lworkl;
-    float workev[75];
+    a_int iparam[11];
+    a_int ipntr[14];
+    a_bool rvec, first;
+    a_fcomplex c1, c2, c3;
+    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    float tol, deni, denr, numi, numr, sigmai, sigmar;
 
     /*     Simple program to illustrate the idea of reverse communication */
     /*     in shift-invert mode for a generalized nonsymmetric eigenvalue problem. */
@@ -163,6 +139,13 @@ int main()
     /* diagonal and 1 on the off-diagonals.               */
     /* -------------------------------------------------- */
 
+    a_int* ipiv = (a_int*)malloc(sizeof(a_int) * 256);
+
+    a_fcomplex* cdd = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    a_fcomplex* cdl = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    a_fcomplex* cdu = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    a_fcomplex* cdu2 = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+
     r__1 = -2.f - sigmar;
     r__2 = -sigmai;
     q__1.r = r__1, q__1.i = r__2;
@@ -210,12 +193,20 @@ int main()
     /* generated in SNAUPD to start the Arnoldi iteration. */
     /* --------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 6;
+    lworkl = ncv * ncv * 3 + ncv * 6;
     tol = 0.f;
     ido = 0;
     info = 0;
+
+    a_fcomplex* ctemp = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    float* d = (float*)malloc(sizeof(float) * 25 * 3);
+    float* v = (float*)malloc(sizeof(float) * 256 * 25);
+    float* ax = (float*)malloc(sizeof(float) * 256);
+    float* mx = (float*)malloc(sizeof(float) * 256);
+    float* resid = (float*)malloc(sizeof(float) * 256);
+    float* workd = (float*)malloc(sizeof(float) * 768);
+    float* workl = (float*)malloc(sizeof(float) * 2025);
+    float* workev = (float*)malloc(sizeof(float) * 75);
 
     /* ------------------------------------------------- */
     /* This program uses exact shift with respect to     */
@@ -576,7 +567,7 @@ L20:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            smout_(&nconv, &c__3, d, &c__25, &c_n6,"Ritz values (Real,Imag) and relative residuals");
+            smout_(nconv, 3, d, 25, -6, "Ritz values (Real,Imag) and relative residuals");
         }
 
         /* ----------------------------------------- */
@@ -615,6 +606,21 @@ L20:
     /* ------------------------- */
     /* Done with program sndrv6. */
     /* ------------------------- */
+
+    free(cdd);
+    free(cdl);
+    free(cdu);
+    free(cdu2);
+    free(ctemp);
+    free(ipiv);
+    free(d);
+    free(v);
+    free(ax);
+    free(mx);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
 
     return 0;
 }

@@ -1,5 +1,6 @@
 /* EXAMPLES\NONSYM\dndrv6.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -21,38 +22,15 @@ int main()
     a_dcomplex z__1;
 
     /* Local variables */
-    double d[75] /* was [25][3] */;
-    a_int j, n;
-    double v[6400] /* was [256][25] */;
-    a_dcomplex c1, c2, c3;
-    double ax[256];
-    double mx[256];
-    a_dcomplex cdd[256], cdl[256], cdu[256];
-    a_int ido, ncv, nev;
-    double tol;
-    a_dcomplex cdu2[256];
-    double deni;
-    char* bmat;
-    a_int mode;
-    double denr;
-    a_int info;
-    a_bool rvec;
-    a_int ierr, ipiv[256];
-    double numi, numr;
-    char* which;
-    double resid[256];
-    a_dcomplex ctemp[256];
-    a_int nconv;
-    double workd[768];
-    a_bool first;
-    a_int ipntr[14];
-    double workl[2025];
-    a_int iparam[11];
-    double sigmai;
     a_bool select[25];
-    double sigmar;
-    a_int ishfts, maxitr, lworkl;
-    double workev[75];
+    a_int iparam[11];
+    a_int ipntr[14];
+    a_bool rvec, first;
+    a_dcomplex c1, c2, c3;
+    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    double tol, deni, denr, numi, numr, sigmai, sigmar;
 
     /*     Simple program to illustrate the idea of reverse communication */
     /*     in shift-invert mode for a generalized nonsymmetric eigenvalue problem. */
@@ -161,6 +139,13 @@ int main()
     /* diagonal and 1 on the off-diagonals.               */
     /* -------------------------------------------------- */
 
+    a_int* ipiv = (a_int*)malloc(sizeof(a_int) * 256);
+
+    a_dcomplex* cdd = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    a_dcomplex* cdl = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    a_dcomplex* cdu = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    a_dcomplex* cdu2 = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+
     d__1 = -2. - sigmar;
     d__2 = -sigmai;
     z__1.r = d__1, z__1.i = d__2;
@@ -208,12 +193,20 @@ int main()
     /* generated in DNAUPD to start the Arnoldi iteration. */
     /* --------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 6;
+    lworkl = ncv * ncv * 3 + ncv * 6;
     tol = 0.;
     ido = 0;
     info = 0;
+
+    a_dcomplex* ctemp = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    double* d = (double*)malloc(sizeof(double) * 25 * 3);
+    double* v = (double*)malloc(sizeof(double) * 256 * 25);
+    double* ax = (double*)malloc(sizeof(double) * 256);
+    double* mx = (double*)malloc(sizeof(double) * 256);
+    double* resid = (double*)malloc(sizeof(double) * 256);
+    double* workd = (double*)malloc(sizeof(double) * 768);
+    double* workl = (double*)malloc(sizeof(double) * 2025);
+    double* workev = (double*)malloc(sizeof(double) * 75);
 
     /* ------------------------------------------------- */
     /* This program uses exact shift with respect to     */
@@ -574,7 +567,7 @@ L20:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            dmout_(&nconv, &c__3, d, &c__25, &c_n6,"Ritz values (Real,Imag) and relative residuals");
+            dmout_(nconv, 3, d, 25, -6, "Ritz values (Real,Imag) and relative residuals");
         }
 
         /* ----------------------------------------- */
@@ -613,6 +606,21 @@ L20:
     /* ------------------------- */
     /* Done with program dndrv6. */
     /* ------------------------- */
+
+    free(cdd);
+    free(cdl);
+    free(cdu);
+    free(cdu2);
+    free(ctemp);
+    free(ipiv);
+    free(d);
+    free(v);
+    free(ax);
+    free(mx);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
 
     return 0;
 }

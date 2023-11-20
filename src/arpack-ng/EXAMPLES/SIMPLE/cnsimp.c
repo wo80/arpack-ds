@@ -1,5 +1,6 @@
 /* EXAMPLES\SIMPLE\cnsimp.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -22,29 +23,15 @@ int main()
     a_fcomplex q__1;
 
     /* Local variables */
-    a_fcomplex d[30];
-    a_int j, n;
-    a_fcomplex v[7680] /* was [256][30] */;
-    float rd[90] /* was [30][3] */;
-    a_fcomplex ax[256];
-    a_int nx, ido, ncv, nev;
-    float tol;
-    char* bmat;
-    a_int info;
-    a_bool rvec;
-    a_int ierr, mode1;
-    a_fcomplex sigma;
-    char* which;
-    a_fcomplex resid[256];
-    a_int nconv;
-    a_fcomplex workd[768];
-    a_int ipntr[14];
-    a_fcomplex workl[2850];
-    float rwork[30];
-    a_int iparam[11];
     a_bool select[30];
-    a_int ishfts, maxitr, lworkl;
-    a_fcomplex workev[60];
+    a_int iparam[11];
+    a_int ipntr[14];
+    a_bool rvec;
+    a_fcomplex sigma;
+    a_int j, n, nx, ido, ncv, nev, ierr = 0;
+    a_int info, mode1, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    float tol;
 
     /*     This example program is intended to illustrate the */
     /*     simplest case of using ARPACK in considerable detail. */
@@ -258,12 +245,20 @@ int main()
     /*                                                     */
     /* --------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 5;
+    lworkl = ncv * ncv * 3 + ncv * 5;
     tol = 0.f;
     ido = 0;
     info = 0;
+
+    a_fcomplex* d = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 30);
+    a_fcomplex* v = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256 * 30);
+    a_fcomplex* ax = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    a_fcomplex* resid = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    a_fcomplex* workd = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 768);
+    a_fcomplex* workl = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 2850);
+    a_fcomplex* workev = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 60);
+    float* rd = (float*)malloc(sizeof(float) * 30 * 3);
+    float* rwork = (float*)malloc(sizeof(float) * 30);
 
     /* ------------------------------------------------- */
     /* Specification of Algorithm Mode:                  */
@@ -428,7 +423,7 @@ L10:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            smout_(&nconv, &c__3, rd, &c__30, &c_n6,"Ritz values (Real, Imag) and relative residuals");
+            smout_(nconv, 3, rd, 30, -6, "Ritz values (Real, Imag) and relative residuals");
         }
 
         /* ----------------------------------------- */
@@ -467,6 +462,16 @@ L10:
     /* ------------------------- */
     /* Done with program cnsimp. */
     /* ------------------------- */
+
+    free(d);
+    free(v);
+    free(ax);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
+    free(rd);
+    free(rwork);
 
     return 0;
 }

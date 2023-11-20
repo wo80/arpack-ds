@@ -1,5 +1,6 @@
 /* EXAMPLES\NONSYM\sndrv1.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -20,29 +21,14 @@ int main()
     float r__1;
 
     /* Local variables */
-    float d[90] /* was [30][3] */;
-    a_int j, n;
-    float v[7680] /* was [256][30] */;
-    float ax[256];
-    a_int nx, ido, ncv, nev;
-    float tol;
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int ierr;
-    char* which;
-    float resid[256];
-    a_int nconv;
-    float workd[768];
-    a_bool first;
-    a_int ipntr[14];
-    float workl[2880];
-    a_int iparam[11];
-    float sigmai;
     a_bool select[30];
-    float sigmar;
-    a_int ishfts, maxitr, lworkl;
-    float workev[90];
+    a_int iparam[11];
+    a_int ipntr[14];
+    a_bool rvec, first;
+    a_int j, n, nx, ido, ncv, nev, ierr = 0;
+    a_int info, mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    float tol, sigmai, sigmar;
 
     /*     Example program to illustrate the idea of reverse communication */
     /*     for a standard nonsymmetric eigenvalue problem. */
@@ -155,12 +141,18 @@ int main()
     /* generated in SNAUPD to start the Arnoldi iteration. */
     /* --------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 6;
+    lworkl = ncv * ncv * 3 + ncv * 6;
     tol = 0.f;
     ido = 0;
     info = 0;
+
+    float* d = (float*)malloc(sizeof(float) * 30 * 3);
+    float* v = (float*)malloc(sizeof(float) * 256 * 30);
+    float* ax = (float*)malloc(sizeof(float) * 256);
+    float* resid = (float*)malloc(sizeof(float) * 256);
+    float* workd = (float*)malloc(sizeof(float) * 768);
+    float* workl = (float*)malloc(sizeof(float) * 2880);
+    float* workev = (float*)malloc(sizeof(float) * 90);
 
     /* ------------------------------------------------- */
     /* This program uses exact shifts with respect to    */
@@ -350,7 +342,7 @@ L10:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            smout_(&nconv, &c__3, d, &c__30, &c_n6,"Ritz values (Real,Imag) and relative residuals");
+            smout_(nconv, 3, d, 30, -6, "Ritz values (Real,Imag) and relative residuals");
         }
 
         /* ----------------------------------------- */
@@ -389,6 +381,14 @@ L10:
     /* ------------------------- */
     /* Done with program sndrv1. */
     /* ------------------------- */
+
+    free(d);
+    free(v);
+    free(ax);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
 
     return 0;
 }

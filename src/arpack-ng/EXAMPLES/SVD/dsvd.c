@@ -1,5 +1,6 @@
 /* EXAMPLES\SVD\dsvd.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -21,27 +22,14 @@ int main()
     double d__1;
 
     /* Local variables */
-    a_int j, m, n;
-    double s[50] /* was [25][2] */, u[5000] /* was [500][10] */, v[6250] /* was [250][25] */;
-    double ax[500];
-    a_int ido, ncv, nev;
-    double tol;
-    char* bmat;
-    a_int info;
-    a_bool rvec;
-    a_int ierr;
-    double temp;
-    a_int mode1;
-    double sigma;
-    char* which;
-    double resid[250];
-    a_int nconv;
-    double workd[750];
-    a_int ipntr[11];
-    double workl[825];
-    a_int iparam[11];
     a_bool select[25];
-    a_int ishfts, maxitr, lworkl;
+    a_int iparam[11];
+    a_int ipntr[11];
+    a_bool rvec;
+    a_int j, m, n, ido, ncv, nev, ierr = 0;
+    a_int info, mode1, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    double tol, temp, sigma;
 
     /*     This example program is intended to illustrate the */
     /*     the use of ARPACK to compute the Singular Value Decomposition. */
@@ -290,6 +278,14 @@ int main()
     info = 0;
     ido = 0;
 
+    double* s = (double*)malloc(sizeof(double) * 25 * 2);
+    double* u = (double*)malloc(sizeof(double) * 500 * 10);
+    double* v = (double*)malloc(sizeof(double) * 250 * 25);
+    double* ax = (double*)malloc(sizeof(double) * 500);
+    double* resid = (double*)malloc(sizeof(double) * 250);
+    double* workd = (double*)malloc(sizeof(double) * 750);
+    double* workl = (double*)malloc(sizeof(double) * 825);
+
     /* ------------------------------------------------- */
     /* Specification of Algorithm Mode:                  */
     /*                                                   */
@@ -462,7 +458,7 @@ L10:
             /* Display computed residuals    */
             /* ----------------------------- */
 
-            dmout_(&nconv, &c__2, s, &c__25, &c_n6,"Singular values and direct residuals");
+            dmout_(nconv, 2, s, 25, -6, "Singular values and direct residuals");
         }
 
         /* ---------------------------------------- */
@@ -501,6 +497,14 @@ L10:
     /* ----------------------- */
     /* Done with program dsvd. */
     /* ----------------------- */
+
+    free(s);
+    free(u);
+    free(v);
+    free(ax);
+    free(resid);
+    free(workd);
+    free(workl);
 
     return 0;
 }

@@ -1,5 +1,6 @@
 /* EXAMPLES\SVD\ssvd.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -21,29 +22,14 @@ int main()
     float r__1;
 
     /* Local variables */
-    a_int j, m, n;
-    float s[50] /* was [25][2] */, u[5000] /* was [500][10] */, v[6250]
-        /* was [250][25] */;
-    float ax[500];
-    a_int ido, ncv, nev;
-    float tol;
-    char* bmat;
-    a_int info;
-    a_bool rvec;
-    a_int ierr;
-    float temp;
-    a_int mode1;
-    float sigma;
-    char* which;
-    float resid[250];
-    a_int nconv;
-    float workd[750];
-    a_int ipntr[11];
-    float workl[825];
-    a_int iparam[11];
     a_bool select[25];
-    a_int ishfts, maxitr;
-    a_int lworkl;
+    a_int iparam[11];
+    a_int ipntr[11];
+    a_bool rvec;
+    a_int j, m, n, ido, ncv, nev, ierr = 0;
+    a_int info, mode1, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    float tol, temp, sigma;
 
     /*     This example program is intended to illustrate the */
     /*     the use of ARPACK to compute the Singular Value Decomposition. */
@@ -292,6 +278,14 @@ int main()
     info = 0;
     ido = 0;
 
+    float* s = (float*)malloc(sizeof(float) * 25 * 2);
+    float* u = (float*)malloc(sizeof(float) * 500 * 10);
+    float* v = (float*)malloc(sizeof(float) * 250 * 25);
+    float* ax = (float*)malloc(sizeof(float) * 500);
+    float* resid = (float*)malloc(sizeof(float) * 250);
+    float* workd = (float*)malloc(sizeof(float) * 750);
+    float* workl = (float*)malloc(sizeof(float) * 825);
+
     /* ------------------------------------------------- */
     /* Specification of Algorithm Mode:                  */
     /*                                                   */
@@ -464,7 +458,7 @@ L10:
             /* Display computed residuals    */
             /* ----------------------------- */
 
-            smout_(&nconv, &c__2, s, &c__25, &c_n6,"Singular values and direct residuals");
+            smout_(nconv, 2, s, 25, -6, "Singular values and direct residuals");
         }
 
         /* ---------------------------------------- */
@@ -503,6 +497,14 @@ L10:
     /* ----------------------- */
     /* Done with program ssvd. */
     /* ----------------------- */
+
+    free(s);
+    free(u);
+    free(v);
+    free(ax);
+    free(resid);
+    free(workd);
+    free(workl);
 
     return 0;
 }

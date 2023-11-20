@@ -1,5 +1,6 @@
 /* EXAMPLES\COMPLEX\zndrv4.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 struct
@@ -30,32 +31,15 @@ int main()
     a_dcomplex z__1, z__2, z__3, z__4, z__5, z__6;
 
     /* Local variables */
-    a_dcomplex d[25], h;
-    a_int j, n;
-    a_dcomplex s, v[6400] /* was [256][25] */, s1, s2, s3, dd[256], dl[256];
-    double rd[75] /* was [25][3] */;
-    a_dcomplex ax[256], du[256];
-    a_dcomplex mx[256], du2[256];
-    a_int ido, ncv, nev;
-    double tol;
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int ierr, ipiv[256];
-    a_dcomplex sigma;
-    char* which;
-    a_dcomplex resid[256];
-    a_int nconv;
-    a_dcomplex workd[768];
-    a_int ipntr[14];
-    a_dcomplex workl[2000];
-    double rwork[256];
-    a_int iparam[11];
     a_bool select[25];
-    a_int ishfts;
-    a_int maxitr;
-    a_int lworkl;
-    a_dcomplex workev[50];
+    a_int iparam[11];
+    a_int ipntr[14];
+    a_bool rvec;
+    a_dcomplex h, s, s1, s2, s3, sigma;
+    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    double tol;
 
     /*     Simple program to illustrate the idea of reverse communication */
     /*     in shift and invert mode for a generalized complex nonsymmetric */
@@ -169,6 +153,13 @@ int main()
     /* diagonal and 1.0 on the off-diagonals.           */
     /* ------------------------------------------------ */
 
+    a_int* ipiv = (a_int*)malloc(sizeof(a_int) * 256);
+
+    a_dcomplex* dd = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    a_dcomplex* dl = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    a_dcomplex* du = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    a_dcomplex* du2 = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+
     convct_1.rho.r = 10., convct_1.rho.i = 0.;
     i__1 = n + 1;
     z__2.r = (double)i__1, z__2.i = 0.;
@@ -232,12 +223,21 @@ int main()
     /* generated in ZNAUPD  to start the Arnoldi iteration. */
     /* --------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 5;
+    lworkl = ncv * ncv * 3 + ncv * 5;
     tol = 0.f;
     ido = 0;
     info = 0;
+
+    a_dcomplex* d = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 25);
+    a_dcomplex* v = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256 * 25);
+    a_dcomplex* ax = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    a_dcomplex* mx = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    a_dcomplex* resid = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256);
+    a_dcomplex* workd = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 768);
+    a_dcomplex* workl = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 2000);
+    a_dcomplex* workev = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 50);
+    double* rd = (double*)malloc(sizeof(double) * 25 * 3);
+    double* rwork = (double*)malloc(sizeof(double) * 256);
 
     /* ------------------------------------------------- */
     /* This program uses exact shifts with respect to    */
@@ -434,7 +434,7 @@ L20:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            dmout_(&nconv, &c__3, rd, &c__25, &c_n6,"Ritz values (Real, Imag) and direct residuals");
+            dmout_(nconv, 3, rd, 25, -6, "Ritz values (Real, Imag) and direct residuals");
         }
 
         /* ----------------------------------------- */
@@ -469,6 +469,22 @@ L20:
         printf(" The convergence criterion is %e", tol);
         printf(" \n");
     }
+
+    free(d);
+    free(v);
+    free(ax);
+    free(dd);
+    free(dl);
+    free(du);
+    free(mx);
+    free(du2);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
+    free(ipiv);
+    free(rd);
+    free(rwork);
 
     return 0;
 }
@@ -539,7 +555,6 @@ int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     /* System generated locals */
     a_int i__1, i__2, i__3, i__4, i__5;
     a_dcomplex z__1, z__2, z__3, z__4, z__5;
-
 
     /* Local variables */
     a_dcomplex h;

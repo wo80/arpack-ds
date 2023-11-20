@@ -1,5 +1,6 @@
 /* EXAMPLES\NONSYM\sndrv3.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -20,30 +21,14 @@ int main()
     float r__1;
 
     /* Local variables */
-    float d[75] /* was [25][3] */, h;
-    a_int j, n;
-    float v[6400] /* was [256][25] */, md[256], me[255];
-    float ax[256];
-    float mx[256];
-    a_int ido, ncv, nev;
-    float tol;
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int ierr;
-    char* which;
-    float resid[256];
-    a_int nconv;
-    float workd[768];
-    a_bool first;
-    a_int ipntr[14];
-    float workl[2025];
-    a_int iparam[11];
-    float sigmai;
     a_bool select[25];
-    float sigmar;
-    a_int ishfts, maxitr, lworkl;
-    float workev[75];
+    a_int iparam[11];
+    a_int ipntr[14];
+    a_bool rvec, first;
+    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    float h, tol, sigmai, sigmar;
 
     /*     Simple program to illustrate the idea of reverse communication */
     /*     in inverse mode for a generalized nonsymmetric eigenvalue problem. */
@@ -143,6 +128,9 @@ int main()
     /* linear elements on [0,1].                      */
     /* ---------------------------------------------- */
 
+    float* md = (float*)malloc(sizeof(float) * 256);
+    float* me = (float*)malloc(sizeof(float) * 255);
+
     h = 1.f / (float)(n + 1);
     i__1 = n - 1;
     for (j = 1; j <= i__1; ++j)
@@ -173,12 +161,19 @@ int main()
     /* generated in SNAUPD to start the Arnoldi iteration. */
     /* --------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 6;
+    lworkl = ncv * ncv * 3 + ncv * 6;
     tol = 0.f;
     ido = 0;
     info = 0;
+
+    float* d = (float*)malloc(sizeof(float) * 25 * 3);
+    float* v = (float*)malloc(sizeof(float) * 256 * 25);
+    float* ax = (float*)malloc(sizeof(float) * 256);
+    float* mx = (float*)malloc(sizeof(float) * 256);
+    float* resid = (float*)malloc(sizeof(float) * 256);
+    float* workd = (float*)malloc(sizeof(float) * 768);
+    float* workl = (float*)malloc(sizeof(float) * 2025);
+    float* workev = (float*)malloc(sizeof(float) * 75);
 
     /* ------------------------------------------------- */
     /* This program uses exact shifts with respect to    */
@@ -401,7 +396,7 @@ L10:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            smout_(&nconv, &c__3, d, &c__25, &c_n6,"Ritz values (Real,Imag) and relative residuals");
+            smout_(nconv, 3, d, 25, -6, "Ritz values (Real,Imag) and relative residuals");
         }
 
         /* ---------------------------------------- */
@@ -440,6 +435,17 @@ L10:
     /* ------------------------- */
     /* Done with program sndrv3. */
     /* ------------------------- */
+
+    free(d);
+    free(v);
+    free(ax);
+    free(md);
+    free(me);
+    free(mx);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
 
     return 0;
 }

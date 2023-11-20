@@ -1,5 +1,6 @@
 /* EXAMPLES\SYM\dsdrv1.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -22,26 +23,14 @@ int main()
     double d__1;
 
     /* Local variables */
-    double d[50] /* was [25][2] */;
-    a_int j, n;
-    double v[6400] /* was [256][25] */;
-    double ax[256];
-    a_int nx, ido, ncv, nev;
-    double tol;
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int ierr;
-    double sigma;
-    char* which;
-    double resid[256];
-    a_int nconv;
-    double workd[768];
-    a_int ipntr[11];
-    double workl[825];
-    a_int iparam[11];
     a_bool select[25];
-    a_int ishfts, maxitr, lworkl;
+    a_int iparam[11];
+    a_int ipntr[11];
+    a_bool rvec;
+    a_int j, n, nx, ido, ncv, nev, ierr = 0;
+    a_int info, mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    double tol, sigma;
 
     /*     Simple program to illustrate the idea of reverse communication */
     /*     in regular mode for a standard symmetric eigenvalue problem. */
@@ -156,6 +145,13 @@ int main()
     tol = 0.;
     info = 0;
     ido = 0;
+
+    double* d = (double*)malloc(sizeof(double) * 25 * 2);
+    double* v = (double*)malloc(sizeof(double) * 256 * 25);
+    double* ax = (double*)malloc(sizeof(double) * 256);
+    double* resid = (double*)malloc(sizeof(double) * 256);
+    double* workd = (double*)malloc(sizeof(double) * 768);
+    double* workl = (double*)malloc(sizeof(double) * 825);
 
     /* ------------------------------------------------- */
     /* This program uses exact shifts with respect to    */
@@ -304,7 +300,7 @@ L10:
             /* Display computed residuals    */
             /* ----------------------------- */
 
-            dmout_(&nconv, &c__2, d, &c__25, &c_n6,"Ritz values and relative residuals");
+            dmout_(nconv, 2, d, 25, -6, "Ritz values and relative residuals");
         }
 
         /* ---------------------------------------- */
@@ -343,6 +339,13 @@ L10:
     /* ------------------------- */
     /* Done with program dsdrv1. */
     /* ------------------------- */
+
+    free(d);
+    free(v);
+    free(ax);
+    free(resid);
+    free(workd);
+    free(workl);
 
     return 0;
 }

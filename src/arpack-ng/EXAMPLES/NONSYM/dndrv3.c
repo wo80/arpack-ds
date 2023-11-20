@@ -1,5 +1,6 @@
 /* EXAMPLES\NONSYM\dndrv3.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -20,31 +21,14 @@ int main()
     double d__1;
 
     /* Local variables */
-    double d[75] /* was [25][3] */, h;
-    a_int j, n;
-    double v[6400] /* was [256][25] */, md[256], me[255];
-    double ax[256];
-    double mx[256];
-    a_int ido, ncv, nev;
-    double tol;
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int ierr;
-    char* which;
-    double resid[256];
-    a_int nconv;
-    double workd[768];
-    a_bool first;
-    a_int ipntr[14];
-    double workl[2025];
-    a_int iparam[11];
-    double sigmai;
     a_bool select[25];
-    double sigmar;
-    a_int ishfts;
-    a_int maxitr, lworkl;
-    double workev[75];
+    a_int iparam[11];
+    a_int ipntr[14];
+    a_bool rvec, first;
+    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    double h, tol, sigmai, sigmar;
 
     /*     Simple program to illustrate the idea of reverse communication */
     /*     in inverse mode for a generalized nonsymmetric eigenvalue problem. */
@@ -144,6 +128,9 @@ int main()
     /* linear elements on [0,1].                      */
     /* ---------------------------------------------- */
 
+    double* md = (double*)malloc(sizeof(double) * 256);
+    double* me = (double*)malloc(sizeof(double) * 255);
+
     h = 1. / (double)(n + 1);
     i__1 = n - 1;
     for (j = 1; j <= i__1; ++j)
@@ -174,12 +161,19 @@ int main()
     /* generated in DNAUPD to start the Arnoldi iteration. */
     /* --------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 6;
+    lworkl = ncv * ncv * 3 + ncv * 6;
     tol = 0.f;
     ido = 0;
     info = 0;
+
+    double* d = (double*)malloc(sizeof(double) * 25 * 3);
+    double* v = (double*)malloc(sizeof(double) * 256 * 25);
+    double* ax = (double*)malloc(sizeof(double) * 256);
+    double* mx = (double*)malloc(sizeof(double) * 256);
+    double* resid = (double*)malloc(sizeof(double) * 256);
+    double* workd = (double*)malloc(sizeof(double) * 768);
+    double* workl = (double*)malloc(sizeof(double) * 2025);
+    double* workev = (double*)malloc(sizeof(double) * 75);
 
     /* ------------------------------------------------- */
     /* This program uses exact shifts with respect to    */
@@ -402,7 +396,7 @@ L10:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            dmout_(&nconv, &c__3, d, &c__25, &c_n6,"Ritz values (Real,Imag) and relative residuals");
+            dmout_(nconv, 3, d, 25, -6, "Ritz values (Real,Imag) and relative residuals");
         }
 
         /* ---------------------------------------- */
@@ -441,6 +435,17 @@ L10:
     /* ------------------------- */
     /* Done with program dndrv3. */
     /* ------------------------- */
+
+    free(d);
+    free(v);
+    free(ax);
+    free(md);
+    free(me);
+    free(mx);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
 
     return 0;
 }

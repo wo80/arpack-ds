@@ -1,5 +1,6 @@
 /* EXAMPLES\SYM\ssdrv6.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -21,31 +22,14 @@ int main()
     float r__1;
 
     /* Local variables */
-    float d[50] /* was [25][2] */, h;
-    a_int j, n;
-    float v[6400] /* was [256][25] */, r1, r2, ad[256];
-    float ax[256];
-    float mx[256], adl[256], adu[256];
-    a_int ido, ncv, nev;
-    float tol, adu2[256];
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int ierr;
-    float temp[256];
-    a_int ipiv[256];
-    float sigma;
-    char* which;
-    float resid[256];
-    a_int nconv;
-    float workd[768];
-    a_int ipntr[11];
-    float workl[825];
-    a_int iparam[11];
     a_bool select[25];
-    a_int ishfts;
-    a_int maxitr;
-    a_int lworkl;
+    a_int iparam[11];
+    a_int ipntr[11];
+    a_bool rvec;
+    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    float h, r1, r2, tol, sigma;
 
     /*     Program to illustrate the idea of reverse communication */
     /*     in Cayley mode for a generalized symmetric eigenvalue */
@@ -167,6 +151,20 @@ int main()
     tol = 0.f;
     ido = 0;
     info = 0;
+
+    a_int* ipiv = (a_int*)malloc(sizeof(a_int) * 256);
+    float* d = (float*)malloc(sizeof(float) * 25 * 2);
+    float* v = (float*)malloc(sizeof(float) * 256 * 25);
+    float* ad = (float*)malloc(sizeof(float) * 256);
+    float* ax = (float*)malloc(sizeof(float) * 256);
+    float* mx = (float*)malloc(sizeof(float) * 256);
+    float* adl = (float*)malloc(sizeof(float) * 256);
+    float* adu = (float*)malloc(sizeof(float) * 256);
+    float* adu2 = (float*)malloc(sizeof(float) * 256);
+    float* temp = (float*)malloc(sizeof(float) * 256);
+    float* resid = (float*)malloc(sizeof(float) * 256);
+    float* workd = (float*)malloc(sizeof(float) * 768);
+    float* workl = (float*)malloc(sizeof(float) * 825);
 
     /* ------------------------------------------------- */
     /* This program uses exact shifts with respect to    */
@@ -400,7 +398,7 @@ L10:
                 /* L30: */
             }
 
-            smout_(&nconv, &c__2, d, &c__25, &c_n6,"Ritz values and relative residuals");
+            smout_(nconv, 2, d, 25, -6, "Ritz values and relative residuals");
         }
 
         /* ---------------------------------------- */
@@ -439,6 +437,20 @@ L10:
     /* ------------------------- */
     /* Done with program ssdrv6. */
     /* ------------------------- */
+
+    free(ipiv);
+    free(d);
+    free(v);
+    free(ad);
+    free(ax);
+    free(mx);
+    free(adl);
+    free(adu);
+    free(adu2);
+    free(temp);
+    free(resid);
+    free(workd);
+    free(workl);
 
     return 0;
 }

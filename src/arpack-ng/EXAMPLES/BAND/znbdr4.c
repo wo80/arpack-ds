@@ -1,5 +1,6 @@
 /* EXAMPLES\BAND\znbdr4.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -24,35 +25,14 @@ int main()
     a_dcomplex z__1, z__2, z__3, z__4;
 
     /* Local variables */
-    a_dcomplex a[50000] /* was [50][1000] */, d[50], h;
-    a_int j;
-    a_dcomplex m[50000] /* was [50][1000] */;
-    a_int n;
-    a_dcomplex v[50000] /* was [1000][50] */;
-    double rd[150] /* was [50][3] */;
-    a_int kl;
-    a_dcomplex ax[1000];
-    a_int ku;
-    a_dcomplex mx[1000], fac[50000] /* was [50][1000] */;
-    a_int ncv, nev;
-    a_dcomplex rho;
-    double tol;
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int isub, isup, idiag;
-    a_dcomplex sigma;
-    char* which;
-    a_dcomplex resid[1000];
-    a_int nconv;
-    a_dcomplex workd[3000];
-    a_int iwork[1000];
-    a_dcomplex workl[7750];
-    double rwork[1000];
-    a_int iparam[11];
     a_bool select[50];
-    a_int maxitr, lworkl;
-    a_dcomplex workev[100];
+    a_int iparam[11];
+    a_bool rvec;
+    a_dcomplex h, rho, sigma;
+    a_int j, n, kl, ku, ncv, nev, info;
+    a_int isub, isup, mode, idiag, nconv, lworkl, maxitr;
+    char *bmat, *which;
+    double tol;
 
     /*     ... Construct matrices A and M in LAPACK-style band form. */
     /*         Matries A and M are derived from the finite */
@@ -159,11 +139,24 @@ int main()
     /* the ARNOLDI process.                               */
     /* -------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 5;
+    lworkl = ncv * ncv * 3 + ncv * 5;
     info = 0;
     tol = 0.f;
+
+    a_dcomplex* a = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 50 * 1000);
+    a_dcomplex* d = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 50);
+    a_dcomplex* m = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 50 * 1000);
+    a_dcomplex* v = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 1000 * 50);
+    a_dcomplex* ax = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 1000);
+    a_dcomplex* mx = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 1000);
+    a_dcomplex* fac = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 50 * 1000);
+    a_dcomplex* resid = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 1000);
+    a_dcomplex* workd = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 3000);
+    a_dcomplex* workl = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 7750);
+    a_dcomplex* workev = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 100);
+    a_int* iwork = (a_int*)malloc(sizeof(a_int) * 1000);
+    double* rd = (double*)malloc(sizeof(double) * 50 * 3);
+    double* rwork = (double*)malloc(sizeof(double) * 1000);
 
     /* ------------------------------------------------- */
     /* IPARAm(3) specifies the maximum number of Arnoldi */
@@ -311,7 +304,7 @@ int main()
             rd[j + 99] /= dlapy2_(&rd[j - 1], &rd[j + 49]);
             /* L90: */
         }
-        dmout_(&nconv, &c__3, rd, &c__50, &c_n6,"Ritz values (Real,Imag) and relative residuals");
+        dmout_(nconv, 3, rd, 50, -6, "Ritz values (Real,Imag) and relative residuals");
     }
     else
     {
@@ -329,5 +322,21 @@ int main()
     }
 
 L9000:
+
+    free(a);
+    free(d);
+    free(m);
+    free(v);
+    free(ax);
+    free(mx);
+    free(fac);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
+    free(iwork);
+    free(rd);
+    free(rwork);
+
     return 0;
 }

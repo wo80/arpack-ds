@@ -1,5 +1,6 @@
 /* EXAMPLES\COMPLEX\cndrv3.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -23,31 +24,15 @@ int main()
     a_fcomplex q__1, q__2;
 
     /* Local variables */
-    a_fcomplex d[25], h;
-    a_int j, n;
-    a_fcomplex v[6400] /* was [256][25] */, dd[256], dl[256];
-    float rd[75] /* was [25][3] */;
-    a_fcomplex ax[256], du[256];
-    a_fcomplex mx[256], du2[256];
-    a_int ido, ncv, nev;
-    float tol;
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int ierr, ipiv[256];
-    a_fcomplex sigma;
-    char* which;
-    a_fcomplex resid[256];
-    a_int nconv;
-    a_fcomplex workd[768];
-    a_int ipntr[14];
-    a_fcomplex workl[2000];
-    float rwork[256];
-    a_int iparam[11];
     a_bool select[25];
-    a_int ishfts, maxitr;
-    a_int lworkl;
-    a_fcomplex workev[50];
+    a_int iparam[11];
+    a_int ipntr[14];
+    a_bool rvec;
+    a_fcomplex h, sigma;
+    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    float tol;
 
     /*     Simple program to illustrate the idea of reverse communication */
     /*     in inverse mode for a generalized complex nonsymmetric eigenvalue */
@@ -150,6 +135,13 @@ int main()
     /* cgttrf.                                             */
     /* --------------------------------------------------- */
 
+    a_int* ipiv = (a_int*)malloc(sizeof(a_int) * 256);
+
+    a_fcomplex* dd = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    a_fcomplex* dl = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    a_fcomplex* du = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    a_fcomplex* du2 = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+
     i__1 = n + 1;
     q__2.r = (float)i__1, q__2.i = 0.f;
     ar_c_div(&q__1, &c_b2, &q__2);
@@ -192,12 +184,21 @@ int main()
     /* generated in CNAUPD to start the Arnoldi iteration. */
     /* --------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 5;
+    lworkl = ncv * ncv * 3 + ncv * 5;
     tol = 0.f;
     ido = 0;
     info = 0;
+
+    a_fcomplex* d = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 25);
+    a_fcomplex* v = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256 * 25);
+    a_fcomplex* ax = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    a_fcomplex* mx = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    a_fcomplex* resid = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
+    a_fcomplex* workd = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 768);
+    a_fcomplex* workl = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 2000);
+    a_fcomplex* workev = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 50);
+    float* rd = (float*)malloc(sizeof(float) * 25 * 3);
+    float* rwork = (float*)malloc(sizeof(float) * 256);
 
     /* ------------------------------------------------- */
     /* This program uses exact shifts with respect to    */
@@ -378,7 +379,7 @@ L10:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            smout_(&nconv, &c__3, rd, &c__25, &c_n6,"Ritz values (Real, Imag) and relative residuals");
+            smout_(nconv, 3, rd, 25, -6, "Ritz values (Real, Imag) and relative residuals");
         }
 
         /* ---------------------------------------- */
@@ -415,6 +416,22 @@ L10:
         printf(" \n");
     }
 
+    free(d);
+    free(v);
+    free(ax);
+    free(dd);
+    free(dl);
+    free(du);
+    free(mx);
+    free(du2);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
+    free(ipiv);
+    free(rd);
+    free(rwork);
+
     return 0;
 }
 
@@ -427,7 +444,6 @@ int av_(a_int *n, a_fcomplex *v, a_fcomplex *w)
     /* System generated locals */
     a_int i__1, i__2, i__3, i__4, i__5;
     a_fcomplex q__1, q__2, q__3, q__4, q__5;
-
 
     /* Local variables */
     a_fcomplex h;
@@ -494,7 +510,6 @@ int mv_(a_int *n, a_fcomplex *v, a_fcomplex *w)
     /* System generated locals */
     a_int i__1, i__2, i__3, i__4, i__5;
     a_fcomplex q__1, q__2, q__3, q__4, q__5;
-
 
     /* Local variables */
     a_fcomplex h;

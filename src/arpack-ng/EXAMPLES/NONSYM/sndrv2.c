@@ -1,5 +1,6 @@
 /* EXAMPLES\NONSYM\sndrv2.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 struct
@@ -27,30 +28,15 @@ int main()
     float r__1;
 
     /* Local variables */
-    float d[75] /* was [25][3] */, h;
-    a_int j, n;
-    float s, v[6400] /* was [256][25] */, s1, s2, s3, dd[256], dl[256];
-    float ax[256], du[256], du2[256];
-    a_int ido, ncv, nev;
-    float tol;
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int ierr, ipiv[256];
-    char* which;
-    float resid[256];
-    a_int nconv;
-    float workd[768];
-    a_bool first;
-    a_int ipntr[14];
-    float workl[2025];
-    a_int iparam[11];
-    float sigmai;
     a_bool select[25];
+    a_int iparam[11];
+    a_int ipntr[14];
+    a_bool rvec, first;
+    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    float h, s, s1, s2, s3, tol, sigmai;
     float sigmar;
-    a_int ishfts, maxitr;
-    a_int lworkl;
-    float workev[75];
 
     /*     Simple program to illustrate the idea of reverse communication */
     /*     in shift-invert mode for a standard nonsymmetric eigenvalue problem. */
@@ -160,6 +146,13 @@ int main()
     /* zero Dirichlet boundary condition.                 */
     /* -------------------------------------------------- */
 
+    a_int* ipiv = (a_int*)malloc(sizeof(a_int) * 256);
+
+    float* dd = (float*)malloc(sizeof(float) * 256);
+    float* dl = (float*)malloc(sizeof(float) * 256);
+    float* du = (float*)malloc(sizeof(float) * 256);
+    float* du2 = (float*)malloc(sizeof(float) * 256);
+
     convct_1.rho = 10.f;
     h = 1.f / (float)(n + 1);
     s = convct_1.rho * h / 2.f;
@@ -198,12 +191,18 @@ int main()
     /* generated in SNAUPD to start the Arnoldi iteration. */
     /* --------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 6;
+    lworkl = ncv * ncv * 3 + ncv * 6;
     tol = 0.f;
     ido = 0;
     info = 0;
+
+    float* d = (float*)malloc(sizeof(float) * 25 * 3);
+    float* v = (float*)malloc(sizeof(float) * 256 * 25);
+    float* ax = (float*)malloc(sizeof(float) * 256);
+    float* resid = (float*)malloc(sizeof(float) * 256);
+    float* workd = (float*)malloc(sizeof(float) * 768);
+    float* workl = (float*)malloc(sizeof(float) * 2025);
+    float* workev = (float*)malloc(sizeof(float) * 75);
 
     /* ------------------------------------------------- */
     /* This program uses exact shifts with respect to    */
@@ -398,7 +397,7 @@ L20:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            smout_(&nconv, &c__3, d, &c__25, &c_n6,"Ritz values (Real,Imag) and relative residuals");
+            smout_(nconv, 3, d, 25, -6, "Ritz values (Real,Imag) and relative residuals");
         }
 
         /* ----------------------------------------- */
@@ -437,6 +436,19 @@ L20:
     /* ------------------------- */
     /* Done with program sndrv2. */
     /* ------------------------- */
+
+    free(ipiv);
+    free(d);
+    free(v);
+    free(ax);
+    free(dd);
+    free(dl);
+    free(du);
+    free(du2);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
 
     return 0;
 }

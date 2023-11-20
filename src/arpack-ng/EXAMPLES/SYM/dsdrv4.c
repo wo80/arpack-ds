@@ -1,5 +1,6 @@
 /* EXAMPLES\SYM\dsdrv4.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -21,27 +22,14 @@ int main()
     double d__1;
 
     /* Local variables */
-    double d[50] /* was [25][2] */, h;
-    a_int j, n;
-    double v[6400] /* was [256][25] */, r1, r2, ad[256];
-    double adl[256], adu[256];
-    a_int ido, ncv, nev;
-    double tol, adu2[256];
-    char* bmat;
-    a_int mode, info;
-    a_bool rvec;
-    a_int ierr, ipiv[256];
-    double sigma;
-    char* which;
-    double resid[256];
-    a_int nconv;
-    double workd[768];
-    a_int ipntr[11];
-    double workl[825];
-    a_int iparam[11];
     a_bool select[25];
-    a_int ishfts, maxitr;
-    a_int lworkl;
+    a_int iparam[11];
+    a_int ipntr[11];
+    a_bool rvec;
+    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int mode, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    double h, r1, r2, tol, sigma;
 
     /*     Program to illustrate the idea of reverse communication */
     /*     in shift and invert mode for a generalized symmetric eigenvalue */
@@ -158,6 +146,17 @@ int main()
     tol = 0.;
     ido = 0;
     info = 0;
+
+    a_int* ipiv = (a_int*)malloc(sizeof(a_int) * 256);
+    double* d = (double*)malloc(sizeof(double) * 25 * 2);
+    double* v = (double*)malloc(sizeof(double) * 256 * 25);
+    double* ad = (double*)malloc(sizeof(double) * 256);
+    double* adl = (double*)malloc(sizeof(double) * 256);
+    double* adu = (double*)malloc(sizeof(double) * 256);
+    double* adu2 = (double*)malloc(sizeof(double) * 256);
+    double* resid = (double*)malloc(sizeof(double) * 256);
+    double* workd = (double*)malloc(sizeof(double) * 768);
+    double* workl = (double*)malloc(sizeof(double) * 825);
 
     /* ------------------------------------------------- */
     /* This program uses exact shifts with respect to    */
@@ -388,7 +387,7 @@ L10:
                 /* L30: */
             }
 
-            dmout_(&nconv, &c__2, d, &c__25, &c_n6,"Ritz values and relative residuals");
+            dmout_(nconv, 2, d, 25, -6, "Ritz values and relative residuals");
         }
 
         /* ---------------------------------------- */
@@ -427,6 +426,17 @@ L10:
     /* ------------------------- */
     /* Done with program dsdrv4. */
     /* ------------------------- */
+
+    free(ipiv);
+    free(d);
+    free(v);
+    free(ad);
+    free(adl);
+    free(adu);
+    free(adu2);
+    free(resid);
+    free(workd);
+    free(workl);
 
     return 0;
 }

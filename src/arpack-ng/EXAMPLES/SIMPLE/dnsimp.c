@@ -1,5 +1,6 @@
 /* EXAMPLES\SIMPLE\dnsimp.f -- translated by f2c (version 20230428). */
 
+#include <stdlib.h>
 #include "arpack_internal.h"
 
 /* Table of constant values */
@@ -20,29 +21,14 @@ int main()
     double d__1;
 
     /* Local variables */
-    double d[90] /* was [30][3] */;
-    a_int j, n;
-    double v[7680] /* was [256][30] */;
-    double ax[256];
-    a_int nx, ido, ncv, nev;
-    double tol;
-    char* bmat;
-    a_int info;
-    a_bool rvec;
-    a_int ierr, mode1;
-    char* which;
-    double resid[256];
-    a_int nconv;
-    double workd[768];
-    a_bool first;
-    a_int ipntr[14];
-    double workl[2880];
-    a_int iparam[11];
-    double sigmai;
     a_bool select[30];
-    double sigmar;
-    a_int ishfts, maxitr, lworkl;
-    double workev[90];
+    a_int iparam[11];
+    a_int ipntr[14];
+    a_bool rvec, first;
+    a_int j, n, nx, ido, ncv, nev, ierr = 0;
+    a_int info, mode1, nconv, ishfts, lworkl, maxitr;
+    char *bmat, *which;
+    double tol, sigmai, sigmar;
 
     /*     This example program is intended to illustrate the */
     /*     simplest case of using ARPACK in considerable detail. */
@@ -261,12 +247,18 @@ int main()
     /*                                                     */
     /* --------------------------------------------------- */
 
-    /* Computing 2nd power */
-    i__1 = ncv;
-    lworkl = i__1 * i__1 * 3 + ncv * 6;
+    lworkl = ncv * ncv * 3 + ncv * 6;
     tol = 0.;
     ido = 0;
     info = 0;
+
+    double* d = (double*)malloc(sizeof(double) * 30 * 3);
+    double* v = (double*)malloc(sizeof(double) * 256 * 30);
+    double* ax = (double*)malloc(sizeof(double) * 256);
+    double* resid = (double*)malloc(sizeof(double) * 256);
+    double* workd = (double*)malloc(sizeof(double) * 768);
+    double* workl = (double*)malloc(sizeof(double) * 2880);
+    double* workev = (double*)malloc(sizeof(double) * 90);
 
     /* ------------------------------------------------- */
     /* Specification of Algorithm Mode:                  */
@@ -467,7 +459,7 @@ L10:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            dmout_(&nconv, &c__3, d, &c__30, &c_n6,"Ritz values (Real, Imag) and residual residuals");
+            dmout_(nconv, 3, d, 30, -6, "Ritz values (Real, Imag) and residual residuals");
         }
 
         /* ----------------------------------------- */
@@ -506,6 +498,14 @@ L10:
     /* ------------------------- */
     /* Done with program dnsimp. */
     /* ------------------------- */
+
+    free(d);
+    free(v);
+    free(ax);
+    free(resid);
+    free(workd);
+    free(workl);
+    free(workev);
 
     return 0;
 }
