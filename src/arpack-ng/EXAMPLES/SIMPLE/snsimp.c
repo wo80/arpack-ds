@@ -13,7 +13,7 @@ static a_int c__30 = 30;
 static a_int c_n6 = -6;
 static a_int c__4 = 4;
 
-/* Main program */ int MAIN__(void)
+int main()
 {
     /* System generated locals */
     a_int i__1;
@@ -509,7 +509,7 @@ L10:
     /* ------------------------- */
 
     return 0;
-} /* MAIN__ */
+}
 
 /* ========================================================================== */
 
@@ -618,9 +618,3 @@ int tv_(a_int *nx, float *x, float *y)
     y[*nx] = dl * x[*nx - 1] + dd * x[*nx];
     return 0;
 } /* tv_ */
-
-/* Main program alias */ int snsimp_()
-{
-    MAIN__();
-    return 0;
-}

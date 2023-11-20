@@ -23,7 +23,7 @@ static a_int c__25 = 25;
 static a_int c_n6 = -6;
 static a_int c__4 = 4;
 
-/* Main program */ int MAIN__(void)
+int main()
 {
     /* System generated locals */
     a_int i__1, i__2;
@@ -470,7 +470,7 @@ L20:
     }
 
     return 0;
-} /* MAIN__ */
+}
 
 /* ========================================================================== */
 
@@ -599,9 +599,3 @@ int av_(a_int *n, a_fcomplex *v, a_fcomplex *w)
     w[i__1].r = q__1.r, w[i__1].i = q__1.i;
     return 0;
 } /* av_ */
-
-/* Main program alias */ int cndrv4_()
-{
-    MAIN__();
-    return 0;
-}

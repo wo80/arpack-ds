@@ -14,7 +14,7 @@ static a_int c__25 = 25;
 static a_int c_n6 = -6;
 static a_int c__4 = 4;
 
-/* Main program */ int MAIN__(void)
+int main()
 {
     /* System generated locals */
     a_int i__1;
@@ -441,7 +441,7 @@ L10:
     /* ------------------------- */
 
     return 0;
-} /* MAIN__ */
+}
 
 /* ------------------------------------------------------------------------ */
 /*     Matrix vector subroutine */
@@ -517,9 +517,3 @@ int av_(a_int *n, float *v, float *w)
     sscal_(n, &r__1, &w[1], &c__1);
     return 0;
 } /* av_ */
-
-/* Main program alias */ int ssdrv6_()
-{
-    MAIN__();
-    return 0;
-}

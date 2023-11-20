@@ -15,7 +15,7 @@ static a_int c__4 = 4;
 static a_fcomplex c_b137 = {1.f, 0.f};
 static a_fcomplex c_b151 = {4.f, 0.f};
 
-/* Main program */ int MAIN__(void)
+int main()
 {
     /* System generated locals */
     a_int i__1, i__2;
@@ -356,7 +356,7 @@ L10:
     /* ------------------------- */
 
     return 0;
-} /* MAIN__ */
+}
 
 /* ========================================================================== */
 
@@ -500,9 +500,3 @@ int tv_(a_int *nx, a_fcomplex *x, a_fcomplex *y)
     y[i__1].r = q__1.r, y[i__1].i = q__1.i;
     return 0;
 } /* tv_ */
-
-/* Main program alias */ int cndrv1_()
-{
-    MAIN__();
-    return 0;
-}

@@ -15,7 +15,7 @@ static a_int c__5 = 5;
 static a_dcomplex c_b137 = {1., 0.};
 static a_dcomplex c_b151 = {4., 0.};
 
-/* Main program */ int MAIN__(void)
+int main()
 {
     /* System generated locals */
     a_int i__1, i__2;
@@ -358,7 +358,7 @@ L10:
     /* ------------------------- */
 
     return 0;
-} /* MAIN__ */
+}
 
 /* ========================================================================== */
 
@@ -502,9 +502,3 @@ int tv_(a_int *nx, a_dcomplex *x, a_dcomplex *y)
     y[i__1].r = z__1.r, y[i__1].i = z__1.i;
     return 0;
 } /* tv_ */
-
-/* Main program alias */ int zndrv1_()
-{
-    MAIN__();
-    return 0;
-}

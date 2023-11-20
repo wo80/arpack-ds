@@ -13,7 +13,7 @@ static a_int c__25 = 25;
 static a_int c_n6 = -6;
 static a_int c__4 = 4;
 
-/* Main program */ int MAIN__(void)
+int main()
 {
     /* System generated locals */
     a_int i__1, i__2, i__3;
@@ -617,7 +617,7 @@ L20:
     /* ------------------------- */
 
     return 0;
-} /* MAIN__ */
+}
 
 /* ========================================================================== */
 
@@ -677,9 +677,3 @@ int av_(a_int *n, float *v, float *w)
     w[*n] = v[*n - 1] * -2.f + v[*n] * 2.f;
     return 0;
 } /* av_ */
-
-/* Main program alias */ int sndrv6_()
-{
-    MAIN__();
-    return 0;
-}

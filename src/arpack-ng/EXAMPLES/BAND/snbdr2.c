@@ -15,7 +15,7 @@ static float c_b100 = 1.f;
 static a_int c__6 = 6;
 static a_int c_n6 = -6;
 
-/* Main program */ int MAIN__(void)
+int main()
 {
     /* System generated locals */
     a_int i__1, i__2;
@@ -374,11 +374,5 @@ static a_int c_n6 = -6;
     }
 
 L9000:
-    return 0;
-} /* MAIN__ */
-
-/* Main program alias */ int snbdr2_()
-{
-    MAIN__();
     return 0;
 }

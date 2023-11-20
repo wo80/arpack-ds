@@ -16,7 +16,7 @@ static a_int c__4 = 4;
 static a_fcomplex c_b163 = {2.f, 0.f};
 static a_fcomplex c_b164 = {10.f, 0.f};
 
-/* Main program */ int MAIN__(void)
+int main()
 {
     /* System generated locals */
     a_int i__1, i__2;
@@ -416,7 +416,7 @@ L10:
     }
 
     return 0;
-} /* MAIN__ */
+}
 
 /* ========================================================================== */
 
@@ -546,9 +546,3 @@ int mv_(a_int *n, a_fcomplex *v, a_fcomplex *w)
     cscal_(n, &h, &w[1], &c__1);
     return 0;
 } /* mv_ */
-
-/* Main program alias */ int cndrv3_()
-{
-    MAIN__();
-    return 0;
-}

@@ -16,7 +16,7 @@ static a_int c__5 = 5;
 static a_dcomplex c_b163 = {2., 0.};
 static a_dcomplex c_b164 = {10., 0.};
 
-/* Main program */ int MAIN__(void)
+int main()
 {
     /* System generated locals */
     a_int i__1, i__2;
@@ -417,7 +417,7 @@ L10:
     }
 
     return 0;
-} /* MAIN__ */
+}
 
 /* ========================================================================== */
 
@@ -547,9 +547,3 @@ int mv_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     zscal_(n, &h, &w[1], &c__1);
     return 0;
 } /* mv_ */
-
-/* Main program alias */ int zndrv3_()
-{
-    MAIN__();
-    return 0;
-}
