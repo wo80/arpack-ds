@@ -67,7 +67,7 @@
 
 /* ----------------------------------------------------------------------- */
 
-int ssortc_(char *which, a_bool *apply, a_int *n, float *xfloat, float *ximag, float *y)
+int ssortc_(const char *which, a_bool *apply, a_int *n, float *xfloat, float *ximag, float *y)
 {
     /* System generated locals */
     a_int i__1;

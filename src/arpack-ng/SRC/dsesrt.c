@@ -73,7 +73,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int dsesrt_(char *which, a_bool *apply, a_int *n, double *x, a_int *na, double *a,
+int dsesrt_(const char *which, a_bool *apply, a_int *n, double *x, a_int *na, double *a,
      a_int *lda)
 {
     /* System generated locals */

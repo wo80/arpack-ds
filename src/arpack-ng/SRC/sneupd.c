@@ -311,8 +311,8 @@ static float s_n1 = -1.f;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int sneupd_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, float *z,
-     a_int *ldz, float *sigmar, float *sigmai, float *workev, char *bmat, a_int *n,
+int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *di, float *z,
+     a_int *ldz, float *sigmar, float *sigmai, float *workev, const char *bmat, a_int *n,
      char *which, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv,
      a_int *iparam, a_int *ipntr, float *workd, float *workl, a_int *lworkl, a_int *info)
 {

@@ -100,7 +100,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int sngets_(a_int *ishift, char *which, a_int *kev, a_int *np, float *ritzr, float *ritzi,
+int sngets_(a_int *ishift, const char *which, a_int *kev, a_int *np, float *ritzr, float *ritzi,
      float *bounds, float *shiftr, float *shifti)
 {
     /* System generated locals */

@@ -127,7 +127,7 @@ static double d_n1 = -1.;
 
 /* ----------------------------------------------------------------------- */
 
-int dgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j,
+int dgetv0_(a_int *ido, const char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j,
      double *v, a_int *ldv, double *resid, double *rnorm, a_int *ipntr, double *workd,
      a_int *ierr)
 {

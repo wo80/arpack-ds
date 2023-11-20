@@ -73,7 +73,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int ssesrt_(char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a, a_int *lda)
+int ssesrt_(const char *which, a_bool *apply, a_int *n, float *x, a_int *na, float *a, a_int *lda)
 {
     /* System generated locals */
     a_int a_dim1, a_offset, i__1;

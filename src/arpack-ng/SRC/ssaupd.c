@@ -411,7 +411,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int ssaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *tol,
+int ssaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *nev, float *tol,
      float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, a_int *ipntr, float *workd,
      float *workl, a_int *lworkl, a_int *info)
 {

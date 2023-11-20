@@ -411,7 +411,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int dnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *tol,
+int dnaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *nev, double *tol,
      double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, a_int *ipntr,
      double *workd, double *workl, a_int *lworkl, a_int *info)
 {

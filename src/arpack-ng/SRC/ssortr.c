@@ -60,7 +60,7 @@
 
 /* ----------------------------------------------------------------------- */
 
-int ssortr_(char *which, a_bool *apply, a_int *n, float *x1, float *x2)
+int ssortr_(const char *which, a_bool *apply, a_int *n, float *x1, float *x2)
 {
     /* System generated locals */
     a_int i__1;

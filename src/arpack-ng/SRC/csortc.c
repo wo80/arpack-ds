@@ -62,7 +62,7 @@
 
 /* ----------------------------------------------------------------------- */
 
-int csortc_(char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomplex *y)
+int csortc_(const char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomplex *y)
 {
     /* System generated locals */
     a_int i__1, i__2, i__3;

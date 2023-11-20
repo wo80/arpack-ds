@@ -92,7 +92,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int zngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_dcomplex *ritz, a_dcomplex *bounds)
+int zngets_(a_int *ishift, const char *which, a_int *kev, a_int *np, a_dcomplex *ritz, a_dcomplex *bounds)
 {
     /* System generated locals */
     a_int i__1;

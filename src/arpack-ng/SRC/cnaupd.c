@@ -381,7 +381,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int cnaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *tol,
+int cnaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *nev, float *tol,
      a_fcomplex *resid, a_int *ncv, a_fcomplex *v, a_int *ldv, a_int *iparam, a_int *ipntr,
      a_fcomplex *workd, a_fcomplex *workl, a_int *lworkl, float *rwork, a_int *info)
 {

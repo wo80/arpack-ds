@@ -188,7 +188,7 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int dsaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np,
+int dsaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *nev, a_int *np,
      double *tol, double *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter,
      double *v, a_int *ldv, double *h, a_int *ldh, double *ritz, double *bounds, double *q,
      a_int *ldq, double *workl, a_int *ipntr, double *workd, a_int *info)

@@ -122,7 +122,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int cgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j,
+int cgetv0_(a_int *ido, const char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j,
      a_fcomplex *v, a_int *ldv, a_fcomplex *resid, float *rnorm, a_int *ipntr, a_fcomplex *workd,
      a_int *ierr)
 {

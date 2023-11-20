@@ -256,8 +256,8 @@ static a_bool b_true = TRUE_;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int cneupd_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d, a_fcomplex *z,
-     a_int *ldz, a_fcomplex *sigma, a_fcomplex *workev, char *bmat, a_int *n, char *which,
+int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_fcomplex *z,
+     a_int *ldz, a_fcomplex *sigma, a_fcomplex *workev, const char *bmat, a_int *n, const char *which,
      a_int *nev, float *tol, a_fcomplex *resid, a_int *ncv, a_fcomplex *v, a_int *ldv,
      a_int *iparam, a_int *ipntr, a_fcomplex *workd, a_fcomplex *workl, a_int *lworkl,
      float *rwork, a_int *info)

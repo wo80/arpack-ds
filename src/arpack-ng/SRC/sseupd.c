@@ -223,8 +223,8 @@ static float s_one = 1.f;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d, float *z, a_int *ldz,
-     float *sigma, char *bmat, a_int *n, char *which, a_int *nev, float *tol, float *resid,
+int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z, a_int *ldz,
+     float *sigma, const char *bmat, a_int *n, const char *which, a_int *nev, float *tol, float *resid,
      a_int *ncv, float *v, a_int *ldv, a_int *iparam, a_int *ipntr, float *workd, float *workl,
      a_int *lworkl, a_int *info)
 {

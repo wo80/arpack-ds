@@ -62,7 +62,7 @@
 
 /* ----------------------------------------------------------------------- */
 
-int zsortc_(char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
+int zsortc_(const char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomplex *y)
 {
     /* System generated locals */
     a_int i__1, i__2, i__3;

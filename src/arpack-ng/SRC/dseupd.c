@@ -223,8 +223,8 @@ static double d_one = 1.;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int dseupd_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_int *ldz,
-     double *sigma, char *bmat, a_int *n, char *which, a_int *nev, double *tol, double *resid,
+int dseupd_(a_bool *rvec, const char *howmny, a_bool *select, double *d, double *z, a_int *ldz,
+     double *sigma, const char *bmat, a_int *n, const char *which, a_int *nev, double *tol, double *resid,
      a_int *ncv, double *v, a_int *ldv, a_int *iparam, a_int *ipntr, double *workd,
      double *workl, a_int *lworkl, a_int *info)
 {

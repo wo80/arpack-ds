@@ -176,7 +176,7 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int cnaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np,
+int cnaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *nev, a_int *np,
      float *tol, a_fcomplex *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter,
      a_fcomplex *v, a_int *ldv, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz, a_fcomplex *bounds,
      a_fcomplex *q, a_int *ldq, a_fcomplex *workl, a_int *ipntr, a_fcomplex *workd,

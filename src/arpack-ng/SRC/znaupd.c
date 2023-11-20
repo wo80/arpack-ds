@@ -381,7 +381,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int znaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *tol,
+int znaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *nev, double *tol,
      a_dcomplex *resid, a_int *ncv, a_dcomplex *v, a_int *ldv, a_int *iparam, a_int *ipntr,
      a_dcomplex *workd, a_dcomplex *workl, a_int *lworkl, double *rwork, a_int *info)
 {

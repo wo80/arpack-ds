@@ -311,8 +311,8 @@ static double d_n1 = -1.;
 /* \EndLib */
 
 /* ----------------------------------------------------------------------- */
-int dneupd_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, double *z,
-     a_int *ldz, double *sigmar, double *sigmai, double *workev, char *bmat, a_int *n,
+int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double *di, double *z,
+     a_int *ldz, double *sigmar, double *sigmai, double *workev, const char *bmat, a_int *n,
      char *which, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv,
      a_int *iparam, a_int *ipntr, double *workd, double *workl, a_int *lworkl, a_int *info)
 {

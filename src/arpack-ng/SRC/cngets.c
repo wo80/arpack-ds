@@ -92,7 +92,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int cngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_fcomplex *ritz, a_fcomplex *bounds)
+int cngets_(a_int *ishift, const char *which, a_int *kev, a_int *np, a_fcomplex *ritz, a_fcomplex *bounds)
 {
     /* System generated locals */
     a_int i__1;

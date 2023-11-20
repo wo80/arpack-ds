@@ -127,7 +127,7 @@ static float s_n1 = -1.f;
 
 /* ----------------------------------------------------------------------- */
 
-int sgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j,
+int sgetv0_(a_int *ido, const char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j,
      float *v, a_int *ldv, float *resid, float *rnorm, a_int *ipntr, float *workd, a_int *ierr)
 {
     /* Initialized data */

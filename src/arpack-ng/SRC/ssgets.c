@@ -99,7 +99,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int ssgets_(a_int *ishift, char *which, a_int *kev, a_int *np, float *ritz, float *bounds,
+int ssgets_(a_int *ishift, const char *which, a_int *kev, a_int *np, float *ritz, float *bounds,
      float *shifts)
 {
     /* System generated locals */

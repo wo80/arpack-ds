@@ -214,7 +214,7 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int ssaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *mode, float *resid,
+int ssaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *mode, float *resid,
      float *rnorm, float *v, a_int *ldv, float *h, a_int *ldh, a_int *ipntr, float *workd,
      a_int *info)
 {

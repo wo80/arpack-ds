@@ -122,7 +122,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int zgetv0_(a_int *ido, char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j,
+int zgetv0_(a_int *ido, const char *bmat, a_int *itry, a_bool *initv, a_int *n, a_int *j,
      a_dcomplex *v, a_int *ldv, a_dcomplex *resid, double *rnorm, a_int *ipntr, a_dcomplex *workd,
      a_int *ierr)
 {

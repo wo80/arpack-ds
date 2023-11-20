@@ -99,7 +99,7 @@ static a_int i_one = 1;
 
 /* ----------------------------------------------------------------------- */
 
-int dsgets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritz, double *bounds,
+int dsgets_(a_int *ishift, const char *which, a_int *kev, a_int *np, double *ritz, double *bounds,
      double *shifts)
 {
     /* System generated locals */

@@ -218,7 +218,7 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int cnaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_fcomplex *resid,
+int cnaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_fcomplex *resid,
      float *rnorm, a_fcomplex *v, a_int *ldv, a_fcomplex *h, a_int *ldh, a_int *ipntr,
      a_fcomplex *workd, a_int *info)
 {

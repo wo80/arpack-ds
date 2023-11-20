@@ -219,7 +219,7 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int snaitr_(a_int *ido, char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, float *resid,
+int snaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, float *resid,
      float *rnorm, float *v, a_int *ldv, float *h, a_int *ldh, a_int *ipntr, float *workd,
      a_int *info)
 {

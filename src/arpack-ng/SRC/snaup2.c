@@ -183,7 +183,7 @@ static a_int i_two = 2;
 
 /* ----------------------------------------------------------------------- */
 
-int snaup2_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, a_int *np,
+int snaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *nev, a_int *np,
      float *tol, float *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter,
      float *v, a_int *ldv, float *h, a_int *ldh, float *ritzr, float *ritzi, float *bounds,
      float *q, a_int *ldq, float *workl, a_int *ipntr, float *workd, a_int *info)
