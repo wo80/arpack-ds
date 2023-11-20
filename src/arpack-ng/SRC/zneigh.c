@@ -143,7 +143,7 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
 #ifndef NO_TRACE
     if (msglvl > 2)
     {
-        zmout_(n, n, &h[h_offset], ldh, debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ");
+        zmout_(*n, *n, &h[h_offset], *ldh, debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ");
     }
 #endif
 
@@ -167,7 +167,7 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
 #ifndef NO_TRACE
     if (msglvl > 1)
     {
-        zvout_(n, &bounds[1], debug_1.ndigit, "_neigh: last row of the Schur matrix for H");
+        zvout_(*n, &bounds[1], debug_1.ndigit, "_neigh: last row of the Schur matrix for H");
     }
 #endif
 
@@ -206,7 +206,7 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
     if (msglvl > 1)
     {
         zcopy_(n, &q[*n + q_dim1], ldq, &workl[1], &i_one);
-        zvout_(n, &workl[1], debug_1.ndigit, "_neigh: Last row of the eigenvector matrix for H");
+        zvout_(*n, &workl[1], debug_1.ndigit, "_neigh: Last row of the eigenvector matrix for H");
     }
 #endif
 
@@ -220,8 +220,8 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
 #ifndef NO_TRACE
     if (msglvl > 2)
     {
-        zvout_(n, &ritz[1], debug_1.ndigit, "_neigh: The eigenvalues of H");
-        zvout_(n, &bounds[1], debug_1.ndigit, "_neigh: Ritz estimates for the eigenvalues of H");
+        zvout_(*n, &ritz[1], debug_1.ndigit, "_neigh: The eigenvalues of H");
+        zvout_(*n, &bounds[1], debug_1.ndigit, "_neigh: Ritz estimates for the eigenvalues of H");
     }
 #endif
 

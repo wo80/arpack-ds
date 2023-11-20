@@ -438,7 +438,7 @@ L50:
 #ifndef NO_TRACE
     if (msglvl > 2)
     {
-        zvout_(n, &resid[1], debug_1.ndigit, "_getv0: initial / restarted starting vector");
+        zvout_(*n, &resid[1], debug_1.ndigit, "_getv0: initial / restarted starting vector");
     }
 #endif
 

@@ -141,7 +141,7 @@ int sseigt_(float *rnorm, a_int *n, float *h, a_int *ldh, float *eig, float *bou
 #ifndef NO_TRACE
     if (msglvl > 1)
     {
-        svout_(n, &bounds[1], debug_1.ndigit, "_seigt: last row of the eigenvector matrix for H");
+        svout_(*n, &bounds[1], debug_1.ndigit, "_seigt: last row of the eigenvector matrix for H");
     }
 #endif
 

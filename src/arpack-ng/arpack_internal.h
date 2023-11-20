@@ -19,7 +19,7 @@ extern "C"
 
     int arscnd_(float*);
 
-    int ivout_(a_int, a_int*, a_int, const char*);
+    void ivout_(a_int, a_int*, a_int, const char*);
 
     /* a_fcomplex */
 
@@ -32,8 +32,8 @@ extern "C"
     int csortc_(const char*, a_bool*, a_int*, a_fcomplex*, a_fcomplex*);
     int cstatn_(void);
 
-    int cmout_(a_int, a_int, a_fcomplex*, a_int, a_int, const char*);
-    int cvout_(a_int, a_fcomplex*, a_int, const char*);
+    void cmout_(a_int, a_int, a_fcomplex*, a_int, a_int, const char*);
+    void cvout_(a_int, a_fcomplex*, a_int, const char*);
 
     /* double */
 
@@ -57,8 +57,8 @@ extern "C"
     int dstats_(void);
     int dstqrb_(a_int*, double*, double*, double*, double*, a_int*);
 
-    int dmout_(a_int, a_int, double*, a_int, a_int, const char*);
-    int dvout_(a_int, double*, a_int, const char*);
+    void dmout_(a_int, a_int, double*, a_int, a_int, const char*);
+    void dvout_(a_int, double*, a_int, const char*);
 
     /* single */
 
@@ -82,8 +82,8 @@ extern "C"
     int sstats_(void);
     int sstqrb_(a_int*, float*, float*, float*, float*, a_int*);
 
-    int smout_(a_int, a_int, float*, a_int, a_int, const char*);
-    int svout_(a_int, float*, a_int, const char*);
+    void smout_(a_int, a_int, float*, a_int, a_int, const char*);
+    void svout_(a_int, float*, a_int, const char*);
 
     /* a_dcomplex */
 
@@ -96,8 +96,8 @@ extern "C"
     int zsortc_(const char*, a_bool*, a_int*, a_dcomplex*, a_dcomplex*);
     int zstatn_(void);
 
-    int zmout_(a_int, a_int, a_dcomplex*, a_int, a_int, const char*);
-    int zvout_(a_int, a_dcomplex*, a_int, const char*);
+    void zmout_(a_int, a_int, a_dcomplex*, a_int, a_int, const char*);
+    void zvout_(a_int, a_dcomplex*, a_int, const char*);
 
     /* f2c */
 

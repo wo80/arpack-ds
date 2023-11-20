@@ -13,7 +13,7 @@
  *              If IDIGIT .LT. 0, printing is done with 72 columns.
  *              If IDIGIT .GT. 0, printing is done with 132 columns.
  */
-void ivout_(const int n, const int *ix, const int idigit, const char *ifmt)
+void ivout_(const a_int n, const a_int *ix, const a_int idigit, const char *ifmt)
 {
     /* Local variables */
     int i, j, k, len, m;

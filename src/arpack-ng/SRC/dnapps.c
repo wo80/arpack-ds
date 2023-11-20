@@ -706,7 +706,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
         ivout_(1, kev, debug_1.ndigit, "_napps: Order of the final Hessenberg matrix ");
         if (msglvl > 2)
         {
-            dmout_(*kev, *kev, &h[h_offset], ldh, debug_1.ndigit, "_napps: updated Hessenberg matrix H for next iteration");
+            dmout_(*kev, *kev, &h[h_offset], *ldh, debug_1.ndigit, "_napps: updated Hessenberg matrix H for next iteration");
         }
     }
 #endif

@@ -13,7 +13,7 @@
  *              If IDIGIT .LT. 0, printing is done with 72 columns.
  *              If IDIGIT .GT. 0, printing is done with 132 columns.
  */
-void dvout_(const int n, const double *sx, const int idigit, const char *ifmt)
+void dvout_(const a_int n, const double *sx, const a_int idigit, const char *ifmt)
 {
     /* Local variables */
     int i, j, k, len, m;

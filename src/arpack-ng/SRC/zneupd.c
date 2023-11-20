@@ -276,7 +276,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
     a_int ierr;
     a_dcomplex temp;
     a_int iwev;
-    char type__[6];
+    char type[7];
     a_int ritz, iheig, ihbds;
     double conds;
     a_bool reord;
@@ -370,11 +370,11 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
 
     if (mode == 1 || mode == 2)
     {
-        strcpy(type__, "REGULR");
+        strcpy(type, "REGULR");
     }
     else if (mode == 3)
     {
-        strcpy(type__, "SHIFTI");
+        strcpy(type, "SHIFTI");
     }
     else
     {
@@ -588,7 +588,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
             zvout_(*ncv, &workl[ihbds], debug_1.ndigit, "_neupd: Last row of the Schur vector matrix");
             if (msglvl > 3)
             {
-                zmout_(*ncv, *ncv, &workl[iuptri], &ldh, debug_1.ndigit, "_neupd: The upper triangular matrix ");
+                zmout_(*ncv, *ncv, &workl[iuptri], ldh, debug_1.ndigit, "_neupd: The upper triangular matrix ");
             }
         }
 #endif
@@ -618,7 +618,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
                 zvout_(*ncv, &workl[iheig], debug_1.ndigit, "_neupd: Eigenvalues of H--reordered");
                 if (msglvl > 3)
                 {
-                    zmout_(*ncv, *ncv, &workl[iuptri], &ldq, debug_1.ndigit, "_neupd: Triangular matrix after re-ordering");
+                    zmout_(*ncv, *ncv, &workl[iuptri], ldq, debug_1.ndigit, "_neupd: Triangular matrix after re-ordering");
                 }
             }
 #endif
@@ -639,7 +639,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
         /* if a spectral transformation was not used. */
         /* ------------------------------------------ */
 
-        if (strcmp(type__, "REGULR") == 0)
+        if (strcmp(type, "REGULR") == 0)
         {
             zcopy_(&nconv, &workl[iheig], &i_one, &d[1], &i_one);
         }
@@ -759,7 +759,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
                 zvout_(nconv, &workl[ihbds], debug_1.ndigit, "_neupd: Last row of the eigenvector matrix for T");
                 if (msglvl > 3)
                 {
-                    zmout_(*ncv, *ncv, &workl[invsub], &ldq, debug_1.ndigit, "_neupd: The eigenvector matrix for T");
+                    zmout_(*ncv, *ncv, &workl[invsub], ldq, debug_1.ndigit, "_neupd: The eigenvector matrix for T");
                 }
             }
 #endif
@@ -797,7 +797,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
     /* of A*x = lambda*B*x.                           */
     /* ---------------------------------------------- */
 
-    if (strcmp(type__, "REGULR") == 0)
+    if (strcmp(type, "REGULR") == 0)
     {
 
         if (*rvec)
@@ -840,7 +840,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
     /* *The Ritz vectors are not affected by the transformation. */
     /* --------------------------------------------------------- */
 
-    if (strcmp(type__, "SHIFTI") == 0)
+    if (strcmp(type, "SHIFTI") == 0)
     {
         i__1 = nconv;
         for (k = 1; k <= i__1; ++k)
@@ -853,7 +853,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
         }
     }
 
-    if (strcmp(type__, "REGULR") != 0 && msglvl > 1)
+    if (strcmp(type, "REGULR") != 0 && msglvl > 1)
     {
         zvout_(nconv, &d[1], debug_1.ndigit, "_neupd: Untransformed Ritz values.");
         zvout_(nconv, &workl[ihbds], debug_1.ndigit, "_neupd: Ritz estimates of the untransformed Ritz values.");
@@ -870,7 +870,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
     /* for MODE = 3. See reference 3.                  */
     /* ----------------------------------------------- */
 
-    if (*rvec && *howmny == 'A' && strcmp(type__, "SHIFTI") == 0)
+    if (*rvec && *howmny == 'A' && strcmp(type, "SHIFTI") == 0)
     {
 
         /* ---------------------------------------------- */

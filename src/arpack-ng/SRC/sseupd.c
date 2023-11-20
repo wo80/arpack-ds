@@ -238,7 +238,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
     a_int ierr;
     float temp;
     a_int next;
-    char type__[6];
+    char type[7];
     a_int ritz;
     float temp1;
     a_bool reord;
@@ -324,19 +324,19 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
 
     if (mode == 1 || mode == 2)
     {
-        strcpy(type__, "REGULR");
+        strcpy(type, "REGULR");
     }
     else if (mode == 3)
     {
-        strcpy(type__, "SHIFTI");
+        strcpy(type, "SHIFTI");
     }
     else if (mode == 4)
     {
-        strcpy(type__, "BUCKLE");
+        strcpy(type, "BUCKLE");
     }
     else if (mode == 5)
     {
-        strcpy(type__, "CAYLEY");
+        strcpy(type, "CAYLEY");
     }
     else
     {
@@ -673,7 +673,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
     /* (and corresponding data) are returned in ascending order.        */
     /* ---------------------------------------------------------------- */
 
-    if (strcmp(type__, "REGULR") == 0)
+    if (strcmp(type, "REGULR") == 0)
     {
 
         /* ------------------------------------------------------- */
@@ -709,7 +709,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
         /* ----------------------------------------------------------- */
 
         scopy_(ncv, &workl[ihd], &i_one, &workl[iw], &i_one);
-        if (strcmp(type__, "SHIFTI") == 0)
+        if (strcmp(type, "SHIFTI") == 0)
         {
             i__1 = *ncv;
             for (k = 1; k <= i__1; ++k)
@@ -718,7 +718,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
                 /* L40: */
             }
         }
-        else if (strcmp(type__, "BUCKLE") == 0)
+        else if (strcmp(type, "BUCKLE") == 0)
         {
             i__1 = *ncv;
             for (k = 1; k <= i__1; ++k)
@@ -727,7 +727,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
                 /* L50: */
             }
         }
-        else if (strcmp(type__, "CAYLEY") == 0)
+        else if (strcmp(type, "CAYLEY") == 0)
         {
             i__1 = *ncv;
             for (k = 1; k <= i__1; ++k)
@@ -829,7 +829,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
         /*     Not yet implemented. See remark 2 above. */
     }
 
-    if (strcmp(type__, "REGULR") == 0 && *rvec)
+    if (strcmp(type, "REGULR") == 0 && *rvec)
     {
 
         i__1 = *ncv;
@@ -839,7 +839,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
             /* L70: */
         }
     }
-    else if (strcmp(type__, "REGULR") != 0 && *rvec)
+    else if (strcmp(type, "REGULR") != 0 && *rvec)
     {
 
         /* ----------------------------------------------- */
@@ -852,7 +852,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
         /* ----------------------------------------------- */
 
         sscal_(ncv, &bnorm2, &workl[ihb], &i_one);
-        if (strcmp(type__, "SHIFTI") == 0)
+        if (strcmp(type, "SHIFTI") == 0)
         {
 
             i__1 = *ncv;
@@ -864,7 +864,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
                 /* L80: */
             }
         }
-        else if (strcmp(type__, "BUCKLE") == 0)
+        else if (strcmp(type, "BUCKLE") == 0)
         {
 
             i__1 = *ncv;
@@ -876,7 +876,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
                 /* L90: */
             }
         }
-        else if (strcmp(type__, "CAYLEY") == 0)
+        else if (strcmp(type, "CAYLEY") == 0)
         {
 
             i__1 = *ncv;
@@ -888,7 +888,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
         }
     }
 
-    if (strcmp(type__, "REGULR") != 0 && msglvl > 1)
+    if (strcmp(type, "REGULR") != 0 && msglvl > 1)
     {
         svout_(nconv, &d[1], debug_1.ndigit, "_seupd: Untransformed converged Ritz values");
         svout_(nconv, &workl[ihb], debug_1.ndigit, "_seupd: Ritz estimates of the untransformed Ritz values");
@@ -905,7 +905,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
     /* for MODE = 3,4,5. See reference 7               */
     /* ----------------------------------------------- */
 
-    if (*rvec && (strcmp(type__, "SHIFTI") == 0 || strcmp(type__, "CAYLEY") == 0))
+    if (*rvec && (strcmp(type, "SHIFTI") == 0 || strcmp(type, "CAYLEY") == 0))
     {
 
         i__1 = nconv - 1;
@@ -915,7 +915,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
             /* L110: */
         }
     }
-    else if (*rvec && strcmp(type__, "BUCKLE") == 0)
+    else if (*rvec && strcmp(type, "BUCKLE") == 0)
     {
 
         i__1 = nconv - 1;
@@ -926,7 +926,7 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
         }
     }
 
-    if (strcmp(type__, "REGULR") != 0)
+    if (strcmp(type, "REGULR") != 0)
     {
         sger_(n, &nconv, &s_one, &resid[1], &i_one, &workl[iw], &i_one, &z[z_offset], ldz);
     }

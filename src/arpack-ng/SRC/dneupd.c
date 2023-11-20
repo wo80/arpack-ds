@@ -330,7 +330,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
     a_int ierr;
     double temp;
     a_int iwev;
-    char type__[6];
+    char type[7];
     double temp1;
     a_int ihbds, iconj;
     double conds;
@@ -426,19 +426,19 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
 
     if (mode == 1 || mode == 2)
     {
-        strcpy(type__, "REGULR");
+        strcpy(type, "REGULR");
     }
     else if (mode == 3 && *sigmai == 0.)
     {
-        strcpy(type__, "SHIFTI");
+        strcpy(type, "SHIFTI");
     }
     else if (mode == 3)
     {
-        strcpy(type__, "REALPT");
+        strcpy(type, "REALPT");
     }
     else if (mode == 4)
     {
-        strcpy(type__, "IMAGPT");
+        strcpy(type, "IMAGPT");
     }
     else
     {
@@ -652,7 +652,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
             dvout_(*ncv, &workl[ihbds], debug_1.ndigit, "_neupd: Last row of the Schur vector matrix");
             if (msglvl > 3)
             {
-                dmout_(*ncv, *ncv, &workl[iuptri], &ldh, debug_1.ndigit, "_neupd: The upper quasi-triangular matrix ");
+                dmout_(*ncv, *ncv, &workl[iuptri], ldh, debug_1.ndigit, "_neupd: The upper quasi-triangular matrix ");
             }
         }
 #endif
@@ -683,7 +683,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
                 dvout_(*ncv, &workl[iheigi], debug_1.ndigit, "_neupd: Imag part of the eigenvalues of H--reordered");
                 if (msglvl > 3)
                 {
-                    dmout_(*ncv, *ncv, &workl[iuptri], &ldq, debug_1.ndigit, "_neupd: Quasi-triangular matrix after re-ordering");
+                    dmout_(*ncv, *ncv, &workl[iuptri], ldq, debug_1.ndigit, "_neupd: Quasi-triangular matrix after re-ordering");
                 }
             }
 #endif
@@ -704,7 +704,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
         /* if a spectral transformation was not used.         */
         /* -------------------------------------------------- */
 
-        if (strcmp(type__, "REGULR") == 0)
+        if (strcmp(type, "REGULR") == 0)
         {
             dcopy_(&nconv, &workl[iheigr], &i_one, &dr[1], &i_one);
             dcopy_(&nconv, &workl[iheigi], &i_one, &di[1], &i_one);
@@ -876,7 +876,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
                 dvout_(*ncv, &workl[ihbds], debug_1.ndigit, "_neupd: Last row of the eigenvector matrix for T");
                 if (msglvl > 3)
                 {
-                    dmout_(*ncv, *ncv, &workl[invsub], &ldq, debug_1.ndigit, "_neupd: The eigenvector matrix for T");
+                    dmout_(*ncv, *ncv, &workl[invsub], ldq, debug_1.ndigit, "_neupd: The eigenvector matrix for T");
                 }
             }
 #endif
@@ -929,7 +929,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
     /* of A*x = lambda*B*x.                           */
     /* ---------------------------------------------- */
 
-    if (strcmp(type__, "REGULR") == 0)
+    if (strcmp(type, "REGULR") == 0)
     {
 
         if (*rvec)
@@ -946,7 +946,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
         /*   Ritz values in the original system. */
         /* ------------------------------------- */
 
-        if (strcmp(type__, "SHIFTI") == 0)
+        if (strcmp(type, "SHIFTI") == 0)
         {
 
             if (*rvec)
@@ -962,7 +962,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
                 /* L50: */
             }
         }
-        else if (strcmp(type__, "REALPT") == 0)
+        else if (strcmp(type, "REALPT") == 0)
         {
 
             i__1 = *ncv;
@@ -971,7 +971,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
                 /* L60: */
             }
         }
-        else if (strcmp(type__, "IMAGPT") == 0)
+        else if (strcmp(type, "IMAGPT") == 0)
         {
 
             i__1 = *ncv;
@@ -991,7 +991,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
         /* *The Ritz vectors are not affected by the transformation. */
         /* --------------------------------------------------------- */
 
-        if (strcmp(type__, "SHIFTI") == 0)
+        if (strcmp(type, "SHIFTI") == 0)
         {
 
             i__1 = *ncv;
@@ -1006,7 +1006,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
             dcopy_(&nconv, &workl[iheigr], &i_one, &dr[1], &i_one);
             dcopy_(&nconv, &workl[iheigi], &i_one, &di[1], &i_one);
         }
-        else if (strcmp(type__, "REALPT") == 0 || strcmp(type__, "IMAGPT") == 0)
+        else if (strcmp(type, "REALPT") == 0 || strcmp(type, "IMAGPT") == 0)
         {
 
             dcopy_(&nconv, &workl[iheigr], &i_one, &dr[1], &i_one);
@@ -1014,13 +1014,13 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
         }
     }
 
-    if (strcmp(type__, "SHIFTI") == 0 && msglvl > 1)
+    if (strcmp(type, "SHIFTI") == 0 && msglvl > 1)
     {
         dvout_(nconv, &dr[1], debug_1.ndigit, "_neupd: Untransformed float part of the Ritz values.");
         dvout_(nconv, &di[1], debug_1.ndigit, "_neupd: Untransformed imag part of the Ritz values.");
         dvout_(nconv, &workl[ihbds], debug_1.ndigit, "_neupd: Ritz estimates of untransformed Ritz values.");
     }
-    else if (strcmp(type__, "REGULR") == 0 && msglvl > 1)
+    else if (strcmp(type, "REGULR") == 0 && msglvl > 1)
     {
         dvout_(nconv, &dr[1], debug_1.ndigit, "_neupd: Real parts of converged Ritz values.");
         dvout_(nconv, &di[1], debug_1.ndigit, "_neupd: Imag parts of converged Ritz values.");
@@ -1033,7 +1033,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
     /* for MODE = 2.                                   */
     /* ----------------------------------------------- */
 
-    if (*rvec && *howmny == 'A' && strcmp(type__, "SHIFTI") == 0)
+    if (*rvec && *howmny == 'A' && strcmp(type, "SHIFTI") == 0)
     {
 
         /* ---------------------------------------------- */

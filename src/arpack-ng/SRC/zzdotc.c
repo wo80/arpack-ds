@@ -2,7 +2,7 @@
 
 #include "arpack_internal.h"
 
-/* Double Complex */ VOID zzdotc_(doublecomplex *ret_val, integer *n, doublecomplex *zx, integer *incx, doublecomplex *zy, integer *incy)
+void zzdotc_(a_dcomplex* ret_val, a_int* n, a_dcomplex* zx, a_int* incx, a_dcomplex* zy, a_int* incy)
 {
     /* System generated locals */
     a_int i__1, i__2;

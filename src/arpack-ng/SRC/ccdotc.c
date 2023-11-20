@@ -2,7 +2,7 @@
 
 #include "arpack_internal.h"
 
-/* Complex */ VOID ccdotc_(complex *ret_val, integer *n, complex *zx, integer *incx, complex *zy, integer *incy)
+void ccdotc_(a_fcomplex* ret_val, a_int* n, a_fcomplex* zx, a_int* incx, a_fcomplex* zy, a_int* incy)
 {
     /* System generated locals */
     a_int i__1, i__2;

@@ -16,7 +16,7 @@
  *              If IDIGIT .LT. 0, printing is done with 72 columns.
  *              If IDIGIT .GT. 0, printing is done with 132 columns.
  */
-void zmout_(const int m, const int n, const a_dcomplex *a, const int lda, const int idigit, const char *ifmt)
+void zmout_(const a_int m, const a_int n, const a_dcomplex *a, const a_int lda, const a_int idigit, const char *ifmt)
 {
     /* System generated locals */
     a_dcomplex d__1;

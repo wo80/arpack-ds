@@ -213,7 +213,7 @@ int dsaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
     static double rnorm;
     a_int nevbef;
     static a_bool update;
-    char wprime[2];
+    char wprime[3];
     static a_bool ushift;
     static a_int kplusp, msglvl;
     a_int nptemp;

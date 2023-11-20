@@ -597,7 +597,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         ivout_(1, kev, debug_1.ndigit, "_napps: Order of the final Hessenberg matrix ");
         if (msglvl > 2)
         {
-            cmout_(*kev, *kev, &h[h_offset], ldh, debug_1.ndigit, "_napps: updated Hessenberg matrix H for next iteration");
+            cmout_(*kev, *kev, &h[h_offset], *ldh, debug_1.ndigit, "_napps: updated Hessenberg matrix H for next iteration");
         }
     }
 #endif

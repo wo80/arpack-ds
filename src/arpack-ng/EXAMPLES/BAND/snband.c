@@ -411,7 +411,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
     a_int imid;
     float denr;
     a_int ibot, ierr;
-    a_int itop, type__;
+    a_int itop, type;
     float numr;
     float dmdul;
     a_bool first;
@@ -546,27 +546,27 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
 
     if (iparam[7] == 1)
     {
-        type__ = 1;
+        type = 1;
     }
     else if (iparam[7] == 3 && *bmat == 'I')
     {
-        type__ = 2;
+        type = 2;
     }
     else if (iparam[7] == 2)
     {
-        type__ = 3;
+        type = 3;
     }
     else if (iparam[7] == 3 && *bmat == 'G')
     {
-        type__ = 4;
+        type = 4;
     }
     else if (iparam[7] == 4 && *bmat == 'I')
     {
-        type__ = 5;
+        type = 5;
     }
     else if (iparam[7] == 4 && *bmat == 'G')
     {
-        type__ = 6;
+        type = 6;
     }
     else
     {
@@ -587,7 +587,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
     /* must be nonzero.                 */
     /* -------------------------------- */
 
-    if (type__ == 5 || type__ == 6)
+    if (type == 5 || type == 6)
     {
         if (*sigmai == 0.f)
         {
@@ -629,7 +629,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
     imid = *kl + *ku + 1;
     ibot = (*kl << 1) + *ku + 1;
 
-    if (type__ == 2 || type__ == 5)
+    if (type == 2 || type == 5)
     {
 
         /* ----------------------------- */
@@ -718,7 +718,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
             }
         }
     }
-    else if (type__ == 3)
+    else if (type == 3)
     {
 
         /* --------------------------------------------- */
@@ -743,7 +743,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
             goto L9000;
         }
     }
-    else if (type__ == 4 || type__ == 6)
+    else if (type == 4 || type == 6)
     {
 
         /* ----------------------------------------- */
@@ -838,7 +838,7 @@ L90:
     if (ido == -1)
     {
 
-        if (type__ == 1)
+        if (type == 1)
         {
 
             /* -------------------------- */
@@ -847,7 +847,7 @@ L90:
 
             sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
         }
-        else if (type__ == 2)
+        else if (type == 2)
         {
 
             if (*sigmai == 0.f)
@@ -920,7 +920,7 @@ L90:
                 }
             }
         }
-        else if (type__ == 3)
+        else if (type == 3)
         {
 
             /* --------------------------------- */
@@ -946,7 +946,7 @@ L90:
                 goto L9000;
             }
         }
-        else if (type__ == 4)
+        else if (type == 4)
         {
 
             /* --------------------------------------- */
@@ -1022,7 +1022,7 @@ L90:
                 }
             }
         }
-        else if (type__ == 5)
+        else if (type == 5)
         {
 
             /* ------------------------------------- */
@@ -1064,7 +1064,7 @@ L90:
                 /* L150: */
             }
         }
-        else if (type__ == 6)
+        else if (type == 6)
         {
 
             /* -------------------------------------- */
@@ -1112,7 +1112,7 @@ L90:
     else if (ido == 1)
     {
 
-        if (type__ == 1)
+        if (type == 1)
         {
 
             /* -------------------------- */
@@ -1121,7 +1121,7 @@ L90:
 
             sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
         }
-        else if (type__ == 2)
+        else if (type == 2)
         {
 
             if (*sigmai == 0.f)
@@ -1178,7 +1178,7 @@ L90:
                 }
             }
         }
-        else if (type__ == 3)
+        else if (type == 3)
         {
 
             /* --------------------------------- */
@@ -1202,7 +1202,7 @@ L90:
                 goto L9000;
             }
         }
-        else if (type__ == 4)
+        else if (type == 4)
         {
 
             /* ------------------------------------ */
@@ -1276,7 +1276,7 @@ L90:
                 }
             }
         }
-        else if (type__ == 5)
+        else if (type == 5)
         {
 
             /* ------------------------------------- */
@@ -1316,7 +1316,7 @@ L90:
                 /* L230: */
             }
         }
-        else if (type__ == 6)
+        else if (type == 6)
         {
 
             /* --------------------------------------- */
@@ -1458,7 +1458,7 @@ L90:
                 else if (*sigmai != 0.f)
                 {
 
-                    if (type__ == 4 || type__ == 6)
+                    if (type == 4 || type == 6)
                     {
 
                         first = TRUE_;
@@ -1623,7 +1623,7 @@ L90:
                             /* L270: */
                         }
                     }
-                    else if (type__ == 2 || type__ == 5)
+                    else if (type == 2 || type == 5)
                     {
 
                         first = TRUE_;

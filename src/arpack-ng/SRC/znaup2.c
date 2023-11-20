@@ -202,7 +202,7 @@ int znaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
     static a_bool update, ushift;
     static a_int kplusp, msglvl;
     a_int nptemp;
-    char wprime[2];
+    char wprime[3];
     a_dcomplex cmpnorm;
 
     /* Parameter adjustments */
@@ -850,7 +850,7 @@ L100:
     if (msglvl > 2)
     {
         dvout_(1, &rnorm, debug_1.ndigit, "_naup2: B-norm of residual for compressed factorization");
-        zmout_(*nev, *nev, &h[h_offset], ldh, debug_1.ndigit, "_naup2: Compressed upper Hessenberg matrix H");
+        zmout_(*nev, *nev, &h[h_offset], *ldh, debug_1.ndigit, "_naup2: Compressed upper Hessenberg matrix H");
     }
 #endif
 

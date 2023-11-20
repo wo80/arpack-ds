@@ -277,7 +277,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
     a_int ierr;
     a_fcomplex temp;
     a_int iwev;
-    char type__[6];
+    char type[7];
     a_int ritz, iheig;
     a_int ihbds;
     float conds;
@@ -372,11 +372,11 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
 
     if (mode == 1 || mode == 2)
     {
-        strcpy(type__, "REGULR");
+        strcpy(type, "REGULR");
     }
     else if (mode == 3)
     {
-        strcpy(type__, "SHIFTI");
+        strcpy(type, "SHIFTI");
     }
     else
     {
@@ -590,7 +590,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
             cvout_(*ncv, &workl[ihbds], debug_1.ndigit, "_neupd: Last row of the Schur vector matrix");
             if (msglvl > 3)
             {
-                cmout_(*ncv, *ncv, &workl[iuptri], &ldh, debug_1.ndigit, "_neupd: The upper triangular matrix ");
+                cmout_(*ncv, *ncv, &workl[iuptri], ldh, debug_1.ndigit, "_neupd: The upper triangular matrix ");
             }
         }
 #endif
@@ -620,7 +620,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
                 cvout_(*ncv, &workl[iheig], debug_1.ndigit, "_neupd: Eigenvalues of H--reordered");
                 if (msglvl > 3)
                 {
-                    cmout_(*ncv, *ncv, &workl[iuptri], &ldq, debug_1.ndigit, "_neupd: Triangular matrix after re-ordering");
+                    cmout_(*ncv, *ncv, &workl[iuptri], ldq, debug_1.ndigit, "_neupd: Triangular matrix after re-ordering");
                 }
             }
 #endif
@@ -641,7 +641,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
         /* if a spectral transformation was not used. */
         /* ------------------------------------------ */
 
-        if (strcmp(type__, "REGULR") == 0)
+        if (strcmp(type, "REGULR") == 0)
         {
             ccopy_(&nconv, &workl[iheig], &i_one, &d[1], &i_one);
         }
@@ -761,7 +761,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
                 cvout_(nconv, &workl[ihbds], debug_1.ndigit, "_neupd: Last row of the eigenvector matrix for T");
                 if (msglvl > 3)
                 {
-                    cmout_(*ncv, *ncv, &workl[invsub], &ldq, debug_1.ndigit, "_neupd: The eigenvector matrix for T");
+                    cmout_(*ncv, *ncv, &workl[invsub], ldq, debug_1.ndigit, "_neupd: The eigenvector matrix for T");
                 }
             }
 #endif
@@ -799,7 +799,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
     /* of A*x = lambda*B*x.                           */
     /* ---------------------------------------------- */
 
-    if (strcmp(type__, "REGULR") == 0)
+    if (strcmp(type, "REGULR") == 0)
     {
 
         if (*rvec)
@@ -842,7 +842,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
     /* *The Ritz vectors are not affected by the transformation. */
     /* --------------------------------------------------------- */
 
-    if (strcmp(type__, "SHIFTI") == 0)
+    if (strcmp(type, "SHIFTI") == 0)
     {
         i__1 = nconv;
         for (k = 1; k <= i__1; ++k)
@@ -855,7 +855,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
         }
     }
 
-    if (strcmp(type__, "REGULR") != 0 && msglvl > 1)
+    if (strcmp(type, "REGULR") != 0 && msglvl > 1)
     {
         cvout_(nconv, &d[1], debug_1.ndigit, "_neupd: Untransformed Ritz values.");
         cvout_(nconv, &workl[ihbds], debug_1.ndigit, "_neupd: Ritz estimates of the untransformed Ritz values.");
@@ -872,7 +872,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
     /* for MODE = 3. See reference 3.                  */
     /* ----------------------------------------------- */
 
-    if (*rvec && *howmny == 'A' && strcmp(type__, "SHIFTI") == 0)
+    if (*rvec && *howmny == 'A' && strcmp(type, "SHIFTI") == 0)
     {
 
         /* ---------------------------------------------- */

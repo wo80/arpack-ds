@@ -892,7 +892,7 @@ L100:
         {
             i__1 = *k + *np;
             i__2 = *k + *np;
-            smout_(i__1, i__2, &h[h_offset], ldh, debug_1.ndigit, "_naitr: Final upper Hessenberg matrix H of order K+NP");
+            smout_(i__1, i__2, &h[h_offset], *ldh, debug_1.ndigit, "_naitr: Final upper Hessenberg matrix H of order K+NP");
         }
 #endif
 

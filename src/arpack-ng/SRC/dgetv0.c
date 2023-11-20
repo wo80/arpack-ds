@@ -433,7 +433,7 @@ L50:
 #ifndef NO_TRACE
     if (msglvl > 3)
     {
-        dvout_(n, &resid[1], debug_1.ndigit, "_getv0: initial / restarted starting vector");
+        dvout_(*n, &resid[1], debug_1.ndigit, "_getv0: initial / restarted starting vector");
     }
 #endif
 

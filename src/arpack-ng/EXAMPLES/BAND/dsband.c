@@ -350,7 +350,7 @@ int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
 
     /* Local variables */
-    a_int i, j, ido, imid, ibot, ierr, itop, type__;
+    a_int i, j, ido, imid, ibot, ierr, itop, type;
     a_int ipntr[14];
 
     /* Fortran I/O blocks */
@@ -445,27 +445,27 @@ int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
 
     if (iparam[7] == 1)
     {
-        type__ = 1;
+        type = 1;
     }
     else if (iparam[7] == 3 && *bmat == 'I')
     {
-        type__ = 2;
+        type = 2;
     }
     else if (iparam[7] == 2)
     {
-        type__ = 3;
+        type = 3;
     }
     else if (iparam[7] == 3 && *bmat == 'G')
     {
-        type__ = 4;
+        type = 4;
     }
     else if (iparam[7] == 4)
     {
-        type__ = 5;
+        type = 5;
     }
     else if (iparam[7] == 5)
     {
-        type__ = 6;
+        type = 6;
     }
     else
     {
@@ -506,7 +506,7 @@ int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
     imid = *kl + *ku + 1;
     ibot = (*kl << 1) + *ku + 1;
 
-    if (type__ == 2 || type__ == 6 && *bmat == 'I')
+    if (type == 2 || type == 6 && *bmat == 'I')
     {
 
         /* -------------------------------- */
@@ -537,7 +537,7 @@ int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
             goto L9000;
         }
     }
-    else if (type__ == 3)
+    else if (type == 3)
     {
 
         /* -------------------------------------------- */
@@ -562,7 +562,7 @@ int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
             goto L9000;
         }
     }
-    else if (type__ == 4 || type__ == 5 || type__ == 6 && *bmat == 'G')
+    else if (type == 4 || type == 5 || type == 6 && *bmat == 'G')
     {
 
         /* ----------------------------------------- */
@@ -613,7 +613,7 @@ L90:
     if (ido == -1)
     {
 
-        if (type__ == 1)
+        if (type == 1)
         {
 
             /* -------------------------- */
@@ -622,7 +622,7 @@ L90:
 
             dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
         }
-        else if (type__ == 2)
+        else if (type == 2)
         {
 
             /* -------------------------------- */
@@ -648,7 +648,7 @@ L90:
                 goto L9000;
             }
         }
-        else if (type__ == 3)
+        else if (type == 3)
         {
 
             /* --------------------------------- */
@@ -674,7 +674,7 @@ L90:
                 goto L9000;
             }
         }
-        else if (type__ == 4)
+        else if (type == 4)
         {
 
             /* --------------------------------------- */
@@ -700,7 +700,7 @@ L90:
                 goto L9000;
             }
         }
-        else if (type__ == 5)
+        else if (type == 5)
         {
 
             /* ------------------------------------- */
@@ -727,7 +727,7 @@ L90:
                 goto L9000;
             }
         }
-        else if (type__ == 6)
+        else if (type == 6)
         {
 
             /* ------------------------------------- */
@@ -768,7 +768,7 @@ L90:
     else if (ido == 1)
     {
 
-        if (type__ == 1)
+        if (type == 1)
         {
 
             /* -------------------------- */
@@ -777,7 +777,7 @@ L90:
 
             dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
         }
-        else if (type__ == 2)
+        else if (type == 2)
         {
 
             /* -------------------------------- */
@@ -801,7 +801,7 @@ L90:
                 goto L9000;
             }
         }
-        else if (type__ == 3)
+        else if (type == 3)
         {
 
             /* --------------------------------- */
@@ -825,7 +825,7 @@ L90:
                 goto L9000;
             }
         }
-        else if (type__ == 4)
+        else if (type == 4)
         {
 
             /* ----------------------------------- */
@@ -850,7 +850,7 @@ L90:
                 goto L9000;
             }
         }
-        else if (type__ == 5)
+        else if (type == 5)
         {
 
             /* ----------------------------- */
@@ -876,7 +876,7 @@ L90:
                 goto L9000;
             }
         }
-        else if (type__ == 6)
+        else if (type == 6)
         {
 
             /* ------------------------------- */
@@ -908,7 +908,7 @@ L90:
         /* B = A, otherwise B=M.            */
         /* -------------------------------- */
 
-        if (type__ == 5)
+        if (type == 5)
         {
 
             /* ------------------- */
