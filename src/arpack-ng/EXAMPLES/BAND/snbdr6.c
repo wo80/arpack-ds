@@ -21,9 +21,6 @@ static a_int c_n6 = -6;
     a_int i__1, i__2;
     float r__1;
 
-    /* Builtin functions */
-    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-
     /* Local variables */
     float a[50000] /* was [50][1000] */, d[150] /* was [50][3] */, h;
     a_int i, j;
@@ -38,12 +35,12 @@ static a_int c_n6 = -6;
     float rho, tol;
     a_fcomplex cfac[50000] /* was [50][1000] */;
     float rfac[50000] /* was [50][1000] */;
-    char bmat[1];
+    char* bmat;
     a_int mode, info;
     a_bool rvec;
     a_int isub, isup;
     a_int idiag;
-    char which[2];
+    char* which;
     float resid[1000];
     a_int nconv;
     a_fcomplex workc[1000];
@@ -57,28 +54,6 @@ static a_int c_n6 = -6;
     float sigmar;
     a_int maxitr, lworkl;
     float workev[150];
-
-    /* Fortran I/O blocks */
-    static cilist io___5 = {0, 6, 0, 0, 0};
-    static cilist io___6 = {0, 6, 0, 0, 0};
-    static cilist io___7 = {0, 6, 0, 0, 0};
-    static cilist io___44 = {0, 6, 0, 0, 0};
-    static cilist io___45 = {0, 6, 0, 0, 0};
-    static cilist io___46 = {0, 6, 0, 0, 0};
-    static cilist io___47 = {0, 6, 0, 0, 0};
-    static cilist io___48 = {0, 6, 0, 0, 0};
-    static cilist io___49 = {0, 6, 0, 0, 0};
-    static cilist io___50 = {0, 6, 0, 0, 0};
-    static cilist io___51 = {0, 6, 0, 0, 0};
-    static cilist io___52 = {0, 6, 0, 0, 0};
-    static cilist io___53 = {0, 6, 0, 0, 0};
-    static cilist io___54 = {0, 6, 0, 0, 0};
-    static cilist io___55 = {0, 6, 0, 0, 0};
-    static cilist io___56 = {0, 6, 0, 0, 0};
-    static cilist io___60 = {0, 6, 0, 0, 0};
-    static cilist io___61 = {0, 6, 0, 0, 0};
-    static cilist io___62 = {0, 6, 0, 0, 0};
-    static cilist io___63 = {0, 6, 0, 0, 0};
 
     /*     ... Construct matrices A and M in LAPACK-style band form. */
     /*         The matrix A is a block tridiagonal matrix.  Each */
@@ -160,27 +135,21 @@ static a_int c_n6 = -6;
     ncv = 10;
     if (n > 1000)
     {
-        s_wsle(&io___5);
-        do_lio(&c__9, &c__1, " ERROR with _NBDR6: N is greater than MAXN ", (ftnlen)43);
-        e_wsle();
-        goto L9000;
+        printf(" ERROR with _NBDR6: N is greater than MAXN \n");
+        return ierr;
     }
     else if (nev > 25)
     {
-        s_wsle(&io___6);
-        do_lio(&c__9, &c__1, " ERROR with _NBDR6: NEV is greater than MAXNEV ", (ftnlen)47);
-        e_wsle();
-        goto L9000;
+        printf(" ERROR with _NBDR6: NEV is greater than MAXNEV \n");
+        return ierr;
     }
     else if (ncv > 50)
     {
-        s_wsle(&io___7);
-        do_lio(&c__9, &c__1, " ERROR with _NBDR6: NCV is greater than MAXNCV ", (ftnlen)47);
-        e_wsle();
-        goto L9000;
+        printf(" ERROR with _NBDR6: NCV is greater than MAXNCV \n");
+        return ierr;
     }
-    *bmat = 'G';
-    strcpy(which, "LM");
+    bmat = "G";
+    which = "LM";
     sigmar = .4f;
     sigmai = .6f;
 
@@ -323,55 +292,19 @@ static a_int c_n6 = -6;
 
         nconv = iparam[4];
 
-        s_wsle(&io___44);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
-        s_wsle(&io___45);
-        do_lio(&c__9, &c__1, " _NBDR6 ", (ftnlen)8);
-        e_wsle();
-        s_wsle(&io___46);
-        do_lio(&c__9, &c__1, " ====== ", (ftnlen)8);
-        e_wsle();
-        s_wsle(&io___47);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
-        s_wsle(&io___48);
-        do_lio(&c__9, &c__1, " The size of the matrix is ", (ftnlen)27);
-        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___49);
-        do_lio(&c__9, &c__1, " Number of eigenvalue requested is ", (ftnlen)35);
-        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___50);
-        do_lio(&c__9, &c__1, " The number of Arnoldi vectors generated", (ftnlen)40);
-        do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
-        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___51);
-        do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___52);
-        do_lio(&c__9, &c__1, " What portion of the spectrum ", (ftnlen)30);
-        do_lio(&c__9, &c__1, which, (ftnlen)2);
-        e_wsle();
-        s_wsle(&io___53);
-        do_lio(&c__9, &c__1, " The number of Implicit Arnoldi ", (ftnlen)32);
-        do_lio(&c__9, &c__1, " update taken is ", (ftnlen)17);
-        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___54);
-        do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___55);
-        do_lio(&c__9, &c__1, " The convergence tolerance is ", (ftnlen)30);
-        do_lio(&c__4, &c__1, (char *)&tol, (ftnlen)sizeof(float));
-        e_wsle();
-        s_wsle(&io___56);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
+        printf(" \n");
+        printf(" _NBDR6 \n");
+        printf(" ====== \n");
+        printf(" \n");
+        printf(" The size of the matrix is %d", n);
+        printf(" Number of eigenvalue requested is %d", nev);
+        printf(" The number of Arnoldi vectors generated (NCV) is %d", ncv);
+        printf(" The number of converged Ritz values is %d", nconv);
+        printf(" What portion of the spectrum %s", which);
+        printf(" The number of Implicit Arnoldi update iterations taken is %d", iparam[2]);
+        printf(" The number of OP*x is %d", iparam[8]);
+        printf(" The convergence tolerance is %e", tol);
+        printf(" \n");
 
         /* -------------------------- */
         /* Compute the residual norm. */
@@ -434,7 +367,7 @@ static a_int c_n6 = -6;
 
             /* L90: */
         }
-        smout_(&c__6, &nconv, &c__3, d, &c__50, &c_n6,"Ritz values (Real,Imag) and relative residuals");
+        smout_(&nconv, &c__3, d, &c__50, &c_n6,"Ritz values (Real,Imag) and relative residuals");
     }
     else
     {
@@ -445,19 +378,10 @@ static a_int c_n6 = -6;
         /* for snband.                         */
         /* ----------------------------------- */
 
-        s_wsle(&io___60);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
-        s_wsle(&io___61);
-        do_lio(&c__9, &c__1, " Error with _nband, info= ", (ftnlen)26);
-        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___62);
-        do_lio(&c__9, &c__1, " Check the documentation of _nband ", (ftnlen)35);
-        e_wsle();
-        s_wsle(&io___63);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
+        printf(" \n");
+        printf(" Error with _nband info= %d", info);
+        printf(" Check the documentation of _nband \n");
+        printf(" \n");
     }
 
 L9000:

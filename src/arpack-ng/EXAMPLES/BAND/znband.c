@@ -314,43 +314,9 @@ int znband_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
     a_int v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, fac_dim1, fac_offset, i__1, i__2, i__3, i__4, i__5;
     a_dcomplex z__1, z__2;
 
-    /* Builtin functions */
-    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-
     /* Local variables */
     a_int i, j, ido, imid, mode, ibot, ierr, itop;
     a_int ipntr[14];
-
-    /* Fortran I/O blocks */
-    static cilist io___7 = {0, 6, 0, 0, 0};
-    static cilist io___8 = {0, 6, 0, 0, 0};
-    static cilist io___9 = {0, 6, 0, 0, 0};
-    static cilist io___12 = {0, 6, 0, 0, 0};
-    static cilist io___13 = {0, 6, 0, 0, 0};
-    static cilist io___14 = {0, 6, 0, 0, 0};
-    static cilist io___16 = {0, 6, 0, 0, 0};
-    static cilist io___17 = {0, 6, 0, 0, 0};
-    static cilist io___18 = {0, 6, 0, 0, 0};
-    static cilist io___19 = {0, 6, 0, 0, 0};
-    static cilist io___20 = {0, 6, 0, 0, 0};
-    static cilist io___21 = {0, 6, 0, 0, 0};
-    static cilist io___22 = {0, 6, 0, 0, 0};
-    static cilist io___23 = {0, 6, 0, 0, 0};
-    static cilist io___24 = {0, 6, 0, 0, 0};
-    static cilist io___25 = {0, 6, 0, 0, 0};
-    static cilist io___26 = {0, 6, 0, 0, 0};
-    static cilist io___27 = {0, 6, 0, 0, 0};
-    static cilist io___28 = {0, 6, 0, 0, 0};
-    static cilist io___29 = {0, 6, 0, 0, 0};
-    static cilist io___30 = {0, 6, 0, 0, 0};
-    static cilist io___31 = {0, 6, 0, 0, 0};
-    static cilist io___32 = {0, 6, 0, 0, 0};
-    static cilist io___33 = {0, 6, 0, 0, 0};
-    static cilist io___34 = {0, 6, 0, 0, 0};
-    static cilist io___35 = {0, 6, 0, 0, 0};
-    static cilist io___36 = {0, 6, 0, 0, 0};
-    static cilist io___37 = {0, 6, 0, 0, 0};
-    static cilist io___38 = {0, 6, 0, 0, 0};
 
     /* Parameter adjustments */
     --select;
@@ -417,16 +383,10 @@ int znband_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
         zgbtrf_(n, n, kl, ku, &fac[fac_offset], lda, &iwork[1], &ierr);
         if (ierr != 0)
         {
-            s_wsle(&io___7);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
-            s_wsle(&io___8);
-            do_lio(&c__9, &c__1, "_band:  error in _gbtrf", (ftnlen)23);
-            e_wsle();
-            s_wsle(&io___9);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
-            goto L9000;
+            printf(" \n");
+            printf("_band:  error in _gbtrf\n");
+            printf(" \n");
+            return ierr;
         }
     }
     else if (mode == 3)
@@ -482,16 +442,10 @@ int znband_(a_bool *rvec, char *howmny, a_bool *select, a_dcomplex *d, a_dcomple
         zgbtrf_(n, n, kl, ku, &fac[fac_offset], lda, &iwork[1], &ierr);
         if (ierr != 0)
         {
-            s_wsle(&io___12);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
-            s_wsle(&io___13);
-            do_lio(&c__9, &c__1, "_band: error in _gbtrf.", (ftnlen)23);
-            e_wsle();
-            s_wsle(&io___14);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
-            goto L9000;
+            printf(" \n");
+            printf("_band: error in _gbtrf.\n");
+            printf(" \n");
+            return ierr;
         }
     }
 
@@ -527,16 +481,10 @@ L40:
             zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
-                s_wsle(&io___16);
-                do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                e_wsle();
-                s_wsle(&io___17);
-                do_lio(&c__9, &c__1, "_band: error in sbgtrs.", (ftnlen)23);
-                e_wsle();
-                s_wsle(&io___18);
-                do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                e_wsle();
-                goto L9000;
+                printf(" \n");
+                printf("_band: error in sbgtrs.\n");
+                printf(" \n");
+                return ierr;
             }
         }
         else if (mode == 3)
@@ -554,16 +502,10 @@ L40:
             zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
-                s_wsle(&io___19);
-                do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                e_wsle();
-                s_wsle(&io___20);
-                do_lio(&c__9, &c__1, "_band: error in _gbtrs.", (ftnlen)23);
-                e_wsle();
-                s_wsle(&io___21);
-                do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                e_wsle();
-                goto L9000;
+                printf(" \n");
+                printf("_band: error in _gbtrs.\n");
+                printf(" \n");
+                return ierr;
             }
         }
     }
@@ -591,16 +533,10 @@ L40:
             zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], ldv, &ierr);
             if (ierr != 0)
             {
-                s_wsle(&io___22);
-                do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                e_wsle();
-                s_wsle(&io___23);
-                do_lio(&c__9, &c__1, "_band: error in sbgtrs.", (ftnlen)23);
-                e_wsle();
-                s_wsle(&io___24);
-                do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                e_wsle();
-                goto L9000;
+                printf(" \n");
+                printf("_band: error in sbgtrs.\n");
+                printf(" \n");
+                return ierr;
             }
         }
         else if (mode == 3)
@@ -617,16 +553,10 @@ L40:
                 zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
-                    s_wsle(&io___25);
-                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                    e_wsle();
-                    s_wsle(&io___26);
-                    do_lio(&c__9, &c__1, "_band: error in _gbtrs.", (ftnlen)23);
-                    e_wsle();
-                    s_wsle(&io___27);
-                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                    e_wsle();
-                    goto L9000;
+                    printf(" \n");
+                    printf("_band: error in _gbtrs.\n");
+                    printf(" \n");
+                    return ierr;
                 }
             }
             else
@@ -642,16 +572,10 @@ L40:
                 zgbtrs_("Notranspose", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
-                    s_wsle(&io___28);
-                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                    e_wsle();
-                    s_wsle(&io___29);
-                    do_lio(&c__9, &c__1, "_band: error in _gbtrs.", (ftnlen)23);
-                    e_wsle();
-                    s_wsle(&io___30);
-                    do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                    e_wsle();
-                    goto L9000;
+                    printf(" \n");
+                    printf("_band: error in _gbtrs.\n");
+                    printf(" \n");
+                    return ierr;
                 }
             }
         }
@@ -681,19 +605,10 @@ L40:
             /* documentation in dnaupd  */
             /* ------------------------ */
 
-            s_wsle(&io___31);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
-            s_wsle(&io___32);
-            do_lio(&c__9, &c__1, " Error with _naupd info = ", (ftnlen)26);
-            do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(a_int));
-            e_wsle();
-            s_wsle(&io___33);
-            do_lio(&c__9, &c__1, " Check the documentation of _naupd ", (ftnlen)35);
-            e_wsle();
-            s_wsle(&io___34);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
+            printf(" \n");
+            printf(" Error with _naupd info = %d", (*info));
+            printf(" Check the documentation of _naupd \n");
+            printf(" \n");
         }
         else
         {
@@ -707,23 +622,14 @@ L40:
                 /* Check the documentation of zneupd . */
                 /* ---------------------------------- */
 
-                s_wsle(&io___35);
-                do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                e_wsle();
-                s_wsle(&io___36);
-                do_lio(&c__9, &c__1, " Error with _neupd = ", (ftnlen)21);
-                do_lio(&c__3, &c__1, (char *)&(*info), (ftnlen)sizeof(a_int));
-                e_wsle();
-                s_wsle(&io___37);
-                do_lio(&c__9, &c__1, " Check the documentation of _neupd ", (ftnlen)35);
-                e_wsle();
-                s_wsle(&io___38);
-                do_lio(&c__9, &c__1, " ", (ftnlen)1);
-                e_wsle();
+                printf(" \n");
+                printf(" Error with _neupd = %d", (*info));
+                printf(" Check the documentation of _neupd \n");
+                printf(" \n");
             }
         }
 
-        goto L9000;
+        return ierr;
     }
 
     /* -------------------------------------- */
@@ -731,8 +637,6 @@ L40:
     /* -------------------------------------- */
 
     goto L40;
-
-L9000:
 
     return 0;
 } /* znband_ */

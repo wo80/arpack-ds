@@ -22,9 +22,6 @@ static a_dcomplex c_b164 = {10., 0.};
     a_int i__1, i__2;
     a_dcomplex z__1, z__2;
 
-    /* Builtin functions */
-    a_int s_wsle(cilist *), do_lio(a_int *, a_int *, char *, ftnlen), e_wsle(void);
-
     /* Local variables */
     a_dcomplex d[25], h;
     a_int j, n;
@@ -34,12 +31,12 @@ static a_dcomplex c_b164 = {10., 0.};
     a_dcomplex mx[256], du2[256];
     a_int ido, ncv, nev;
     double tol;
-    char bmat[1];
+    char* bmat;
     a_int mode, info;
     a_bool rvec;
     a_int ierr, ipiv[256];
     a_dcomplex sigma;
-    char which[2];
+    char* which;
     a_dcomplex resid[256];
     a_int nconv;
     a_dcomplex workd[768];
@@ -52,44 +49,6 @@ static a_dcomplex c_b164 = {10., 0.};
     a_int maxitr;
     a_int lworkl;
     a_dcomplex workev[50];
-
-    /* Fortran I/O blocks */
-    static cilist io___4 = {0, 6, 0, 0, 0};
-    static cilist io___5 = {0, 6, 0, 0, 0};
-    static cilist io___6 = {0, 6, 0, 0, 0};
-    static cilist io___18 = {0, 6, 0, 0, 0};
-    static cilist io___19 = {0, 6, 0, 0, 0};
-    static cilist io___20 = {0, 6, 0, 0, 0};
-    static cilist io___35 = {0, 6, 0, 0, 0};
-    static cilist io___36 = {0, 6, 0, 0, 0};
-    static cilist io___37 = {0, 6, 0, 0, 0};
-    static cilist io___38 = {0, 6, 0, 0, 0};
-    static cilist io___39 = {0, 6, 0, 0, 0};
-    static cilist io___40 = {0, 6, 0, 0, 0};
-    static cilist io___41 = {0, 6, 0, 0, 0};
-    static cilist io___46 = {0, 6, 0, 0, 0};
-    static cilist io___47 = {0, 6, 0, 0, 0};
-    static cilist io___48 = {0, 6, 0, 0, 0};
-    static cilist io___49 = {0, 6, 0, 0, 0};
-    static cilist io___54 = {0, 6, 0, 0, 0};
-    static cilist io___55 = {0, 6, 0, 0, 0};
-    static cilist io___56 = {0, 6, 0, 0, 0};
-    static cilist io___57 = {0, 6, 0, 0, 0};
-    static cilist io___58 = {0, 6, 0, 0, 0};
-    static cilist io___59 = {0, 6, 0, 0, 0};
-    static cilist io___60 = {0, 6, 0, 0, 0};
-    static cilist io___61 = {0, 6, 0, 0, 0};
-    static cilist io___62 = {0, 6, 0, 0, 0};
-    static cilist io___63 = {0, 6, 0, 0, 0};
-    static cilist io___64 = {0, 6, 0, 0, 0};
-    static cilist io___65 = {0, 6, 0, 0, 0};
-    static cilist io___66 = {0, 6, 0, 0, 0};
-    static cilist io___67 = {0, 6, 0, 0, 0};
-    static cilist io___68 = {0, 6, 0, 0, 0};
-    static cilist io___69 = {0, 6, 0, 0, 0};
-    static cilist io___70 = {0, 6, 0, 0, 0};
-    static cilist io___71 = {0, 6, 0, 0, 0};
-    static cilist io___72 = {0, 6, 0, 0, 0};
 
     /*     Simple program to illustrate the idea of reverse communication */
     /*     in inverse mode for a generalized complex nonsymmetric eigenvalue */
@@ -168,27 +127,21 @@ static a_dcomplex c_b164 = {10., 0.};
     ncv = 20;
     if (n > 256)
     {
-        s_wsle(&io___4);
-        do_lio(&c__9, &c__1, " ERROR with _NDRV3: N is greater than MAXN ", (ftnlen)43);
-        e_wsle();
-        goto L9000;
+        printf(" ERROR with _NDRV3: N is greater than MAXN \n");
+        return ierr;
     }
     else if (nev > 10)
     {
-        s_wsle(&io___5);
-        do_lio(&c__9, &c__1, " ERROR with _NDRV3: NEV is greater than MAXNEV ", (ftnlen)47);
-        e_wsle();
-        goto L9000;
+        printf(" ERROR with _NDRV3: NEV is greater than MAXNEV \n");
+        return ierr;
     }
     else if (ncv > 25)
     {
-        s_wsle(&io___6);
-        do_lio(&c__9, &c__1, " ERROR with _NDRV3: NCV is greater than MAXNCV ", (ftnlen)47);
-        e_wsle();
-        goto L9000;
+        printf(" ERROR with _NDRV3: NCV is greater than MAXNCV \n");
+        return ierr;
     }
-    *bmat = 'G';
-    strcpy(which, "LM");
+    bmat = "G";
+    which = "LM";
     sigma.r = 0., sigma.i = 0.;
 
     /* --------------------------------------------------- */
@@ -223,16 +176,10 @@ static a_dcomplex c_b164 = {10., 0.};
     zgttrf_(&n, dl, dd, du, du2, ipiv, &ierr);
     if (ierr != 0)
     {
-        s_wsle(&io___18);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
-        s_wsle(&io___19);
-        do_lio(&c__9, &c__1, " ERROR with _gttrf. ", (ftnlen)20);
-        e_wsle();
-        s_wsle(&io___20);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
-        goto L9000;
+        printf(" \n");
+        printf(" ERROR with _gttrf. \n");
+        printf(" \n");
+        return ierr;
     }
 
     /* --------------------------------------------------- */
@@ -303,16 +250,10 @@ L10:
         zgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
-            s_wsle(&io___35);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
-            s_wsle(&io___36);
-            do_lio(&c__9, &c__1, " ERROR with _gttrs. ", (ftnlen)20);
-            e_wsle();
-            s_wsle(&io___37);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
-            goto L9000;
+            printf(" \n");
+            printf(" ERROR with _gttrs. \n");
+            printf(" \n");
+            return ierr;
         }
 
         /* --------------------------------------- */
@@ -354,19 +295,10 @@ L10:
         /* documentation in ZNAUPD . */
         /* ------------------------ */
 
-        s_wsle(&io___38);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
-        s_wsle(&io___39);
-        do_lio(&c__9, &c__1, " Error with _naupd, info = ", (ftnlen)27);
-        do_lio(&c__3, &c__1, (char *)&info, (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___40);
-        do_lio(&c__9, &c__1, " Check the documentation of _naupd.", (ftnlen)35);
-        e_wsle();
-        s_wsle(&io___41);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
+        printf(" \n");
+        printf(" Error with _naupd info = %d", info);
+        printf(" Check the documentation of _naupd.\n");
+        printf(" \n");
     }
     else
     {
@@ -404,19 +336,10 @@ L10:
             /* Check the documentation of ZNEUPD . */
             /* ---------------------------------- */
 
-            s_wsle(&io___46);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
-            s_wsle(&io___47);
-            do_lio(&c__9, &c__1, " Error with _neupd, info = ", (ftnlen)27);
-            do_lio(&c__3, &c__1, (char *)&ierr, (ftnlen)sizeof(a_int));
-            e_wsle();
-            s_wsle(&io___48);
-            do_lio(&c__9, &c__1, " Check the documentation of _neupd", (ftnlen)34);
-            e_wsle();
-            s_wsle(&io___49);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
+            printf(" \n");
+            printf(" Error with _neupd info = %d", ierr);
+            printf(" Check the documentation of _neupd\n");
+            printf(" \n");
         }
         else
         {
@@ -456,7 +379,7 @@ L10:
             /* Display computed residuals. */
             /* --------------------------- */
 
-            dmout_(&c__6, &nconv, &c__3, rd, &c__25, &c_n6,"Ritz values (Real, Imag) and relative residuals");
+            dmout_(&nconv, &c__3, rd, &c__25, &c_n6,"Ritz values (Real, Imag) and relative residuals");
         }
 
         /* ---------------------------------------- */
@@ -465,82 +388,33 @@ L10:
 
         if (info == 1)
         {
-            s_wsle(&io___54);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
-            s_wsle(&io___55);
-            do_lio(&c__9, &c__1, " Maximum number of iterations reached.", (ftnlen)38);
-            e_wsle();
-            s_wsle(&io___56);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
+            printf(" \n");
+            printf(" Maximum number of iterations reached.\n");
+            printf(" \n");
         }
         else if (info == 3)
         {
-            s_wsle(&io___57);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
-            s_wsle(&io___58);
-            do_lio(&c__9, &c__1, " No shifts could be applied during implicit", (ftnlen)43);
-            do_lio(&c__9, &c__1, " Arnoldi update, try increasing NCV.", (ftnlen)36);
-            e_wsle();
-            s_wsle(&io___59);
-            do_lio(&c__9, &c__1, " ", (ftnlen)1);
-            e_wsle();
+            printf(" \n");
+            printf(" No shifts could be applied during implicit\n");
+            printf(" Arnoldi update try increasing NCV.\n");
+            printf(" \n");
         }
 
-        s_wsle(&io___60);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
-        s_wsle(&io___61);
-        do_lio(&c__9, &c__1, "_NDRV3 ", (ftnlen)7);
-        e_wsle();
-        s_wsle(&io___62);
-        do_lio(&c__9, &c__1, "====== ", (ftnlen)7);
-        e_wsle();
-        s_wsle(&io___63);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
-        s_wsle(&io___64);
-        do_lio(&c__9, &c__1, " Size of the matrix is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&n, (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___65);
-        do_lio(&c__9, &c__1, " The number of Ritz values requested is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nev, (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___66);
-        do_lio(&c__9, &c__1, " The number of Arnoldi vectors generated ", (ftnlen)41);
-        do_lio(&c__9, &c__1, " (NCV) is ", (ftnlen)10);
-        do_lio(&c__3, &c__1, (char *)&ncv, (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___67);
-        do_lio(&c__9, &c__1, " What portion of the spectrum: ", (ftnlen)31);
-        do_lio(&c__9, &c__1, which, (ftnlen)2);
-        e_wsle();
-        s_wsle(&io___68);
-        do_lio(&c__9, &c__1, " The number of converged Ritz values is ", (ftnlen)40);
-        do_lio(&c__3, &c__1, (char *)&nconv, (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___69);
-        do_lio(&c__9, &c__1, " The number of Implicit Arnoldi update", (ftnlen)38);
-        do_lio(&c__9, &c__1, " iterations taken is ", (ftnlen)21);
-        do_lio(&c__3, &c__1, (char *)&iparam[2], (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___70);
-        do_lio(&c__9, &c__1, " The number of OP*x is ", (ftnlen)23);
-        do_lio(&c__3, &c__1, (char *)&iparam[8], (ftnlen)sizeof(a_int));
-        e_wsle();
-        s_wsle(&io___71);
-        do_lio(&c__9, &c__1, " The convergence criterion is ", (ftnlen)30);
-        do_lio(&c__5, &c__1, (char *)&tol, (ftnlen)sizeof(double));
-        e_wsle();
-        s_wsle(&io___72);
-        do_lio(&c__9, &c__1, " ", (ftnlen)1);
-        e_wsle();
+        printf(" \n");
+        printf("_NDRV3 \n");
+        printf("====== \n");
+        printf(" \n");
+        printf(" Size of the matrix is %d", n);
+        printf(" The number of Ritz values requested is %d", nev);
+        printf(" The number of Arnoldi vectors generated \n");
+        printf(" (NCV) is %d", ncv);
+        printf(" What portion of the spectrum: %s", which);
+        printf(" The number of converged Ritz values is %d", nconv);
+        printf(" The number of Implicit Arnoldi update iterations taken is %d", iparam[2]);
+        printf(" The number of OP*x is %d", iparam[8]);
+        printf(" The convergence criterion is %e", tol);
+        printf(" \n");
     }
-
-L9000:
 
     return 0;
 } /* MAIN__ */
