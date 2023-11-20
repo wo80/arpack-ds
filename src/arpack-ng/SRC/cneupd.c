@@ -462,11 +462,13 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
     i__1 = ih + 2;
     workl[i__1].r = 0.f, workl[i__1].i = 0.f;
 
+#ifndef NO_TRACE
     if (msglvl > 2)
     {
         cvout_(*ncv, &workl[irz], debug_1.ndigit, "_neupd: Ritz values passed in from _NAUPD.");
         cvout_(*ncv, &workl[ibd], debug_1.ndigit, "_neupd: Ritz estimates passed in from _NAUPD.");
     }
+#endif
 
     if (*rvec)
     {
@@ -501,11 +503,13 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
         ishift = 0;
         cngets_(&ishift, which, nev, &np, &workl[irz], &workl[bounds]);
 
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             cvout_(*ncv, &workl[irz], debug_1.ndigit, "_neupd: Ritz values after calling _NGETS.");
             cvout_(*ncv, &workl[bounds], debug_1.ndigit, "_neupd: Ritz value indices after calling _NGETS.");
         }
+#endif
 
         /* --------------------------------------------------- */
         /* Record indices of the converged wanted Ritz values  */
@@ -546,11 +550,13 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
         /* caused by incorrect passing of the dnaupd data.           */
         /* --------------------------------------------------------- */
 
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             ivout_(1, &numcnv, debug_1.ndigit, "_neupd: Number of specified eigenvalues");
             ivout_(1, &nconv, debug_1.ndigit, "_neupd: Number of \"converged\" eigenvalues");
         }
+#endif
 
         if (numcnv != nconv)
         {
@@ -577,6 +583,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
             goto L9000;
         }
 
+#ifndef NO_TRACE
         if (msglvl > 1)
         {
             cvout_(*ncv, &workl[iheig], debug_1.ndigit, "_neupd: Eigenvalues of H");
@@ -586,6 +593,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
                 cmout_(*ncv, *ncv, &workl[iuptri], &ldh, debug_1.ndigit, "_neupd: The upper triangular matrix ");
             }
         }
+#endif
 
         if (reord)
         {
@@ -606,6 +614,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
                 goto L9000;
             }
 
+#ifndef NO_TRACE
             if (msglvl > 2)
             {
                 cvout_(*ncv, &workl[iheig], debug_1.ndigit, "_neupd: Eigenvalues of H--reordered");
@@ -614,6 +623,8 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
                     cmout_(*ncv, *ncv, &workl[iuptri], &ldq, debug_1.ndigit, "_neupd: Triangular matrix after re-ordering");
                 }
             }
+#endif
+
         }
 
         /* ------------------------------------------- */
@@ -743,6 +754,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
                 /* L40: */
             }
 
+#ifndef NO_TRACE
             if (msglvl > 2)
             {
                 ccopy_(&nconv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
@@ -752,6 +764,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
                     cmout_(*ncv, *ncv, &workl[invsub], &ldq, debug_1.ndigit, "_neupd: The eigenvector matrix for T");
                 }
             }
+#endif
 
             /* ------------------------------------- */
             /* Copy Ritz estimates into workl(ihbds) */

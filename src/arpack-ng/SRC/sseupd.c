@@ -453,11 +453,13 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
         bnorm2 = snrm2_(n, &workd[1], &i_one);
     }
 
+#ifndef NO_TRACE
     if (msglvl > 2)
     {
         svout_(*ncv, &workl[irz], debug_1.ndigit, "_seupd: Ritz values passed in from _SAUPD.");
         svout_(*ncv, &workl[ibd], debug_1.ndigit, "_seupd: Ritz estimates passed in from _SAUPD.");
     }
+#endif
 
     if (*rvec)
     {
@@ -491,11 +493,13 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
         ishift = 0;
         ssgets_(&ishift, which, nev, &np, &workl[irz], &workl[bounds], &workl[1]);
 
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             svout_(*ncv, &workl[irz], debug_1.ndigit, "_seupd: Ritz values after calling _SGETS.");
             svout_(*ncv, &workl[bounds], debug_1.ndigit, "_seupd: Ritz value indices after calling _SGETS.");
         }
+#endif
 
         /* --------------------------------------------------- */
         /* Record indices of the converged wanted Ritz values  */
@@ -529,11 +533,13 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
         /* caused by incorrect passing of the _saupd data.           */
         /* --------------------------------------------------------- */
 
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             ivout_(1, &numcnv, debug_1.ndigit, "_seupd: Number of specified eigenvalues");
             ivout_(1, &nconv, debug_1.ndigit, "_seupd: Number of \"converged\" eigenvalues");
         }
+#endif
 
         if (numcnv != nconv)
         {
@@ -559,12 +565,14 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
             goto L9000;
         }
 
+#ifndef NO_TRACE
         if (msglvl > 1)
         {
             scopy_(ncv, &workl[iq + *ncv - 1], &ldq, &workl[iw], &i_one);
             svout_(*ncv, &workl[ihd], debug_1.ndigit, "_seupd: NCV Ritz values of the final H matrix");
             svout_(*ncv, &workl[iw], debug_1.ndigit, "_seupd: last row of the eigenvector matrix for H");
         }
+#endif
 
         if (reord)
         {
@@ -635,10 +643,12 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
         }
 
     L30:
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             svout_(*ncv, &workl[ihd], debug_1.ndigit, "_seupd: The eigenvalues of H--reordered");
         }
+#endif
 
         /* -------------------------------------- */
         /* Load the converged Ritz values into D. */

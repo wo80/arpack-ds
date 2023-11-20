@@ -76,7 +76,9 @@ int ssconv_(a_int *n, float *ritz, float *bounds, float *tol, a_int *nconv)
     --bounds;
     --ritz;
 
+#ifndef NO_TIMER
     arscnd_(&t0);
+#endif
 
     eps23 = slamch_("E");
     eps23 = pow((double)eps23, TWO_THIRDS);
@@ -102,8 +104,10 @@ int ssconv_(a_int *n, float *ritz, float *bounds, float *tol, a_int *nconv)
         /* L10: */
     }
 
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tsconv += t1 - t0;
+#endif
 
     return 0;
 

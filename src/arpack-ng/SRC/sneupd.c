@@ -528,12 +528,14 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
     rnorm = workl[ih + 2];
     workl[ih + 2] = 0.f;
 
+#ifndef NO_TRACE
     if (msglvl > 2)
     {
         svout_(*ncv, &workl[irr], debug_1.ndigit, "_neupd: Real part of Ritz values passed in from _NAUPD.");
         svout_(*ncv, &workl[iri], debug_1.ndigit, "_neupd: Imag part of Ritz values passed in from _NAUPD.");
         svout_(*ncv, &workl[ibd], debug_1.ndigit, "_neupd: Ritz estimates passed in from _NAUPD.");
     }
+#endif
 
     if (*rvec)
     {
@@ -567,12 +569,14 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
         ishift = 0;
         sngets_(&ishift, which, nev, &np, &workl[irr], &workl[iri], &workl[bounds], &workl[1], &workl[np + 1]);
 
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             svout_(*ncv, &workl[irr], debug_1.ndigit, "_neupd: Real part of Ritz values after calling _NGETS.");
             svout_(*ncv, &workl[iri], debug_1.ndigit, "_neupd: Imag part of Ritz values after calling _NGETS.");
             svout_(*ncv, &workl[bounds], debug_1.ndigit, "_neupd: Ritz value indices after calling _NGETS.");
         }
+#endif
 
         /* --------------------------------------------------- */
         /* Record indices of the converged wanted Ritz values  */
@@ -606,11 +610,13 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
         /* caused by incorrect passing of the dnaupd data.           */
         /* --------------------------------------------------------- */
 
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             ivout_(1, &numcnv, debug_1.ndigit, "_neupd: Number of specified eigenvalues");
             ivout_(1, &nconv, debug_1.ndigit, "_neupd: Number of \"converged\" eigenvalues");
         }
+#endif
 
         if (numcnv != nconv)
         {
@@ -637,6 +643,7 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
             goto L9000;
         }
 
+#ifndef NO_TRACE
         if (msglvl > 1)
         {
             svout_(*ncv, &workl[iheigr], debug_1.ndigit, "_neupd: Real part of the eigenvalues of H");
@@ -647,6 +654,7 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
                 smout_(*ncv, *ncv, &workl[iuptri], &ldh, debug_1.ndigit, "_neupd: The upper quasi-triangular matrix ");
             }
         }
+#endif
 
         if (reord)
         {
@@ -667,6 +675,7 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
                 goto L9000;
             }
 
+#ifndef NO_TRACE
             if (msglvl > 2)
             {
                 svout_(*ncv, &workl[iheigr], debug_1.ndigit, "_neupd: Real part of the eigenvalues of H--reordered");
@@ -676,6 +685,8 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
                     smout_(*ncv, *ncv, &workl[iuptri], &ldq, debug_1.ndigit, "_neupd: Quasi-triangular matrix after re-ordering");
                 }
             }
+#endif
+
         }
 
         /* ------------------------------------- */
@@ -857,6 +868,7 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
                 /* L45: */
             }
 
+#ifndef NO_TRACE
             if (msglvl > 2)
             {
                 scopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
@@ -866,6 +878,7 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
                     smout_(*ncv, *ncv, &workl[invsub], &ldq, debug_1.ndigit, "_neupd: The eigenvector matrix for T");
                 }
             }
+#endif
 
             /* ------------------------------------- */
             /* Copy Ritz estimates into workl(ihbds) */

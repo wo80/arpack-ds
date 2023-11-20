@@ -289,7 +289,10 @@ int dnaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
         /* & message level for debugging */
         /* ----------------------------- */
 
+#ifndef NO_TIMER
         arscnd_(&t0);
+#endif
+
         msglvl = debug_1.mnaitr;
 
         /* ---------------------------- */
@@ -354,11 +357,13 @@ int dnaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
      /* ------------------------------------------------------------ */
 L1000:
 
+#ifndef NO_TRACE
     if (msglvl > 1)
     {
         ivout_(1, &j, debug_1.ndigit, "_naitr: generating Arnoldi vector number");
         dvout_(1, rnorm, debug_1.ndigit, "_naitr: B-norm of the current residual is");
     }
+#endif
 
     /* ------------------------------------------------- */
     /* STEP 1: Check if the B norm of j-th residual      */
@@ -378,10 +383,12 @@ L1000:
     /* basis and continue the iteration.                 */
     /* ------------------------------------------------- */
 
+#ifndef NO_TRACE
     if (msglvl > 0)
     {
         ivout_(1, &j, debug_1.ndigit, "_naitr: ****** RESTART AT STEP ******");
     }
+#endif
 
     /* ------------------------------------------- */
     /* ITRY is the loop variable that controls the */
@@ -422,8 +429,11 @@ L30:
         /* ---------------------------------------------- */
 
         *info = j - 1;
+#ifndef NO_TIMER
         arscnd_(&t1);
         timing_1.tnaitr += t1 - t0;
+#endif
+
         *ido = 99;
         goto L9000;
     }
@@ -463,7 +473,10 @@ L40:
 
     step3 = TRUE_;
     ++timing_1.nopx;
+#ifndef NO_TIMER
     arscnd_(&t2);
+#endif
+
     dcopy_(n, &v[j * v_dim1 + 1], &i_one, &workd[ivj], &i_one);
     ipntr[1] = ivj;
     ipntr[2] = irj;
@@ -483,8 +496,11 @@ L50:
     /* if step3 = .true.                */
     /* -------------------------------- */
 
+#ifndef NO_TIMER
     arscnd_(&t3);
     timing_1.tmvopx += t3 - t2;
+#endif
+
     step3 = FALSE_;
 
     /* ---------------------------------------- */
@@ -498,7 +514,10 @@ L50:
     /*          factorization to length j.   */
     /* ------------------------------------- */
 
+#ifndef NO_TIMER
     arscnd_(&t2);
+#endif
+
     if (*bmat == 'G')
     {
         ++timing_1.nbx;
@@ -527,8 +546,11 @@ L60:
 
     if (*bmat == 'G')
     {
+#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
+#endif
+
     }
 
     step4 = FALSE_;
@@ -575,11 +597,16 @@ L60:
         h[j + (j - 1) * h_dim1] = betaj;
     }
 
+#ifndef NO_TIMER
     arscnd_(&t4);
+#endif
 
     orth1 = TRUE_;
 
+#ifndef NO_TIMER
     arscnd_(&t2);
+#endif
+
     if (*bmat == 'G')
     {
         ++timing_1.nbx;
@@ -607,8 +634,11 @@ L70:
 
     if (*bmat == 'G')
     {
+#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
+#endif
+
     }
 
     orth1 = FALSE_;
@@ -661,6 +691,7 @@ L70:
 
 L80:
 
+#ifndef NO_TRACE
     if (msglvl > 2)
     {
         xtemp[0] = wnorm;
@@ -668,6 +699,7 @@ L80:
         dvout_(2, xtemp, debug_1.ndigit, "_naitr: re-orthonalization; wnorm and rnorm are");
         dvout_(j, &h[j * h_dim1 + 1], debug_1.ndigit, "_naitr: j-th column of H");
     }
+#endif
 
     /* -------------------------------------------------- */
     /* Compute V_{j}^T * B * r_{j}.                       */
@@ -687,7 +719,10 @@ L80:
     daxpy_(&j, &d_one, &workd[irj], &i_one, &h[j * h_dim1 + 1], &i_one);
 
     orth2 = TRUE_;
+#ifndef NO_TIMER
     arscnd_(&t2);
+#endif
+
     if (*bmat == 'G')
     {
         ++timing_1.nbx;
@@ -715,8 +750,11 @@ L90:
 
     if (*bmat == 'G')
     {
+#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
+#endif
+
     }
 
     /* --------------------------------------------------- */
@@ -733,6 +771,7 @@ L90:
         rnorm1 = dnrm2_(n, &resid[1], &i_one);
     }
 
+#ifndef NO_TRACE
     if (msglvl > 0 && iter > 0)
     {
         ivout_(1, &j, debug_1.ndigit, "_naitr: Iterative refinement for Arnoldi residual");
@@ -743,6 +782,7 @@ L90:
             dvout_(2, xtemp, debug_1.ndigit, "_naitr: iterative refinement ; rnorm and rnorm1 are");
         }
     }
+#endif
 
     /* --------------------------------------- */
     /* Determine if we need to perform another */
@@ -804,8 +844,10 @@ L100:
     rstart = FALSE_;
     orth2 = FALSE_;
 
+#ifndef NO_TIMER
     arscnd_(&t5);
     timing_1.titref += t5 - t4;
+#endif
 
     /* ---------------------------------- */
     /* STEP 6: Update  j = j+1;  Continue */
@@ -814,8 +856,11 @@ L100:
     ++j;
     if (j > *k + *np)
     {
+#ifndef NO_TIMER
         arscnd_(&t1);
         timing_1.tnaitr += t1 - t0;
+#endif
+
         *ido = 99;
         i__1 = *k + *np - 1;
         for (i = max(1, *k); i <= i__1; ++i)
@@ -842,12 +887,14 @@ L100:
             /* L110: */
         }
 
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             i__1 = *k + *np;
             i__2 = *k + *np;
             dmout_(i__1, i__2, &h[h_offset], ldh, debug_1.ndigit, "_naitr: Final upper Hessenberg matrix H of order K+NP");
         }
+#endif
 
         goto L9000;
     }

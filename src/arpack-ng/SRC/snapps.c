@@ -216,7 +216,10 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     /* & message level for debugging */
     /* ----------------------------- */
 
+#ifndef NO_TIMER
     arscnd_(&t0);
+#endif
+
     msglvl = debug_1.mnapps;
     kplusp = *kev + *np;
 
@@ -249,12 +252,14 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         sigmar = shiftr[jj];
         sigmai = shifti[jj];
 
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             ivout_(1, &jj, debug_1.ndigit, "_napps: shift number.");
             svout_(1, &sigmar, debug_1.ndigit, "_napps: The float part of the shift ");
             svout_(1, &sigmai, debug_1.ndigit, "_napps: The imaginary part of the shift ");
         }
+#endif
 
         /* ----------------------------------------------- */
         /* The following set of conditionals is necessary  */
@@ -329,12 +334,15 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             r__2 = ulp * tst1;
             if ((r__1 = h[i + 1 + i * h_dim1], dabs(r__1)) <= dmax(r__2, smlnum))
             {
+#ifndef NO_TRACE
                 if (msglvl > 0)
                 {
                     ivout_(1, &i, debug_1.ndigit, "_napps: matrix splitting at row/column no.");
                     ivout_(1, &jj, debug_1.ndigit, "_napps: matrix splitting with shift number.");
                     svout_(1, &h[i + 1 + i * h_dim1], debug_1.ndigit, "_napps: off diagonal element.");
                 }
+#endif
+
                 iend = i;
                 h[i + 1 + i * h_dim1] = 0.f;
                 goto L40;
@@ -344,11 +352,13 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         iend = kplusp;
     L40:
 
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             ivout_(1, &istart, debug_1.ndigit, "_napps: Start of current block ");
             ivout_(1, &iend, debug_1.ndigit, "_napps: End of current block ");
         }
+#endif
 
         /* ---------------------------------------------- */
         /* No reason to apply a shift to block of order 1 */
@@ -683,6 +693,7 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         saxpy_(n, &h[*kev + 1 + *kev * h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
     }
 
+#ifndef NO_TRACE
     if (msglvl > 1)
     {
         svout_(1, &q[kplusp + *kev * q_dim1], debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}");
@@ -693,10 +704,13 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             smout_(*kev, *kev, &h[h_offset], ldh, debug_1.ndigit, "_napps: updated Hessenberg matrix H for next iteration");
         }
     }
+#endif
 
 L9000:
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tnapps += t1 - t0;
+#endif
 
     return 0;
 

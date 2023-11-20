@@ -134,13 +134,18 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
     q_offset = 1 + q_dim1;
     q -= q_offset;
 
+#ifndef NO_TIMER
     arscnd_(&t0);
+#endif
+
     msglvl = debug_1.mceigh;
 
+#ifndef NO_TRACE
     if (msglvl > 2)
     {
         cmout_(n, n, &h[h_offset], ldh, debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ");
     }
+#endif
 
     /* -------------------------------------------------------- */
     /* 1. Compute the eigenvalues, the last components of the   */
@@ -159,10 +164,12 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
     }
 
     ccopy_(n, &q[*n - 1 + q_dim1], ldq, &bounds[1], &i_one);
+#ifndef NO_TRACE
     if (msglvl > 1)
     {
         cvout_(n, &bounds[1], debug_1.ndigit, "_neigh: last row of the Schur matrix for H");
     }
+#endif
 
     /* -------------------------------------------------------- */
     /* 2. Compute the eigenvectors of the full Schur form T and */
@@ -195,11 +202,13 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
         /* L10: */
     }
 
+#ifndef NO_TRACE
     if (msglvl > 1)
     {
         ccopy_(n, &q[*n + q_dim1], ldq, &workl[1], &i_one);
         cvout_(n, &workl[1], debug_1.ndigit, "_neigh: Last row of the eigenvector matrix for H");
     }
+#endif
 
     /* -------------------------- */
     /* Compute the Ritz estimates */
@@ -208,14 +217,18 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
     ccopy_(n, &q[*n + q_dim1], n, &bounds[1], &i_one);
     csscal_(n, rnorm, &bounds[1], &i_one);
 
+#ifndef NO_TRACE
     if (msglvl > 2)
     {
         cvout_(n, &ritz[1], debug_1.ndigit, "_neigh: The eigenvalues of H");
         cvout_(n, &bounds[1], debug_1.ndigit, "_neigh: Ritz estimates for the eigenvalues of H");
     }
+#endif
 
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tceigh += t1 - t0;
+#endif
 
 L9000:
     return 0;

@@ -75,7 +75,9 @@ int dsconv_(a_int *n, double *ritz, double *bounds, double *tol, a_int *nconv)
     --bounds;
     --ritz;
 
+#ifndef NO_TIMER
     arscnd_(&t0);
+#endif
 
     eps23 = dlamch_("E");
     eps23 = pow(eps23, TWO_THIRDS);
@@ -101,8 +103,10 @@ int dsconv_(a_int *n, double *ritz, double *bounds, double *tol, a_int *nconv)
         /* L10: */
     }
 
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tsconv += t1 - t0;
+#endif
 
     return 0;
 

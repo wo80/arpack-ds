@@ -442,7 +442,10 @@ int ssaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         /* ----------------------------- */
 
         sstats_();
+#ifndef NO_TIMER
         arscnd_(&t0);
+#endif
+
         msglvl = debug_1.msaupd;
 
         ierr = 0;
@@ -635,6 +638,7 @@ int ssaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         *info = 3;
     }
 
+#ifndef NO_TRACE
     if (msglvl > 0)
     {
         ivout_(1, &mxiter, debug_1.ndigit, "_saupd: number of update iterations taken");
@@ -642,10 +646,14 @@ int ssaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         svout_(np, &workl[ritz], debug_1.ndigit, "_saupd: final Ritz values");
         svout_(np, &workl[bounds], debug_1.ndigit, "_saupd: corresponding error bounds");
     }
+#endif
 
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tsaupd = t1 - t0;
+#endif
 
+#ifndef NO_TRACE
     if (msglvl > 0)
     {
 
@@ -675,6 +683,7 @@ int ssaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         printf(" Total time in applying the shifts          =  %12.6f\n", timing_1.tsapps);
         printf(" Total time in convergence testing          =  %12.6f\n", timing_1.tsconv);
     }
+#endif
 
 L9000:
 

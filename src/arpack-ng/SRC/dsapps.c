@@ -184,7 +184,10 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /* & message level for debugging */
     /* ----------------------------- */
 
+#ifndef NO_TIMER
     arscnd_(&t0);
+#endif
+
     msglvl = debug_1.msapps;
 
     kplusp = *kev + *np;
@@ -239,12 +242,15 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
             big = (d__1 = h[i + (h_dim1 << 1)], abs(d__1)) + (d__2 = h[i + 1 + (h_dim1 << 1)], abs(d__2));
             if (h[i + 1 + h_dim1] <= epsmch * big)
             {
+#ifndef NO_TRACE
                 if (msglvl > 0)
                 {
                     ivout_(1, &i, debug_1.ndigit, "_sapps: deflation at row/column no.");
                     ivout_(1, &jj, debug_1.ndigit, "_sapps: occurred before shift number.");
                     dvout_(1, &h[i + 1 + h_dim1], debug_1.ndigit, "_sapps: the corresponding off diagonal element");
                 }
+#endif
+
                 h[i + 1 + h_dim1] = 0.;
                 iend = i;
                 goto L40;
@@ -436,11 +442,14 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
         big = (d__1 = h[i + (h_dim1 << 1)], abs(d__1)) + (d__2 = h[i + 1 + (h_dim1 << 1)], abs(d__2));
         if (h[i + 1 + h_dim1] <= epsmch * big)
         {
+#ifndef NO_TRACE
             if (msglvl > 0)
             {
                 ivout_(1, &i, debug_1.ndigit, "_sapps: deflation at row/column no.");
                 dvout_(1, &h[i + 1 + h_dim1], debug_1.ndigit, "_sapps: the corresponding off diagonal element");
             }
+#endif
+
             h[i + 1 + h_dim1] = 0.;
         }
         /* L100: */
@@ -508,6 +517,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
         daxpy_(n, &h[*kev + 1 + h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
     }
 
+#ifndef NO_TRACE
     if (msglvl > 1)
     {
         dvout_(1, &q[kplusp + *kev * q_dim1], debug_1.ndigit, "_sapps: sigmak of the updated residual vector");
@@ -519,9 +529,12 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
             dvout_(i__1, &h[h_dim1 + 2], debug_1.ndigit, "_sapps: updated sub diagonal of H for next iteration");
         }
     }
+#endif
 
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tsapps += t1 - t0;
+#endif
 
 L9000:
     return 0;

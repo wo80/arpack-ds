@@ -205,7 +205,10 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     /* & message level for debugging */
     /* ----------------------------- */
 
+#ifndef NO_TIMER
     arscnd_(&t0);
+#endif
+
     msglvl = debug_1.mcapps;
 
     kplusp = *kev + *np;
@@ -238,11 +241,13 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         i__2 = jj;
         sigma.r = shift[i__2].r, sigma.i = shift[i__2].i;
 
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             ivout_(1, &jj, debug_1.ndigit, "_napps: shift number.");
             cvout_(1, &sigma, debug_1.ndigit, "_napps: Value of the shift ");
         }
+#endif
 
         istart = 1;
     L20:
@@ -270,12 +275,15 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
             r__2 = ulp * tst1;
             if ((r__1 = h[i__3].r, dabs(r__1)) <= dmax(r__2, smlnum))
             {
+#ifndef NO_TRACE
                 if (msglvl > 0)
                 {
                     ivout_(1, &i, debug_1.ndigit, "_napps: matrix splitting at row/column no.");
                     ivout_(1, &jj, debug_1.ndigit, "_napps: matrix splitting with shift number.");
                     cvout_(1, &h[i + 1 + i * h_dim1], debug_1.ndigit, "_napps: off diagonal element.");
                 }
+#endif
+
                 iend = i;
                 i__3 = i + 1 + i * h_dim1;
                 h[i__3].r = 0.f, h[i__3].i = 0.f;
@@ -286,11 +294,13 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         iend = kplusp;
     L40:
 
+#ifndef NO_TRACE
         if (msglvl > 2)
         {
             ivout_(1, &istart, debug_1.ndigit, "_napps: Start of current block ");
             ivout_(1, &iend, debug_1.ndigit, "_napps: End of current block ");
         }
+#endif
 
         /* ---------------------------------------------- */
         /* No reason to apply a shift to block of order 1 */
@@ -579,6 +589,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         caxpy_(n, &h[*kev + 1 + *kev * h_dim1], &v[(*kev + 1) * v_dim1 + 1], &i_one, &resid[1], &i_one);
     }
 
+#ifndef NO_TRACE
     if (msglvl > 1)
     {
         cvout_(1, &q[kplusp + *kev * q_dim1], debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}");
@@ -589,10 +600,13 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
             cmout_(*kev, *kev, &h[h_offset], ldh, debug_1.ndigit, "_napps: updated Hessenberg matrix H for next iteration");
         }
     }
+#endif
 
 L9000:
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tcapps += t1 - t0;
+#endif
 
     return 0;
 

@@ -120,7 +120,10 @@ int sngets_(a_int *ishift, const char *which, a_int *kev, a_int *np, float *ritz
     --shiftr;
     --shifti;
 
+#ifndef NO_TIMER
     arscnd_(&t0);
+#endif
+
     msglvl = debug_1.mngets;
 
     /* -------------------------------------------------- */
@@ -195,9 +198,12 @@ int sngets_(a_int *ishift, const char *which, a_int *kev, a_int *np, float *ritz
         ssortc_("SR", &b_true, np, &bounds[1], &ritzr[1], &ritzi[1]);
     }
 
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tngets += t1 - t0;
+#endif
 
+#ifndef NO_TRACE
     if (msglvl > 0)
     {
         ivout_(1, kev, debug_1.ndigit, "_ngets: KEV is");
@@ -209,6 +215,7 @@ int sngets_(a_int *ishift, const char *which, a_int *kev, a_int *np, float *ritz
         i__1 = *kev + *np;
         svout_(i__1, &bounds[1], debug_1.ndigit, "_ngets: Ritz estimates of the current KEV+NP Ritz values");
     }
+#endif
 
     return 0;
 

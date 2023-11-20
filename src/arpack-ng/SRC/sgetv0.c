@@ -176,7 +176,10 @@ int sgetv0_(a_int *ido, const char *bmat, a_int *itry, a_bool *initv, a_int *n, 
         /* & message level for debugging */
         /* ----------------------------- */
 
+#ifndef NO_TIMER
         arscnd_(&t0);
+#endif
+
         msglvl = debug_1.mgetv0;
 
         *ierr = 0;
@@ -204,7 +207,10 @@ int sgetv0_(a_int *ido, const char *bmat, a_int *itry, a_bool *initv, a_int *n, 
         /* the generalized problem when B is possibly (singular).   */
         /* -------------------------------------------------------- */
 
+#ifndef NO_TIMER
         arscnd_(&t2);
+#endif
+
         if (*itry == 1)
         {
             ++timing_1.nopx;
@@ -240,8 +246,11 @@ int sgetv0_(a_int *ido, const char *bmat, a_int *itry, a_bool *initv, a_int *n, 
 
     if (*bmat == 'G')
     {
+#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvopx += t3 - t2;
+#endif
+
     }
 
     /* ---------------------------------------------------- */
@@ -249,7 +258,10 @@ int sgetv0_(a_int *ido, const char *bmat, a_int *itry, a_bool *initv, a_int *n, 
     /* Compute B-norm of starting vector.                   */
     /* ---------------------------------------------------- */
 
+#ifndef NO_TIMER
     arscnd_(&t2);
+#endif
+
     first = TRUE_;
     if (*itry == 1)
     {
@@ -272,8 +284,11 @@ L20:
 
     if (*bmat == 'G')
     {
+#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
+#endif
+
     }
 
     first = FALSE_;
@@ -321,7 +336,10 @@ L30:
     /* Compute the B-norm of the orthogonalized starting vector */
     /* -------------------------------------------------------- */
 
+#ifndef NO_TIMER
     arscnd_(&t2);
+#endif
+
     if (*bmat == 'G')
     {
         ++timing_1.nbx;
@@ -340,8 +358,11 @@ L40:
 
     if (*bmat == 'G')
     {
+#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
+#endif
+
     }
 
     if (*bmat == 'G')
@@ -358,11 +379,13 @@ L40:
     /* Check for further orthogonalization. */
     /* ------------------------------------ */
 
+#ifndef NO_TRACE
     if (msglvl > 2)
     {
         svout_(1, &rnorm0, debug_1.ndigit, "_getv0: re-orthonalization ; rnorm0 is");
         svout_(1, rnorm, debug_1.ndigit, "_getv0: re-orthonalization ; rnorm is");
     }
+#endif
 
     if (*rnorm > rnorm0 * .717f)
     {
@@ -399,18 +422,26 @@ L40:
 
 L50:
 
+#ifndef NO_TRACE
     if (msglvl > 0)
     {
         svout_(1, rnorm, debug_1.ndigit, "_getv0: B-norm of initial / restarted starting vector");
     }
+#endif
+
+#ifndef NO_TRACE
     if (msglvl > 3)
     {
         svout_(n, &resid[1], debug_1.ndigit, "_getv0: initial / restarted starting vector");
     }
+#endif
+
     *ido = 99;
 
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tgetv0 += t1 - t0;
+#endif
 
 L9000:
     return 0;

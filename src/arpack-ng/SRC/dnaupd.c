@@ -445,7 +445,10 @@ int dnaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         /* ----------------------------- */
 
         dstatn_();
+#ifndef NO_TIMER
         arscnd_(&t0);
+#endif
+
         msglvl = debug_1.mnaupd;
 
         /* -------------- */
@@ -636,6 +639,7 @@ int dnaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         *info = 3;
     }
 
+#ifndef NO_TRACE
     if (msglvl > 0)
     {
         ivout_(1, &mxiter, debug_1.ndigit, "_naupd: Number of update iterations taken");
@@ -644,10 +648,14 @@ int dnaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         dvout_(np, &workl[ritzi], debug_1.ndigit, "_naupd: Imaginary part of the final Ritz values");
         dvout_(np, &workl[bounds], debug_1.ndigit, "_naupd: Associated Ritz estimates");
     }
+#endif
 
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tnaupd = t1 - t0;
+#endif
 
+#ifndef NO_TRACE
     if (msglvl > 0)
     {
 
@@ -678,6 +686,7 @@ int dnaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         printf(" Total time in convergence testing          =  %12.6f\n", timing_1.tnconv);
         printf(" Total time in computing final Ritz vectors =  %12.6f\n", timing_1.trvec);
     }
+#endif
 
 L9000:
 

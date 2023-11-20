@@ -94,7 +94,9 @@ int dnconv_(a_int *n, double *ritzr, double *ritzi, double *bounds, double *tol,
     --ritzi;
     --ritzr;
 
+#ifndef NO_TIMER
     arscnd_(&t0);
+#endif
 
     /* ------------------------------- */
     /* Get machine dependent constant. */
@@ -117,8 +119,10 @@ int dnconv_(a_int *n, double *ritzr, double *ritzi, double *bounds, double *tol,
         /* L20: */
     }
 
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tnconv += t1 - t0;
+#endif
 
     return 0;
 

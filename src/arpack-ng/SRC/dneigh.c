@@ -134,13 +134,18 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
     q_offset = 1 + q_dim1;
     q -= q_offset;
 
+#ifndef NO_TIMER
     arscnd_(&t0);
+#endif
+
     msglvl = debug_1.mneigh;
 
+#ifndef NO_TRACE
     if (msglvl > 2)
     {
         dmout_(n, n, &h[h_offset], ldh, debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ");
     }
+#endif
 
     /* --------------------------------------------------------- */
     /* 1. Compute the eigenvalues, the last components of the    */
@@ -164,10 +169,12 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
         goto L9000;
     }
 
+#ifndef NO_TRACE
     if (msglvl > 1)
     {
         dvout_(n, &bounds[1], debug_1.ndigit, "_neigh: last row of the Schur matrix for H");
     }
+#endif
 
     /* --------------------------------------------------------- */
     /* 2. Compute the eigenvectors of the full Schur form T and  */
@@ -242,10 +249,12 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
 
     dgemv_("T", n, n, &d_one, &q[q_offset], ldq, &bounds[1], &i_one, &d_zero, &workl[1], &i_one);
 
+#ifndef NO_TRACE
     if (msglvl > 1)
     {
         dvout_(n, &workl[1], debug_1.ndigit, "_neigh: Last row of the eigenvector matrix for H");
     }
+#endif
 
     /* -------------------------- */
     /* Compute the Ritz estimates */
@@ -289,15 +298,19 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
         /* L20: */
     }
 
+#ifndef NO_TRACE
     if (msglvl > 2)
     {
         dvout_(n, &ritzr[1], debug_1.ndigit, "_neigh: Real part of the eigenvalues of H");
         dvout_(n, &ritzi[1], debug_1.ndigit, "_neigh: Imaginary part of the eigenvalues of H");
         dvout_(n, &bounds[1], debug_1.ndigit, "_neigh: Ritz estimates for the eigenvalues of H");
     }
+#endif
 
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tneigh += t1 - t0;
+#endif
 
 L9000:
     return 0;

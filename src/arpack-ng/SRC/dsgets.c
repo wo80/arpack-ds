@@ -118,7 +118,10 @@ int dsgets_(a_int *ishift, const char *which, a_int *kev, a_int *np, double *rit
     --bounds;
     --ritz;
 
+#ifndef NO_TIMER
     arscnd_(&t0);
+#endif
+
     msglvl = debug_1.msgets;
 
     if (strcmp(which, "BE") == 0)
@@ -174,9 +177,12 @@ int dsgets_(a_int *ishift, const char *which, a_int *kev, a_int *np, double *rit
         dcopy_(np, &ritz[1], &i_one, &shifts[1], &i_one);
     }
 
+#ifndef NO_TIMER
     arscnd_(&t1);
     timing_1.tsgets += t1 - t0;
+#endif
 
+#ifndef NO_TRACE
     if (msglvl > 0)
     {
         ivout_(1, kev, debug_1.ndigit, "_sgets: KEV is");
@@ -186,6 +192,7 @@ int dsgets_(a_int *ishift, const char *which, a_int *kev, a_int *np, double *rit
         i__1 = *kev + *np;
         dvout_(i__1, &bounds[1], debug_1.ndigit, "_sgets: Associated Ritz estimates");
     }
+#endif
 
     return 0;
 
