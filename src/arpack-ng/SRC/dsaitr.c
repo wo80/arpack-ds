@@ -411,8 +411,8 @@ L1000:
 
     if (msglvl > 2)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_saitr: generating Arnoldi vector no.");
-        dvout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,"_saitr: B-norm of the current residual =");
+        ivout_(1, &j, debug_1.ndigit, "_saitr: generating Arnoldi vector no.");
+        dvout_(1, rnorm, debug_1.ndigit, "_saitr: B-norm of the current residual =");
     }
 
     /*        %---------------------------------------------------------% */
@@ -433,7 +433,7 @@ L1000:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_saitr: ****** restart at step ******");
+        ivout_(1, &j, debug_1.ndigit, "_saitr: ****** restart at step ******");
     }
 
     /*           %---------------------------------------------% */
@@ -748,7 +748,7 @@ L80:
     {
         xtemp[0] = wnorm;
         xtemp[1] = *rnorm;
-        dvout_(&debug_1.logfil, &i_two, xtemp, &debug_1.ndigit,"_saitr: re-orthonalization ; wnorm and rnorm are");
+        dvout_(2, xtemp, debug_1.ndigit, "_saitr: re-orthonalization ; wnorm and rnorm are");
     }
 
     /*        %----------------------------------------------------% */
@@ -823,12 +823,12 @@ L90:
 
     if (msglvl > 0 && iter > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_saitr: Iterative refinement for Arnoldi residual");
+        ivout_(1, &j, debug_1.ndigit, "_saitr: Iterative refinement for Arnoldi residual");
         if (msglvl > 2)
         {
             xtemp[0] = *rnorm;
             xtemp[1] = rnorm1;
-            dvout_(&debug_1.logfil, &i_two, xtemp, &debug_1.ndigit,"_saitr: iterative refinement ; rnorm and rnorm1 are");
+            dvout_(2, xtemp, debug_1.ndigit, "_saitr: iterative refinement ; rnorm and rnorm1 are");
         }
     }
 
@@ -922,11 +922,11 @@ L100:
         if (msglvl > 1)
         {
             i__1 = *k + *np;
-            dvout_(&debug_1.logfil, &i__1, &h[(h_dim1 << 1) + 1], &debug_1.ndigit,"_saitr: main diagonal of matrix H of step K+NP.");
+            dvout_(i__1, &h[(h_dim1 << 1) + 1], debug_1.ndigit, "_saitr: main diagonal of matrix H of step K+NP.");
             if (*k + *np > 1)
             {
                 i__1 = *k + *np - 1;
-                dvout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit,"_saitr: sub diagonal of matrix H of step K+NP.");
+                dvout_(i__1, &h[h_dim1 + 2], debug_1.ndigit, "_saitr: sub diagonal of matrix H of step K+NP.");
             }
         }
 

@@ -422,8 +422,8 @@ L1000:
 
     if (msglvl > 1)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_naitr: generating Arnoldi vector number");
-        svout_(&debug_1.logfil, &i_one, rnorm, &debug_1.ndigit,"_naitr: B-norm of the current residual is");
+        ivout_(1, &j, debug_1.ndigit, "_naitr: generating Arnoldi vector number");
+        svout_(1, rnorm, debug_1.ndigit, "_naitr: B-norm of the current residual is");
     }
 
     /*        %---------------------------------------------------% */
@@ -446,7 +446,7 @@ L1000:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_naitr: ****** RESTART AT STEP ******");
+        ivout_(1, &j, debug_1.ndigit, "_naitr: ****** RESTART AT STEP ******");
     }
 
     /*           %---------------------------------------------% */
@@ -741,8 +741,8 @@ L80:
     {
         rtemp[0] = wnorm;
         rtemp[1] = *rnorm;
-        svout_(&debug_1.logfil, &i_two, rtemp, &debug_1.ndigit,"_naitr: re-orthogonalization; wnorm and rnorm are");
-        cvout_(&debug_1.logfil, &j, &h[j * h_dim1 + 1], &debug_1.ndigit, "_naitr: j-th column of H");
+        svout_(2, rtemp, debug_1.ndigit, "_naitr: re-orthogonalization; wnorm and rnorm are");
+        cvout_(j, &h[j * h_dim1 + 1], debug_1.ndigit, "_naitr: j-th column of H");
     }
 
     /*        %----------------------------------------------------% */
@@ -815,12 +815,12 @@ L90:
 
     if (msglvl > 0 && iter > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &j, &debug_1.ndigit,"_naitr: Iterative refinement for Arnoldi residual");
+        ivout_(1, &j, debug_1.ndigit, "_naitr: Iterative refinement for Arnoldi residual");
         if (msglvl > 2)
         {
             rtemp[0] = *rnorm;
             rtemp[1] = rnorm1;
-            svout_(&debug_1.logfil, &i_two, rtemp, &debug_1.ndigit,"_naitr: iterative refinement ; rnorm and rnorm1 are");
+            svout_(2, rtemp, debug_1.ndigit, "_naitr: iterative refinement ; rnorm and rnorm1 are");
         }
     }
 
@@ -937,7 +937,7 @@ L100:
         {
             i__1 = *k + *np;
             i__2 = *k + *np;
-            cmout_(&debug_1.logfil, &i__1, &i__2, &h[h_offset], ldh, &debug_1.ndigit,"_naitr: Final upper Hessenberg matrix H of order K+NP");
+            cmout_(i__1, i__2, &h[h_offset], ldh, debug_1.ndigit, "_naitr: Final upper Hessenberg matrix H of order K+NP");
         }
 
         goto L9000;

@@ -179,12 +179,12 @@ int zngets_(a_int *ishift, char *which, a_int *kev, a_int *np, a_dcomplex *ritz,
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit, "_ngets: KEV is");
-        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit, "_ngets: NP is");
+        ivout_(1, kev, debug_1.ndigit, "_ngets: KEV is");
+        ivout_(1, np, debug_1.ndigit, "_ngets: NP is");
         i__1 = *kev + *np;
-        zvout_(&debug_1.logfil, &i__1, &ritz[1], &debug_1.ndigit,"_ngets: Eigenvalues of current H matrix ");
+        zvout_(i__1, &ritz[1], debug_1.ndigit, "_ngets: Eigenvalues of current H matrix ");
         i__1 = *kev + *np;
-        zvout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit,"_ngets: Ritz estimates of the current KEV+NP Ritz values");
+        zvout_(i__1, &bounds[1], debug_1.ndigit, "_ngets: Ritz estimates of the current KEV+NP Ritz values");
     }
 
     return 0;

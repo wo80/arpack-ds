@@ -194,7 +194,7 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
 
     if (msglvl > 2)
     {
-        smout_(&debug_1.logfil, n, n, &h[h_offset], ldh, &debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ");
+        smout_(n, n, &h[h_offset], ldh, debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ");
     }
 
     /*     %-----------------------------------------------------------% */
@@ -221,7 +221,7 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
 
     if (msglvl > 1)
     {
-        svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_neigh: last row of the Schur matrix for H");
+        svout_(n, &bounds[1], debug_1.ndigit, "_neigh: last row of the Schur matrix for H");
     }
 
     /*     %-----------------------------------------------------------% */
@@ -299,7 +299,7 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
 
     if (msglvl > 1)
     {
-        svout_(&debug_1.logfil, n, &workl[1], &debug_1.ndigit,"_neigh: Last row of the eigenvector matrix for H");
+        svout_(n, &workl[1], debug_1.ndigit, "_neigh: Last row of the eigenvector matrix for H");
     }
 
     /*     %----------------------------% */
@@ -346,9 +346,9 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
 
     if (msglvl > 2)
     {
-        svout_(&debug_1.logfil, n, &ritzr[1], &debug_1.ndigit,"_neigh: Real part of the eigenvalues of H");
-        svout_(&debug_1.logfil, n, &ritzi[1], &debug_1.ndigit,"_neigh: Imaginary part of the eigenvalues of H");
-        svout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_neigh: Ritz estimates for the eigenvalues of H");
+        svout_(n, &ritzr[1], debug_1.ndigit, "_neigh: Real part of the eigenvalues of H");
+        svout_(n, &ritzi[1], debug_1.ndigit, "_neigh: Imaginary part of the eigenvalues of H");
+        svout_(n, &bounds[1], debug_1.ndigit, "_neigh: Ritz estimates for the eigenvalues of H");
     }
 
     arscnd_(&t1);

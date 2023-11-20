@@ -689,11 +689,11 @@ int snaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *to
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &mxiter, &debug_1.ndigit,"_naupd: Number of update iterations taken");
-        ivout_(&debug_1.logfil, &i_one, &np, &debug_1.ndigit,"_naupd: Number of wanted \"converged\" Ritz values");
-        svout_(&debug_1.logfil, &np, &workl[ritzr], &debug_1.ndigit,"_naupd: Real part of the final Ritz values");
-        svout_(&debug_1.logfil, &np, &workl[ritzi], &debug_1.ndigit,"_naupd: Imaginary part of the final Ritz values");
-        svout_(&debug_1.logfil, &np, &workl[bounds], &debug_1.ndigit,"_naupd: Associated Ritz estimates");
+        ivout_(1, &mxiter, debug_1.ndigit, "_naupd: Number of update iterations taken");
+        ivout_(1, &np, debug_1.ndigit, "_naupd: Number of wanted \"converged\" Ritz values");
+        svout_(np, &workl[ritzr], debug_1.ndigit, "_naupd: Real part of the final Ritz values");
+        svout_(np, &workl[ritzi], debug_1.ndigit, "_naupd: Imaginary part of the final Ritz values");
+        svout_(np, &workl[bounds], debug_1.ndigit, "_naupd: Associated Ritz estimates");
     }
 
     arscnd_(&t1);

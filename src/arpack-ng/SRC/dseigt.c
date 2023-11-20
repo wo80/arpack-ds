@@ -164,11 +164,11 @@ int dseigt_(double *rnorm, a_int *n, double *h, a_int *ldh, double *eig, double 
 
     if (msglvl > 0)
     {
-        dvout_(&debug_1.logfil, n, &h[(h_dim1 << 1) + 1], &debug_1.ndigit, "_seigt: main diagonal of matrix H");
+        dvout_(n, &h[(h_dim1 << 1) + 1], debug_1.ndigit, "_seigt: main diagonal of matrix H");
         if (*n > 1)
         {
             i__1 = *n - 1;
-            dvout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit, "_seigt: sub diagonal of matrix H");
+            dvout_(i__1, &h[h_dim1 + 2], debug_1.ndigit, "_seigt: sub diagonal of matrix H");
         }
     }
 
@@ -182,7 +182,7 @@ int dseigt_(double *rnorm, a_int *n, double *h, a_int *ldh, double *eig, double 
     }
     if (msglvl > 1)
     {
-        dvout_(&debug_1.logfil, n, &bounds[1], &debug_1.ndigit,"_seigt: last row of the eigenvector matrix for H");
+        dvout_(n, &bounds[1], debug_1.ndigit, "_seigt: last row of the eigenvector matrix for H");
     }
 
     /*     %-----------------------------------------------% */

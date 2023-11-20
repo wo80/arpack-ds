@@ -658,10 +658,10 @@ int znaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &mxiter, &debug_1.ndigit,"_naupd: Number of update iterations taken");
-        ivout_(&debug_1.logfil, &i_one, &np, &debug_1.ndigit,"_naupd: Number of wanted \"converged\" Ritz values");
-        zvout_(&debug_1.logfil, &np, &workl[ritz], &debug_1.ndigit,"_naupd: The final Ritz values");
-        zvout_(&debug_1.logfil, &np, &workl[bounds], &debug_1.ndigit,"_naupd: Associated Ritz estimates");
+        ivout_(1, &mxiter, debug_1.ndigit, "_naupd: Number of update iterations taken");
+        ivout_(1, &np, debug_1.ndigit, "_naupd: Number of wanted \"converged\" Ritz values");
+        zvout_(np, &workl[ritz], debug_1.ndigit, "_naupd: The final Ritz values");
+        zvout_(np, &workl[bounds], debug_1.ndigit, "_naupd: Associated Ritz estimates");
     }
 
     arscnd_(&t1);

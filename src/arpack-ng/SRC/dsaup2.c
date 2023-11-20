@@ -458,12 +458,12 @@ L1000:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &iter, &debug_1.ndigit,"_saup2: **** Start of major iteration number ****");
+        ivout_(1, &iter, debug_1.ndigit, "_saup2: **** Start of major iteration number ****");
     }
     if (msglvl > 1)
     {
-        ivout_(&debug_1.logfil, &i_one, nev, &debug_1.ndigit,"_saup2: The length of the current Lanczos factorization");
-        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit,"_saup2: Extend the Lanczos factorization by");
+        ivout_(1, nev, debug_1.ndigit, "_saup2: The length of the current Lanczos factorization");
+        ivout_(1, np, debug_1.ndigit, "_saup2: Extend the Lanczos factorization by");
     }
 
     /*        %------------------------------------------------------------% */
@@ -504,7 +504,7 @@ L20:
 
     if (msglvl > 1)
     {
-        dvout_(&debug_1.logfil, &i_one, &rnorm, &debug_1.ndigit,"_saup2: Current B-norm of residual for factorization");
+        dvout_(1, &rnorm, debug_1.ndigit, "_saup2: Current B-norm of residual for factorization");
     }
 
     /*        %--------------------------------------------------------% */
@@ -554,9 +554,9 @@ L20:
         kp[0] = *nev;
         kp[1] = *np;
         kp[2] = nconv;
-        ivout_(&debug_1.logfil, &i_three, kp, &debug_1.ndigit,"_saup2: NEV, NP, NCONV are");
-        dvout_(&debug_1.logfil, &kplusp, &ritz[1], &debug_1.ndigit,"_saup2: The eigenvalues of H");
-        dvout_(&debug_1.logfil, &kplusp, &bounds[1], &debug_1.ndigit,"_saup2: Ritz estimates of the current NCV Ritz values");
+        ivout_(3, kp, debug_1.ndigit, "_saup2: NEV, NP, NCONV are");
+        dvout_(kplusp, &ritz[1], debug_1.ndigit, "_saup2: The eigenvalues of H");
+        dvout_(kplusp, &bounds[1], debug_1.ndigit, "_saup2: Ritz estimates of the current NCV Ritz values");
     }
 
     /*        %---------------------------------------------------------% */
@@ -733,8 +733,8 @@ L20:
 
         if (msglvl > 1)
         {
-            dvout_(&debug_1.logfil, &kplusp, &ritz[1], &debug_1.ndigit,"_saup2: Sorted Ritz values.");
-            dvout_(&debug_1.logfil, &kplusp, &bounds[1], &debug_1.ndigit, "_saup2: Sorted ritz estimates.");
+            dvout_(kplusp, &ritz[1], debug_1.ndigit, "_saup2: Sorted Ritz values.");
+            dvout_(kplusp, &bounds[1], debug_1.ndigit, "_saup2: Sorted ritz estimates.");
         }
 
         /*           %------------------------------------% */
@@ -794,14 +794,14 @@ L20:
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,"_saup2: no. of \"converged\" Ritz values at this iter.");
+        ivout_(1, &nconv, debug_1.ndigit, "_saup2: no. of \"converged\" Ritz values at this iter.");
         if (msglvl > 1)
         {
             kp[0] = *nev;
             kp[1] = *np;
-            ivout_(&debug_1.logfil, &i_two, kp, &debug_1.ndigit,"_saup2: NEV and NP are");
-            dvout_(&debug_1.logfil, nev, &ritz[*np + 1], &debug_1.ndigit, "_saup2: \"wanted\" Ritz values.");
-            dvout_(&debug_1.logfil, nev, &bounds[*np + 1], &debug_1.ndigit, "_saup2: Ritz estimates of the \"wanted\" values ");
+            ivout_(2, kp, debug_1.ndigit, "_saup2: NEV and NP are");
+            dvout_(*nev, &ritz[*np + 1], debug_1.ndigit, "_saup2: \"wanted\" Ritz values.");
+            dvout_(*nev, &bounds[*np + 1], debug_1.ndigit, "_saup2: Ritz estimates of the \"wanted\" values ");
         }
     }
 
@@ -842,11 +842,11 @@ L50:
 
     if (msglvl > 2)
     {
-        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit,"_saup2: The number of shifts to apply ");
-        dvout_(&debug_1.logfil, np, &workl[1], &debug_1.ndigit,"_saup2: shifts selected");
+        ivout_(1, np, debug_1.ndigit, "_saup2: The number of shifts to apply ");
+        dvout_(*np, &workl[1], debug_1.ndigit, "_saup2: shifts selected");
         if (*ishift == 1)
         {
-            dvout_(&debug_1.logfil, np, &bounds[1], &debug_1.ndigit,"_saup2: corresponding Ritz estimates");
+            dvout_(*np, &bounds[1], debug_1.ndigit, "_saup2: corresponding Ritz estimates");
         }
     }
 
@@ -914,10 +914,10 @@ L100:
 
     if (msglvl > 2)
     {
-        dvout_(&debug_1.logfil, &i_one, &rnorm, &debug_1.ndigit,"_saup2: B-norm of residual for NEV factorization");
-        dvout_(&debug_1.logfil, nev, &h[(h_dim1 << 1) + 1], &debug_1.ndigit, "_saup2: main diagonal of compressed H matrix");
+        dvout_(1, &rnorm, debug_1.ndigit, "_saup2: B-norm of residual for NEV factorization");
+        dvout_(*nev, &h[(h_dim1 << 1) + 1], debug_1.ndigit, "_saup2: main diagonal of compressed H matrix");
         i__1 = *nev - 1;
-        dvout_(&debug_1.logfil, &i__1, &h[h_dim1 + 2], &debug_1.ndigit, "_saup2: subdiagonal of compressed H matrix");
+        dvout_(i__1, &h[h_dim1 + 2], debug_1.ndigit, "_saup2: subdiagonal of compressed H matrix");
     }
 
     goto L1000;

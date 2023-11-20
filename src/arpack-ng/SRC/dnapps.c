@@ -309,9 +309,9 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit,"_napps: shift number.");
-            dvout_(&debug_1.logfil, &i_one, &sigmar, &debug_1.ndigit,"_napps: The float part of the shift ");
-            dvout_(&debug_1.logfil, &i_one, &sigmai, &debug_1.ndigit,"_napps: The imaginary part of the shift ");
+            ivout_(1, &jj, debug_1.ndigit, "_napps: shift number.");
+            dvout_(1, &sigmar, debug_1.ndigit, "_napps: The float part of the shift ");
+            dvout_(1, &sigmai, debug_1.ndigit, "_napps: The imaginary part of the shift ");
         }
 
         /*        %-------------------------------------------------% */
@@ -389,9 +389,9 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
             {
                 if (msglvl > 0)
                 {
-                    ivout_(&debug_1.logfil, &i_one, &i, &debug_1.ndigit, "_napps: matrix splitting at row/column no.");
-                    ivout_(&debug_1.logfil, &i_one, &jj, &debug_1.ndigit, "_napps: matrix splitting with shift number.");
-                    dvout_(&debug_1.logfil, &i_one, &h[i + 1 + i * h_dim1], &debug_1.ndigit,"_napps: off diagonal element.");
+                    ivout_(1, &i, debug_1.ndigit, "_napps: matrix splitting at row/column no.");
+                    ivout_(1, &jj, debug_1.ndigit, "_napps: matrix splitting with shift number.");
+                    dvout_(1, &h[i + 1 + i * h_dim1], debug_1.ndigit, "_napps: off diagonal element.");
                 }
                 iend = i;
                 h[i + 1 + i * h_dim1] = 0.;
@@ -404,8 +404,8 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &i_one, &istart, &debug_1.ndigit,"_napps: Start of current block ");
-            ivout_(&debug_1.logfil, &i_one, &iend, &debug_1.ndigit,"_napps: End of current block ");
+            ivout_(1, &istart, debug_1.ndigit, "_napps: Start of current block ");
+            ivout_(1, &iend, debug_1.ndigit, "_napps: End of current block ");
         }
 
         /*        %------------------------------------------------% */
@@ -748,12 +748,12 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
 
     if (msglvl > 1)
     {
-        dvout_(&debug_1.logfil, &i_one, &q[kplusp + *kev * q_dim1], &debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}");
-        dvout_(&debug_1.logfil, &i_one, &h[*kev + 1 + *kev * h_dim1], &debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}");
-        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit,"_napps: Order of the final Hessenberg matrix ");
+        dvout_(1, &q[kplusp + *kev * q_dim1], debug_1.ndigit, "_napps: sigmak = (e_{kev+p}^T*Q)*e_{kev}");
+        dvout_(1, &h[*kev + 1 + *kev * h_dim1], debug_1.ndigit, "_napps: betak = e_{kev+1}^T*H*e_{kev}");
+        ivout_(1, kev, debug_1.ndigit, "_napps: Order of the final Hessenberg matrix ");
         if (msglvl > 2)
         {
-            dmout_(&debug_1.logfil, kev, kev, &h[h_offset], ldh, &debug_1.ndigit,"_napps: updated Hessenberg matrix H for next iteration");
+            dmout_(*kev, *kev, &h[h_offset], ldh, debug_1.ndigit, "_napps: updated Hessenberg matrix H for next iteration");
         }
     }
 

@@ -509,8 +509,8 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d, float *z, a_in
 
     if (msglvl > 2)
     {
-        svout_(&debug_1.logfil, ncv, &workl[irz], &debug_1.ndigit,"_seupd: Ritz values passed in from _SAUPD.");
-        svout_(&debug_1.logfil, ncv, &workl[ibd], &debug_1.ndigit,"_seupd: Ritz estimates passed in from _SAUPD.");
+        svout_(*ncv, &workl[irz], debug_1.ndigit, "_seupd: Ritz values passed in from _SAUPD.");
+        svout_(*ncv, &workl[ibd], debug_1.ndigit, "_seupd: Ritz estimates passed in from _SAUPD.");
     }
 
     if (*rvec)
@@ -547,8 +547,8 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d, float *z, a_in
 
         if (msglvl > 2)
         {
-            svout_(&debug_1.logfil, ncv, &workl[irz], &debug_1.ndigit,"_seupd: Ritz values after calling _SGETS.");
-            svout_(&debug_1.logfil, ncv, &workl[bounds], &debug_1.ndigit, "_seupd: Ritz value indices after calling _SGETS.");
+            svout_(*ncv, &workl[irz], debug_1.ndigit, "_seupd: Ritz values after calling _SGETS.");
+            svout_(*ncv, &workl[bounds], debug_1.ndigit, "_seupd: Ritz value indices after calling _SGETS.");
         }
 
         /*        %-----------------------------------------------------% */
@@ -585,8 +585,8 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d, float *z, a_in
 
         if (msglvl > 2)
         {
-            ivout_(&debug_1.logfil, &i_one, &numcnv, &debug_1.ndigit,"_seupd: Number of specified eigenvalues");
-            ivout_(&debug_1.logfil, &i_one, &nconv, &debug_1.ndigit,"_seupd: Number of \"converged\" eigenvalues");
+            ivout_(1, &numcnv, debug_1.ndigit, "_seupd: Number of specified eigenvalues");
+            ivout_(1, &nconv, debug_1.ndigit, "_seupd: Number of \"converged\" eigenvalues");
         }
 
         if (numcnv != nconv)
@@ -616,8 +616,8 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d, float *z, a_in
         if (msglvl > 1)
         {
             scopy_(ncv, &workl[iq + *ncv - 1], &ldq, &workl[iw], &i_one);
-            svout_(&debug_1.logfil, ncv, &workl[ihd], &debug_1.ndigit,"_seupd: NCV Ritz values of the final H matrix");
-            svout_(&debug_1.logfil, ncv, &workl[iw], &debug_1.ndigit,"_seupd: last row of the eigenvector matrix for H");
+            svout_(*ncv, &workl[ihd], debug_1.ndigit, "_seupd: NCV Ritz values of the final H matrix");
+            svout_(*ncv, &workl[iw], debug_1.ndigit, "_seupd: last row of the eigenvector matrix for H");
         }
 
         if (reord)
@@ -691,7 +691,7 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d, float *z, a_in
     L30:
         if (msglvl > 2)
         {
-            svout_(&debug_1.logfil, ncv, &workl[ihd], &debug_1.ndigit,"_seupd: The eigenvalues of H--reordered");
+            svout_(*ncv, &workl[ihd], debug_1.ndigit, "_seupd: The eigenvalues of H--reordered");
         }
 
         /*        %----------------------------------------% */
@@ -934,13 +934,13 @@ int sseupd_(a_bool *rvec, char *howmny, a_bool *select, float *d, float *z, a_in
 
     if (strcmp(type__, "REGULR") != 0 && msglvl > 1)
     {
-        svout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,"_seupd: Untransformed converged Ritz values");
-        svout_(&debug_1.logfil, &nconv, &workl[ihb], &debug_1.ndigit,"_seupd: Ritz estimates of the untransformed Ritz values");
+        svout_(nconv, &d[1], debug_1.ndigit, "_seupd: Untransformed converged Ritz values");
+        svout_(nconv, &workl[ihb], debug_1.ndigit, "_seupd: Ritz estimates of the untransformed Ritz values");
     }
     else if (msglvl > 1)
     {
-        svout_(&debug_1.logfil, &nconv, &d[1], &debug_1.ndigit,"_seupd: Converged Ritz values");
-        svout_(&debug_1.logfil, &nconv, &workl[ihb], &debug_1.ndigit,"_seupd: Associated Ritz estimates");
+        svout_(nconv, &d[1], debug_1.ndigit, "_seupd: Converged Ritz values");
+        svout_(nconv, &workl[ihb], debug_1.ndigit, "_seupd: Associated Ritz estimates");
     }
 
     /*     %-------------------------------------------------% */

@@ -251,14 +251,14 @@ int dngets_(a_int *ishift, char *which, a_int *kev, a_int *np, double *ritzr, do
 
     if (msglvl > 0)
     {
-        ivout_(&debug_1.logfil, &i_one, kev, &debug_1.ndigit, "_ngets: KEV is");
-        ivout_(&debug_1.logfil, &i_one, np, &debug_1.ndigit, "_ngets: NP is");
+        ivout_(1, kev, debug_1.ndigit, "_ngets: KEV is");
+        ivout_(1, np, debug_1.ndigit, "_ngets: NP is");
         i__1 = *kev + *np;
-        dvout_(&debug_1.logfil, &i__1, &ritzr[1], &debug_1.ndigit,"_ngets: Eigenvalues of current H matrix -- float part");
+        dvout_(i__1, &ritzr[1], debug_1.ndigit, "_ngets: Eigenvalues of current H matrix -- float part");
         i__1 = *kev + *np;
-        dvout_(&debug_1.logfil, &i__1, &ritzi[1], &debug_1.ndigit,"_ngets: Eigenvalues of current H matrix -- imag part");
+        dvout_(i__1, &ritzi[1], debug_1.ndigit, "_ngets: Eigenvalues of current H matrix -- imag part");
         i__1 = *kev + *np;
-        dvout_(&debug_1.logfil, &i__1, &bounds[1], &debug_1.ndigit,"_ngets: Ritz estimates of the current KEV+NP Ritz values");
+        dvout_(i__1, &bounds[1], debug_1.ndigit, "_ngets: Ritz estimates of the current KEV+NP Ritz values");
     }
 
     return 0;
