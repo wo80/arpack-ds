@@ -415,33 +415,6 @@ int snaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *to
      float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, a_int *ipntr, float *workd,
      float *workl, a_int *lworkl, a_int *info)
 {
-    /* Format strings */
-    static char fmt_1000[] = "(//,5x,\002==================================="
-                             "==========\002,/5x,\002= Nonsymmetric implicit Arnoldi update co"
-                             "de =\002,/5x,\002= Version Number: \002,\002 2.4\002,21x,\002 "
-                             "=\002,/5x,\002= Version Date:   \002,\002 07/31/96\002,16x,\002 ="
-                             "\002,/5x,\002=============================================\002,/"
-                             "5x,\002= Summary of timing statistics              =\002,/5x,"
-                             "\002=============================================\002,//)";
-    static char fmt_1100[] = "(5x,\002Total number update iterations        "
-                             "     = \002,i5,/5x,\002Total number of OP*x operations          "
-                             "  = \002,i5,/5x,\002Total number of B*x operations             = "
-                             "\002,i5,/5x,\002Total number of reorthogonalization steps  = "
-                             "\002,i5,/5x,\002Total number of iterative refinement steps = "
-                             "\002,i5,/5x,\002Total number of restart steps              = "
-                             "\002,i5,/5x,\002Total time in user OP*x operation          = "
-                             "\002,f12.6,/5x,\002Total time in user B*x operation           ="
-                             " \002,f12.6,/5x,\002Total time in Arnoldi update routine       = "
-                             "\002,f12.6,/5x,\002Total time in naup2 routine                ="
-                             " \002,f12.6,/5x,\002Total time in basic Arnoldi iteration loop = "
-                             "\002,f12.6,/5x,\002Total time in reorthogonalization phase    ="
-                             " \002,f12.6,/5x,\002Total time in (re)start vector generation  = "
-                             "\002,f12.6,/5x,\002Total time in Hessenberg eig. subproblem   ="
-                             " \002,f12.6,/5x,\002Total time in getting the shifts           = "
-                             "\002,f12.6,/5x,\002Total time in applying the shifts          ="
-                             " \002,f12.6,/5x,\002Total time in convergence testing          = "
-                             "\002,f12.6,/5x,\002Total time in computing final Ritz vectors ="
-                             " \002,f12.6/)";
 
     /* System generated locals */
     a_int v_dim1, v_offset, i__1, i__2;
@@ -456,10 +429,6 @@ int snaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *to
     static a_int iupd, next, ritzi;
     static a_int ritzr;
     static a_int bounds, ishift, msglvl, mxiter;
-
-    /* Fortran I/O blocks */
-    static cilist io___22 = {0, 6, 0, fmt_1000, 0};
-    static cilist io___23 = {0, 6, 0, fmt_1100, 0};
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -733,32 +702,32 @@ int snaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, float *to
     if (msglvl > 0)
     {
 
-        /*        %--------------------------------------------------------% */
-        /*        | Version Number & Version Date are defined in version.h | */
-        /*        %--------------------------------------------------------% */
+        printf(" ============================================= \n");
+        printf(" = Nonsymmetric implicit Arnoldi update code = \n");
+        printf(" = Version Number:     %s                 = \n", ARPACK_VERSION);
+        printf(" = Version Date:       %s            = \n", ARPACK_DATE);
+        printf(" ============================================= \n");
+        printf(" = Summary of timing statistics              = \n");
+        printf(" ============================================= \n");
 
-        s_wsfe(&io___22);
-        e_wsfe();
-        s_wsfe(&io___23);
-        do_fio(&i_one, (char *)&mxiter, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.nopx, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.nbx, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.nrorth, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.nitref, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.nrstrt, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.tmvopx, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tmvbx, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tnaupd, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tnaup2, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tnaitr, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.titref, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tgetv0, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tneigh, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tngets, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tnapps, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tnconv, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.trvec, (ftnlen)sizeof(float));
-        e_wsfe();
+        printf(" Total number update iterations             =  %5d\n", mxiter);
+        printf(" Total number of OP*x operations            =  %5d\n", timing_1.nopx);
+        printf(" Total number of B*x operations             =  %5d\n", timing_1.nbx);
+        printf(" Total number of reorthogonalization steps  =  %5d\n", timing_1.nrorth);
+        printf(" Total number of iterative refinement steps =  %5d\n", timing_1.nitref);
+        printf(" Total number of restart steps              =  %5d\n", timing_1.nrstrt);
+        printf(" Total time in user OP*x operation          =  %12.6f\n", timing_1.tmvopx);
+        printf(" Total time in user B*x operation           =  %12.6f\n", timing_1.tmvbx);
+        printf(" Total time in Arnoldi update routine       =  %12.6f\n", timing_1.tnaupd);
+        printf(" Total time in naup2 routine                =  %12.6f\n", timing_1.tnaup2);
+        printf(" Total time in basic Arnoldi iteration loop =  %12.6f\n", timing_1.tnaitr);
+        printf(" Total time in reorthogonalization phase    =  %12.6f\n", timing_1.titref);
+        printf(" Total time in (re)start vector generation  =  %12.6f\n", timing_1.tgetv0);
+        printf(" Total time in Hessenberg eig. subproblem   =  %12.6f\n", timing_1.tneigh);
+        printf(" Total time in getting the shifts           =  %12.6f\n", timing_1.tngets);
+        printf(" Total time in applying the shifts          =  %12.6f\n", timing_1.tnapps);
+        printf(" Total time in convergence testing          =  %12.6f\n", timing_1.tnconv);
+        printf(" Total time in computing final Ritz vectors =  %12.6f\n", timing_1.trvec);
     }
 
 L9000:

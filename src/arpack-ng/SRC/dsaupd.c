@@ -415,32 +415,6 @@ int dsaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
      double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, a_int *ipntr,
      double *workd, double *workl, a_int *lworkl, a_int *info)
 {
-    /* Format strings */
-    static char fmt_1000[] = "(//,5x,\002==================================="
-                             "=======\002,/5x,\002= Symmetric implicit Arnoldi update code "
-                             "=\002,/5x,\002= Version Number:\002,\002 2.4\002,19x,\002 =\002,"
-                             "/5x,\002= Version Date:  \002,\002 07/31/96\002,14x,\002 =\002,/"
-                             "5x,\002==========================================\002,/5x,\002= "
-                             "Summary of timing statistics           =\002,/5x,\002==========="
-                             "===============================\002,//)";
-    static char fmt_1100[] = "(5x,\002Total number update iterations        "
-                             "     = \002,i5,/5x,\002Total number of OP*x operations          "
-                             "  = \002,i5,/5x,\002Total number of B*x operations             = "
-                             "\002,i5,/5x,\002Total number of reorthogonalization steps  = "
-                             "\002,i5,/5x,\002Total number of iterative refinement steps = "
-                             "\002,i5,/5x,\002Total number of restart steps              = "
-                             "\002,i5,/5x,\002Total time in user OP*x operation          = "
-                             "\002,f12.6,/5x,\002Total time in user B*x operation           ="
-                             " \002,f12.6,/5x,\002Total time in Arnoldi update routine       = "
-                             "\002,f12.6,/5x,\002Total time in saup2 routine                ="
-                             " \002,f12.6,/5x,\002Total time in basic Arnoldi iteration loop = "
-                             "\002,f12.6,/5x,\002Total time in reorthogonalization phase    ="
-                             " \002,f12.6,/5x,\002Total time in (re)start vector generation  = "
-                             "\002,f12.6,/5x,\002Total time in trid eigenvalue subproblem   ="
-                             " \002,f12.6,/5x,\002Total time in getting the shifts           = "
-                             "\002,f12.6,/5x,\002Total time in applying the shifts          ="
-                             " \002,f12.6,/5x,\002Total time in convergence testing          = "
-                             "\002,f12.6)";
 
     /* System generated locals */
     a_int v_dim1, v_offset, i__1, i__2;
@@ -452,10 +426,6 @@ int dsaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
     static float t0, t1;
     static a_int nb, ih, iq, np, iw, ldh, ldq, nev0, mode, ierr, iupd, next, ritz;
     static a_int bounds, ishift, msglvl, mxiter;
-
-    /* Fortran I/O blocks */
-    static cilist io___21 = {0, 6, 0, fmt_1000, 0};
-    static cilist io___22 = {0, 6, 0, fmt_1100, 0};
 
     /*     %----------------------------------------------------% */
     /*     | Include files for debugging and timing information | */
@@ -730,31 +700,31 @@ int dsaupd_(a_int *ido, char *bmat, a_int *n, char *which, a_int *nev, double *t
     if (msglvl > 0)
     {
 
-        /*        %--------------------------------------------------------% */
-        /*        | Version Number & Version Date are defined in version.h | */
-        /*        %--------------------------------------------------------% */
+        printf(" ============================================= \n");
+        printf(" = Symmetric implicit Arnoldi update code    = \n");
+        printf(" = Version Number:     %s                 = \n", ARPACK_VERSION);
+        printf(" = Version Date:       %s            = \n", ARPACK_DATE);
+        printf(" ============================================= \n");
+        printf(" = Summary of timing statistics              = \n");
+        printf(" ============================================= \n");
 
-        s_wsfe(&io___21);
-        e_wsfe();
-        s_wsfe(&io___22);
-        do_fio(&i_one, (char *)&mxiter, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.nopx, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.nbx, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.nrorth, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.nitref, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.nrstrt, (ftnlen)sizeof(a_int));
-        do_fio(&i_one, (char *)&timing_1.tmvopx, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tmvbx, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tsaupd, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tsaup2, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tsaitr, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.titref, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tgetv0, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tseigt, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tsgets, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tsapps, (ftnlen)sizeof(float));
-        do_fio(&i_one, (char *)&timing_1.tsconv, (ftnlen)sizeof(float));
-        e_wsfe();
+        printf(" Total number update iterations             =  %5d\n", mxiter);
+        printf(" Total number of OP*x operations            =  %5d\n", timing_1.nopx);
+        printf(" Total number of B*x operations             =  %5d\n", timing_1.nbx);
+        printf(" Total number of reorthogonalization steps  =  %5d\n", timing_1.nrorth);
+        printf(" Total number of iterative refinement steps =  %5d\n", timing_1.nitref);
+        printf(" Total number of restart steps              =  %5d\n", timing_1.nrstrt);
+        printf(" Total time in user OP*x operation          =  %12.6f\n", timing_1.tmvopx);
+        printf(" Total time in user B*x operation           =  %12.6f\n", timing_1.tmvbx);
+        printf(" Total time in Arnoldi update routine       =  %12.6f\n", timing_1.tsaupd);
+        printf(" Total time in saup2 routine                =  %12.6f\n", timing_1.tsaup2);
+        printf(" Total time in basic Arnoldi iteration loop =  %12.6f\n", timing_1.tsaitr);
+        printf(" Total time in reorthogonalization phase    =  %12.6f\n", timing_1.titref);
+        printf(" Total time in (re)start vector generation  =  %12.6f\n", timing_1.tgetv0);
+        printf(" Total time in trid eigenvalue subproblem   =  %12.6f\n", timing_1.tseigt);
+        printf(" Total time in getting the shifts           =  %12.6f\n", timing_1.tsgets);
+        printf(" Total time in applying the shifts          =  %12.6f\n", timing_1.tsapps);
+        printf(" Total time in convergence testing          =  %12.6f\n", timing_1.tsconv);
     }
 
 L9000:
