@@ -121,7 +121,7 @@ int dseigt_(double *rnorm, a_int *n, double *h, a_int *ldh, double *eig, double 
 #ifndef NO_TRACE
     if (msglvl > 0)
     {
-        dvout_(n, &h[(h_dim1 << 1) + 1], debug_1.ndigit, "_seigt: main diagonal of matrix H");
+        dvout_(*n, &h[(h_dim1 << 1) + 1], debug_1.ndigit, "_seigt: main diagonal of matrix H");
         if (*n > 1)
         {
             i__1 = *n - 1;

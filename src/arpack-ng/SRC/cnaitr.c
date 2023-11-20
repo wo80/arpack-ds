@@ -894,7 +894,7 @@ L100:
             r__2 = h[i + i * h_dim1].i;
             i__3 = i + 1 + (i + 1) * h_dim1;
             r__3 = h[i__3].r;
-            r__4 = r_imag(&h[i + 1 + (i + 1) * h_dim1]);
+            r__4 = h[i + 1 + (i + 1) * h_dim1].i;
             tst1 = slapy2_(&r__1, &r__2) + slapy2_(&r__3, &r__4);
             if (tst1 == 0.f)
             {

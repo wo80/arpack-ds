@@ -2,7 +2,7 @@
 
 #include "arpack_internal.h"
 
-Extern struct
+struct
 {
     double rho;
 } convct_;

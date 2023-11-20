@@ -308,14 +308,14 @@ static a_int c__3 = 3;
  *
  * \EndLib
  */
-int cnband_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d, a_fcomplex *z, a_int *ldz, a_fcomplex *sigma, a_fcomplex *workev, a_int *n, a_fcomplex *ab, a_fcomplex *mb, a_int *lda, a_fcomplex *fac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, a_fcomplex *resid, a_int *ncv, a_fcomplex *v, a_int *ldv, a_int *iparam, a_fcomplex *workd, a_fcomplex *workl, a_int *lworkl, float *rwork, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
+int cnband_(a_bool *rvec, char *howmny, a_bool *select, a_fcomplex *d, a_fcomplex *z, a_int *ldz, a_fcomplex *sigma, a_fcomplex *workev, a_int *n, a_fcomplex *ab, a_fcomplex *mb, a_int *lda, a_fcomplex *fac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, a_fcomplex *resid, a_int *ncv, a_fcomplex *v, a_int *ldv, a_int *iparam, a_fcomplex *workd, a_fcomplex *workl, a_int *lworkl, float *rwork, a_int *iwork, a_int *info)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, fac_dim1, fac_offset, i__1, i__2, i__3, i__4, i__5;
     a_fcomplex q__1, q__2;
 
     /* Local variables */
-    a_int i, j, ido, imid, mode, ibot, ierr, itop;
+    a_int i, j, ido, imid, mode, ibot, itop, ierr = 0;
     a_int ipntr[14];
 
     /* Parameter adjustments */

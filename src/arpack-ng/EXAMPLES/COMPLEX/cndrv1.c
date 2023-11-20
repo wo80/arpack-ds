@@ -435,8 +435,6 @@ int tv_(a_int *nx, a_fcomplex *x, a_fcomplex *y)
     a_int i__1, i__2, i__3, i__4, i__5;
     a_fcomplex q__1, q__2, q__3, q__4, q__5;
 
-    /* Builtin functions */
-    void ar_c_div(a_fcomplex *, a_fcomplex *, a_fcomplex *);
 
     /* Local variables */
     a_fcomplex h;

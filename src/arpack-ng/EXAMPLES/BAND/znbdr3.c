@@ -132,17 +132,17 @@ int main()
     if (n > 1000)
     {
         printf(" ERROR with _NBDR3: N is greater than MAXN \n");
-        return ierr;
+        return -1;
     }
     else if (nev > 25)
     {
         printf(" ERROR with _NBDR3: NEV is greater than MAXNEV \n");
-        return ierr;
+        return -1;
     }
     else if (ncv > 50)
     {
         printf(" ERROR with _NBDR3: NCV is greater than MAXNCV \n");
-        return ierr;
+        return -1;
     }
     bmat = "G";
     which = "LM";

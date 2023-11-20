@@ -133,9 +133,6 @@ int zgetv0_(a_int *ido, const char *bmat, a_int *itry, a_bool *initv, a_int *n, 
     double d__1, d__2;
     a_dcomplex z__1;
 
-    /* Builtin functions */
-    double d_imag(a_dcomplex *), sqrt(double);
-
     /* Local variables */
     static float t0, t1, t2, t3;
     a_int jj;

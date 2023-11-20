@@ -264,7 +264,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
 
             i__3 = i + i * h_dim1;
             i__4 = i + 1 + (i + 1) * h_dim1;
-            tst1 = (r__1 = h[i__3].r, dabs(r__1)) + (r__2 = r_imag(&h[i + i * h_dim1]), dabs(r__2)) + ((r__3 = h[i__4].r, dabs(r__3)) + (r__4 = r_imag(&h[i + 1 + (i + 1) * h_dim1]), dabs(r__4)));
+            tst1 = (r__1 = h[i__3].r, dabs(r__1)) + (r__2 = h[i + i * h_dim1].i, dabs(r__2)) + ((r__3 = h[i__4].r, dabs(r__3)) + (r__4 = h[i + 1 + (i + 1) * h_dim1].i, dabs(r__4)));
             if (tst1 == 0.f)
             {
                 i__3 = kplusp - jj + 1;
@@ -470,7 +470,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     for (j = 1; j <= i__1; ++j)
     {
         i__2 = j + 1 + j * h_dim1;
-        if (h[i__2].r < 0.f || r_imag(&h[j + 1 + j * h_dim1]) != 0.f)
+        if (h[i__2].r < 0.f || h[j + 1 + j * h_dim1].i != 0.f)
         {
             i__2 = j + 1 + j * h_dim1;
             i__3 = j + 1 + j * h_dim1;
@@ -514,7 +514,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
 
         i__2 = i + i * h_dim1;
         i__3 = i + 1 + (i + 1) * h_dim1;
-        tst1 = (r__1 = h[i__2].r, dabs(r__1)) + (r__2 = r_imag(&h[i + i * h_dim1]), dabs(r__2)) + ((r__3 = h[i__3].r, dabs(r__3)) + (r__4 = r_imag(&h[i + 1 + (i + 1) * h_dim1]), dabs(r__4)));
+        tst1 = (r__1 = h[i__2].r, dabs(r__1)) + (r__2 = h[i + i * h_dim1].i, dabs(r__2)) + ((r__3 = h[i__3].r, dabs(r__3)) + (r__4 = h[i + 1 + (i + 1) * h_dim1].i, dabs(r__4)));
         if (tst1 == 0.f)
         {
             tst1 = clanhs_("1", kev, &h[h_offset], ldh, &workl[1]);

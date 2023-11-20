@@ -341,7 +341,7 @@ int csortc_(const char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomple
                 goto L150;
             }
 
-            if (r_imag(&x[j]) > r_imag(&x[j + igap]))
+            if (x[j].i > x[j + igap].i)
             {
                 i__2 = j;
                 temp.r = x[i__2].r, temp.i = x[i__2].i;
@@ -396,7 +396,7 @@ int csortc_(const char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomple
                 goto L180;
             }
 
-            if (r_imag(&x[j]) < r_imag(&x[j + igap]))
+            if (x[j].i < x[j + igap].i)
             {
                 i__2 = j;
                 temp.r = x[i__2].r, temp.i = x[i__2].i;

@@ -341,7 +341,7 @@ int zsortc_(const char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomple
                 goto L150;
             }
 
-            if (d_imag(&x[j]) > d_imag(&x[j + igap]))
+            if (x[j].i > x[j + igap].i)
             {
                 i__2 = j;
                 temp.r = x[i__2].r, temp.i = x[i__2].i;
@@ -396,7 +396,7 @@ int zsortc_(const char *which, a_bool *apply, a_int *n, a_dcomplex *x, a_dcomple
                 goto L180;
             }
 
-            if (d_imag(&x[j]) < d_imag(&x[j + igap]))
+            if (x[j].i < x[j + igap].i)
             {
                 i__2 = j;
                 temp.r = x[i__2].r, temp.i = x[i__2].i;

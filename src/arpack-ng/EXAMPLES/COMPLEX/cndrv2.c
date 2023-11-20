@@ -2,7 +2,7 @@
 
 #include "arpack_internal.h"
 
-Extern struct
+struct
 {
     a_fcomplex rho;
 } convct_;
@@ -436,8 +436,6 @@ int av_(a_int *n, a_fcomplex *v, a_fcomplex *w)
     a_int i__1, i__2, i__3, i__4, i__5;
     a_fcomplex q__1, q__2, q__3, q__4, q__5;
 
-    /* Builtin functions */
-    void ar_c_div(a_fcomplex *, a_fcomplex *, a_fcomplex *);
 
     /* Local variables */
     a_fcomplex h;

@@ -116,9 +116,6 @@ int dstqrb_(a_int *n, double *d, double *e, double *z, double *work, a_int *info
     a_int i__1, i__2;
     double d__1, d__2;
 
-    /* Builtin functions */
-    double sqrt(double), ar_d_sign(double *, double *);
-
     /* Local variables */
     double b, c, f, g;
     a_int i, j, k, l, m;

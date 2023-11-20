@@ -116,9 +116,6 @@ int sstqrb_(a_int *n, float *d, float *e, float *z, float *work, a_int *info)
     a_int i__1, i__2;
     float r__1, r__2;
 
-    /* Builtin functions */
-    double sqrt(double), ar_r_sign(float *, float *);
-
     /* Local variables */
     float b, c, f, g;
     a_int i, j, k, l, m;

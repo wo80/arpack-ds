@@ -517,7 +517,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     {
         svout_(1, &q[kplusp + *kev * q_dim1], debug_1.ndigit, "_sapps: sigmak of the updated residual vector");
         svout_(1, &h[*kev + 1 + h_dim1], debug_1.ndigit, "_sapps: betak of the updated residual vector");
-        svout_(kev, &h[(h_dim1 << 1) + 1], debug_1.ndigit, "_sapps: updated main diagonal of H for next iteration");
+        svout_(*kev, &h[(h_dim1 << 1) + 1], debug_1.ndigit, "_sapps: updated main diagonal of H for next iteration");
         if (*kev > 1)
         {
             i__1 = *kev - 1;

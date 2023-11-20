@@ -229,9 +229,6 @@ int znaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
     double d__1, d__2, d__3, d__4;
     a_dcomplex z__1;
 
-    /* Builtin functions */
-    double d_imag(a_dcomplex *), sqrt(double);
-
     /* Local variables */
     a_int i;
     static a_int j;
@@ -897,7 +894,7 @@ L100:
             d__2 = h[i + i * h_dim1].i;
             i__3 = i + 1 + (i + 1) * h_dim1;
             d__3 = h[i__3].r;
-            d__4 = d_imag(&h[i + 1 + (i + 1) * h_dim1]);
+            d__4 = h[i + 1 + (i + 1) * h_dim1].i;
             tst1 = dlapy2_(&d__1, &d__2) + dlapy2_(&d__3, &d__4);
             if (tst1 == 0.)
             {

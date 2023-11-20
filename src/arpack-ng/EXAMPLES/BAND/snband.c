@@ -395,7 +395,7 @@ static a_int c__3 = 3;
  *
  * \EndLib
  */
-int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, float *z, a_int *ldz, float *sigmar, float *sigmai, float *workev, a_int *n, float *ab, float *mb, a_int *lda, float *rfac, a_fcomplex *cfac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, float *workd, float *workl, a_int *lworkl, a_fcomplex *workc, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
+int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, float *z, a_int *ldz, float *sigmar, float *sigmai, float *workev, a_int *n, float *ab, float *mb, a_int *lda, float *rfac, a_fcomplex *cfac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv, a_int *iparam, float *workd, float *workl, a_int *lworkl, a_fcomplex *workc, a_int *iwork, a_int *info)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, rfac_dim1, rfac_offset, cfac_dim1, cfac_offset, i__1, i__2, i__3, i__4, i__5;
@@ -407,7 +407,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
     float deni;
     a_int imid;
     float denr;
-    a_int ibot, ierr;
+    a_int ibot, ierr = 0;
     a_int itop, type;
     float numr;
     float dmdul;

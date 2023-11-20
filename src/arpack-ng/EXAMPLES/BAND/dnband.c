@@ -395,7 +395,7 @@ static a_int c__3 = 3;
  *
  * \EndLib
  */
-int dnband_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, double *z, a_int *ldz, double *sigmar, double *sigmai, double *workev, a_int *n, double *ab, double *mb, a_int *lda, double *rfac, a_dcomplex *cfac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, double *workd, double *workl, a_int *lworkl, a_dcomplex *workc, a_int *iwork, a_int *info, ftnlen howmny_len, ftnlen which_len, ftnlen bmat_len)
+int dnband_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, double *z, a_int *ldz, double *sigmar, double *sigmai, double *workev, a_int *n, double *ab, double *mb, a_int *lda, double *rfac, a_dcomplex *cfac, a_int *kl, a_int *ku, char *which, char *bmat, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv, a_int *iparam, double *workd, double *workl, a_int *lworkl, a_dcomplex *workc, a_int *iwork, a_int *info)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, ab_dim1, ab_offset, mb_dim1, mb_offset, rfac_dim1, rfac_offset, cfac_dim1, cfac_offset, i__1, i__2, i__3, i__4, i__5;
@@ -407,7 +407,7 @@ int dnband_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
     double deni;
     a_int imid;
     double denr;
-    a_int ibot, ierr, itop, type;
+    a_int ibot, itop, type, ierr = 0;
     double numr;
     double dmdul;
     a_bool first;

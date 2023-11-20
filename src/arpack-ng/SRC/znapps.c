@@ -264,7 +264,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
 
             i__3 = i + i * h_dim1;
             i__4 = i + 1 + (i + 1) * h_dim1;
-            tst1 = (d__1 = h[i__3].r, abs(d__1)) + (d__2 = d_imag(&h[i + i * h_dim1]), abs(d__2)) + ((d__3 = h[i__4].r, abs(d__3)) + (d__4 = d_imag(&h[i + 1 + (i + 1) * h_dim1]), abs(d__4)));
+            tst1 = (d__1 = h[i__3].r, abs(d__1)) + (d__2 = h[i + i * h_dim1].i, abs(d__2)) + ((d__3 = h[i__4].r, abs(d__3)) + (d__4 = h[i + 1 + (i + 1) * h_dim1].i, abs(d__4)));
             if (tst1 == 0.)
             {
                 i__3 = kplusp - jj + 1;
@@ -470,7 +470,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     for (j = 1; j <= i__1; ++j)
     {
         i__2 = j + 1 + j * h_dim1;
-        if (h[i__2].r < 0. || d_imag(&h[j + 1 + j * h_dim1]) != 0.)
+        if (h[i__2].r < 0. || h[j + 1 + j * h_dim1].i != 0.)
         {
             i__2 = j + 1 + j * h_dim1;
             i__3 = j + 1 + j * h_dim1;
@@ -514,7 +514,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
 
         i__2 = i + i * h_dim1;
         i__3 = i + 1 + (i + 1) * h_dim1;
-        tst1 = (d__1 = h[i__2].r, abs(d__1)) + (d__2 = d_imag(&h[i + i * h_dim1]), abs(d__2)) + ((d__3 = h[i__3].r, abs(d__3)) + (d__4 = d_imag(&h[i + 1 + (i + 1) * h_dim1]), abs(d__4)));
+        tst1 = (d__1 = h[i__2].r, abs(d__1)) + (d__2 = h[i + i * h_dim1].i, abs(d__2)) + ((d__3 = h[i__3].r, abs(d__3)) + (d__4 = h[i + 1 + (i + 1) * h_dim1].i, abs(d__4)));
         if (tst1 == 0.)
         {
             tst1 = zlanhs_("1", kev, &h[h_offset], ldh, &workl[1]);
