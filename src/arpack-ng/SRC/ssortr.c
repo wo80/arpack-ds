@@ -2,91 +2,71 @@
 
 #include "arpack_internal.h"
 
-/* ----------------------------------------------------------------------- */
-/* \BeginDoc */
-
-/* \Name: ssortr */
-
-/* \Description: */
-/*  Sort the array X1 in the order specified by WHICH and optionally */
-/*  applies the permutation to the array X2. */
-
-/* \Usage: */
-/*  call ssortr */
-/*     ( WHICH, APPLY, N, X1, X2 ) */
-
-/* \Arguments */
-/*  WHICH   Character*2.  (Input) */
-/*          'LM' -> X1 is sorted into increasing order of magnitude. */
-/*          'SM' -> X1 is sorted into decreasing order of magnitude. */
-/*          'LA' -> X1 is sorted into increasing order of algebraic. */
-/*          'SA' -> X1 is sorted into decreasing order of algebraic. */
-
-/*  APPLY   Logical.  (Input) */
-/*          APPLY = .TRUE.  -> apply the sorted order to X2. */
-/*          APPLY = .FALSE. -> do not apply the sorted order to X2. */
-
-/*  N       Integer.  (INPUT) */
-/*          Size of the arrays. */
-
-/*  X1      Real array of length N.  (INPUT/OUTPUT) */
-/*          The array to be sorted. */
-
-/*  X2      Real array of length N.  (INPUT/OUTPUT) */
-/*          Only referenced if APPLY = .TRUE. */
-
-/* \EndDoc */
-
-/* ----------------------------------------------------------------------- */
-
-/* \BeginLib */
-
-/* \Author */
-/*     Danny Sorensen               Phuong Vu */
-/*     Richard Lehoucq              CRPC / Rice University */
-/*     Dept. of Computational &     Houston, Texas */
-/*     Applied Mathematics */
-/*     Rice University */
-/*     Houston, Texas */
-
-/* \Revision history: */
-/*     12/16/93: Version ' 2.1'. */
-/*               Adapted from the sort routine in LANSO. */
-
-/* \SCCS Information: @(#) */
-/* FILE: sortr.F   SID: 2.3   DATE OF SID: 4/19/96   RELEASE: 2 */
-
-/* \EndLib */
-
-/* ----------------------------------------------------------------------- */
-
+/**
+ * \BeginDoc
+ *
+ * \Name: ssortr
+ *
+ * \Description:
+ *  Sort the array X1 in the order specified by WHICH and optionally
+ *  applies the permutation to the array X2.
+ *
+ * \Usage:
+ *  call ssortr
+ *     ( WHICH, APPLY, N, X1, X2 )
+ *
+ * \Arguments
+ *  WHICH   Character*2.  (Input)
+ *          'LM' -> X1 is sorted into increasing order of magnitude.
+ *          'SM' -> X1 is sorted into decreasing order of magnitude.
+ *          'LA' -> X1 is sorted into increasing order of algebraic.
+ *          'SA' -> X1 is sorted into decreasing order of algebraic.
+ *
+ *  APPLY   Logical.  (Input)
+ *          APPLY = .TRUE.  -> apply the sorted order to X2.
+ *          APPLY = .FALSE. -> do not apply the sorted order to X2.
+ *
+ *  N       Integer.  (INPUT)
+ *          Size of the arrays.
+ *
+ *  X1      Real array of length N.  (INPUT/OUTPUT)
+ *          The array to be sorted.
+ *
+ *  X2      Real array of length N.  (INPUT/OUTPUT)
+ *          Only referenced if APPLY = .TRUE.
+ *
+ * \EndDoc
+ *
+ * -----------------------------------------------------------------------
+ *
+ * \BeginLib
+ *
+ * \Author
+ *     Danny Sorensen               Phuong Vu
+ *     Richard Lehoucq              CRPC / Rice University
+ *     Dept. of Computational &     Houston, Texas
+ *     Applied Mathematics
+ *     Rice University
+ *     Houston, Texas
+ *
+ * \Revision history:
+ *     12/16/93: Version ' 2.1'.
+ *               Adapted from the sort routine in LANSO.
+ *
+ * \SCCS Information: @(#)
+ * FILE: sortr.F   SID: 2.3   DATE OF SID: 4/19/96   RELEASE: 2
+ *
+ * \EndLib
+ */
 int ssortr_(const char *which, a_bool *apply, a_int *n, float *x1, float *x2)
 {
     /* System generated locals */
     a_int i__1;
     float r__1, r__2;
 
-    /* Builtin functions */
-
     /* Local variables */
     a_int i, j, igap;
     float temp;
-
-    /*     %------------------% */
-    /*     | Scalar Arguments | */
-    /*     %------------------% */
-
-    /*     %-----------------% */
-    /*     | Array Arguments | */
-    /*     %-----------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
 
     igap = *n / 2;
 
@@ -270,8 +250,8 @@ int ssortr_(const char *which, a_bool *apply, a_int *n, float *x1, float *x2)
 L9000:
     return 0;
 
-    /*     %---------------% */
-    /*     | End of ssortr | */
-    /*     %---------------% */
+    /* ------------- */
+    /* End of ssortr */
+    /* ------------- */
 
 } /* ssortr_ */

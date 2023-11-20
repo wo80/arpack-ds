@@ -30,8 +30,6 @@ void cmout_(const int m, const int n, const a_fcomplex *a, const int lda, const 
 
     int a_dim = lda;
 
-    /* Function Body */
-
     len = strlen(ifmt);
     len = min(len,80);
     for (i = 0; i < len; ++i)

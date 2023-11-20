@@ -7,140 +7,138 @@
 static a_fcomplex c_one = {1.f, 0.f};
 static a_fcomplex c_zero = {0.f, 0.f};
 static a_int i_one = 1;
-
-/* \BeginDoc */
-
-/* \Name: cnapps */
-
-/* \Description: */
-/*  Given the Arnoldi factorization */
-
-/*     A*V_{k} - V_{k}*H_{k} = r_{k+p}*e_{k+p}^T, */
-
-/*  apply NP implicit shifts resulting in */
-
-/*     A*(V_{k}*Q) - (V_{k}*Q)*(Q^T* H_{k}*Q) = r_{k+p}*e_{k+p}^T * Q */
-
-/*  where Q is an orthogonal matrix which is the product of rotations */
-/*  and reflections resulting from the NP bulge change sweeps. */
-/*  The updated Arnoldi factorization becomes: */
-
-/*     A*VNEW_{k} - VNEW_{k}*HNEW_{k} = rnew_{k}*e_{k}^T. */
-
-/* \Usage: */
-/*  call cnapps */
-/*     ( N, KEV, NP, SHIFT, V, LDV, H, LDH, RESID, Q, LDQ, */
-/*       WORKL, WORKD ) */
-
-/* \Arguments */
-/*  N       Integer.  (INPUT) */
-/*          Problem size, i.e. size of matrix A. */
-
-/*  KEV     Integer.  (INPUT/OUTPUT) */
-/*          KEV+NP is the size of the input matrix H. */
-/*          KEV is the size of the updated matrix HNEW. */
-
-/*  NP      Integer.  (INPUT) */
-/*          Number of implicit shifts to be applied. */
-
-/*  SHIFT   Complex array of length NP.  (INPUT) */
-/*          The shifts to be applied. */
-
-/*  V       Complex N by (KEV+NP) array.  (INPUT/OUTPUT) */
-/*          On INPUT, V contains the current KEV+NP Arnoldi vectors. */
-/*          On OUTPUT, V contains the updated KEV Arnoldi vectors */
-/*          in the first KEV columns of V. */
-
-/*  LDV     Integer.  (INPUT) */
-/*          Leading dimension of V exactly as declared in the calling */
-/*          program. */
-
-/*  H       Complex (KEV+NP) by (KEV+NP) array.  (INPUT/OUTPUT) */
-/*          On INPUT, H contains the current KEV+NP by KEV+NP upper */
-/*          Hessenberg matrix of the Arnoldi factorization. */
-/*          On OUTPUT, H contains the updated KEV by KEV upper Hessenberg */
-/*          matrix in the KEV leading submatrix. */
-
-/*  LDH     Integer.  (INPUT) */
-/*          Leading dimension of H exactly as declared in the calling */
-/*          program. */
-
-/*  RESID   Complex array of length N.  (INPUT/OUTPUT) */
-/*          On INPUT, RESID contains the the residual vector r_{k+p}. */
-/*          On OUTPUT, RESID is the update residual vector rnew_{k} */
-/*          in the first KEV locations. */
-
-/*  Q       Complex KEV+NP by KEV+NP work array.  (WORKSPACE) */
-/*          Work array used to accumulate the rotations and reflections */
-/*          during the bulge chase sweep. */
-
-/*  LDQ     Integer.  (INPUT) */
-/*          Leading dimension of Q exactly as declared in the calling */
-/*          program. */
-
-/*  WORKL   Complex work array of length (KEV+NP).  (WORKSPACE) */
-/*          Private (replicated) array on each PE or array allocated on */
-/*          the front end. */
-
-/*  WORKD   Complex work array of length 2*N.  (WORKSPACE) */
-/*          Distributed array used in the application of the accumulated */
-/*          orthogonal matrix Q. */
-
-/* \EndDoc */
-
-/* ----------------------------------------------------------------------- */
-
-/* \BeginLib */
-
-/* \Local variables: */
-/*     xxxxxx  Complex */
-
-/* \References: */
-/*  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in */
-/*     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992), */
-/*     pp 357-385. */
-
-/* \Routines called: */
-/*     ivout   ARPACK utility routine that prints integers. */
-/*     arscnd  ARPACK utility routine for timing. */
-/*     cmout   ARPACK utility routine that prints matrices */
-/*     cvout   ARPACK utility routine that prints vectors. */
-/*     clacpy  LAPACK matrix copy routine. */
-/*     clanhs  LAPACK routine that computes various norms of a matrix. */
-/*     clartg  LAPACK Givens rotation construction routine. */
-/*     claset  LAPACK matrix initialization routine. */
-/*     slabad  LAPACK routine for defining the underflow and overflow */
-/*             limits. */
-/*     slamch  LAPACK routine that determines machine constants. */
-/*     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-/*     cgemv   Level 2 BLAS routine for matrix vector multiplication. */
-/*     caxpy   Level 1 BLAS that computes a vector triad. */
-/*     ccopy   Level 1 BLAS that copies one vector to another. */
-/*     cscal   Level 1 BLAS that scales a vector. */
-
-/* \Author */
-/*     Danny Sorensen               Phuong Vu */
-/*     Richard Lehoucq              CRPC / Rice University */
-/*     Dept. of Computational &     Houston, Texas */
-/*     Applied Mathematics */
-/*     Rice University */
-/*     Houston, Texas */
-
-/* \SCCS Information: @(#) */
-/* FILE: napps.F   SID: 2.3   DATE OF SID: 3/28/97   RELEASE: 2 */
-
-/* \Remarks */
-/*  1. In this version, each shift is applied to all the sublocks of */
-/*     the Hessenberg matrix H and not just to the submatrix that it */
-/*     comes from. Deflation as in LAPACK routine clahqr (QR algorithm */
-/*     for upper Hessenberg matrices ) is used. */
-/*     Upon output, the subdiagonals of H are enforced to be non-negative */
-/*     real numbers. */
-
-/* \EndLib */
-
-/* ----------------------------------------------------------------------- */
-
+/**
+ * \BeginDoc
+ *
+ * \Name: cnapps
+ *
+ * \Description:
+ *  Given the Arnoldi factorization
+ *
+ *     A*V_{k} - V_{k}*H_{k} = r_{k+p}*e_{k+p}^T,
+ *
+ *  apply NP implicit shifts resulting in
+ *
+ *     A*(V_{k}*Q) - (V_{k}*Q)*(Q^T* H_{k}*Q) = r_{k+p}*e_{k+p}^T * Q
+ *
+ *  where Q is an orthogonal matrix which is the product of rotations
+ *  and reflections resulting from the NP bulge change sweeps.
+ *  The updated Arnoldi factorization becomes:
+ *
+ *     A*VNEW_{k} - VNEW_{k}*HNEW_{k} = rnew_{k}*e_{k}^T.
+ *
+ * \Usage:
+ *  call cnapps
+ *     ( N, KEV, NP, SHIFT, V, LDV, H, LDH, RESID, Q, LDQ,
+ *       WORKL, WORKD )
+ *
+ * \Arguments
+ *  N       Integer.  (INPUT)
+ *          Problem size, i.e. size of matrix A.
+ *
+ *  KEV     Integer.  (INPUT/OUTPUT)
+ *          KEV+NP is the size of the input matrix H.
+ *          KEV is the size of the updated matrix HNEW.
+ *
+ *  NP      Integer.  (INPUT)
+ *          Number of implicit shifts to be applied.
+ *
+ *  SHIFT   Complex array of length NP.  (INPUT)
+ *          The shifts to be applied.
+ *
+ *  V       Complex N by (KEV+NP) array.  (INPUT/OUTPUT)
+ *          On INPUT, V contains the current KEV+NP Arnoldi vectors.
+ *          On OUTPUT, V contains the updated KEV Arnoldi vectors
+ *          in the first KEV columns of V.
+ *
+ *  LDV     Integer.  (INPUT)
+ *          Leading dimension of V exactly as declared in the calling
+ *          program.
+ *
+ *  H       Complex (KEV+NP) by (KEV+NP) array.  (INPUT/OUTPUT)
+ *          On INPUT, H contains the current KEV+NP by KEV+NP upper
+ *          Hessenberg matrix of the Arnoldi factorization.
+ *          On OUTPUT, H contains the updated KEV by KEV upper Hessenberg
+ *          matrix in the KEV leading submatrix.
+ *
+ *  LDH     Integer.  (INPUT)
+ *          Leading dimension of H exactly as declared in the calling
+ *          program.
+ *
+ *  RESID   Complex array of length N.  (INPUT/OUTPUT)
+ *          On INPUT, RESID contains the the residual vector r_{k+p}.
+ *          On OUTPUT, RESID is the update residual vector rnew_{k}
+ *          in the first KEV locations.
+ *
+ *  Q       Complex KEV+NP by KEV+NP work array.  (WORKSPACE)
+ *          Work array used to accumulate the rotations and reflections
+ *          during the bulge chase sweep.
+ *
+ *  LDQ     Integer.  (INPUT)
+ *          Leading dimension of Q exactly as declared in the calling
+ *          program.
+ *
+ *  WORKL   Complex work array of length (KEV+NP).  (WORKSPACE)
+ *          Private (replicated) array on each PE or array allocated on
+ *          the front end.
+ *
+ *  WORKD   Complex work array of length 2*N.  (WORKSPACE)
+ *          Distributed array used in the application of the accumulated
+ *          orthogonal matrix Q.
+ *
+ * \EndDoc
+ *
+ * -----------------------------------------------------------------------
+ *
+ * \BeginLib
+ *
+ * \Local variables:
+ *     xxxxxx  Complex
+ *
+ * \References:
+ *  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in
+ *     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992),
+ *     pp 357-385.
+ *
+ * \Routines called:
+ *     ivout   ARPACK utility routine that prints integers.
+ *     arscnd  ARPACK utility routine for timing.
+ *     cmout   ARPACK utility routine that prints matrices
+ *     cvout   ARPACK utility routine that prints vectors.
+ *     clacpy  LAPACK matrix copy routine.
+ *     clanhs  LAPACK routine that computes various norms of a matrix.
+ *     clartg  LAPACK Givens rotation construction routine.
+ *     claset  LAPACK matrix initialization routine.
+ *     slabad  LAPACK routine for defining the underflow and overflow
+ *             limits.
+ *     slamch  LAPACK routine that determines machine constants.
+ *     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     cgemv   Level 2 BLAS routine for matrix vector multiplication.
+ *     caxpy   Level 1 BLAS that computes a vector triad.
+ *     ccopy   Level 1 BLAS that copies one vector to another.
+ *     cscal   Level 1 BLAS that scales a vector.
+ *
+ * \Author
+ *     Danny Sorensen               Phuong Vu
+ *     Richard Lehoucq              CRPC / Rice University
+ *     Dept. of Computational &     Houston, Texas
+ *     Applied Mathematics
+ *     Rice University
+ *     Houston, Texas
+ *
+ * \SCCS Information: @(#)
+ * FILE: napps.F   SID: 2.3   DATE OF SID: 3/28/97   RELEASE: 2
+ *
+ * \Remarks
+ *  1. In this version, each shift is applied to all the sublocks of
+ *     the Hessenberg matrix H and not just to the submatrix that it
+ *     comes from. Deflation as in LAPACK routine clahqr (QR algorithm
+ *     for upper Hessenberg matrices ) is used.
+ *     Upon output, the subdiagonals of H are enforced to be non-negative
+ *     real numbers.
+ *
+ * \EndLib
+ */
 int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a_int *ldv, a_fcomplex *h, a_int *ldh, a_fcomplex *resid, a_fcomplex *q, a_int *ldq, a_fcomplex *workl, a_fcomplex *workd)
 {
     /* Initialized data */
@@ -151,8 +149,6 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     a_int h_dim1, h_offset, v_dim1, v_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     float r__1, r__2, r__3, r__4;
     a_fcomplex q__1, q__2, q__3, q__4, q__5;
-
-    /* Builtin functions */
 
     /* Local variables */
     float c;
@@ -170,60 +166,6 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     a_int istart, kplusp, msglvl;
     static float smlnum;
 
-    /*     %----------------------------------------------------% */
-    /*     | Include files for debugging and timing information | */
-    /*     %----------------------------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %---------------------------------% */
-    /*     | See debug.doc for documentation | */
-    /*     %---------------------------------% */
-
-    /*     %------------------% */
-    /*     | Scalar Arguments | */
-    /*     %------------------% */
-
-    /*     %--------------------------------% */
-    /*     | See stat.doc for documentation | */
-    /*     %--------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %-----------------% */
-    /*     | Array Arguments | */
-    /*     %-----------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %------------------------% */
-    /*     | Local Scalars & Arrays | */
-    /*     %------------------------% */
-
-    /*     %----------------------% */
-    /*     | External Subroutines | */
-    /*     %----------------------% */
-
-    /*     %--------------------% */
-    /*     | External Functions | */
-    /*     %--------------------% */
-
-    /*     %----------------------% */
-    /*     | Intrinsics Functions | */
-    /*     %----------------------% */
-
-    /*     %---------------------% */
-    /*     | Statement Functions | */
-    /*     %---------------------% */
-
-    /*     %----------------% */
-    /*     | Data statements | */
-    /*     %----------------% */
-
     /* Parameter adjustments */
     --workd;
     --resid;
@@ -239,21 +181,15 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     q_offset = 1 + q_dim1;
     q -= q_offset;
 
-    /* Function Body */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
     if (first)
     {
 
-        /*        %-----------------------------------------------% */
-        /*        | Set machine-dependent constants for the       | */
-        /*        | stopping criterion. If norm(H) <= sqrt(OVFL), | */
-        /*        | overflow should not occur.                    | */
-        /*        | REFERENCE: LAPACK subroutine clahqr           | */
-        /*        %-----------------------------------------------% */
+        /* --------------------------------------------- */
+        /* Set machine-dependent constants for the       */
+        /* stopping criterion. If norm(H) <= sqrt(OVFL), */
+        /* overflow should not occur.                    */
+        /* REFERENCE: LAPACK subroutine clahqr           */
+        /* --------------------------------------------- */
 
         unfl = slamch_("safe minimum");
         q__1.r = 1.f / unfl, q__1.i = 0.f / unfl;
@@ -264,37 +200,37 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         first = FALSE_;
     }
 
-    /*     %-------------------------------% */
-    /*     | Initialize timing statistics  | */
-    /*     | & message level for debugging | */
-    /*     %-------------------------------% */
+    /* ----------------------------- */
+    /* Initialize timing statistics  */
+    /* & message level for debugging */
+    /* ----------------------------- */
 
     arscnd_(&t0);
     msglvl = debug_1.mcapps;
 
     kplusp = *kev + *np;
 
-    /*     %--------------------------------------------% */
-    /*     | Initialize Q to the identity to accumulate | */
-    /*     | the rotations and reflections              | */
-    /*     %--------------------------------------------% */
+    /* ------------------------------------------ */
+    /* Initialize Q to the identity to accumulate */
+    /* the rotations and reflections              */
+    /* ------------------------------------------ */
 
     claset_("All", &kplusp, &kplusp, &c_zero, &c_one, &q[q_offset], ldq);
 
-    /*     %----------------------------------------------% */
-    /*     | Quick return if there are no shifts to apply | */
-    /*     %----------------------------------------------% */
+    /* -------------------------------------------- */
+    /* Quick return if there are no shifts to apply */
+    /* -------------------------------------------- */
 
     if (*np == 0)
     {
         goto L9000;
     }
 
-    /*     %----------------------------------------------% */
-    /*     | Chase the bulge with the application of each | */
-    /*     | implicit shift. Each shift is applied to the | */
-    /*     | whole matrix including each block.           | */
-    /*     %----------------------------------------------% */
+    /* -------------------------------------------- */
+    /* Chase the bulge with the application of each */
+    /* implicit shift. Each shift is applied to the */
+    /* whole matrix including each block.           */
+    /* -------------------------------------------- */
 
     i__1 = *np;
     for (jj = 1; jj <= i__1; ++jj)
@@ -315,11 +251,11 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         for (i = istart; i <= i__2; ++i)
         {
 
-            /*           %----------------------------------------% */
-            /*           | Check for splitting and deflation. Use | */
-            /*           | a standard test as in the QR algorithm | */
-            /*           | REFERENCE: LAPACK subroutine clahqr    | */
-            /*           %----------------------------------------% */
+            /* -------------------------------------- */
+            /* Check for splitting and deflation. Use */
+            /* a standard test as in the QR algorithm */
+            /* REFERENCE: LAPACK subroutine clahqr    */
+            /* -------------------------------------- */
 
             i__3 = i + i * h_dim1;
             i__4 = i + 1 + (i + 1) * h_dim1;
@@ -356,11 +292,11 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
             ivout_(1, &iend, debug_1.ndigit, "_napps: End of current block ");
         }
 
-        /*        %------------------------------------------------% */
-        /*        | No reason to apply a shift to block of order 1 | */
-        /*        | or if the current block starts after the point | */
-        /*        | of compression since we'll discard this stuff  | */
-        /*        %------------------------------------------------% */
+        /* ---------------------------------------------- */
+        /* No reason to apply a shift to block of order 1 */
+        /* or if the current block starts after the point */
+        /* of compression since we'll discard this stuff  */
+        /* ---------------------------------------------- */
 
         if (istart == iend || istart > *kev)
         {
@@ -379,9 +315,9 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         for (i = istart; i <= i__2; ++i)
         {
 
-            /*           %------------------------------------------------------% */
-            /*           | Construct the plane rotation G to zero out the bulge | */
-            /*           %------------------------------------------------------% */
+            /* ---------------------------------------------------- */
+            /* Construct the plane rotation G to zero out the bulge */
+            /* ---------------------------------------------------- */
 
             clartg_(&f, &g, &c, &s, &r);
             if (i > istart)
@@ -392,9 +328,9 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
                 h[i__3].r = 0.f, h[i__3].i = 0.f;
             }
 
-            /*           %---------------------------------------------% */
-            /*           | Apply rotation to the left of H;  H <- G'*H | */
-            /*           %---------------------------------------------% */
+            /* ------------------------------------------- */
+            /* Apply rotation to the left of H;  H <- G'*H */
+            /* ------------------------------------------- */
 
             i__3 = kplusp;
             for (j = i; j <= i__3; ++j)
@@ -419,9 +355,9 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
                 /* L50: */
             }
 
-            /*           %---------------------------------------------% */
-            /*           | Apply rotation to the right of H;  H <- H*G | */
-            /*           %---------------------------------------------% */
+            /* ------------------------------------------- */
+            /* Apply rotation to the right of H;  H <- H*G */
+            /* ------------------------------------------- */
 
             /* Computing MIN */
             i__4 = i + 2;
@@ -448,9 +384,9 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
                 /* L60: */
             }
 
-            /*           %-----------------------------------------------------% */
-            /*           | Accumulate the rotation in the matrix Q;  Q <- Q*G' | */
-            /*           %-----------------------------------------------------% */
+            /* --------------------------------------------------- */
+            /* Accumulate the rotation in the matrix Q;  Q <- Q*G' */
+            /* --------------------------------------------------- */
 
             /* Computing MIN */
             i__4 = i + jj;
@@ -477,9 +413,9 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
                 /* L70: */
             }
 
-            /*           %---------------------------% */
-            /*           | Prepare for next rotation | */
-            /*           %---------------------------% */
+            /* ------------------------- */
+            /* Prepare for next rotation */
+            /* ------------------------- */
 
             if (i < iend - 1)
             {
@@ -491,15 +427,15 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
             /* L80: */
         }
 
-        /*        %-------------------------------% */
-        /*        | Finished applying the shift.  | */
-        /*        %-------------------------------% */
+        /* ----------------------------- */
+        /* Finished applying the shift.  */
+        /* ----------------------------- */
 
     L100:
 
-        /*        %---------------------------------------------------------% */
-        /*        | Apply the same shift to the next block if there is any. | */
-        /*        %---------------------------------------------------------% */
+        /* ------------------------------------------------------- */
+        /* Apply the same shift to the next block if there is any. */
+        /* ------------------------------------------------------- */
 
         istart = iend + 1;
         if (iend < kplusp)
@@ -507,18 +443,18 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
             goto L20;
         }
 
-        /*        %---------------------------------------------% */
-        /*        | Loop back to the top to get the next shift. | */
-        /*        %---------------------------------------------% */
+        /* ------------------------------------------- */
+        /* Loop back to the top to get the next shift. */
+        /* ------------------------------------------- */
 
         /* L110: */
     }
 
-    /*     %---------------------------------------------------% */
-    /*     | Perform a similarity transformation that makes    | */
-    /*     | sure that the compressed H will have non-negative | */
-    /*     | real subdiagonal elements.                        | */
-    /*     %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* Perform a similarity transformation that makes    */
+    /* sure that the compressed H will have non-negative */
+    /* real subdiagonal elements.                        */
+    /* ------------------------------------------------- */
 
     i__1 = *kev;
     for (j = 1; j <= i__1; ++j)
@@ -557,14 +493,14 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     for (i = 1; i <= i__1; ++i)
     {
 
-        /*        %--------------------------------------------% */
-        /*        | Final check for splitting and deflation.   | */
-        /*        | Use a standard test as in the QR algorithm | */
-        /*        | REFERENCE: LAPACK subroutine clahqr.       | */
-        /*        | Note: Since the subdiagonals of the        | */
-        /*        | compressed H are nonnegative real numbers, | */
-        /*        | we take advantage of this.                 | */
-        /*        %--------------------------------------------% */
+        /* ------------------------------------------ */
+        /* Final check for splitting and deflation.   */
+        /* Use a standard test as in the QR algorithm */
+        /* REFERENCE: LAPACK subroutine clahqr.       */
+        /* Note: Since the subdiagonals of the        */
+        /* compressed H are nonnegative real numbers, */
+        /* we take advantage of this.                 */
+        /* ------------------------------------------ */
 
         i__2 = i + i * h_dim1;
         i__3 = i + 1 + (i + 1) * h_dim1;
@@ -584,13 +520,13 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         /* L130: */
     }
 
-    /*     %-------------------------------------------------% */
-    /*     | Compute the (kev+1)-st column of (V*Q) and      | */
-    /*     | temporarily store the result in WORKD(N+1:2*N). | */
-    /*     | This is needed in the residual update since we  | */
-    /*     | cannot GUARANTEE that the corresponding entry   | */
-    /*     | of H would be zero as in exact arithmetic.      | */
-    /*     %-------------------------------------------------% */
+    /* ----------------------------------------------- */
+    /* Compute the (kev+1)-st column of (V*Q) and      */
+    /* temporarily store the result in WORKD(N+1:2*N). */
+    /* This is needed in the residual update since we  */
+    /* cannot GUARANTEE that the corresponding entry   */
+    /* of H would be zero as in exact arithmetic.      */
+    /* ----------------------------------------------- */
 
     i__1 = *kev + 1 + *kev * h_dim1;
     if (h[i__1].r > 0.f)
@@ -598,10 +534,10 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         cgemv_("N", n, &kplusp, &c_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &c_zero, &workd[*n + 1], &i_one);
     }
 
-    /*     %----------------------------------------------------------% */
-    /*     | Compute column 1 to kev of (V*Q) in backward order       | */
-    /*     | taking advantage of the upper Hessenberg structure of Q. | */
-    /*     %----------------------------------------------------------% */
+    /* -------------------------------------------------------- */
+    /* Compute column 1 to kev of (V*Q) in backward order       */
+    /* taking advantage of the upper Hessenberg structure of Q. */
+    /* -------------------------------------------------------- */
 
     i__1 = *kev;
     for (i = 1; i <= i__1; ++i)
@@ -612,15 +548,15 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         /* L140: */
     }
 
-    /*     %-------------------------------------------------% */
-    /*     |  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). | */
-    /*     %-------------------------------------------------% */
+    /* ----------------------------------------------- */
+    /*  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). */
+    /* ----------------------------------------------- */
 
     clacpy_("A", n, kev, &v[(kplusp - *kev + 1) * v_dim1 + 1], ldv, &v[v_offset], ldv);
 
-    /*     %--------------------------------------------------------------% */
-    /*     | Copy the (kev+1)-st column of (V*Q) in the appropriate place | */
-    /*     %--------------------------------------------------------------% */
+    /* ------------------------------------------------------------ */
+    /* Copy the (kev+1)-st column of (V*Q) in the appropriate place */
+    /* ------------------------------------------------------------ */
 
     i__1 = *kev + 1 + *kev * h_dim1;
     if (h[i__1].r > 0.f)
@@ -628,13 +564,13 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         ccopy_(n, &workd[*n + 1], &i_one, &v[(*kev + 1) * v_dim1 + 1], &i_one);
     }
 
-    /*     %-------------------------------------% */
-    /*     | Update the residual vector:         | */
-    /*     |    r <- sigmak*r + betak*v(:,kev+1) | */
-    /*     | where                               | */
-    /*     |    sigmak = (e_{kev+p}'*Q)*e_{kev}  | */
-    /*     |    betak = e_{kev+1}'*H*e_{kev}     | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* Update the residual vector:         */
+    /*    r <- sigmak*r + betak*v(:,kev+1) */
+    /* where                               */
+    /*    sigmak = (e_{kev+p}'*Q)*e_{kev}  */
+    /*    betak = e_{kev+1}'*H*e_{kev}     */
+    /* ----------------------------------- */
 
     cscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &i_one);
     i__1 = *kev + 1 + *kev * h_dim1;
@@ -660,8 +596,8 @@ L9000:
 
     return 0;
 
-    /*     %---------------% */
-    /*     | End of cnapps | */
-    /*     %---------------% */
+    /* ------------- */
+    /* End of cnapps */
+    /* ------------- */
 
 } /* cnapps_ */

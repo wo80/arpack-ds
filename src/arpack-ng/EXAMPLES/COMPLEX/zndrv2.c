@@ -2,8 +2,6 @@
 
 #include "arpack_internal.h"
 
-/* Common Block Declarations */
-
 Extern struct
 {
     a_dcomplex rho;
@@ -148,49 +146,29 @@ static a_int c__5 = 5;
     /* \EndLib */
     /* -------------------------------------------------------------------------- */
 
-    /*     %-----------------------------% */
-    /*     | Define leading dimensions   | */
-    /*     | for all arrays.             | */
-    /*     | MAXN:   Maximum dimension   | */
-    /*     |         of the A allowed.   | */
-    /*     | MAXNEV: Maximum NEV allowed | */
-    /*     | MAXNCV: Maximum NCV allowed | */
-    /*     %-----------------------------% */
+    /* --------------------------- */
+    /* Define leading dimensions   */
+    /* for all arrays.             */
+    /* MAXN:   Maximum dimension   */
+    /*         of the A allowed.   */
+    /* MAXNEV: Maximum NEV allowed */
+    /* MAXNCV: Maximum NCV allowed */
+    /* --------------------------- */
 
-    /*     %--------------% */
-    /*     | Local Arrays | */
-    /*     %--------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %-----------------------------% */
-    /*     | BLAS & LAPACK routines used | */
-    /*     %-----------------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable statements | */
-    /*     %-----------------------% */
-
-    /*     %--------------------------------------------------% */
-    /*     | The number N is the dimension of the matrix.  A  | */
-    /*     | standard eigenvalue problem is solved (BMAT =    | */
-    /*     | 'I').  NEV is the number of eigenvalues (closest | */
-    /*     | to the shift SIGMA) to be approximated.  Since   | */
-    /*     | the shift-invert mode is used, WHICH is set to   | */
-    /*     | 'LM'.  The user can modify NEV, NCV, SIGMA to    | */
-    /*     | solve problems of different sizes, and to get    | */
-    /*     | different parts of the spectrum.  However, The   | */
-    /*     | following conditions must be satisfied:          | */
-    /*     |                 N <= MAXN,                       | */
-    /*     |               NEV <= MAXNEV,                     | */
-    /*     |           NEV + 2 <= NCV <= MAXNCV               | */
-    /*     %--------------------------------------------------% */
+    /* ------------------------------------------------ */
+    /* The number N is the dimension of the matrix.  A  */
+    /* standard eigenvalue problem is solved (BMAT =    */
+    /* 'I').  NEV is the number of eigenvalues (closest */
+    /* to the shift SIGMA) to be approximated.  Since   */
+    /* the shift-invert mode is used, WHICH is set to   */
+    /* 'LM'.  The user can modify NEV, NCV, SIGMA to    */
+    /* solve problems of different sizes, and to get    */
+    /* different parts of the spectrum.  However, The   */
+    /* following conditions must be satisfied:          */
+    /*                 N <= MAXN,                       */
+    /*               NEV <= MAXNEV,                     */
+    /*           NEV + 2 <= NCV <= MAXNCV               */
+    /* ------------------------------------------------ */
 
     n = 100;
     nev = 4;
@@ -220,15 +198,15 @@ static a_int c__5 = 5;
     strcpy(which, "LM");
     sigma.r = 0., sigma.i = 0.;
 
-    /*     %----------------------------------------------------% */
-    /*     | Construct C = A - SIGMA*I, factor C in complex     | */
-    /*     | arithmetic (using LAPACK subroutine zgttrf ). The   | */
-    /*     | matrix A is chosen to be the tridiagonal matrix    | */
-    /*     | derived from standard central difference of the    | */
-    /*     | 1-d convection diffusion operator - u``+ rho*u` on | */
-    /*     | the interval [0, 1] with zero Dirichlet boundary   | */
-    /*     | condition.                                         | */
-    /*     %----------------------------------------------------% */
+    /* -------------------------------------------------- */
+    /* Construct C = A - SIGMA*I, factor C in complex     */
+    /* arithmetic (using LAPACK subroutine zgttrf ). The   */
+    /* matrix A is chosen to be the tridiagonal matrix    */
+    /* derived from standard central difference of the    */
+    /* 1-d convection diffusion operator - u``+ rho*u` on */
+    /* the interval [0, 1] with zero Dirichlet boundary   */
+    /* condition.                                         */
+    /* -------------------------------------------------- */
 
     convct_1.rho.r = 10., convct_1.rho.i = 0.;
     i__1 = n + 1;
@@ -283,16 +261,16 @@ static a_int c__5 = 5;
         goto L9000;
     }
 
-    /*     %-----------------------------------------------------% */
-    /*     | The work array WORKL is used in ZNAUPD  as           | */
-    /*     | workspace.  Its dimension LWORKL is set as          | */
-    /*     | illustrated below.  The parameter TOL determines    | */
-    /*     | the stopping criterion. If TOL<=0, machine          | */
-    /*     | precision is used.  The variable IDO is used for    | */
-    /*     | reverse communication, and is initially set to 0.   | */
-    /*     | Setting INFO=0 indicates that a random vector is    | */
-    /*     | generated in ZNAUPD  to start the Arnoldi iteration. | */
-    /*     %-----------------------------------------------------% */
+    /* --------------------------------------------------- */
+    /* The work array WORKL is used in ZNAUPD  as           */
+    /* workspace.  Its dimension LWORKL is set as          */
+    /* illustrated below.  The parameter TOL determines    */
+    /* the stopping criterion. If TOL<=0, machine          */
+    /* precision is used.  The variable IDO is used for    */
+    /* reverse communication, and is initially set to 0.   */
+    /* Setting INFO=0 indicates that a random vector is    */
+    /* generated in ZNAUPD  to start the Arnoldi iteration. */
+    /* --------------------------------------------------- */
 
     /* Computing 2nd power */
     i__1 = ncv;
@@ -301,15 +279,15 @@ static a_int c__5 = 5;
     ido = 0;
     info = 0;
 
-    /*     %---------------------------------------------------% */
-    /*     | This program uses exact shifts with respect to    | */
-    /*     | the current Hessenberg matrix (IPARAM(1) = 1).    | */
-    /*     | IPARAM(3) specifies the maximum number of Arnoldi | */
-    /*     | iterations allowed. Mode 3 of ZNAUPD  is used      | */
-    /*     | (IPARAM(7) = 3).  All these options can be        | */
-    /*     | changed by the user. For details see the          | */
-    /*     | documentation in ZNAUPD .                          | */
-    /*     %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* This program uses exact shifts with respect to    */
+    /* the current Hessenberg matrix (IPARAM(1) = 1).    */
+    /* IPARAM(3) specifies the maximum number of Arnoldi */
+    /* iterations allowed. Mode 3 of ZNAUPD  is used      */
+    /* (IPARAM(7) = 3).  All these options can be        */
+    /* changed by the user. For details see the          */
+    /* documentation in ZNAUPD .                          */
+    /* ------------------------------------------------- */
 
     ishfts = 1;
     maxitr = 300;
@@ -319,31 +297,31 @@ static a_int c__5 = 5;
     iparam[2] = maxitr;
     iparam[6] = mode;
 
-    /*     %-------------------------------------------% */
-    /*     | M A I N   L O O P (Reverse communication) | */
-    /*     %-------------------------------------------% */
+    /* ----------------------------------------- */
+    /* M A I N   L O O P (Reverse communication) */
+    /* ----------------------------------------- */
 
 L20:
 
-    /*        %---------------------------------------------% */
-    /*        | Repeatedly call the routine ZNAUPD  and take | */
-    /*        | actions indicated by parameter IDO until    | */
-    /*        | either convergence is indicated or maxitr   | */
-    /*        | has been exceeded.                          | */
-    /*        %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Repeatedly call the routine ZNAUPD  and take */
+    /* actions indicated by parameter IDO until    */
+    /* either convergence is indicated or maxitr   */
+    /* has been exceeded.                          */
+    /* ------------------------------------------- */
 
     znaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
     if (ido == -1 || ido == 1)
     {
 
-        /*           %-------------------------------------------% */
-        /*           | Perform  y <--- OP*x = inv[A-SIGMA*I]*x   | */
-        /*           | The user should supply his/her own linear | */
-        /*           | system solver here that takes             | */
-        /*           | workd(ipntr(1)) as the input, and returns | */
-        /*           | the result to workd(ipntr(2)).            | */
-        /*           %-------------------------------------------% */
+        /* ----------------------------------------- */
+        /* Perform  y <--- OP*x = inv[A-SIGMA*I]*x   */
+        /* The user should supply his/her own linear */
+        /* system solver here that takes             */
+        /* workd(ipntr(1)) as the input, and returns */
+        /* the result to workd(ipntr(2)).            */
+        /* ----------------------------------------- */
 
         zcopy_(&n, &workd[ipntr[0] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
 
@@ -362,25 +340,25 @@ L20:
             goto L9000;
         }
 
-        /*           %-----------------------------------------% */
-        /*           | L O O P   B A C K to call ZNAUPD  again. | */
-        /*           %-----------------------------------------% */
+        /* --------------------------------------- */
+        /* L O O P   B A C K to call ZNAUPD  again. */
+        /* --------------------------------------- */
 
         goto L20;
     }
 
-    /*     %-----------------------------------------% */
-    /*     | Either we have convergence, or there is | */
-    /*     | an error.                               | */
-    /*     %-----------------------------------------% */
+    /* --------------------------------------- */
+    /* Either we have convergence, or there is */
+    /* an error.                               */
+    /* --------------------------------------- */
 
     if (info < 0)
     {
 
-        /*        %--------------------------% */
-        /*        | Error message, check the | */
-        /*        | documentation in ZNAUPD   | */
-        /*        %--------------------------% */
+        /* ------------------------ */
+        /* Error message, check the */
+        /* documentation in ZNAUPD   */
+        /* ------------------------ */
 
         s_wsle(&io___43);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -399,38 +377,38 @@ L20:
     else
     {
 
-        /*        %-------------------------------------------% */
-        /*        | No fatal errors occurred.                 | */
-        /*        | Post-Process using ZNEUPD .                | */
-        /*        |                                           | */
-        /*        | Computed eigenvalues may be extracted.    | */
-        /*        |                                           | */
-        /*        | Eigenvectors may also be computed now if  | */
-        /*        | desired.  (indicated by rvec = .true.)    | */
-        /*        %-------------------------------------------% */
+        /* ----------------------------------------- */
+        /* No fatal errors occurred.                 */
+        /* Post-Process using ZNEUPD .                */
+        /*                                           */
+        /* Computed eigenvalues may be extracted.    */
+        /*                                           */
+        /* Eigenvectors may also be computed now if  */
+        /* desired.  (indicated by rvec = .true.)    */
+        /* ----------------------------------------- */
 
         rvec = TRUE_;
 
         zneupd_(&rvec, "A", select, d, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr);
 
-        /*        %----------------------------------------------% */
-        /*        | Eigenvalues are returned in the one          | */
-        /*        | dimensional array D.  The corresponding      | */
-        /*        | eigenvectors are returned in the first NCONV | */
-        /*        | (=IPARAM(5)) columns of the two dimensional  | */
-        /*        | array V if requested.  Otherwise, an         | */
-        /*        | orthogonal basis for the invariant subspace  | */
-        /*        | corresponding to the eigenvalues in D is     | */
-        /*        | returned in V.                               | */
-        /*        %----------------------------------------------% */
+        /* -------------------------------------------- */
+        /* Eigenvalues are returned in the one          */
+        /* dimensional array D.  The corresponding      */
+        /* eigenvectors are returned in the first NCONV */
+        /* (=IPARAM(5)) columns of the two dimensional  */
+        /* array V if requested.  Otherwise, an         */
+        /* orthogonal basis for the invariant subspace  */
+        /* corresponding to the eigenvalues in D is     */
+        /* returned in V.                               */
+        /* -------------------------------------------- */
 
         if (ierr != 0)
         {
 
-            /*           %------------------------------------% */
-            /*           | Error condition:                   | */
-            /*           | Check the documentation of ZNEUPD . | */
-            /*           %------------------------------------% */
+            /* ---------------------------------- */
+            /* Error condition:                   */
+            /* Check the documentation of ZNEUPD . */
+            /* ---------------------------------- */
 
             s_wsle(&io___51);
             do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -454,18 +432,18 @@ L20:
             for (j = 1; j <= i__1; ++j)
             {
 
-                /*              %---------------------------% */
-                /*              | Compute the residual norm | */
-                /*              |                           | */
-                /*              |   ||  A*x - lambda*x ||   | */
-                /*              |                           | */
-                /*              | for the NCONV accurately  | */
-                /*              | computed eigenvalues and  | */
-                /*              | eigenvectors.  (iparam(5) | */
-                /*              | indicates how many are    | */
-                /*              | accurate to the requested | */
-                /*              | tolerance)                | */
-                /*              %---------------------------% */
+                /* ------------------------- */
+                /* Compute the residual norm */
+                /*                           */
+                /*   ||  A*x - lambda*x ||   */
+                /*                           */
+                /* for the NCONV accurately  */
+                /* computed eigenvalues and  */
+                /* eigenvectors.  (iparam(5) */
+                /* indicates how many are    */
+                /* accurate to the requested */
+                /* tolerance)                */
+                /* ------------------------- */
 
                 av_(&n, &v[(j << 8) - 256], ax);
                 i__2 = j - 1;
@@ -479,16 +457,16 @@ L20:
                 /* L60: */
             }
 
-            /*           %-----------------------------% */
-            /*           | Display computed residuals. | */
-            /*           %-----------------------------% */
+            /* --------------------------- */
+            /* Display computed residuals. */
+            /* --------------------------- */
 
             dmout_(&c__6, &nconv, &c__3, rd, &c__25, &c_n6,"Ritz values (Real, Imag) and relative residuals");
         }
 
-        /*        %-------------------------------------------% */
-        /*        | Print additional convergence information. | */
-        /*        %-------------------------------------------% */
+        /* ----------------------------------------- */
+        /* Print additional convergence information. */
+        /* ----------------------------------------- */
 
         if (info == 1)
         {
@@ -567,9 +545,9 @@ L20:
         e_wsle();
     }
 
-    /*     %---------------------------% */
-    /*     | Done with program zndrv2 . | */
-    /*     %---------------------------% */
+    /* ------------------------- */
+    /* Done with program zndrv2 . */
+    /* ------------------------- */
 
 L9000:
 
@@ -598,7 +576,6 @@ int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     --w;
     --v;
 
-    /* Function Body */
     i__1 = *n + 1;
     z__2.r = (double)i__1, z__2.i = 0.;
     ar_z_div(&z__1, &c_b1, &z__2);

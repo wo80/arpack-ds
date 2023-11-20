@@ -8,110 +8,108 @@ static a_int i_zero = 0;
 static a_int i_one = 1;
 static double d_one = 1.;
 
-/* ----------------------------------------------------------------------- */
-/* \BeginDoc */
-
-/* \Name: dstqrb */
-
-/* \Description: */
-/*  Computes all eigenvalues and the last component of the eigenvectors */
-/*  of a symmetric tridiagonal matrix using the implicit QL or QR method. */
-
-/*  This is mostly a modification of the LAPACK routine dsteqr. */
-/*  See Remarks. */
-
-/* \Usage: */
-/*  call dstqrb */
-/*     ( N, D, E, Z, WORK, INFO ) */
-
-/* \Arguments */
-/*  N       Integer.  (INPUT) */
-/*          The number of rows and columns in the matrix.  N >= 0. */
-
-/*  D       Double precision array, dimension (N).  (INPUT/OUTPUT) */
-/*          On entry, D contains the diagonal elements of the */
-/*          tridiagonal matrix. */
-/*          On exit, D contains the eigenvalues, in ascending order. */
-/*          If an error exit is made, the eigenvalues are correct */
-/*          for indices 1,2,...,INFO-1, but they are unordered and */
-/*          may not be the smallest eigenvalues of the matrix. */
-
-/*  E       Double precision array, dimension (N-1).  (INPUT/OUTPUT) */
-/*          On entry, E contains the subdiagonal elements of the */
-/*          tridiagonal matrix in positions 1 through N-1. */
-/*          On exit, E has been destroyed. */
-
-/*  Z       Double precision array, dimension (N).  (OUTPUT) */
-/*          On exit, Z contains the last row of the orthonormal */
-/*          eigenvector matrix of the symmetric tridiagonal matrix. */
-/*          If an error exit is made, Z contains the last row of the */
-/*          eigenvector matrix associated with the stored eigenvalues. */
-
-/*  WORK    Double precision array, dimension (max(1,2*N-2)).  (WORKSPACE) */
-/*          Workspace used in accumulating the transformation for */
-/*          computing the last components of the eigenvectors. */
-
-/*  INFO    Integer.  (OUTPUT) */
-/*          = 0:  normal return. */
-/*          < 0:  if INFO = -i, the i-th argument had an illegal value. */
-/*          > 0:  if INFO = +i, the i-th eigenvalue has not converged */
-/*                              after a total of  30*N  iterations. */
-
-/* \Remarks */
-/*  1. None. */
-
-/* ----------------------------------------------------------------------- */
-
-/* \BeginLib */
-
-/* \Local variables: */
-/*     xxxxxx  real */
-
-/* \Routines called: */
-/*     daxpy   Level 1 BLAS that computes a vector triad. */
-/*     dcopy   Level 1 BLAS that copies one vector to another. */
-/*     dswap   Level 1 BLAS that swaps the contents of two vectors. */
-/*     lsame   LAPACK character comparison routine. */
-/*     dlae2   LAPACK routine that computes the eigenvalues of a 2-by-2 */
-/*             symmetric matrix. */
-/*     dlaev2  LAPACK routine that eigendecomposition of a 2-by-2 symmetric */
-/*             matrix. */
-/*     dlamch  LAPACK routine that determines machine constants. */
-/*     dlanst  LAPACK routine that computes the norm of a matrix. */
-/*     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-/*     dlartg  LAPACK Givens rotation construction routine. */
-/*     dlascl  LAPACK routine for careful scaling of a matrix. */
-/*     dlaset  LAPACK matrix initialization routine. */
-/*     dlasr   LAPACK routine that applies an orthogonal transformation to */
-/*             a matrix. */
-/*     dlasrt  LAPACK sorting routine. */
-/*     dsteqr  LAPACK routine that computes eigenvalues and eigenvectors */
-/*             of a symmetric tridiagonal matrix. */
-/*     xerbla  LAPACK error handler routine. */
-
-/* \Authors */
-/*     Danny Sorensen               Phuong Vu */
-/*     Richard Lehoucq              CRPC / Rice University */
-/*     Dept. of Computational &     Houston, Texas */
-/*     Applied Mathematics */
-/*     Rice University */
-/*     Houston, Texas */
-
-/* \SCCS Information: @(#) */
-/* FILE: stqrb.F   SID: 2.5   DATE OF SID: 8/27/96   RELEASE: 2 */
-
-/* \Remarks */
-/*     1. Starting with version 2.5, this routine is a modified version */
-/*        of LAPACK version 2.0 subroutine SSTEQR. No lines are deleted, */
-/*        only commented out and new lines inserted. */
-/*        All lines commented out have "c$$$" at the beginning. */
-/*        Note that the LAPACK version 1.0 subroutine SSTEQR contained */
-/*        bugs. */
-
-/* \EndLib */
-
-/* ----------------------------------------------------------------------- */
-
+/**
+ * \BeginDoc
+ *
+ * \Name: dstqrb
+ *
+ * \Description:
+ *  Computes all eigenvalues and the last component of the eigenvectors
+ *  of a symmetric tridiagonal matrix using the implicit QL or QR method.
+ *
+ *  This is mostly a modification of the LAPACK routine dsteqr.
+ *  See Remarks.
+ *
+ * \Usage:
+ *  call dstqrb
+ *     ( N, D, E, Z, WORK, INFO )
+ *
+ * \Arguments
+ *  N       Integer.  (INPUT)
+ *          The number of rows and columns in the matrix.  N >= 0.
+ *
+ *  D       Double precision array, dimension (N).  (INPUT/OUTPUT)
+ *          On entry, D contains the diagonal elements of the
+ *          tridiagonal matrix.
+ *          On exit, D contains the eigenvalues, in ascending order.
+ *          If an error exit is made, the eigenvalues are correct
+ *          for indices 1,2,...,INFO-1, but they are unordered and
+ *          may not be the smallest eigenvalues of the matrix.
+ *
+ *  E       Double precision array, dimension (N-1).  (INPUT/OUTPUT)
+ *          On entry, E contains the subdiagonal elements of the
+ *          tridiagonal matrix in positions 1 through N-1.
+ *          On exit, E has been destroyed.
+ *
+ *  Z       Double precision array, dimension (N).  (OUTPUT)
+ *          On exit, Z contains the last row of the orthonormal
+ *          eigenvector matrix of the symmetric tridiagonal matrix.
+ *          If an error exit is made, Z contains the last row of the
+ *          eigenvector matrix associated with the stored eigenvalues.
+ *
+ *  WORK    Double precision array, dimension (max(1,2*N-2)).  (WORKSPACE)
+ *          Workspace used in accumulating the transformation for
+ *          computing the last components of the eigenvectors.
+ *
+ *  INFO    Integer.  (OUTPUT)
+ *          = 0:  normal return.
+ *          < 0:  if INFO = -i, the i-th argument had an illegal value.
+ *          > 0:  if INFO = +i, the i-th eigenvalue has not converged
+ *                              after a total of  30*N  iterations.
+ *
+ * \Remarks
+ *  1. None.
+ *
+ * -----------------------------------------------------------------------
+ *
+ * \BeginLib
+ *
+ * \Local variables:
+ *     xxxxxx  real
+ *
+ * \Routines called:
+ *     daxpy   Level 1 BLAS that computes a vector triad.
+ *     dcopy   Level 1 BLAS that copies one vector to another.
+ *     dswap   Level 1 BLAS that swaps the contents of two vectors.
+ *     lsame   LAPACK character comparison routine.
+ *     dlae2   LAPACK routine that computes the eigenvalues of a 2-by-2
+ *             symmetric matrix.
+ *     dlaev2  LAPACK routine that eigendecomposition of a 2-by-2 symmetric
+ *             matrix.
+ *     dlamch  LAPACK routine that determines machine constants.
+ *     dlanst  LAPACK routine that computes the norm of a matrix.
+ *     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     dlartg  LAPACK Givens rotation construction routine.
+ *     dlascl  LAPACK routine for careful scaling of a matrix.
+ *     dlaset  LAPACK matrix initialization routine.
+ *     dlasr   LAPACK routine that applies an orthogonal transformation to
+ *             a matrix.
+ *     dlasrt  LAPACK sorting routine.
+ *     dsteqr  LAPACK routine that computes eigenvalues and eigenvectors
+ *             of a symmetric tridiagonal matrix.
+ *     xerbla  LAPACK error handler routine.
+ *
+ * \Authors
+ *     Danny Sorensen               Phuong Vu
+ *     Richard Lehoucq              CRPC / Rice University
+ *     Dept. of Computational &     Houston, Texas
+ *     Applied Mathematics
+ *     Rice University
+ *     Houston, Texas
+ *
+ * \SCCS Information: @(#)
+ * FILE: stqrb.F   SID: 2.5   DATE OF SID: 8/27/96   RELEASE: 2
+ *
+ * \Remarks
+ *     1. Starting with version 2.5, this routine is a modified version
+ *        of LAPACK version 2.0 subroutine SSTEQR. No lines are deleted,
+ *        only commented out and new lines inserted.
+ *        All lines commented out have "c$$$" at the beginning.
+ *        Note that the LAPACK version 1.0 subroutine SSTEQR contained
+ *        bugs.
+ *
+ * \EndLib
+ */
 int dstqrb_(a_int *n, double *d, double *e, double *z, double *work, a_int *info)
 {
     /* System generated locals */
@@ -138,35 +136,12 @@ int dstqrb_(a_int *n, double *d, double *e, double *z, double *work, a_int *info
     a_int lendsv, nmaxit, icompz;
     double ssfmax, ssfmin;
 
-    /*     %------------------% */
-    /*     | Scalar Arguments | */
-    /*     %------------------% */
-
-    /*     %-----------------% */
-    /*     | Array Arguments | */
-    /*     %-----------------% */
-
-    /*     .. parameters .. */
-    /*     .. */
-    /*     .. local scalars .. */
-    /*     .. */
-    /*     .. external functions .. */
-    /*     .. */
-    /*     .. external subroutines .. */
-    /*     .. */
-    /*     .. intrinsic functions .. */
-    /*     .. */
-    /*     .. executable statements .. */
-
-    /*     test the input parameters. */
-
     /* Parameter adjustments */
     --work;
     --z;
     --e;
     --d;
 
-    /* Function Body */
     *info = 0;
 
     /* $$$      IF( LSAME( COMPZ, 'N' ) ) THEN */
@@ -712,8 +687,8 @@ L160:
 L190:
     return 0;
 
-    /*     %---------------% */
-    /*     | End of dstqrb | */
-    /*     %---------------% */
+    /* ------------- */
+    /* End of dstqrb */
+    /* ------------- */
 
 } /* dstqrb_ */

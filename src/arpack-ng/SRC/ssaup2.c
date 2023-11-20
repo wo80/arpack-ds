@@ -10,184 +10,182 @@ static a_int i_three = 3;
 static a_bool b_true = TRUE_;
 static a_int i_two = 2;
 
-/* ----------------------------------------------------------------------- */
-/* \BeginDoc */
-
-/* \Name: ssaup2 */
-
-/* \Description: */
-/*  Intermediate level interface called by ssaupd. */
-
-/* \Usage: */
-/*  call ssaup2 */
-/*     ( IDO, BMAT, N, WHICH, NEV, NP, TOL, RESID, MODE, IUPD, */
-/*       ISHIFT, MXITER, V, LDV, H, LDH, RITZ, BOUNDS, Q, LDQ, WORKL, */
-/*       IPNTR, WORKD, INFO ) */
-
-/* \Arguments */
-
-/*  IDO, BMAT, N, WHICH, NEV, TOL, RESID: same as defined in ssaupd. */
-/*  MODE, ISHIFT, MXITER: see the definition of IPARAM in ssaupd. */
-
-/*  NP      Integer.  (INPUT/OUTPUT) */
-/*          Contains the number of implicit shifts to apply during */
-/*          each Arnoldi/Lanczos iteration. */
-/*          If ISHIFT=1, NP is adjusted dynamically at each iteration */
-/*          to accelerate convergence and prevent stagnation. */
-/*          This is also roughly equal to the number of matrix-vector */
-/*          products (involving the operator OP) per Arnoldi iteration. */
-/*          The logic for adjusting is contained within the current */
-/*          subroutine. */
-/*          If ISHIFT=0, NP is the number of shifts the user needs */
-/*          to provide via reverse communication. 0 < NP < NCV-NEV. */
-/*          NP may be less than NCV-NEV since a leading block of the current */
-/*          upper Tridiagonal matrix has split off and contains "unwanted" */
-/*          Ritz values. */
-/*          Upon termination of the IRA iteration, NP contains the number */
-/*          of "converged" wanted Ritz values. */
-
-/*  IUPD    Integer.  (INPUT) */
-/*          IUPD .EQ. 0: use explicit restart instead implicit update. */
-/*          IUPD .NE. 0: use implicit update. */
-
-/*  V       Real N by (NEV+NP) array.  (INPUT/OUTPUT) */
-/*          The Lanczos basis vectors. */
-
-/*  LDV     Integer.  (INPUT) */
-/*          Leading dimension of V exactly as declared in the calling */
-/*          program. */
-
-/*  H       Real (NEV+NP) by 2 array.  (OUTPUT) */
-/*          H is used to store the generated symmetric tridiagonal matrix */
-/*          The subdiagonal is stored in the first column of H starting */
-/*          at H(2,1).  The main diagonal is stored in the second column */
-/*          of H starting at H(1,2). If ssaup2 converges store the */
-/*          B-norm of the final residual vector in H(1,1). */
-
-/*  LDH     Integer.  (INPUT) */
-/*          Leading dimension of H exactly as declared in the calling */
-/*          program. */
-
-/*  RITZ    Real array of length NEV+NP.  (OUTPUT) */
-/*          RITZ(1:NEV) contains the computed Ritz values of OP. */
-
-/*  BOUNDS  Real array of length NEV+NP.  (OUTPUT) */
-/*          BOUNDS(1:NEV) contain the error bounds corresponding to RITZ. */
-
-/*  Q       Real (NEV+NP) by (NEV+NP) array.  (WORKSPACE) */
-/*          Private (replicated) work array used to accumulate the */
-/*          rotation in the shift application step. */
-
-/*  LDQ     Integer.  (INPUT) */
-/*          Leading dimension of Q exactly as declared in the calling */
-/*          program. */
-
-/*  WORKL   Real array of length at least 3*(NEV+NP).  (INPUT/WORKSPACE) */
-/*          Private (replicated) array on each PE or array allocated on */
-/*          the front end.  It is used in the computation of the */
-/*          tridiagonal eigenvalue problem, the calculation and */
-/*          application of the shifts and convergence checking. */
-/*          If ISHIFT .EQ. O and IDO .EQ. 3, the first NP locations */
-/*          of WORKL are used in reverse communication to hold the user */
-/*          supplied shifts. */
-
-/*  IPNTR   Integer array of length 3.  (OUTPUT) */
-/*          Pointer to mark the starting locations in the WORKD for */
-/*          vectors used by the Lanczos iteration. */
-/*          ------------------------------------------------------------- */
-/*          IPNTR(1): pointer to the current operand vector X. */
-/*          IPNTR(2): pointer to the current result vector Y. */
-/*          IPNTR(3): pointer to the vector B * X when used in one of */
-/*                    the spectral transformation modes.  X is the current */
-/*                    operand. */
-/*          ------------------------------------------------------------- */
-
-/*  WORKD   Real work array of length 3*N.  (REVERSE COMMUNICATION) */
-/*          Distributed array to be used in the basic Lanczos iteration */
-/*          for reverse communication.  The user should not use WORKD */
-/*          as temporary workspace during the iteration !!!!!!!!!! */
-/*          See Data Distribution Note in ssaupd. */
-
-/*  INFO    Integer.  (INPUT/OUTPUT) */
-/*          If INFO .EQ. 0, a randomly initial residual vector is used. */
-/*          If INFO .NE. 0, RESID contains the initial residual vector, */
-/*                          possibly from a previous run. */
-/*          Error flag on output. */
-/*          =     0: Normal return. */
-/*          =     1: All possible eigenvalues of OP has been found. */
-/*                   NP returns the size of the invariant subspace */
-/*                   spanning the operator OP. */
-/*          =     2: No shifts could be applied. */
-/*          =    -8: Error return from trid. eigenvalue calculation; */
-/*                   This should never happen. */
-/*          =    -9: Starting vector is zero. */
-/*          = -9999: Could not build an Lanczos factorization. */
-/*                   Size that was built in returned in NP. */
-
-/* \EndDoc */
-
-/* ----------------------------------------------------------------------- */
-
-/* \BeginLib */
-
-/* \References: */
-/*  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in */
-/*     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992), */
-/*     pp 357-385. */
-/*  2. R.B. Lehoucq, "Analysis and Implementation of an Implicitly */
-/*     Restarted Arnoldi Iteration", Rice University Technical Report */
-/*     TR95-13, Department of Computational and Applied Mathematics. */
-/*  3. B.N. Parlett, "The Symmetric Eigenvalue Problem". Prentice-Hall, */
-/*     1980. */
-/*  4. B.N. Parlett, B. Nour-Omid, "Towards a Black Box Lanczos Program", */
-/*     Computer Physics Communications, 53 (1989), pp 169-179. */
-/*  5. B. Nour-Omid, B.N. Parlett, T. Ericson, P.S. Jensen, "How to */
-/*     Implement the Spectral Transformation", Math. Comp., 48 (1987), */
-/*     pp 663-673. */
-/*  6. R.G. Grimes, J.G. Lewis and H.D. Simon, "A Shifted Block Lanczos */
-/*     Algorithm for Solving Sparse Symmetric Generalized Eigenproblems", */
-/*     SIAM J. Matr. Anal. Apps.,  January (1993). */
-/*  7. L. Reichel, W.B. Gragg, "Algorithm 686: FORTRAN Subroutines */
-/*     for Updating the QR decomposition", ACM TOMS, December 1990, */
-/*     Volume 16 Number 4, pp 369-377. */
-
-/* \Routines called: */
-/*     sgetv0  ARPACK initial vector generation routine. */
-/*     ssaitr  ARPACK Lanczos factorization routine. */
-/*     ssapps  ARPACK application of implicit shifts routine. */
-/*     ssconv  ARPACK convergence of Ritz values routine. */
-/*     sseigt  ARPACK compute Ritz values and error bounds routine. */
-/*     ssgets  ARPACK reorder Ritz values and error bounds routine. */
-/*     ssortr  ARPACK sorting routine. */
-/*     ivout   ARPACK utility routine that prints integers. */
-/*     arscnd  ARPACK utility routine for timing. */
-/*     svout   ARPACK utility routine that prints vectors. */
-/*     slamch  LAPACK routine that determines machine constants. */
-/*     scopy   Level 1 BLAS that copies one vector to another. */
-/*     sdot    Level 1 BLAS that computes the scalar product of two vectors. */
-/*     snrm2   Level 1 BLAS that computes the norm of a vector. */
-/*     sscal   Level 1 BLAS that scales a vector. */
-/*     sswap   Level 1 BLAS that swaps two vectors. */
-
-/* \Author */
-/*     Danny Sorensen               Phuong Vu */
-/*     Richard Lehoucq              CRPC / Rice University */
-/*     Dept. of Computational &     Houston, Texas */
-/*     Applied Mathematics */
-/*     Rice University */
-/*     Houston, Texas */
-
-/* \Revision history: */
-/*     12/15/93: Version ' 2.4' */
-/*     xx/xx/95: Version ' 2.4'.  (R.B. Lehoucq) */
-
-/* \SCCS Information: @(#) */
-/* FILE: saup2.F   SID: 2.7   DATE OF SID: 5/19/98   RELEASE: 2 */
-
-/* \EndLib */
-
-/* ----------------------------------------------------------------------- */
-
+/**
+ * \BeginDoc
+ *
+ * \Name: ssaup2
+ *
+ * \Description:
+ *  Intermediate level interface called by ssaupd.
+ *
+ * \Usage:
+ *  call ssaup2
+ *     ( IDO, BMAT, N, WHICH, NEV, NP, TOL, RESID, MODE, IUPD,
+ *       ISHIFT, MXITER, V, LDV, H, LDH, RITZ, BOUNDS, Q, LDQ, WORKL,
+ *       IPNTR, WORKD, INFO )
+ *
+ * \Arguments
+ *
+ *  IDO, BMAT, N, WHICH, NEV, TOL, RESID: same as defined in ssaupd.
+ *  MODE, ISHIFT, MXITER: see the definition of IPARAM in ssaupd.
+ *
+ *  NP      Integer.  (INPUT/OUTPUT)
+ *          Contains the number of implicit shifts to apply during
+ *          each Arnoldi/Lanczos iteration.
+ *          If ISHIFT=1, NP is adjusted dynamically at each iteration
+ *          to accelerate convergence and prevent stagnation.
+ *          This is also roughly equal to the number of matrix-vector
+ *          products (involving the operator OP) per Arnoldi iteration.
+ *          The logic for adjusting is contained within the current
+ *          subroutine.
+ *          If ISHIFT=0, NP is the number of shifts the user needs
+ *          to provide via reverse communication. 0 < NP < NCV-NEV.
+ *          NP may be less than NCV-NEV since a leading block of the current
+ *          upper Tridiagonal matrix has split off and contains "unwanted"
+ *          Ritz values.
+ *          Upon termination of the IRA iteration, NP contains the number
+ *          of "converged" wanted Ritz values.
+ *
+ *  IUPD    Integer.  (INPUT)
+ *          IUPD .EQ. 0: use explicit restart instead implicit update.
+ *          IUPD .NE. 0: use implicit update.
+ *
+ *  V       Real N by (NEV+NP) array.  (INPUT/OUTPUT)
+ *          The Lanczos basis vectors.
+ *
+ *  LDV     Integer.  (INPUT)
+ *          Leading dimension of V exactly as declared in the calling
+ *          program.
+ *
+ *  H       Real (NEV+NP) by 2 array.  (OUTPUT)
+ *          H is used to store the generated symmetric tridiagonal matrix
+ *          The subdiagonal is stored in the first column of H starting
+ *          at H(2,1).  The main diagonal is stored in the second column
+ *          of H starting at H(1,2). If ssaup2 converges store the
+ *          B-norm of the final residual vector in H(1,1).
+ *
+ *  LDH     Integer.  (INPUT)
+ *          Leading dimension of H exactly as declared in the calling
+ *          program.
+ *
+ *  RITZ    Real array of length NEV+NP.  (OUTPUT)
+ *          RITZ(1:NEV) contains the computed Ritz values of OP.
+ *
+ *  BOUNDS  Real array of length NEV+NP.  (OUTPUT)
+ *          BOUNDS(1:NEV) contain the error bounds corresponding to RITZ.
+ *
+ *  Q       Real (NEV+NP) by (NEV+NP) array.  (WORKSPACE)
+ *          Private (replicated) work array used to accumulate the
+ *          rotation in the shift application step.
+ *
+ *  LDQ     Integer.  (INPUT)
+ *          Leading dimension of Q exactly as declared in the calling
+ *          program.
+ *
+ *  WORKL   Real array of length at least 3*(NEV+NP).  (INPUT/WORKSPACE)
+ *          Private (replicated) array on each PE or array allocated on
+ *          the front end.  It is used in the computation of the
+ *          tridiagonal eigenvalue problem, the calculation and
+ *          application of the shifts and convergence checking.
+ *          If ISHIFT .EQ. O and IDO .EQ. 3, the first NP locations
+ *          of WORKL are used in reverse communication to hold the user
+ *          supplied shifts.
+ *
+ *  IPNTR   Integer array of length 3.  (OUTPUT)
+ *          Pointer to mark the starting locations in the WORKD for
+ *          vectors used by the Lanczos iteration.
+ *          -------------------------------------------------------------
+ *          IPNTR(1): pointer to the current operand vector X.
+ *          IPNTR(2): pointer to the current result vector Y.
+ *          IPNTR(3): pointer to the vector B * X when used in one of
+ *                    the spectral transformation modes.  X is the current
+ *                    operand.
+ *          -------------------------------------------------------------
+ *
+ *  WORKD   Real work array of length 3*N.  (REVERSE COMMUNICATION)
+ *          Distributed array to be used in the basic Lanczos iteration
+ *          for reverse communication.  The user should not use WORKD
+ *          as temporary workspace during the iteration !!!!!!!!!!
+ *          See Data Distribution Note in ssaupd.
+ *
+ *  INFO    Integer.  (INPUT/OUTPUT)
+ *          If INFO .EQ. 0, a randomly initial residual vector is used.
+ *          If INFO .NE. 0, RESID contains the initial residual vector,
+ *                          possibly from a previous run.
+ *          Error flag on output.
+ *          =     0: Normal return.
+ *          =     1: All possible eigenvalues of OP has been found.
+ *                   NP returns the size of the invariant subspace
+ *                   spanning the operator OP.
+ *          =     2: No shifts could be applied.
+ *          =    -8: Error return from trid. eigenvalue calculation;
+ *                   This should never happen.
+ *          =    -9: Starting vector is zero.
+ *          = -9999: Could not build an Lanczos factorization.
+ *                   Size that was built in returned in NP.
+ *
+ * \EndDoc
+ *
+ * -----------------------------------------------------------------------
+ *
+ * \BeginLib
+ *
+ * \References:
+ *  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in
+ *     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992),
+ *     pp 357-385.
+ *  2. R.B. Lehoucq, "Analysis and Implementation of an Implicitly
+ *     Restarted Arnoldi Iteration", Rice University Technical Report
+ *     TR95-13, Department of Computational and Applied Mathematics.
+ *  3. B.N. Parlett, "The Symmetric Eigenvalue Problem". Prentice-Hall,
+ *     1980.
+ *  4. B.N. Parlett, B. Nour-Omid, "Towards a Black Box Lanczos Program",
+ *     Computer Physics Communications, 53 (1989), pp 169-179.
+ *  5. B. Nour-Omid, B.N. Parlett, T. Ericson, P.S. Jensen, "How to
+ *     Implement the Spectral Transformation", Math. Comp., 48 (1987),
+ *     pp 663-673.
+ *  6. R.G. Grimes, J.G. Lewis and H.D. Simon, "A Shifted Block Lanczos
+ *     Algorithm for Solving Sparse Symmetric Generalized Eigenproblems",
+ *     SIAM J. Matr. Anal. Apps.,  January (1993).
+ *  7. L. Reichel, W.B. Gragg, "Algorithm 686: FORTRAN Subroutines
+ *     for Updating the QR decomposition", ACM TOMS, December 1990,
+ *     Volume 16 Number 4, pp 369-377.
+ *
+ * \Routines called:
+ *     sgetv0  ARPACK initial vector generation routine.
+ *     ssaitr  ARPACK Lanczos factorization routine.
+ *     ssapps  ARPACK application of implicit shifts routine.
+ *     ssconv  ARPACK convergence of Ritz values routine.
+ *     sseigt  ARPACK compute Ritz values and error bounds routine.
+ *     ssgets  ARPACK reorder Ritz values and error bounds routine.
+ *     ssortr  ARPACK sorting routine.
+ *     ivout   ARPACK utility routine that prints integers.
+ *     arscnd  ARPACK utility routine for timing.
+ *     svout   ARPACK utility routine that prints vectors.
+ *     slamch  LAPACK routine that determines machine constants.
+ *     scopy   Level 1 BLAS that copies one vector to another.
+ *     sdot    Level 1 BLAS that computes the scalar product of two vectors.
+ *     snrm2   Level 1 BLAS that computes the norm of a vector.
+ *     sscal   Level 1 BLAS that scales a vector.
+ *     sswap   Level 1 BLAS that swaps two vectors.
+ *
+ * \Author
+ *     Danny Sorensen               Phuong Vu
+ *     Richard Lehoucq              CRPC / Rice University
+ *     Dept. of Computational &     Houston, Texas
+ *     Applied Mathematics
+ *     Rice University
+ *     Houston, Texas
+ *
+ * \Revision history:
+ *     12/15/93: Version ' 2.4'
+ *     xx/xx/95: Version ' 2.4'.  (R.B. Lehoucq)
+ *
+ * \SCCS Information: @(#)
+ * FILE: saup2.F   SID: 2.7   DATE OF SID: 5/19/98   RELEASE: 2
+ *
+ * \EndLib
+ */
 int ssaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *nev, a_int *np,
      float *tol, float *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter,
      float *v, a_int *ldv, float *h, a_int *ldh, float *ritz, float *bounds, float *q,
@@ -197,8 +195,6 @@ int ssaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
     a_int h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3;
     float r__1, r__2, r__3;
     double d__1;
-
-    /* Builtin functions */
 
     /* Local variables */
     a_int j;
@@ -223,56 +219,6 @@ int ssaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
     static a_int kplusp, msglvl;
     a_int nptemp;
 
-    /*     %----------------------------------------------------% */
-    /*     | Include files for debugging and timing information | */
-    /*     %----------------------------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %---------------------------------% */
-    /*     | See debug.doc for documentation | */
-    /*     %---------------------------------% */
-
-    /*     %------------------% */
-    /*     | Scalar Arguments | */
-    /*     %------------------% */
-
-    /*     %--------------------------------% */
-    /*     | See stat.doc for documentation | */
-    /*     %--------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %-----------------% */
-    /*     | Array Arguments | */
-    /*     %-----------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %----------------------% */
-    /*     | External Subroutines | */
-    /*     %----------------------% */
-
-    /*     %--------------------% */
-    /*     | External Functions | */
-    /*     %--------------------% */
-
-    /*     %---------------------% */
-    /*     | Intrinsic Functions | */
-    /*     %---------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
     /* Parameter adjustments */
     --workd;
     --resid;
@@ -290,50 +236,49 @@ int ssaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
     q -= q_offset;
     --ipntr;
 
-    /* Function Body */
     if (*ido == 0)
     {
 
-        /*        %-------------------------------% */
-        /*        | Initialize timing statistics  | */
-        /*        | & message level for debugging | */
-        /*        %-------------------------------% */
+        /* ----------------------------- */
+        /* Initialize timing statistics  */
+        /* & message level for debugging */
+        /* ----------------------------- */
 
         arscnd_(&t0);
         msglvl = debug_1.msaup2;
 
-        /*        %---------------------------------% */
-        /*        | Set machine dependent constant. | */
-        /*        %---------------------------------% */
+        /* ------------------------------- */
+        /* Set machine dependent constant. */
+        /* ------------------------------- */
 
         eps23 = slamch_("Epsilon-Machine");
         eps23 = pow((double)eps23, TWO_THIRDS);
 
-        /*        %-------------------------------------% */
-        /*        | nev0 and np0 are integer variables  | */
-        /*        | hold the initial values of NEV & NP | */
-        /*        %-------------------------------------% */
+        /* ----------------------------------- */
+        /* nev0 and np0 are integer variables  */
+        /* hold the initial values of NEV & NP */
+        /* ----------------------------------- */
 
         nev0 = *nev;
         np0 = *np;
 
-        /*        %-------------------------------------% */
-        /*        | kplusp is the bound on the largest  | */
-        /*        |        Lanczos factorization built. | */
-        /*        | nconv is the current number of      | */
-        /*        |        "converged" eigenvlues.      | */
-        /*        | iter is the counter on the current  | */
-        /*        |      iteration step.                | */
-        /*        %-------------------------------------% */
+        /* ----------------------------------- */
+        /* kplusp is the bound on the largest  */
+        /*        Lanczos factorization built. */
+        /* nconv is the current number of      */
+        /*        "converged" eigenvlues.      */
+        /* iter is the counter on the current  */
+        /*      iteration step.                */
+        /* ----------------------------------- */
 
         kplusp = nev0 + np0;
         nconv = 0;
         iter = 0;
 
-        /*        %--------------------------------------------% */
-        /*        | Set flags for computing the first NEV steps | */
-        /*        | of the Lanczos factorization.              | */
-        /*        %--------------------------------------------% */
+        /* ------------------------------------------ */
+        /* Set flags for computing the first NEV steps */
+        /* of the Lanczos factorization.              */
+        /* ------------------------------------------ */
 
         getv0 = TRUE_;
         update = FALSE_;
@@ -343,9 +288,9 @@ int ssaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         if (*info != 0)
         {
 
-            /*        %--------------------------------------------% */
-            /*        | User provides the initial residual vector. | */
-            /*        %--------------------------------------------% */
+            /* ------------------------------------------ */
+            /* User provides the initial residual vector. */
+            /* ------------------------------------------ */
 
             initv = TRUE_;
             *info = 0;
@@ -356,10 +301,10 @@ int ssaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         }
     }
 
-    /*     %---------------------------------------------% */
-    /*     | Get a possibly random starting vector and   | */
-    /*     | force it into the range of the operator OP. | */
-    /*     %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Get a possibly random starting vector and   */
+    /* force it into the range of the operator OP. */
+    /* ------------------------------------------- */
 
     /* L10: */
 
@@ -375,9 +320,9 @@ int ssaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         if (rnorm == 0.f)
         {
 
-            /*           %-----------------------------------------% */
-            /*           | The initial vector is zero. Error exit. | */
-            /*           %-----------------------------------------% */
+            /* --------------------------------------- */
+            /* The initial vector is zero. Error exit. */
+            /* --------------------------------------- */
 
             *info = -9;
             goto L1200;
@@ -386,44 +331,44 @@ int ssaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         *ido = 0;
     }
 
-    /*     %------------------------------------------------------------% */
-    /*     | Back from reverse communication: continue with update step | */
-    /*     %------------------------------------------------------------% */
+    /* ---------------------------------------------------------- */
+    /* Back from reverse communication: continue with update step */
+    /* ---------------------------------------------------------- */
 
     if (update)
     {
         goto L20;
     }
 
-    /*     %-------------------------------------------% */
-    /*     | Back from computing user specified shifts | */
-    /*     %-------------------------------------------% */
+    /* ----------------------------------------- */
+    /* Back from computing user specified shifts */
+    /* ----------------------------------------- */
 
     if (ushift)
     {
         goto L50;
     }
 
-    /*     %-------------------------------------% */
-    /*     | Back from computing residual norm   | */
-    /*     | at the end of the current iteration | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* Back from computing residual norm   */
+    /* at the end of the current iteration */
+    /* ----------------------------------- */
 
     if (cnorm)
     {
         goto L100;
     }
 
-    /*     %----------------------------------------------------------% */
-    /*     | Compute the first NEV steps of the Lanczos factorization | */
-    /*     %----------------------------------------------------------% */
+    /* -------------------------------------------------------- */
+    /* Compute the first NEV steps of the Lanczos factorization */
+    /* -------------------------------------------------------- */
 
     ssaitr_(ido, bmat, n, &i_zero, &nev0, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h[h_offset], ldh, &ipntr[1], &workd[1], info);
 
-    /*     %---------------------------------------------------% */
-    /*     | ido .ne. 99 implies use of reverse communication  | */
-    /*     | to compute operations involving OP and possibly B | */
-    /*     %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* ido .ne. 99 implies use of reverse communication  */
+    /* to compute operations involving OP and possibly B */
+    /* ------------------------------------------------- */
 
     if (*ido != 99)
     {
@@ -433,11 +378,11 @@ int ssaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
     if (*info > 0)
     {
 
-        /*        %-----------------------------------------------------% */
-        /*        | ssaitr was unable to build an Lanczos factorization | */
-        /*        | of length NEV0. INFO is returned with the size of   | */
-        /*        | the factorization built. Exit main loop.            | */
-        /*        %-----------------------------------------------------% */
+        /* --------------------------------------------------- */
+        /* ssaitr was unable to build an Lanczos factorization */
+        /* of length NEV0. INFO is returned with the size of   */
+        /* the factorization built. Exit main loop.            */
+        /* --------------------------------------------------- */
 
         *np = *info;
         *mxiter = iter;
@@ -445,13 +390,13 @@ int ssaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         goto L1200;
     }
 
-    /*     %--------------------------------------------------------------% */
-    /*     |                                                              | */
-    /*     |           M A I N  LANCZOS  I T E R A T I O N  L O O P       | */
-    /*     |           Each iteration implicitly restarts the Lanczos     | */
-    /*     |           factorization in place.                            | */
-    /*     |                                                              | */
-    /*     %--------------------------------------------------------------% */
+    /* ------------------------------------------------------------ */
+    /*                                                              */
+    /*           M A I N  LANCZOS  I T E R A T I O N  L O O P       */
+    /*           Each iteration implicitly restarts the Lanczos     */
+    /*           factorization in place.                            */
+    /*                                                              */
+    /* ------------------------------------------------------------ */
 
 L1000:
 
@@ -467,9 +412,9 @@ L1000:
         ivout_(1, np, debug_1.ndigit, "_saup2: Extend the Lanczos factorization by");
     }
 
-    /*        %------------------------------------------------------------% */
-    /*        | Compute NP additional steps of the Lanczos factorization. | */
-    /*        %------------------------------------------------------------% */
+    /* ---------------------------------------------------------- */
+    /* Compute NP additional steps of the Lanczos factorization. */
+    /* ---------------------------------------------------------- */
 
     *ido = 0;
 L20:
@@ -477,10 +422,10 @@ L20:
 
     ssaitr_(ido, bmat, n, nev, np, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h[h_offset], ldh, &ipntr[1], &workd[1], info);
 
-    /*        %---------------------------------------------------% */
-    /*        | ido .ne. 99 implies use of reverse communication  | */
-    /*        | to compute operations involving OP and possibly B | */
-    /*        %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* ido .ne. 99 implies use of reverse communication  */
+    /* to compute operations involving OP and possibly B */
+    /* ------------------------------------------------- */
 
     if (*ido != 99)
     {
@@ -490,11 +435,11 @@ L20:
     if (*info > 0)
     {
 
-        /*           %-----------------------------------------------------% */
-        /*           | ssaitr was unable to build an Lanczos factorization | */
-        /*           | of length NEV0+NP0. INFO is returned with the size  | */
-        /*           | of the factorization built. Exit main loop.         | */
-        /*           %-----------------------------------------------------% */
+        /* --------------------------------------------------- */
+        /* ssaitr was unable to build an Lanczos factorization */
+        /* of length NEV0+NP0. INFO is returned with the size  */
+        /* of the factorization built. Exit main loop.         */
+        /* --------------------------------------------------- */
 
         *np = *info;
         *mxiter = iter;
@@ -508,10 +453,10 @@ L20:
         svout_(1, &rnorm, debug_1.ndigit, "_saup2: Current B-norm of residual for factorization");
     }
 
-    /*        %--------------------------------------------------------% */
-    /*        | Compute the eigenvalues and corresponding error bounds | */
-    /*        | of the current symmetric tridiagonal matrix.           | */
-    /*        %--------------------------------------------------------% */
+    /* ------------------------------------------------------ */
+    /* Compute the eigenvalues and corresponding error bounds */
+    /* of the current symmetric tridiagonal matrix.           */
+    /* ------------------------------------------------------ */
 
     sseigt_(&rnorm, &kplusp, &h[h_offset], ldh, &ritz[1], &bounds[1], &workl[1], &ierr);
 
@@ -521,31 +466,31 @@ L20:
         goto L1200;
     }
 
-    /*        %----------------------------------------------------% */
-    /*        | Make a copy of eigenvalues and corresponding error | */
-    /*        | bounds obtained from _seigt.                       | */
-    /*        %----------------------------------------------------% */
+    /* -------------------------------------------------- */
+    /* Make a copy of eigenvalues and corresponding error */
+    /* bounds obtained from _seigt.                       */
+    /* -------------------------------------------------- */
 
     scopy_(&kplusp, &ritz[1], &i_one, &workl[kplusp + 1], &i_one);
     scopy_(&kplusp, &bounds[1], &i_one, &workl[(kplusp << 1) + 1], &i_one);
 
-    /*        %---------------------------------------------------% */
-    /*        | Select the wanted Ritz values and their bounds    | */
-    /*        | to be used in the convergence test.               | */
-    /*        | The selection is based on the requested number of | */
-    /*        | eigenvalues instead of the current NEV and NP to  | */
-    /*        | prevent possible misconvergence.                  | */
-    /*        | * Wanted Ritz values := RITZ(NP+1:NEV+NP)         | */
-    /*        | * Shifts := RITZ(1:NP) := WORKL(1:NP)             | */
-    /*        %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* Select the wanted Ritz values and their bounds    */
+    /* to be used in the convergence test.               */
+    /* The selection is based on the requested number of */
+    /* eigenvalues instead of the current NEV and NP to  */
+    /* prevent possible misconvergence.                  */
+    /* * Wanted Ritz values := RITZ(NP+1:NEV+NP)         */
+    /* * Shifts := RITZ(1:NP) := WORKL(1:NP)             */
+    /* ------------------------------------------------- */
 
     *nev = nev0;
     *np = np0;
     ssgets_(ishift, which, nev, np, &ritz[1], &bounds[1], &workl[1]);
 
-    /*        %-------------------% */
-    /*        | Convergence test. | */
-    /*        %-------------------% */
+    /* ----------------- */
+    /* Convergence test. */
+    /* ----------------- */
 
     scopy_(nev, &bounds[*np + 1], &i_one, &workl[*np + 1], &i_one);
     ssconv_(nev, &ritz[*np + 1], &workl[*np + 1], tol, &nconv);
@@ -560,15 +505,15 @@ L20:
         svout_(kplusp, &bounds[1], debug_1.ndigit, "_saup2: Ritz estimates of the current NCV Ritz values");
     }
 
-    /*        %---------------------------------------------------------% */
-    /*        | Count the number of unwanted Ritz values that have zero | */
-    /*        | Ritz estimates. If any Ritz estimates are equal to zero | */
-    /*        | then a leading block of H of order equal to at least    | */
-    /*        | the number of Ritz values with zero Ritz estimates has  | */
-    /*        | split off. None of these Ritz values may be removed by  | */
-    /*        | shifting. Decrease NP the number of shifts to apply. If | */
-    /*        | no shifts may be applied, then prepare to exit          | */
-    /*        %---------------------------------------------------------% */
+    /* ------------------------------------------------------- */
+    /* Count the number of unwanted Ritz values that have zero */
+    /* Ritz estimates. If any Ritz estimates are equal to zero */
+    /* then a leading block of H of order equal to at least    */
+    /* the number of Ritz values with zero Ritz estimates has  */
+    /* split off. None of these Ritz values may be removed by  */
+    /* shifting. Decrease NP the number of shifts to apply. If */
+    /* no shifts may be applied, then prepare to exit          */
+    /* ------------------------------------------------------- */
 
     nptemp = *np;
     i__1 = nptemp;
@@ -585,25 +530,25 @@ L20:
     if (nconv >= nev0 || iter > *mxiter || *np == 0)
     {
 
-        /*           %------------------------------------------------% */
-        /*           | Prepare to exit. Put the converged Ritz values | */
-        /*           | and corresponding bounds in RITZ(1:NCONV) and  | */
-        /*           | BOUNDS(1:NCONV) respectively. Then sort. Be    | */
-        /*           | careful when NCONV > NP since we don't want to | */
-        /*           | swap overlapping locations.                    | */
-        /*           %------------------------------------------------% */
+        /* ---------------------------------------------- */
+        /* Prepare to exit. Put the converged Ritz values */
+        /* and corresponding bounds in RITZ(1:NCONV) and  */
+        /* BOUNDS(1:NCONV) respectively. Then sort. Be    */
+        /* careful when NCONV > NP since we don't want to */
+        /* swap overlapping locations.                    */
+        /* ---------------------------------------------- */
 
         if (strcmp(which, "BE") == 0)
         {
 
-            /*              %-----------------------------------------------------% */
-            /*              | Both ends of the spectrum are requested.            | */
-            /*              | Sort the eigenvalues into algebraically decreasing  | */
-            /*              | order first then swap low end of the spectrum next  | */
-            /*              | to high end in appropriate locations.               | */
-            /*              | NOTE: when np < floor(nev/2) be careful not to swap | */
-            /*              | overlapping locations.                              | */
-            /*              %-----------------------------------------------------% */
+            /* --------------------------------------------------- */
+            /* Both ends of the spectrum are requested.            */
+            /* Sort the eigenvalues into algebraically decreasing  */
+            /* order first then swap low end of the spectrum next  */
+            /* to high end in appropriate locations.               */
+            /* NOTE: when np < floor(nev/2) be careful not to swap */
+            /* overlapping locations.                              */
+            /* --------------------------------------------------- */
 
             strcpy(wprime, "SA");
             ssortr_(wprime, &b_true, &kplusp, &ritz[1], &bounds[1]);
@@ -624,14 +569,14 @@ L20:
         else
         {
 
-            /*              %--------------------------------------------------% */
-            /*              | LM, SM, LA, SA case.                             | */
-            /*              | Sort the eigenvalues of H into the an order that | */
-            /*              | is opposite to WHICH, and apply the resulting    | */
-            /*              | order to BOUNDS.  The eigenvalues are sorted so  | */
-            /*              | that the wanted part are always within the first | */
-            /*              | NEV locations.                                   | */
-            /*              %--------------------------------------------------% */
+            /* ------------------------------------------------ */
+            /* LM, SM, LA, SA case.                             */
+            /* Sort the eigenvalues of H into the an order that */
+            /* is opposite to WHICH, and apply the resulting    */
+            /* order to BOUNDS.  The eigenvalues are sorted so  */
+            /* that the wanted part are always within the first */
+            /* NEV locations.                                   */
+            /* ------------------------------------------------ */
 
             if (strcmp(which, "LM") == 0)
             {
@@ -653,10 +598,10 @@ L20:
             ssortr_(wprime, &b_true, &kplusp, &ritz[1], &bounds[1]);
         }
 
-        /*           %--------------------------------------------------% */
-        /*           | Scale the Ritz estimate of each Ritz value       | */
-        /*           | by 1 / max(eps23,magnitude of the Ritz value).   | */
-        /*           %--------------------------------------------------% */
+        /* ------------------------------------------------ */
+        /* Scale the Ritz estimate of each Ritz value       */
+        /* by 1 / max(eps23,magnitude of the Ritz value).   */
+        /* ------------------------------------------------ */
 
         i__1 = nev0;
         for (j = 1; j <= i__1; ++j)
@@ -668,20 +613,20 @@ L20:
             /* L35: */
         }
 
-        /*           %----------------------------------------------------% */
-        /*           | Sort the Ritz values according to the scaled Ritz  | */
-        /*           | estimates.  This will push all the converged ones  | */
-        /*           | towards the front of ritzr, ritzi, bounds          | */
-        /*           | (in the case when NCONV < NEV.)                    | */
-        /*           %----------------------------------------------------% */
+        /* -------------------------------------------------- */
+        /* Sort the Ritz values according to the scaled Ritz  */
+        /* estimates.  This will push all the converged ones  */
+        /* towards the front of ritzr, ritzi, bounds          */
+        /* (in the case when NCONV < NEV.)                    */
+        /* -------------------------------------------------- */
 
         strcpy(wprime, "LA");
         ssortr_(wprime, &b_true, &nev0, &bounds[1], &ritz[1]);
 
-        /*           %----------------------------------------------% */
-        /*           | Scale the Ritz estimate back to its original | */
-        /*           | value.                                       | */
-        /*           %----------------------------------------------% */
+        /* -------------------------------------------- */
+        /* Scale the Ritz estimate back to its original */
+        /* value.                                       */
+        /* -------------------------------------------- */
 
         i__1 = nev0;
         for (j = 1; j <= i__1; ++j)
@@ -693,21 +638,21 @@ L20:
             /* L40: */
         }
 
-        /*           %--------------------------------------------------% */
-        /*           | Sort the "converged" Ritz values again so that   | */
-        /*           | the "threshold" values and their associated Ritz | */
-        /*           | estimates appear at the appropriate position in  | */
-        /*           | ritz and bound.                                  | */
-        /*           %--------------------------------------------------% */
+        /* ------------------------------------------------ */
+        /* Sort the "converged" Ritz values again so that   */
+        /* the "threshold" values and their associated Ritz */
+        /* estimates appear at the appropriate position in  */
+        /* ritz and bound.                                  */
+        /* ------------------------------------------------ */
 
         if (strcmp(which, "BE") == 0)
         {
 
-            /*              %------------------------------------------------% */
-            /*              | Sort the "converged" Ritz values in increasing | */
-            /*              | order.  The "threshold" values are in the      | */
-            /*              | middle.                                        | */
-            /*              %------------------------------------------------% */
+            /* ---------------------------------------------- */
+            /* Sort the "converged" Ritz values in increasing */
+            /* order.  The "threshold" values are in the      */
+            /* middle.                                        */
+            /* ---------------------------------------------- */
 
             strcpy(wprime, "LA");
             ssortr_(wprime, &b_true, &nconv, &ritz[1], &bounds[1]);
@@ -715,19 +660,19 @@ L20:
         else
         {
 
-            /*              %----------------------------------------------% */
-            /*              | In LM, SM, LA, SA case, sort the "converged" | */
-            /*              | Ritz values according to WHICH so that the   | */
-            /*              | "threshold" value appears at the front of    | */
-            /*              | ritz.                                        | */
-            /*              %----------------------------------------------% */
+            /* -------------------------------------------- */
+            /* In LM, SM, LA, SA case, sort the "converged" */
+            /* Ritz values according to WHICH so that the   */
+            /* "threshold" value appears at the front of    */
+            /* ritz.                                        */
+            /* -------------------------------------------- */
             ssortr_(which, &b_true, &nconv, &ritz[1], &bounds[1]);
         }
 
-        /*           %------------------------------------------% */
-        /*           |  Use h( 1,1 ) as storage to communicate  | */
-        /*           |  rnorm to _seupd if needed               | */
-        /*           %------------------------------------------% */
+        /* ---------------------------------------- */
+        /*  Use h( 1,1 ) as storage to communicate  */
+        /*  rnorm to _seupd if needed               */
+        /* ---------------------------------------- */
 
         h[h_dim1 + 1] = rnorm;
 
@@ -737,18 +682,18 @@ L20:
             svout_(kplusp, &bounds[1], debug_1.ndigit, "_saup2: Sorted ritz estimates.");
         }
 
-        /*           %------------------------------------% */
-        /*           | Max iterations have been exceeded. | */
-        /*           %------------------------------------% */
+        /* ---------------------------------- */
+        /* Max iterations have been exceeded. */
+        /* ---------------------------------- */
 
         if (iter > *mxiter && nconv < *nev)
         {
             *info = 1;
         }
 
-        /*           %---------------------% */
-        /*           | No shifts to apply. | */
-        /*           %---------------------% */
+        /* ------------------- */
+        /* No shifts to apply. */
+        /* ------------------- */
 
         if (*np == 0 && nconv < nev0)
         {
@@ -761,11 +706,11 @@ L20:
     else if (nconv < *nev && *ishift == 1)
     {
 
-        /*           %---------------------------------------------------% */
-        /*           | Do not have all the requested eigenvalues yet.    | */
-        /*           | To prevent possible stagnation, adjust the number | */
-        /*           | of Ritz values and the shifts.                    | */
-        /*           %---------------------------------------------------% */
+        /* ------------------------------------------------- */
+        /* Do not have all the requested eigenvalues yet.    */
+        /* To prevent possible stagnation, adjust the number */
+        /* of Ritz values and the shifts.                    */
+        /* ------------------------------------------------- */
 
         nevbef = *nev;
         /* Computing MIN */
@@ -781,10 +726,10 @@ L20:
         }
         *np = kplusp - *nev;
 
-        /*           %---------------------------------------% */
-        /*           | If the size of NEV was just increased | */
-        /*           | resort the eigenvalues.               | */
-        /*           %---------------------------------------% */
+        /* ------------------------------------- */
+        /* If the size of NEV was just increased */
+        /* resort the eigenvalues.               */
+        /* ------------------------------------- */
 
         if (nevbef < *nev)
         {
@@ -808,11 +753,11 @@ L20:
     if (*ishift == 0)
     {
 
-        /*           %-----------------------------------------------------% */
-        /*           | User specified shifts: reverse communication to     | */
-        /*           | compute the shifts. They are returned in the first  | */
-        /*           | NP locations of WORKL.                              | */
-        /*           %-----------------------------------------------------% */
+        /* --------------------------------------------------- */
+        /* User specified shifts: reverse communication to     */
+        /* compute the shifts. They are returned in the first  */
+        /* NP locations of WORKL.                              */
+        /* --------------------------------------------------- */
 
         ushift = TRUE_;
         *ido = 3;
@@ -821,19 +766,19 @@ L20:
 
 L50:
 
-    /*        %------------------------------------% */
-    /*        | Back from reverse communication;   | */
-    /*        | User specified shifts are returned | */
-    /*        | in WORKL(1:*NP)                   | */
-    /*        %------------------------------------% */
+    /* ---------------------------------- */
+    /* Back from reverse communication;   */
+    /* User specified shifts are returned */
+    /* in WORKL(1:*NP)                   */
+    /* ---------------------------------- */
 
     ushift = FALSE_;
 
-    /*        %---------------------------------------------------------% */
-    /*        | Move the NP shifts to the first NP locations of RITZ to | */
-    /*        | free up WORKL.  This is for the non-exact shift case;   | */
-    /*        | in the exact shift case, ssgets already handles this.   | */
-    /*        %---------------------------------------------------------% */
+    /* ------------------------------------------------------- */
+    /* Move the NP shifts to the first NP locations of RITZ to */
+    /* free up WORKL.  This is for the non-exact shift case;   */
+    /* in the exact shift case, ssgets already handles this.   */
+    /* ------------------------------------------------------- */
 
     if (*ishift == 0)
     {
@@ -850,21 +795,21 @@ L50:
         }
     }
 
-    /*        %---------------------------------------------------------% */
-    /*        | Apply the NP0 implicit shifts by QR bulge chasing.      | */
-    /*        | Each shift is applied to the entire tridiagonal matrix. | */
-    /*        | The first 2*N locations of WORKD are used as workspace. | */
-    /*        | After ssapps is done, we have a Lanczos                 | */
-    /*        | factorization of length NEV.                            | */
-    /*        %---------------------------------------------------------% */
+    /* ------------------------------------------------------- */
+    /* Apply the NP0 implicit shifts by QR bulge chasing.      */
+    /* Each shift is applied to the entire tridiagonal matrix. */
+    /* The first 2*N locations of WORKD are used as workspace. */
+    /* After ssapps is done, we have a Lanczos                 */
+    /* factorization of length NEV.                            */
+    /* ------------------------------------------------------- */
 
     ssapps_(n, nev, np, &ritz[1], &v[v_offset], ldv, &h[h_offset], ldh, &resid[1], &q[q_offset], ldq, &workd[1]);
 
-    /*        %---------------------------------------------% */
-    /*        | Compute the B-norm of the updated residual. | */
-    /*        | Keep B*RESID in WORKD(1:N) to be used in    | */
-    /*        | the first step of the next call to ssaitr.  | */
-    /*        %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Compute the B-norm of the updated residual. */
+    /* Keep B*RESID in WORKD(1:N) to be used in    */
+    /* the first step of the next call to ssaitr.  */
+    /* ------------------------------------------- */
 
     cnorm = TRUE_;
     arscnd_(&t2);
@@ -876,9 +821,9 @@ L50:
         ipntr[2] = 1;
         *ido = 2;
 
-        /*           %----------------------------------% */
-        /*           | Exit in order to compute B*RESID | */
-        /*           %----------------------------------% */
+        /* -------------------------------- */
+        /* Exit in order to compute B*RESID */
+        /* -------------------------------- */
 
         goto L9000;
     }
@@ -889,10 +834,10 @@ L50:
 
 L100:
 
-    /*        %----------------------------------% */
-    /*        | Back from reverse communication; | */
-    /*        | WORKD(1:N) := B*RESID            | */
-    /*        %----------------------------------% */
+    /* -------------------------------- */
+    /* Back from reverse communication; */
+    /* WORKD(1:N) := B*RESID            */
+    /* -------------------------------- */
 
     if (*bmat == 'G')
     {
@@ -922,11 +867,11 @@ L100:
 
     goto L1000;
 
-    /*     %---------------------------------------------------------------% */
-    /*     |                                                               | */
-    /*     |  E N D     O F     M A I N     I T E R A T I O N     L O O P  | */
-    /*     |                                                               | */
-    /*     %---------------------------------------------------------------% */
+    /* ------------------------------------------------------------- */
+    /*                                                               */
+    /*  E N D     O F     M A I N     I T E R A T I O N     L O O P  */
+    /*                                                               */
+    /* ------------------------------------------------------------- */
 
 L1100:
 
@@ -936,9 +881,9 @@ L1100:
 L1200:
     *ido = 99;
 
-    /*     %------------% */
-    /*     | Error exit | */
-    /*     %------------% */
+    /* ---------- */
+    /* Error exit */
+    /* ---------- */
 
     arscnd_(&t1);
     timing_1.tsaup2 = t1 - t0;
@@ -946,8 +891,8 @@ L1200:
 L9000:
     return 0;
 
-    /*     %---------------% */
-    /*     | End of ssaup2 | */
-    /*     %---------------% */
+    /* ------------- */
+    /* End of ssaup2 */
+    /* ------------- */
 
 } /* ssaup2_ */

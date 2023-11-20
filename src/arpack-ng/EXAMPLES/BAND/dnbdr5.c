@@ -122,57 +122,33 @@ static a_int c_n6 = -6;
 
     /* ------------------------------------------------------------------------- */
 
-    /*     %-------------------------------------% */
-    /*     | Define leading dimensions for all   | */
-    /*     | arrays.                             | */
-    /*     | MAXN   - Maximum size of the matrix | */
-    /*     | MAXNEV - Maximum number of          | */
-    /*     |          eigenvalues to be computed | */
-    /*     | MAXNCV - Maximum number of Arnoldi  | */
-    /*     |          vectors stored             | */
-    /*     | MAXBDW - Maximum bandwidth          | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* Define leading dimensions for all   */
+    /* arrays.                             */
+    /* MAXN   - Maximum size of the matrix */
+    /* MAXNEV - Maximum number of          */
+    /*          eigenvalues to be computed */
+    /* MAXNCV - Maximum number of Arnoldi  */
+    /*          vectors stored             */
+    /* MAXBDW - Maximum bandwidth          */
+    /* ----------------------------------- */
 
-    /*     %--------------% */
-    /*     | Local Arrays | */
-    /*     %--------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %-----------------------------% */
-    /*     | BLAS & LAPACK routines used | */
-    /*     %-----------------------------% */
-
-    /*     %--------------------% */
-    /*     | Intrinsic function | */
-    /*     %--------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
-    /*     %--------------------------------------------------% */
-    /*     | The number NX is the size of each block diagonal | */
-    /*     | of A. The number N(=NX*NX) is the dimension of   | */
-    /*     | the matrix.  A standard eigenvalue problem is    | */
-    /*     | solved (BMAT = 'I').  NEV is the number of       | */
-    /*     | eigenvalues (closest to (SIGMAR,SIGMAI)) to be   | */
-    /*     | approximated. Since the shift-invert moded is    | */
-    /*     | used, WHICH is set to 'LM'. The user can modify  | */
-    /*     | NX, NEV, NCV, SIGMAR, SIGMAI to solve problems   | */
-    /*     | of different sizes, and to get different parts   | */
-    /*     | the spectrum. However, The following conditions  | */
-    /*     | must be satisfied:                               | */
-    /*     |                   N <= MAXN                      | */
-    /*     |                 NEV <= MAXNEV                    | */
-    /*     |           NEV + 2 <= NCV <= MAXNCV               | */
-    /*     %--------------------------------------------------% */
+    /* ------------------------------------------------ */
+    /* The number NX is the size of each block diagonal */
+    /* of A. The number N(=NX*NX) is the dimension of   */
+    /* the matrix.  A standard eigenvalue problem is    */
+    /* solved (BMAT = 'I').  NEV is the number of       */
+    /* eigenvalues (closest to (SIGMAR,SIGMAI)) to be   */
+    /* approximated. Since the shift-invert moded is    */
+    /* used, WHICH is set to 'LM'. The user can modify  */
+    /* NX, NEV, NCV, SIGMAR, SIGMAI to solve problems   */
+    /* of different sizes, and to get different parts   */
+    /* the spectrum. However, The following conditions  */
+    /* must be satisfied:                               */
+    /*                   N <= MAXN                      */
+    /*                 NEV <= MAXNEV                    */
+    /*           NEV + 2 <= NCV <= MAXNCV               */
+    /* ------------------------------------------------ */
 
     nx = 10;
     n = nx * nx;
@@ -204,16 +180,16 @@ static a_int c_n6 = -6;
     sigmar = .4;
     sigmai = .6;
 
-    /*     %-----------------------------------------------------% */
-    /*     | The work array WORKL is used in DNAUPD  as           | */
-    /*     | workspace.  Its dimension LWORKL is set as          | */
-    /*     | illustrated below.  The parameter TOL determines    | */
-    /*     | the stopping criterion. If TOL<=0, machine          | */
-    /*     | precision is used.  The variable IDO is used for    | */
-    /*     | reverse communication, and is initially set to 0.   | */
-    /*     | Setting INFO=0 indicates that a random vector is    | */
-    /*     | generated in DNAUPD  to start the Arnoldi iteration. | */
-    /*     %-----------------------------------------------------% */
+    /* --------------------------------------------------- */
+    /* The work array WORKL is used in DNAUPD  as           */
+    /* workspace.  Its dimension LWORKL is set as          */
+    /* illustrated below.  The parameter TOL determines    */
+    /* the stopping criterion. If TOL<=0, machine          */
+    /* precision is used.  The variable IDO is used for    */
+    /* reverse communication, and is initially set to 0.   */
+    /* Setting INFO=0 indicates that a random vector is    */
+    /* generated in DNAUPD  to start the Arnoldi iteration. */
+    /* --------------------------------------------------- */
 
     /* Computing 2nd power */
     i__1 = ncv;
@@ -222,13 +198,13 @@ static a_int c_n6 = -6;
     ido = 0;
     info = 0;
 
-    /*     %---------------------------------------------------% */
-    /*     | IPARAM(3) specifies the maximum number of Arnoldi | */
-    /*     | iterations allowed.  Mode 4 of DNAUPD  is used     | */
-    /*     | (IPARAM(7) = 4). All these options can be changed | */
-    /*     | by the user. For details, see the documentation   | */
-    /*     | in DNBAND .                                        | */
-    /*     %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* IPARAM(3) specifies the maximum number of Arnoldi */
+    /* iterations allowed.  Mode 4 of DNAUPD  is used     */
+    /* (IPARAM(7) = 4). All these options can be changed */
+    /* by the user. For details, see the documentation   */
+    /* in DNBAND .                                        */
+    /* ------------------------------------------------- */
 
     maxitr = 300;
     mode = 4;
@@ -236,31 +212,31 @@ static a_int c_n6 = -6;
     iparam[2] = maxitr;
     iparam[6] = mode;
 
-    /*     %--------------------------------------------% */
-    /*     | Construct matrices A and M in LAPACK-style | */
-    /*     | banded form.                               | */
-    /*     %--------------------------------------------% */
+    /* ------------------------------------------ */
+    /* Construct matrices A and M in LAPACK-style */
+    /* banded form.                               */
+    /* ------------------------------------------ */
 
-    /*     %---------------------------------------------% */
-    /*     | Zero out the workspace for banded matrices. | */
-    /*     %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Zero out the workspace for banded matrices. */
+    /* ------------------------------------------- */
 
     dlaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50);
     dlaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50);
     dlaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50);
 
-    /*     %-------------------------------------% */
-    /*     | KU, KL are number of superdiagonals | */
-    /*     | and subdiagonals within the band of | */
-    /*     | matrices A and M.                   | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* KU, KL are number of superdiagonals */
+    /* and subdiagonals within the band of */
+    /* matrices A and M.                   */
+    /* ----------------------------------- */
 
     kl = nx;
     ku = nx;
 
-    /*     %---------------% */
-    /*     | Main diagonal | */
-    /*     %---------------% */
+    /* ------------- */
+    /* Main diagonal */
+    /* ------------- */
 
     idiag = kl + ku + 1;
     i__1 = n;
@@ -271,9 +247,9 @@ static a_int c_n6 = -6;
         /* L30: */
     }
 
-    /*     %-------------------------------------% */
-    /*     | First subdiagonal and superdiagonal | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* First subdiagonal and superdiagonal */
+    /* ----------------------------------- */
 
     isup = kl + ku;
     isub = kl + kl + 2;
@@ -301,10 +277,10 @@ static a_int c_n6 = -6;
         /* L60: */
     }
 
-    /*     %------------------------------------% */
-    /*     | KL-th subdiagonal and KU-th super- | */
-    /*     | diagonal.                          | */
-    /*     %------------------------------------% */
+    /* ---------------------------------- */
+    /* KL-th subdiagonal and KU-th super- */
+    /* diagonal.                          */
+    /* ---------------------------------- */
 
     isup = kl + 1;
     isub = (kl << 1) + ku + 1;
@@ -322,14 +298,14 @@ static a_int c_n6 = -6;
         /* L80: */
     }
 
-    /*     %------------------------------------------------% */
-    /*     | Call ARPACK banded solver to find eigenvalues  | */
-    /*     | and eigenvectors. The real parts of the        | */
-    /*     | eigenvalues are returned in the first column   | */
-    /*     | of D, the imaginary parts are returned in the  | */
-    /*     | second column of D.  Eigenvectors are returned | */
-    /*     | in the first NCONV (=IPARAM(5)) columns of V.  | */
-    /*     %------------------------------------------------% */
+    /* ---------------------------------------------- */
+    /* Call ARPACK banded solver to find eigenvalues  */
+    /* and eigenvectors. The real parts of the        */
+    /* eigenvalues are returned in the first column   */
+    /* of D, the imaginary parts are returned in the  */
+    /* second column of D.  Eigenvectors are returned */
+    /* in the first NCONV (=IPARAM(5)) columns of V.  */
+    /* ---------------------------------------------- */
 
     rvec = TRUE_;
     dnband_(&rvec, "A", select, d, &d[50], v, &c__1000, &sigmar, &sigmai, workev, &n, a, m, &c__50, rfac, cfac, &ku, &kl, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, workc, iwork, &info);
@@ -337,9 +313,9 @@ static a_int c_n6 = -6;
     if (info == 0)
     {
 
-        /*        %-----------------------------------% */
-        /*        | Print out convergence information | */
-        /*        %-----------------------------------% */
+        /* --------------------------------- */
+        /* Print out convergence information */
+        /* --------------------------------- */
 
         nconv = iparam[4];
 
@@ -393,10 +369,10 @@ static a_int c_n6 = -6;
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
         e_wsle();
 
-        /*        %----------------------------% */
-        /*        | Compute the residual norm. | */
-        /*        |    ||  A*x - lambda*x ||   | */
-        /*        %----------------------------% */
+        /* -------------------------- */
+        /* Compute the residual norm. */
+        /*    ||  A*x - lambda*x ||   */
+        /* -------------------------- */
 
         first = TRUE_;
         i__1 = nconv;
@@ -406,9 +382,9 @@ static a_int c_n6 = -6;
             if (d[j + 49] == 0.)
             {
 
-                /*              %--------------------% */
-                /*              | Ritz value is real | */
-                /*              %--------------------% */
+                /* ------------------ */
+                /* Ritz value is real */
+                /* ------------------ */
 
                 dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
                 d__1 = -d[j - 1];
@@ -419,12 +395,12 @@ static a_int c_n6 = -6;
             else if (first)
             {
 
-                /*              %------------------------% */
-                /*              | Ritz value is complex  | */
-                /*              | Residual of one Ritz   | */
-                /*              | value of the conjugate | */
-                /*              | pair is computed.      | */
-                /*              %------------------------% */
+                /* ---------------------- */
+                /* Ritz value is complex  */
+                /* Residual of one Ritz   */
+                /* value of the conjugate */
+                /* pair is computed.      */
+                /* ---------------------- */
 
                 dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
                 d__1 = -d[j - 1];
@@ -454,11 +430,11 @@ static a_int c_n6 = -6;
     else
     {
 
-        /*        %-------------------------------------% */
-        /*        | Either convergence failed, or there | */
-        /*        | is error.  Check the documentation  | */
-        /*        | for DNBAND .                         | */
-        /*        %-------------------------------------% */
+        /* ----------------------------------- */
+        /* Either convergence failed, or there */
+        /* is error.  Check the documentation  */
+        /* for DNBAND .                         */
+        /* ----------------------------------- */
 
         s_wsle(&io___59);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);

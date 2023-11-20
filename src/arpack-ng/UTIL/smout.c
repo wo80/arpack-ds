@@ -27,8 +27,6 @@ void smout_(const int m, const int n, const float *a, const int lda, const int i
 
     int a_dim = lda;
 
-    /* Function Body */
-
     len = strlen(ifmt);
     len = min(len,80);
     for (i = 0; i < len; ++i)

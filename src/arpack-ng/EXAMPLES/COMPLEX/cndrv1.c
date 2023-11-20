@@ -132,48 +132,32 @@ static a_fcomplex c_b151 = {4.f, 0.f};
     /* \EndLib */
     /* --------------------------------------------------------------------------- */
 
-    /*     %-----------------------------% */
-    /*     | Define maximum dimensions   | */
-    /*     | for all arrays.             | */
-    /*     | MAXN:   Maximum dimension   | */
-    /*     |         of the A allowed.   | */
-    /*     | MAXNEV: Maximum NEV allowed | */
-    /*     | MAXNCV: Maximum NCV allowed | */
-    /*     %-----------------------------% */
+    /* --------------------------- */
+    /* Define maximum dimensions   */
+    /* for all arrays.             */
+    /* MAXN:   Maximum dimension   */
+    /*         of the A allowed.   */
+    /* MAXNEV: Maximum NEV allowed */
+    /* MAXNCV: Maximum NCV allowed */
+    /* --------------------------- */
 
-    /*     %--------------% */
-    /*     | Local Arrays | */
-    /*     %--------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %-----------------------------% */
-    /*     | BLAS & LAPACK routines used | */
-    /*     %-----------------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
-    /*     %--------------------------------------------------% */
-    /*     | The number NX is the number of interior points   | */
-    /*     | in the discretization of the 2-dimensional       | */
-    /*     | convection-diffusion operator on the unit        | */
-    /*     | square with zero Dirichlet boundary condition.   | */
-    /*     | The number N(=NX*NX) is the dimension of the     | */
-    /*     | matrix.  A standard eigenvalue problem is        | */
-    /*     | solved (BMAT = 'I').  NEV is the number of       | */
-    /*     | eigenvalues to be approximated.  The user can    | */
-    /*     | modify NX, NEV, NCV, WHICH to solve problems of  | */
-    /*     | different sizes, and to get different parts of   | */
-    /*     | the spectrum.  However, The following            | */
-    /*     | conditions must be satisfied:                    | */
-    /*     |                   N <= MAXN                      | */
-    /*     |                 NEV <= MAXNEV                    | */
-    /*     |           NEV + 2 <= NCV <= MAXNCV               | */
-    /*     %--------------------------------------------------% */
+    /* ------------------------------------------------ */
+    /* The number NX is the number of interior points   */
+    /* in the discretization of the 2-dimensional       */
+    /* convection-diffusion operator on the unit        */
+    /* square with zero Dirichlet boundary condition.   */
+    /* The number N(=NX*NX) is the dimension of the     */
+    /* matrix.  A standard eigenvalue problem is        */
+    /* solved (BMAT = 'I').  NEV is the number of       */
+    /* eigenvalues to be approximated.  The user can    */
+    /* modify NX, NEV, NCV, WHICH to solve problems of  */
+    /* different sizes, and to get different parts of   */
+    /* the spectrum.  However, The following            */
+    /* conditions must be satisfied:                    */
+    /*                   N <= MAXN                      */
+    /*                 NEV <= MAXNEV                    */
+    /*           NEV + 2 <= NCV <= MAXNCV               */
+    /* ------------------------------------------------ */
 
     nx = 10;
     n = nx * nx;
@@ -203,16 +187,16 @@ static a_fcomplex c_b151 = {4.f, 0.f};
     *bmat = 'I';
     strcpy(which, "LM");
 
-    /*     %---------------------------------------------------% */
-    /*     | The work array WORKL is used in CNAUPD as         | */
-    /*     | workspace.  Its dimension LWORKL is set as        | */
-    /*     | illustrated below.  The parameter TOL determines  | */
-    /*     | the stopping criterion. If TOL<=0, machine        | */
-    /*     | precision is used.  The variable IDO is used for  | */
-    /*     | reverse communication, and is initially set to 0. | */
-    /*     | Setting INFO=0 indicates that a random vector is  | */
-    /*     | generated to start the ARNOLDI iteration.         | */
-    /*     %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* The work array WORKL is used in CNAUPD as         */
+    /* workspace.  Its dimension LWORKL is set as        */
+    /* illustrated below.  The parameter TOL determines  */
+    /* the stopping criterion. If TOL<=0, machine        */
+    /* precision is used.  The variable IDO is used for  */
+    /* reverse communication, and is initially set to 0. */
+    /* Setting INFO=0 indicates that a random vector is  */
+    /* generated to start the ARNOLDI iteration.         */
+    /* ------------------------------------------------- */
 
     /* Computing 2nd power */
     i__1 = ncv;
@@ -221,15 +205,15 @@ static a_fcomplex c_b151 = {4.f, 0.f};
     ido = 0;
     info = 0;
 
-    /*     %---------------------------------------------------% */
-    /*     | This program uses exact shift with respect to     | */
-    /*     | the current Hessenberg matrix (IPARAM(1) = 1).    | */
-    /*     | IPARAM(3) specifies the maximum number of Arnoldi | */
-    /*     | iterations allowed.  Mode 1 of CNAUPD is used     | */
-    /*     | (IPARAM(7) = 1). All these options can be changed | */
-    /*     | by the user. For details see the documentation in | */
-    /*     | CNAUPD.                                           | */
-    /*     %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* This program uses exact shift with respect to     */
+    /* the current Hessenberg matrix (IPARAM(1) = 1).    */
+    /* IPARAM(3) specifies the maximum number of Arnoldi */
+    /* iterations allowed.  Mode 1 of CNAUPD is used     */
+    /* (IPARAM(7) = 1). All these options can be changed */
+    /* by the user. For details see the documentation in */
+    /* CNAUPD.                                           */
+    /* ------------------------------------------------- */
 
     ishfts = 1;
     maxitr = 300;
@@ -239,55 +223,55 @@ static a_fcomplex c_b151 = {4.f, 0.f};
     iparam[2] = maxitr;
     iparam[6] = mode;
 
-    /*     %-------------------------------------------% */
-    /*     | M A I N   L O O P (Reverse communication) | */
-    /*     %-------------------------------------------% */
+    /* ----------------------------------------- */
+    /* M A I N   L O O P (Reverse communication) */
+    /* ----------------------------------------- */
 
 L10:
 
-    /*        %---------------------------------------------% */
-    /*        | Repeatedly call the routine CNAUPD and take | */
-    /*        | actions indicated by parameter IDO until    | */
-    /*        | either convergence is indicated or maxitr   | */
-    /*        | has been exceeded.                          | */
-    /*        %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Repeatedly call the routine CNAUPD and take */
+    /* actions indicated by parameter IDO until    */
+    /* either convergence is indicated or maxitr   */
+    /* has been exceeded.                          */
+    /* ------------------------------------------- */
 
     cnaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &info);
 
     if (ido == -1 || ido == 1)
     {
 
-        /*           %-------------------------------------------% */
-        /*           | Perform matrix vector multiplication      | */
-        /*           |                y <--- OP*x                | */
-        /*           | The user should supply his/her own        | */
-        /*           | matrix vector multiplication routine here | */
-        /*           | that takes workd(ipntr(1)) as the input   | */
-        /*           | vector, and return the matrix vector      | */
-        /*           | product to workd(ipntr(2)).               | */
-        /*           %-------------------------------------------% */
+        /* ----------------------------------------- */
+        /* Perform matrix vector multiplication      */
+        /*                y <--- OP*x                */
+        /* The user should supply his/her own        */
+        /* matrix vector multiplication routine here */
+        /* that takes workd(ipntr(1)) as the input   */
+        /* vector, and return the matrix vector      */
+        /* product to workd(ipntr(2)).               */
+        /* ----------------------------------------- */
 
         av_(&nx, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
 
-        /*           %-----------------------------------------% */
-        /*           | L O O P   B A C K to call CNAUPD again. | */
-        /*           %-----------------------------------------% */
+        /* --------------------------------------- */
+        /* L O O P   B A C K to call CNAUPD again. */
+        /* --------------------------------------- */
 
         goto L10;
     }
 
-    /*     %----------------------------------------% */
-    /*     | Either we have convergence or there is | */
-    /*     | an error.                              | */
-    /*     %----------------------------------------% */
+    /* -------------------------------------- */
+    /* Either we have convergence or there is */
+    /* an error.                              */
+    /* -------------------------------------- */
 
     if (info < 0)
     {
 
-        /*        %--------------------------% */
-        /*        | Error message, check the | */
-        /*        | documentation in CNAUPD  | */
-        /*        %--------------------------% */
+        /* ------------------------ */
+        /* Error message, check the */
+        /* documentation in CNAUPD  */
+        /* ------------------------ */
 
         s_wsle(&io___24);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -306,38 +290,38 @@ L10:
     else
     {
 
-        /*        %-------------------------------------------% */
-        /*        | No fatal errors occurred.                 | */
-        /*        | Post-Process using CNEUPD.                | */
-        /*        |                                           | */
-        /*        | Computed eigenvalues may be extracted.    | */
-        /*        |                                           | */
-        /*        | Eigenvectors may also be computed now if  | */
-        /*        | desired.  (indicated by rvec = .true.)    | */
-        /*        %-------------------------------------------% */
+        /* ----------------------------------------- */
+        /* No fatal errors occurred.                 */
+        /* Post-Process using CNEUPD.                */
+        /*                                           */
+        /* Computed eigenvalues may be extracted.    */
+        /*                                           */
+        /* Eigenvectors may also be computed now if  */
+        /* desired.  (indicated by rvec = .true.)    */
+        /* ----------------------------------------- */
 
         rvec = TRUE_;
 
         cneupd_(&rvec, "A", select, d, v, &c__256, &sigma, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, rwork, &ierr);
 
-        /*        %----------------------------------------------% */
-        /*        | Eigenvalues are returned in the one          | */
-        /*        | dimensional array D.  The corresponding      | */
-        /*        | eigenvectors are returned in the first NCONV | */
-        /*        | (=IPARAM(5)) columns of the two dimensional  | */
-        /*        | array V if requested.  Otherwise, an         | */
-        /*        | orthogonal basis for the invariant subspace  | */
-        /*        | corresponding to the eigenvalues in D is     | */
-        /*        | returned in V.                               | */
-        /*        %----------------------------------------------% */
+        /* -------------------------------------------- */
+        /* Eigenvalues are returned in the one          */
+        /* dimensional array D.  The corresponding      */
+        /* eigenvectors are returned in the first NCONV */
+        /* (=IPARAM(5)) columns of the two dimensional  */
+        /* array V if requested.  Otherwise, an         */
+        /* orthogonal basis for the invariant subspace  */
+        /* corresponding to the eigenvalues in D is     */
+        /* returned in V.                               */
+        /* -------------------------------------------- */
 
         if (ierr != 0)
         {
 
-            /*           %------------------------------------% */
-            /*           | Error condition:                   | */
-            /*           | Check the documentation of CNEUPD. | */
-            /*           %------------------------------------% */
+            /* ---------------------------------- */
+            /* Error condition:                   */
+            /* Check the documentation of CNEUPD. */
+            /* ---------------------------------- */
 
             s_wsle(&io___34);
             do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -361,18 +345,18 @@ L10:
             for (j = 1; j <= i__1; ++j)
             {
 
-                /*               %---------------------------% */
-                /*               | Compute the residual norm | */
-                /*               |                           | */
-                /*               |   ||  A*x - lambda*x ||   | */
-                /*               |                           | */
-                /*               | for the NCONV accurately  | */
-                /*               | computed eigenvalues and  | */
-                /*               | eigenvectors.  (iparam(5) | */
-                /*               | indicates how many are    | */
-                /*               | accurate to the requested | */
-                /*               | tolerance)                | */
-                /*               %---------------------------% */
+                /* ------------------------- */
+                /* Compute the residual norm */
+                /*                           */
+                /*   ||  A*x - lambda*x ||   */
+                /*                           */
+                /* for the NCONV accurately  */
+                /* computed eigenvalues and  */
+                /* eigenvectors.  (iparam(5) */
+                /* indicates how many are    */
+                /* accurate to the requested */
+                /* tolerance)                */
+                /* ------------------------- */
 
                 av_(&nx, &v[(j << 8) - 256], ax);
                 i__2 = j - 1;
@@ -386,16 +370,16 @@ L10:
                 /* L20: */
             }
 
-            /*            %-----------------------------% */
-            /*            | Display computed residuals. | */
-            /*            %-----------------------------% */
+            /* --------------------------- */
+            /* Display computed residuals. */
+            /* --------------------------- */
 
             smout_(&c__6, &nconv, &c__3, rd, &c__30, &c_n6,"Ritz values (Real, Imag) and relative residuals");
         }
 
-        /*        %-------------------------------------------% */
-        /*        | Print additional convergence information. | */
-        /*        %-------------------------------------------% */
+        /* ----------------------------------------- */
+        /* Print additional convergence information. */
+        /* ----------------------------------------- */
 
         if (info == 1)
         {
@@ -474,9 +458,9 @@ L10:
         e_wsle();
     }
 
-    /*     %---------------------------% */
-    /*     | Done with program cndrv1. | */
-    /*     %---------------------------% */
+    /* ------------------------- */
+    /* Done with program cndrv1. */
+    /* ------------------------- */
 
 L9000:
 
@@ -495,8 +479,6 @@ int av_(a_int *nx, a_fcomplex *v, a_fcomplex *w)
     /* System generated locals */
     a_int i__1;
     a_fcomplex q__1, q__2;
-
-    /* Builtin functions */
 
     /* Local variables */
     a_int j;
@@ -522,7 +504,6 @@ int av_(a_int *nx, a_fcomplex *v, a_fcomplex *w)
     --w;
     --v;
 
-    /* Function Body */
     i__1 = (*nx + 1) * (*nx + 1);
     q__2.r = (float)i__1, q__2.i = 0.f;
     ar_c_div(&q__1, &c_b137, &q__2);
@@ -579,7 +560,6 @@ int tv_(a_int *nx, a_fcomplex *x, a_fcomplex *y)
     --y;
     --x;
 
-    /* Function Body */
     i__1 = *nx + 1;
     q__2.r = (float)i__1, q__2.i = 0.f;
     ar_c_div(&q__1, &c_b137, &q__2);

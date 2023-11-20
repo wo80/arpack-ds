@@ -9,173 +9,171 @@ static a_int i_zero = 0;
 static a_int i_three = 3;
 static a_bool b_true = TRUE_;
 static a_int i_two = 2;
-
-/* \BeginDoc */
-
-/* \Name: znaup2 */
-
-/* \Description: */
-/*  Intermediate level interface called by znaupd . */
-
-/* \Usage: */
-/*  call znaup2 */
-/*     ( IDO, BMAT, N, WHICH, NEV, NP, TOL, RESID, MODE, IUPD, */
-/*       ISHIFT, MXITER, V, LDV, H, LDH, RITZ, BOUNDS, */
-/*       Q, LDQ, WORKL, IPNTR, WORKD, RWORK, INFO ) */
-
-/* \Arguments */
-
-/*  IDO, BMAT, N, WHICH, NEV, TOL, RESID: same as defined in znaupd . */
-/*  MODE, ISHIFT, MXITER: see the definition of IPARAM in znaupd . */
-
-/*  NP      Integer.  (INPUT/OUTPUT) */
-/*          Contains the number of implicit shifts to apply during */
-/*          each Arnoldi iteration. */
-/*          If ISHIFT=1, NP is adjusted dynamically at each iteration */
-/*          to accelerate convergence and prevent stagnation. */
-/*          This is also roughly equal to the number of matrix-vector */
-/*          products (involving the operator OP) per Arnoldi iteration. */
-/*          The logic for adjusting is contained within the current */
-/*          subroutine. */
-/*          If ISHIFT=0, NP is the number of shifts the user needs */
-/*          to provide via reverse communication. 0 < NP < NCV-NEV. */
-/*          NP may be less than NCV-NEV since a leading block of the current */
-/*          upper Hessenberg matrix has split off and contains "unwanted" */
-/*          Ritz values. */
-/*          Upon termination of the IRA iteration, NP contains the number */
-/*          of "converged" wanted Ritz values. */
-
-/*  IUPD    Integer.  (INPUT) */
-/*          IUPD .EQ. 0: use explicit restart instead implicit update. */
-/*          IUPD .NE. 0: use implicit update. */
-
-/*  V       Complex*16  N by (NEV+NP) array.  (INPUT/OUTPUT) */
-/*          The Arnoldi basis vectors are returned in the first NEV */
-/*          columns of V. */
-
-/*  LDV     Integer.  (INPUT) */
-/*          Leading dimension of V exactly as declared in the calling */
-/*          program. */
-
-/*  H       Complex*16  (NEV+NP) by (NEV+NP) array.  (OUTPUT) */
-/*          H is used to store the generated upper Hessenberg matrix */
-
-/*  LDH     Integer.  (INPUT) */
-/*          Leading dimension of H exactly as declared in the calling */
-/*          program. */
-
-/*  RITZ    Complex*16  array of length NEV+NP.  (OUTPUT) */
-/*          RITZ(1:NEV)  contains the computed Ritz values of OP. */
-
-/*  BOUNDS  Complex*16  array of length NEV+NP.  (OUTPUT) */
-/*          BOUNDS(1:NEV) contain the error bounds corresponding to */
-/*          the computed Ritz values. */
-
-/*  Q       Complex*16  (NEV+NP) by (NEV+NP) array.  (WORKSPACE) */
-/*          Private (replicated) work array used to accumulate the */
-/*          rotation in the shift application step. */
-
-/*  LDQ     Integer.  (INPUT) */
-/*          Leading dimension of Q exactly as declared in the calling */
-/*          program. */
-
-/*  WORKL   Complex*16  work array of length at least */
-/*          (NEV+NP)**2 + 3*(NEV+NP).  (WORKSPACE) */
-/*          Private (replicated) array on each PE or array allocated on */
-/*          the front end.  It is used in shifts calculation, shifts */
-/*          application and convergence checking. */
-
-/*  IPNTR   Integer array of length 3.  (OUTPUT) */
-/*          Pointer to mark the starting locations in the WORKD for */
-/*          vectors used by the Arnoldi iteration. */
-/*          ------------------------------------------------------------- */
-/*          IPNTR(1): pointer to the current operand vector X. */
-/*          IPNTR(2): pointer to the current result vector Y. */
-/*          IPNTR(3): pointer to the vector B * X when used in the */
-/*                    shift-and-invert mode.  X is the current operand. */
-/*          ------------------------------------------------------------- */
-
-/*  WORKD   Complex*16  work array of length 3*N.  (WORKSPACE) */
-/*          Distributed array to be used in the basic Arnoldi iteration */
-/*          for reverse communication.  The user should not use WORKD */
-/*          as temporary workspace during the iteration !!!!!!!!!! */
-/*          See Data Distribution Note in ZNAUPD . */
-
-/*  RWORK   Double precision    work array of length  NEV+NP ( WORKSPACE) */
-/*          Private (replicated) array on each PE or array allocated on */
-/*          the front end. */
-
-/*  INFO    Integer.  (INPUT/OUTPUT) */
-/*          If INFO .EQ. 0, a randomly initial residual vector is used. */
-/*          If INFO .NE. 0, RESID contains the initial residual vector, */
-/*                          possibly from a previous run. */
-/*          Error flag on output. */
-/*          =     0: Normal return. */
-/*          =     1: Maximum number of iterations taken. */
-/*                   All possible eigenvalues of OP has been found. */
-/*                   NP returns the number of converged Ritz values. */
-/*          =     2: No shifts could be applied. */
-/*          =    -8: Error return from LAPACK eigenvalue calculation; */
-/*                   This should never happen. */
-/*          =    -9: Starting vector is zero. */
-/*          = -9999: Could not build an Arnoldi factorization. */
-/*                   Size that was built in returned in NP. */
-
-/* \EndDoc */
-
-/* ----------------------------------------------------------------------- */
-
-/* \BeginLib */
-
-/* \Local variables: */
-/*     xxxxxx  Complex*16 */
-
-/* \References: */
-/*  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in */
-/*     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992), */
-/*     pp 357-385. */
-/*  2. R.B. Lehoucq, "Analysis and Implementation of an Implicitly */
-/*     Restarted Arnoldi Iteration", Rice University Technical Report */
-/*     TR95-13, Department of Computational and Applied Mathematics. */
-
-/* \Routines called: */
-/*     zgetv0   ARPACK initial vector generation routine. */
-/*     znaitr   ARPACK Arnoldi factorization routine. */
-/*     znapps   ARPACK application of implicit shifts routine. */
-/*     zneigh   ARPACK compute Ritz values and error bounds routine. */
-/*     zngets   ARPACK reorder Ritz values and error bounds routine. */
-/*     zsortc   ARPACK sorting routine. */
-/*     ivout   ARPACK utility routine that prints integers. */
-/*     arscnd  ARPACK utility routine for timing. */
-/*     zmout    ARPACK utility routine that prints matrices */
-/*     zvout    ARPACK utility routine that prints vectors. */
-/*     dvout    ARPACK utility routine that prints vectors. */
-/*     dlamch   LAPACK routine that determines machine constants. */
-/*     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-/*     zcopy    Level 1 BLAS that copies one vector to another . */
-/*     zdotc    Level 1 BLAS that computes the scalar product of two vectors. */
-/*     zswap    Level 1 BLAS that swaps two vectors. */
-/*     dznrm2   Level 1 BLAS that computes the norm of a vector. */
-
-/* \Author */
-/*     Danny Sorensen               Phuong Vu */
-/*     Richard Lehoucq              CRPC / Rice Universitya */
-/*     Chao Yang                    Houston, Texas */
-/*     Dept. of Computational & */
-/*     Applied Mathematics */
-/*     Rice University */
-/*     Houston, Texas */
-
-/* \SCCS Information: @(#) */
-/* FILE: naup2.F   SID: 2.6   DATE OF SID: 06/01/00   RELEASE: 2 */
-
-/* \Remarks */
-/*     1. None */
-
-/* \EndLib */
-
-/* ----------------------------------------------------------------------- */
-
+/**
+ * \BeginDoc
+ *
+ * \Name: znaup2
+ *
+ * \Description:
+ *  Intermediate level interface called by znaupd .
+ *
+ * \Usage:
+ *  call znaup2
+ *     ( IDO, BMAT, N, WHICH, NEV, NP, TOL, RESID, MODE, IUPD,
+ *       ISHIFT, MXITER, V, LDV, H, LDH, RITZ, BOUNDS,
+ *       Q, LDQ, WORKL, IPNTR, WORKD, RWORK, INFO )
+ *
+ * \Arguments
+ *
+ *  IDO, BMAT, N, WHICH, NEV, TOL, RESID: same as defined in znaupd .
+ *  MODE, ISHIFT, MXITER: see the definition of IPARAM in znaupd .
+ *
+ *  NP      Integer.  (INPUT/OUTPUT)
+ *          Contains the number of implicit shifts to apply during
+ *          each Arnoldi iteration.
+ *          If ISHIFT=1, NP is adjusted dynamically at each iteration
+ *          to accelerate convergence and prevent stagnation.
+ *          This is also roughly equal to the number of matrix-vector
+ *          products (involving the operator OP) per Arnoldi iteration.
+ *          The logic for adjusting is contained within the current
+ *          subroutine.
+ *          If ISHIFT=0, NP is the number of shifts the user needs
+ *          to provide via reverse communication. 0 < NP < NCV-NEV.
+ *          NP may be less than NCV-NEV since a leading block of the current
+ *          upper Hessenberg matrix has split off and contains "unwanted"
+ *          Ritz values.
+ *          Upon termination of the IRA iteration, NP contains the number
+ *          of "converged" wanted Ritz values.
+ *
+ *  IUPD    Integer.  (INPUT)
+ *          IUPD .EQ. 0: use explicit restart instead implicit update.
+ *          IUPD .NE. 0: use implicit update.
+ *
+ *  V       Complex*16  N by (NEV+NP) array.  (INPUT/OUTPUT)
+ *          The Arnoldi basis vectors are returned in the first NEV
+ *          columns of V.
+ *
+ *  LDV     Integer.  (INPUT)
+ *          Leading dimension of V exactly as declared in the calling
+ *          program.
+ *
+ *  H       Complex*16  (NEV+NP) by (NEV+NP) array.  (OUTPUT)
+ *          H is used to store the generated upper Hessenberg matrix
+ *
+ *  LDH     Integer.  (INPUT)
+ *          Leading dimension of H exactly as declared in the calling
+ *          program.
+ *
+ *  RITZ    Complex*16  array of length NEV+NP.  (OUTPUT)
+ *          RITZ(1:NEV)  contains the computed Ritz values of OP.
+ *
+ *  BOUNDS  Complex*16  array of length NEV+NP.  (OUTPUT)
+ *          BOUNDS(1:NEV) contain the error bounds corresponding to
+ *          the computed Ritz values.
+ *
+ *  Q       Complex*16  (NEV+NP) by (NEV+NP) array.  (WORKSPACE)
+ *          Private (replicated) work array used to accumulate the
+ *          rotation in the shift application step.
+ *
+ *  LDQ     Integer.  (INPUT)
+ *          Leading dimension of Q exactly as declared in the calling
+ *          program.
+ *
+ *  WORKL   Complex*16  work array of length at least
+ *          (NEV+NP)**2 + 3*(NEV+NP).  (WORKSPACE)
+ *          Private (replicated) array on each PE or array allocated on
+ *          the front end.  It is used in shifts calculation, shifts
+ *          application and convergence checking.
+ *
+ *  IPNTR   Integer array of length 3.  (OUTPUT)
+ *          Pointer to mark the starting locations in the WORKD for
+ *          vectors used by the Arnoldi iteration.
+ *          -------------------------------------------------------------
+ *          IPNTR(1): pointer to the current operand vector X.
+ *          IPNTR(2): pointer to the current result vector Y.
+ *          IPNTR(3): pointer to the vector B * X when used in the
+ *                    shift-and-invert mode.  X is the current operand.
+ *          -------------------------------------------------------------
+ *
+ *  WORKD   Complex*16  work array of length 3*N.  (WORKSPACE)
+ *          Distributed array to be used in the basic Arnoldi iteration
+ *          for reverse communication.  The user should not use WORKD
+ *          as temporary workspace during the iteration !!!!!!!!!!
+ *          See Data Distribution Note in ZNAUPD .
+ *
+ *  RWORK   Double precision    work array of length  NEV+NP ( WORKSPACE)
+ *          Private (replicated) array on each PE or array allocated on
+ *          the front end.
+ *
+ *  INFO    Integer.  (INPUT/OUTPUT)
+ *          If INFO .EQ. 0, a randomly initial residual vector is used.
+ *          If INFO .NE. 0, RESID contains the initial residual vector,
+ *                          possibly from a previous run.
+ *          Error flag on output.
+ *          =     0: Normal return.
+ *          =     1: Maximum number of iterations taken.
+ *                   All possible eigenvalues of OP has been found.
+ *                   NP returns the number of converged Ritz values.
+ *          =     2: No shifts could be applied.
+ *          =    -8: Error return from LAPACK eigenvalue calculation;
+ *                   This should never happen.
+ *          =    -9: Starting vector is zero.
+ *          = -9999: Could not build an Arnoldi factorization.
+ *                   Size that was built in returned in NP.
+ *
+ * \EndDoc
+ *
+ * -----------------------------------------------------------------------
+ *
+ * \BeginLib
+ *
+ * \Local variables:
+ *     xxxxxx  Complex*16
+ *
+ * \References:
+ *  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in
+ *     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992),
+ *     pp 357-385.
+ *  2. R.B. Lehoucq, "Analysis and Implementation of an Implicitly
+ *     Restarted Arnoldi Iteration", Rice University Technical Report
+ *     TR95-13, Department of Computational and Applied Mathematics.
+ *
+ * \Routines called:
+ *     zgetv0   ARPACK initial vector generation routine.
+ *     znaitr   ARPACK Arnoldi factorization routine.
+ *     znapps   ARPACK application of implicit shifts routine.
+ *     zneigh   ARPACK compute Ritz values and error bounds routine.
+ *     zngets   ARPACK reorder Ritz values and error bounds routine.
+ *     zsortc   ARPACK sorting routine.
+ *     ivout   ARPACK utility routine that prints integers.
+ *     arscnd  ARPACK utility routine for timing.
+ *     zmout    ARPACK utility routine that prints matrices
+ *     zvout    ARPACK utility routine that prints vectors.
+ *     dvout    ARPACK utility routine that prints vectors.
+ *     dlamch   LAPACK routine that determines machine constants.
+ *     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     zcopy    Level 1 BLAS that copies one vector to another .
+ *     zdotc    Level 1 BLAS that computes the scalar product of two vectors.
+ *     zswap    Level 1 BLAS that swaps two vectors.
+ *     dznrm2   Level 1 BLAS that computes the norm of a vector.
+ *
+ * \Author
+ *     Danny Sorensen               Phuong Vu
+ *     Richard Lehoucq              CRPC / Rice Universitya
+ *     Chao Yang                    Houston, Texas
+ *     Dept. of Computational &
+ *     Applied Mathematics
+ *     Rice University
+ *     Houston, Texas
+ *
+ * \SCCS Information: @(#)
+ * FILE: naup2.F   SID: 2.6   DATE OF SID: 06/01/00   RELEASE: 2
+ *
+ * \Remarks
+ *     1. None
+ *
+ * \EndLib
+ */
 int znaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *nev, a_int *np,
      double *tol, a_dcomplex *resid, a_int *mode, a_int *iupd, a_int *ishift, a_int *mxiter,
      a_dcomplex *v, a_int *ldv, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz, a_dcomplex *bounds,
@@ -186,8 +184,6 @@ int znaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
     a_int h_dim1, h_offset, q_dim1, q_offset, v_dim1, v_offset, i__1, i__2, i__3;
     double d__1, d__2, d__3, d__4;
     a_dcomplex z__1;
-
-    /* Builtin functions */
 
     /* Local variables */
     a_int i, j;
@@ -209,60 +205,6 @@ int znaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
     char wprime[2];
     a_dcomplex cmpnorm;
 
-    /*     %----------------------------------------------------% */
-    /*     | Include files for debugging and timing information | */
-    /*     %----------------------------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %---------------------------------% */
-    /*     | See debug.doc for documentation | */
-    /*     %---------------------------------% */
-
-    /*     %------------------% */
-    /*     | Scalar Arguments | */
-    /*     %------------------% */
-
-    /*     %--------------------------------% */
-    /*     | See stat.doc for documentation | */
-    /*     %--------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %-----------------% */
-    /*     | Array Arguments | */
-    /*     %-----------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %-----------------------% */
-    /*     | Local array arguments | */
-    /*     %-----------------------% */
-
-    /*     %----------------------% */
-    /*     | External Subroutines | */
-    /*     %----------------------% */
-
-    /*     %--------------------% */
-    /*     | External functions | */
-    /*     %--------------------% */
-
-    /*     %---------------------% */
-    /*     | Intrinsic Functions | */
-    /*     %---------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
     /* Parameter adjustments */
     --workd;
     --resid;
@@ -281,7 +223,6 @@ int znaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
     q -= q_offset;
     --ipntr;
 
-    /* Function Body */
     if (*ido == 0)
     {
 
@@ -292,30 +233,30 @@ int znaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         nev0 = *nev;
         np0 = *np;
 
-        /*        %-------------------------------------% */
-        /*        | kplusp is the bound on the largest  | */
-        /*        |        Lanczos factorization built. | */
-        /*        | nconv is the current number of      | */
-        /*        |        "converged" eigenvalues.     | */
-        /*        | iter is the counter on the current  | */
-        /*        |      iteration step.                | */
-        /*        %-------------------------------------% */
+        /* ----------------------------------- */
+        /* kplusp is the bound on the largest  */
+        /*        Lanczos factorization built. */
+        /* nconv is the current number of      */
+        /*        "converged" eigenvalues.     */
+        /* iter is the counter on the current  */
+        /*      iteration step.                */
+        /* ----------------------------------- */
 
         kplusp = *nev + *np;
         nconv = 0;
         iter = 0;
 
-        /*        %---------------------------------% */
-        /*        | Get machine dependent constant. | */
-        /*        %---------------------------------% */
+        /* ------------------------------- */
+        /* Get machine dependent constant. */
+        /* ------------------------------- */
 
         eps23 = dlamch_("Epsilon-Machine");
         eps23 = pow(eps23, TWO_THIRDS);
 
-        /*        %---------------------------------------% */
-        /*        | Set flags for computing the first NEV | */
-        /*        | steps of the Arnoldi factorization.   | */
-        /*        %---------------------------------------% */
+        /* ------------------------------------- */
+        /* Set flags for computing the first NEV */
+        /* steps of the Arnoldi factorization.   */
+        /* ------------------------------------- */
 
         getv0 = TRUE_;
         update = FALSE_;
@@ -325,9 +266,9 @@ int znaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         if (*info != 0)
         {
 
-            /*           %--------------------------------------------% */
-            /*           | User provides the initial residual vector. | */
-            /*           %--------------------------------------------% */
+            /* ------------------------------------------ */
+            /* User provides the initial residual vector. */
+            /* ------------------------------------------ */
 
             initv = TRUE_;
             *info = 0;
@@ -338,10 +279,10 @@ int znaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         }
     }
 
-    /*     %---------------------------------------------% */
-    /*     | Get a possibly random starting vector and   | */
-    /*     | force it into the range of the operator OP. | */
-    /*     %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Get a possibly random starting vector and   */
+    /* force it into the range of the operator OP. */
+    /* ------------------------------------------- */
 
     /* L10: */
 
@@ -357,9 +298,9 @@ int znaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         if (rnorm == 0.)
         {
 
-            /*           %-----------------------------------------% */
-            /*           | The initial vector is zero. Error exit. | */
-            /*           %-----------------------------------------% */
+            /* --------------------------------------- */
+            /* The initial vector is zero. Error exit. */
+            /* --------------------------------------- */
 
             *info = -9;
             goto L1100;
@@ -368,38 +309,38 @@ int znaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         *ido = 0;
     }
 
-    /*     %-----------------------------------% */
-    /*     | Back from reverse communication : | */
-    /*     | continue with update step         | */
-    /*     %-----------------------------------% */
+    /* --------------------------------- */
+    /* Back from reverse communication : */
+    /* continue with update step         */
+    /* --------------------------------- */
 
     if (update)
     {
         goto L20;
     }
 
-    /*     %-------------------------------------------% */
-    /*     | Back from computing user specified shifts | */
-    /*     %-------------------------------------------% */
+    /* ----------------------------------------- */
+    /* Back from computing user specified shifts */
+    /* ----------------------------------------- */
 
     if (ushift)
     {
         goto L50;
     }
 
-    /*     %-------------------------------------% */
-    /*     | Back from computing residual norm   | */
-    /*     | at the end of the current iteration | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* Back from computing residual norm   */
+    /* at the end of the current iteration */
+    /* ----------------------------------- */
 
     if (cnorm)
     {
         goto L100;
     }
 
-    /*     %----------------------------------------------------------% */
-    /*     | Compute the first NEV steps of the Arnoldi factorization | */
-    /*     %----------------------------------------------------------% */
+    /* -------------------------------------------------------- */
+    /* Compute the first NEV steps of the Arnoldi factorization */
+    /* -------------------------------------------------------- */
 
     znaitr_(ido, bmat, n, &i_zero, nev, mode, &resid[1], &rnorm, &v[v_offset], ldv, &h[h_offset], ldh, &ipntr[1], &workd[1], info);
 
@@ -416,13 +357,13 @@ int znaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         goto L1200;
     }
 
-    /*     %--------------------------------------------------------------% */
-    /*     |                                                              | */
-    /*     |           M A I N  ARNOLDI  I T E R A T I O N  L O O P       | */
-    /*     |           Each iteration implicitly restarts the Arnoldi     | */
-    /*     |           factorization in place.                            | */
-    /*     |                                                              | */
-    /*     %--------------------------------------------------------------% */
+    /* ------------------------------------------------------------ */
+    /*                                                              */
+    /*           M A I N  ARNOLDI  I T E R A T I O N  L O O P       */
+    /*           Each iteration implicitly restarts the Arnoldi     */
+    /*           factorization in place.                            */
+    /*                                                              */
+    /* ------------------------------------------------------------ */
 
 L1000:
 
@@ -433,11 +374,11 @@ L1000:
         ivout_(1, &iter, debug_1.ndigit, "_naup2: **** Start of major iteration number ****");
     }
 
-    /*        %-----------------------------------------------------------% */
-    /*        | Compute NP additional steps of the Arnoldi factorization. | */
-    /*        | Adjust NP since NEV might have been updated by last call  | */
-    /*        | to the shift application routine znapps .                  | */
-    /*        %-----------------------------------------------------------% */
+    /* --------------------------------------------------------- */
+    /* Compute NP additional steps of the Arnoldi factorization. */
+    /* Adjust NP since NEV might have been updated by last call  */
+    /* to the shift application routine znapps .                  */
+    /* --------------------------------------------------------- */
 
     *np = kplusp - *nev;
 
@@ -447,9 +388,9 @@ L1000:
         ivout_(1, np, debug_1.ndigit, "_naup2: Extend the Arnoldi factorization by");
     }
 
-    /*        %-----------------------------------------------------------% */
-    /*        | Compute NP additional steps of the Arnoldi factorization. | */
-    /*        %-----------------------------------------------------------% */
+    /* --------------------------------------------------------- */
+    /* Compute NP additional steps of the Arnoldi factorization. */
+    /* --------------------------------------------------------- */
 
     *ido = 0;
 L20:
@@ -476,10 +417,10 @@ L20:
         dvout_(1, &rnorm, debug_1.ndigit, "_naup2: Corresponding B-norm of the residual");
     }
 
-    /*        %--------------------------------------------------------% */
-    /*        | Compute the eigenvalues and corresponding error bounds | */
-    /*        | of the current upper Hessenberg matrix.                | */
-    /*        %--------------------------------------------------------% */
+    /* ------------------------------------------------------ */
+    /* Compute the eigenvalues and corresponding error bounds */
+    /* of the current upper Hessenberg matrix.                */
+    /* ------------------------------------------------------ */
 
     zneigh_(&rnorm, &kplusp, &h[h_offset], ldh, &ritz[1], &bounds[1], &q[q_offset], ldq, &workl[1], &rwork[1], &ierr);
 
@@ -489,21 +430,21 @@ L20:
         goto L1200;
     }
 
-    /*        %---------------------------------------------------% */
-    /*        | Select the wanted Ritz values and their bounds    | */
-    /*        | to be used in the convergence test.               | */
-    /*        | The wanted part of the spectrum and corresponding | */
-    /*        | error bounds are in the last NEV loc. of RITZ,    | */
-    /*        | and BOUNDS respectively.                          | */
-    /*        %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* Select the wanted Ritz values and their bounds    */
+    /* to be used in the convergence test.               */
+    /* The wanted part of the spectrum and corresponding */
+    /* error bounds are in the last NEV loc. of RITZ,    */
+    /* and BOUNDS respectively.                          */
+    /* ------------------------------------------------- */
 
     *nev = nev0;
     *np = np0;
 
-    /*        %--------------------------------------------------% */
-    /*        | Make a copy of Ritz values and the corresponding | */
-    /*        | Ritz estimates obtained from zneigh .             | */
-    /*        %--------------------------------------------------% */
+    /* ------------------------------------------------ */
+    /* Make a copy of Ritz values and the corresponding */
+    /* Ritz estimates obtained from zneigh .             */
+    /* ------------------------------------------------ */
 
     /* Computing 2nd power */
     i__1 = kplusp;
@@ -512,24 +453,24 @@ L20:
     i__1 = kplusp;
     zcopy_(&kplusp, &bounds[1], &i_one, &workl[i__1 * i__1 + kplusp + 1], &i_one);
 
-    /*        %---------------------------------------------------% */
-    /*        | Select the wanted Ritz values and their bounds    | */
-    /*        | to be used in the convergence test.               | */
-    /*        | The wanted part of the spectrum and corresponding | */
-    /*        | bounds are in the last NEV loc. of RITZ           | */
-    /*        | BOUNDS respectively.                              | */
-    /*        %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* Select the wanted Ritz values and their bounds    */
+    /* to be used in the convergence test.               */
+    /* The wanted part of the spectrum and corresponding */
+    /* bounds are in the last NEV loc. of RITZ           */
+    /* BOUNDS respectively.                              */
+    /* ------------------------------------------------- */
 
     zngets_(ishift, which, nev, np, &ritz[1], &bounds[1]);
 
-    /*        %------------------------------------------------------------% */
-    /*        | Convergence test: currently we use the following criteria. | */
-    /*        | The relative accuracy of a Ritz value is considered        | */
-    /*        | acceptable if:                                             | */
-    /*        |                                                            | */
-    /*        | error_bounds(i) .le. tol*max(eps23, magnitude_of_ritz(i)). | */
-    /*        |                                                            | */
-    /*        %------------------------------------------------------------% */
+    /* ---------------------------------------------------------- */
+    /* Convergence test: currently we use the following criteria. */
+    /* The relative accuracy of a Ritz value is considered        */
+    /* acceptable if:                                             */
+    /*                                                            */
+    /* error_bounds(i) .le. tol*max(eps23, magnitude_of_ritz(i)). */
+    /*                                                            */
+    /* ---------------------------------------------------------- */
 
     nconv = 0;
 
@@ -562,15 +503,15 @@ L20:
         zvout_(kplusp, &bounds[1], debug_1.ndigit, "_naup2: Ritz estimates of the current NCV Ritz values");
     }
 
-    /*        %---------------------------------------------------------% */
-    /*        | Count the number of unwanted Ritz values that have zero | */
-    /*        | Ritz estimates. If any Ritz estimates are equal to zero | */
-    /*        | then a leading block of H of order equal to at least    | */
-    /*        | the number of Ritz values with zero Ritz estimates has  | */
-    /*        | split off. None of these Ritz values may be removed by  | */
-    /*        | shifting. Decrease NP the number of shifts to apply. If | */
-    /*        | no shifts may be applied, then prepare to exit          | */
-    /*        %---------------------------------------------------------% */
+    /* ------------------------------------------------------- */
+    /* Count the number of unwanted Ritz values that have zero */
+    /* Ritz estimates. If any Ritz estimates are equal to zero */
+    /* then a leading block of H of order equal to at least    */
+    /* the number of Ritz values with zero Ritz estimates has  */
+    /* split off. None of these Ritz values may be removed by  */
+    /* shifting. Decrease NP the number of shifts to apply. If */
+    /* no shifts may be applied, then prepare to exit          */
+    /* ------------------------------------------------------- */
 
     nptemp = *np;
     i__1 = nptemp;
@@ -598,27 +539,27 @@ L20:
             zvout_(kplusp, &workl[i__1 * i__1 + kplusp + 1], debug_1.ndigit, "_naup2: Ritz estimates computed by _neigh:");
         }
 
-        /*           %------------------------------------------------% */
-        /*           | Prepare to exit. Put the converged Ritz values | */
-        /*           | and corresponding bounds in RITZ(1:NCONV) and  | */
-        /*           | BOUNDS(1:NCONV) respectively. Then sort. Be    | */
-        /*           | careful when NCONV > NP                        | */
-        /*           %------------------------------------------------% */
+        /* ---------------------------------------------- */
+        /* Prepare to exit. Put the converged Ritz values */
+        /* and corresponding bounds in RITZ(1:NCONV) and  */
+        /* BOUNDS(1:NCONV) respectively. Then sort. Be    */
+        /* careful when NCONV > NP                        */
+        /* ---------------------------------------------- */
 
-        /*           %------------------------------------------% */
-        /*           |  Use h( 3,1 ) as storage to communicate  | */
-        /*           |  rnorm to zneupd  if needed               | */
-        /*           %------------------------------------------% */
+        /* ---------------------------------------- */
+        /*  Use h( 3,1 ) as storage to communicate  */
+        /*  rnorm to zneupd  if needed               */
+        /* ---------------------------------------- */
         i__1 = h_dim1 + 3;
         z__1.r = rnorm, z__1.i = 0.;
         h[i__1].r = z__1.r, h[i__1].i = z__1.i;
 
-        /*           %----------------------------------------------% */
-        /*           | Sort Ritz values so that converged Ritz      | */
-        /*           | values appear within the first NEV locations | */
-        /*           | of ritz and bounds, and the most desired one | */
-        /*           | appears at the front.                        | */
-        /*           %----------------------------------------------% */
+        /* -------------------------------------------- */
+        /* Sort Ritz values so that converged Ritz      */
+        /* values appear within the first NEV locations */
+        /* of ritz and bounds, and the most desired one */
+        /* appears at the front.                        */
+        /* -------------------------------------------- */
 
         if (strcmp(which, "LM") == 0)
         {
@@ -647,10 +588,10 @@ L20:
 
         zsortc_(wprime, &b_true, &kplusp, &ritz[1], &bounds[1]);
 
-        /*           %--------------------------------------------------% */
-        /*           | Scale the Ritz estimate of each Ritz value       | */
-        /*           | by 1 / max(eps23, magnitude of the Ritz value).  | */
-        /*           %--------------------------------------------------% */
+        /* ------------------------------------------------ */
+        /* Scale the Ritz estimate of each Ritz value       */
+        /* by 1 / max(eps23, magnitude of the Ritz value).  */
+        /* ------------------------------------------------ */
 
         i__1 = nev0;
         for (j = 1; j <= i__1; ++j)
@@ -668,20 +609,20 @@ L20:
             /* L35: */
         }
 
-        /*           %---------------------------------------------------% */
-        /*           | Sort the Ritz values according to the scaled Ritz | */
-        /*           | estimates.  This will push all the converged ones | */
-        /*           | towards the front of ritz, bounds (in the case    | */
-        /*           | when NCONV < NEV.)                                | */
-        /*           %---------------------------------------------------% */
+        /* ------------------------------------------------- */
+        /* Sort the Ritz values according to the scaled Ritz */
+        /* estimates.  This will push all the converged ones */
+        /* towards the front of ritz, bounds (in the case    */
+        /* when NCONV < NEV.)                                */
+        /* ------------------------------------------------- */
 
         strcpy(wprime, "LM");
         zsortc_(wprime, &b_true, &nev0, &bounds[1], &ritz[1]);
 
-        /*           %----------------------------------------------% */
-        /*           | Scale the Ritz estimate back to its original | */
-        /*           | value.                                       | */
-        /*           %----------------------------------------------% */
+        /* -------------------------------------------- */
+        /* Scale the Ritz estimate back to its original */
+        /* value.                                       */
+        /* -------------------------------------------- */
 
         i__1 = nev0;
         for (j = 1; j <= i__1; ++j)
@@ -699,11 +640,11 @@ L20:
             /* L40: */
         }
 
-        /*           %-----------------------------------------------% */
-        /*           | Sort the converged Ritz values again so that  | */
-        /*           | the "threshold" value appears at the front of | */
-        /*           | ritz and bound.                               | */
-        /*           %-----------------------------------------------% */
+        /* --------------------------------------------- */
+        /* Sort the converged Ritz values again so that  */
+        /* the "threshold" value appears at the front of */
+        /* ritz and bound.                               */
+        /* --------------------------------------------- */
 
         zsortc_(which, &b_true, &nconv, &ritz[1], &bounds[1]);
 
@@ -713,18 +654,18 @@ L20:
             zvout_(kplusp, &bounds[1], debug_1.ndigit, "_naup2: Sorted ritz estimates.");
         }
 
-        /*           %------------------------------------% */
-        /*           | Max iterations have been exceeded. | */
-        /*           %------------------------------------% */
+        /* ---------------------------------- */
+        /* Max iterations have been exceeded. */
+        /* ---------------------------------- */
 
         if (iter > *mxiter && nconv < nev0)
         {
             *info = 1;
         }
 
-        /*           %---------------------% */
-        /*           | No shifts to apply. | */
-        /*           %---------------------% */
+        /* ------------------- */
+        /* No shifts to apply. */
+        /* ------------------- */
 
         if (*np == 0 && nconv < nev0)
         {
@@ -737,11 +678,11 @@ L20:
     else if (nconv < nev0 && *ishift == 1)
     {
 
-        /*           %-------------------------------------------------% */
-        /*           | Do not have all the requested eigenvalues yet.  | */
-        /*           | To prevent possible stagnation, adjust the size | */
-        /*           | of NEV.                                         | */
-        /*           %-------------------------------------------------% */
+        /* ----------------------------------------------- */
+        /* Do not have all the requested eigenvalues yet.  */
+        /* To prevent possible stagnation, adjust the size */
+        /* of NEV.                                         */
+        /* ----------------------------------------------- */
 
         nevbef = *nev;
         /* Computing MIN */
@@ -757,10 +698,10 @@ L20:
         }
         *np = kplusp - *nev;
 
-        /*           %---------------------------------------% */
-        /*           | If the size of NEV was just increased | */
-        /*           | resort the eigenvalues.               | */
-        /*           %---------------------------------------% */
+        /* ------------------------------------- */
+        /* If the size of NEV was just increased */
+        /* resort the eigenvalues.               */
+        /* ------------------------------------- */
 
         if (nevbef < *nev)
         {
@@ -784,10 +725,10 @@ L20:
     if (*ishift == 0)
     {
 
-        /*           %-------------------------------------------------------% */
-        /*           | User specified shifts: pop back out to get the shifts | */
-        /*           | and return them in the first 2*NP locations of WORKL. | */
-        /*           %-------------------------------------------------------% */
+        /* ----------------------------------------------------- */
+        /* User specified shifts: pop back out to get the shifts */
+        /* and return them in the first 2*NP locations of WORKL. */
+        /* ----------------------------------------------------- */
 
         ushift = TRUE_;
         *ido = 3;
@@ -799,11 +740,11 @@ L50:
     if (*ishift != 1)
     {
 
-        /*            %----------------------------------% */
-        /*            | Move the NP shifts from WORKL to | */
-        /*            | RITZ, to free up WORKL           | */
-        /*            | for non-exact shift case.        | */
-        /*            %----------------------------------% */
+        /* -------------------------------- */
+        /* Move the NP shifts from WORKL to */
+        /* RITZ, to free up WORKL           */
+        /* for non-exact shift case.        */
+        /* -------------------------------- */
 
         zcopy_(np, &workl[1], &i_one, &ritz[1], &i_one);
     }
@@ -818,20 +759,20 @@ L50:
         }
     }
 
-    /*        %---------------------------------------------------------% */
-    /*        | Apply the NP implicit shifts by QR bulge chasing.       | */
-    /*        | Each shift is applied to the whole upper Hessenberg     | */
-    /*        | matrix H.                                               | */
-    /*        | The first 2*N locations of WORKD are used as workspace. | */
-    /*        %---------------------------------------------------------% */
+    /* ------------------------------------------------------- */
+    /* Apply the NP implicit shifts by QR bulge chasing.       */
+    /* Each shift is applied to the whole upper Hessenberg     */
+    /* matrix H.                                               */
+    /* The first 2*N locations of WORKD are used as workspace. */
+    /* ------------------------------------------------------- */
 
     znapps_(n, nev, np, &ritz[1], &v[v_offset], ldv, &h[h_offset], ldh, &resid[1], &q[q_offset], ldq, &workl[1], &workd[1]);
 
-    /*        %---------------------------------------------% */
-    /*        | Compute the B-norm of the updated residual. | */
-    /*        | Keep B*RESID in WORKD(1:N) to be used in    | */
-    /*        | the first step of the next call to znaitr .  | */
-    /*        %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Compute the B-norm of the updated residual. */
+    /* Keep B*RESID in WORKD(1:N) to be used in    */
+    /* the first step of the next call to znaitr .  */
+    /* ------------------------------------------- */
 
     cnorm = TRUE_;
     arscnd_(&t2);
@@ -843,9 +784,9 @@ L50:
         ipntr[2] = 1;
         *ido = 2;
 
-        /*           %----------------------------------% */
-        /*           | Exit in order to compute B*RESID | */
-        /*           %----------------------------------% */
+        /* -------------------------------- */
+        /* Exit in order to compute B*RESID */
+        /* -------------------------------- */
 
         goto L9000;
     }
@@ -856,10 +797,10 @@ L50:
 
 L100:
 
-    /*        %----------------------------------% */
-    /*        | Back from reverse communication; | */
-    /*        | WORKD(1:N) := B*RESID            | */
-    /*        %----------------------------------% */
+    /* -------------------------------- */
+    /* Back from reverse communication; */
+    /* WORKD(1:N) := B*RESID            */
+    /* -------------------------------- */
 
     if (*bmat == 'G')
     {
@@ -889,11 +830,11 @@ L100:
 
     goto L1000;
 
-    /*     %---------------------------------------------------------------% */
-    /*     |                                                               | */
-    /*     |  E N D     O F     M A I N     I T E R A T I O N     L O O P  | */
-    /*     |                                                               | */
-    /*     %---------------------------------------------------------------% */
+    /* ------------------------------------------------------------- */
+    /*                                                               */
+    /*  E N D     O F     M A I N     I T E R A T I O N     L O O P  */
+    /*                                                               */
+    /* ------------------------------------------------------------- */
 
 L1100:
 
@@ -903,18 +844,18 @@ L1100:
 L1200:
     *ido = 99;
 
-    /*     %------------% */
-    /*     | Error Exit | */
-    /*     %------------% */
+    /* ---------- */
+    /* Error Exit */
+    /* ---------- */
 
     arscnd_(&t1);
     timing_1.tcaup2 = t1 - t0;
 
 L9000:
 
-    /*     %---------------% */
-    /*     | End of znaup2  | */
-    /*     %---------------% */
+    /* ------------- */
+    /* End of znaup2  */
+    /* ------------- */
 
     return 0;
 } /* znaup2_ */

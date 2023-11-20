@@ -136,51 +136,27 @@ static a_int c__4 = 4;
     /* \EndLib */
     /* -------------------------------------------------------------------------- */
 
-    /*     %-----------------------------% */
-    /*     | Define leading dimensions   | */
-    /*     | for all arrays.             | */
-    /*     | MAXN:   Maximum dimension   | */
-    /*     |         of the A allowed.   | */
-    /*     | MAXNEV: Maximum NEV allowed | */
-    /*     | MAXNCV: Maximum NCV allowed | */
-    /*     %-----------------------------% */
+    /* --------------------------- */
+    /* Define leading dimensions   */
+    /* for all arrays.             */
+    /* MAXN:   Maximum dimension   */
+    /*         of the A allowed.   */
+    /* MAXNEV: Maximum NEV allowed */
+    /* MAXNCV: Maximum NCV allowed */
+    /* --------------------------- */
 
-    /*     %--------------% */
-    /*     | Local Arrays | */
-    /*     %--------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %-----------------------------% */
-    /*     | BLAS & LAPACK routines used | */
-    /*     %-----------------------------% */
-
-    /*     %--------------------% */
-    /*     | Intrinsic function | */
-    /*     %--------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
-    /*     %----------------------------------------------------% */
-    /*     | The number N is the dimension of the matrix.  A    | */
-    /*     | generalized eigenvalue problem is solved (BMAT =   | */
-    /*     | 'G').  NEV is the number of eigenvalues to be      | */
-    /*     | approximated.  The user can modify NEV, NCV, WHICH | */
-    /*     | to solve problems of different sizes, and to get   | */
-    /*     | different parts of the spectrum.  However, The     | */
-    /*     | following conditions must be satisfied:            | */
-    /*     |                    N <= MAXN,                      | */
-    /*     |                  NEV <= MAXNEV,                    | */
-    /*     |              NEV + 2 <= NCV <= MAXNCV              | */
-    /*     %----------------------------------------------------% */
+    /* -------------------------------------------------- */
+    /* The number N is the dimension of the matrix.  A    */
+    /* generalized eigenvalue problem is solved (BMAT =   */
+    /* 'G').  NEV is the number of eigenvalues to be      */
+    /* approximated.  The user can modify NEV, NCV, WHICH */
+    /* to solve problems of different sizes, and to get   */
+    /* different parts of the spectrum.  However, The     */
+    /* following conditions must be satisfied:            */
+    /*                    N <= MAXN,                      */
+    /*                  NEV <= MAXNEV,                    */
+    /*              NEV + 2 <= NCV <= MAXNCV              */
+    /* -------------------------------------------------- */
 
     n = 100;
     nev = 4;
@@ -209,10 +185,10 @@ static a_int c__4 = 4;
     *bmat = 'G';
     strcpy(which, "LM");
 
-    /*     %------------------------------------------------% */
-    /*     | M is the mass matrix formed by using piecewise | */
-    /*     | linear elements on [0,1].                      | */
-    /*     %------------------------------------------------% */
+    /* ---------------------------------------------- */
+    /* M is the mass matrix formed by using piecewise */
+    /* linear elements on [0,1].                      */
+    /* ---------------------------------------------- */
 
     h = 1.f / (float)(n + 1);
     i__1 = n - 1;
@@ -239,16 +215,16 @@ static a_int c__4 = 4;
         goto L9000;
     }
 
-    /*     %-----------------------------------------------------% */
-    /*     | The work array WORKL is used in SNAUPD as           | */
-    /*     | workspace.  Its dimension LWORKL is set as          | */
-    /*     | illustrated below.  The parameter TOL determines    | */
-    /*     | the stopping criterion. If TOL<=0, machine          | */
-    /*     | precision is used.  The variable IDO is used for    | */
-    /*     | reverse communication, and is initially set to 0.   | */
-    /*     | Setting INFO=0 indicates that a random vector is    | */
-    /*     | generated in SNAUPD to start the Arnoldi iteration. | */
-    /*     %-----------------------------------------------------% */
+    /* --------------------------------------------------- */
+    /* The work array WORKL is used in SNAUPD as           */
+    /* workspace.  Its dimension LWORKL is set as          */
+    /* illustrated below.  The parameter TOL determines    */
+    /* the stopping criterion. If TOL<=0, machine          */
+    /* precision is used.  The variable IDO is used for    */
+    /* reverse communication, and is initially set to 0.   */
+    /* Setting INFO=0 indicates that a random vector is    */
+    /* generated in SNAUPD to start the Arnoldi iteration. */
+    /* --------------------------------------------------- */
 
     /* Computing 2nd power */
     i__1 = ncv;
@@ -257,15 +233,15 @@ static a_int c__4 = 4;
     ido = 0;
     info = 0;
 
-    /*     %---------------------------------------------------% */
-    /*     | This program uses exact shifts with respect to    | */
-    /*     | the current Hessenberg matrix (IPARAM(1) = 1).    | */
-    /*     | IPARAM(3) specifies the maximum number of Arnoldi | */
-    /*     | iterations allowed.  Mode 2 of SNAUPD is used     | */
-    /*     | (IPARAM(7) = 2).  All these options can be        | */
-    /*     | changed by the user. For details, see the         | */
-    /*     | documentation in SNAUPD.                          | */
-    /*     %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* This program uses exact shifts with respect to    */
+    /* the current Hessenberg matrix (IPARAM(1) = 1).    */
+    /* IPARAM(3) specifies the maximum number of Arnoldi */
+    /* iterations allowed.  Mode 2 of SNAUPD is used     */
+    /* (IPARAM(7) = 2).  All these options can be        */
+    /* changed by the user. For details, see the         */
+    /* documentation in SNAUPD.                          */
+    /* ------------------------------------------------- */
 
     ishfts = 1;
     maxitr = 300;
@@ -275,33 +251,33 @@ static a_int c__4 = 4;
     iparam[2] = maxitr;
     iparam[6] = mode;
 
-    /*     %-------------------------------------------% */
-    /*     | M A I N   L O O P (Reverse communication) | */
-    /*     %-------------------------------------------% */
+    /* ----------------------------------------- */
+    /* M A I N   L O O P (Reverse communication) */
+    /* ----------------------------------------- */
 
 L10:
 
-    /*        %---------------------------------------------% */
-    /*        | Repeatedly call the routine SNAUPD and take | */
-    /*        | actions indicated by parameter IDO until    | */
-    /*        | either convergence is indicated or maxitr   | */
-    /*        | has been exceeded.                          | */
-    /*        %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Repeatedly call the routine SNAUPD and take */
+    /* actions indicated by parameter IDO until    */
+    /* either convergence is indicated or maxitr   */
+    /* has been exceeded.                          */
+    /* ------------------------------------------- */
 
     snaupd_(&ido, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &info);
 
     if (ido == -1 || ido == 1)
     {
 
-        /*           %----------------------------------------% */
-        /*           | Perform  y <--- OP*x = inv[M]*A*x      | */
-        /*           | The user should supply his/her own     | */
-        /*           | matrix vector routine and a linear     | */
-        /*           | system solver.  The matrix-vector      | */
-        /*           | subroutine should take workd(ipntr(1)) | */
-        /*           | as input, and the final result should  | */
-        /*           | be returned to workd(ipntr(2)).        | */
-        /*           %----------------------------------------% */
+        /* -------------------------------------- */
+        /* Perform  y <--- OP*x = inv[M]*A*x      */
+        /* The user should supply his/her own     */
+        /* matrix vector routine and a linear     */
+        /* system solver.  The matrix-vector      */
+        /* subroutine should take workd(ipntr(1)) */
+        /* as input, and the final result should  */
+        /* be returned to workd(ipntr(2)).        */
+        /* -------------------------------------- */
 
         av_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
         spttrs_(&n, &c__1, md, me, &workd[ipntr[1] - 1], &n, &ierr);
@@ -319,44 +295,44 @@ L10:
             goto L9000;
         }
 
-        /*           %-----------------------------------------% */
-        /*           | L O O P   B A C K to call SNAUPD again. | */
-        /*           %-----------------------------------------% */
+        /* --------------------------------------- */
+        /* L O O P   B A C K to call SNAUPD again. */
+        /* --------------------------------------- */
 
         goto L10;
     }
     else if (ido == 2)
     {
 
-        /*           %-------------------------------------% */
-        /*           |        Perform  y <--- M*x          | */
-        /*           | The matrix vector multiplication    | */
-        /*           | routine should take workd(ipntr(1)) | */
-        /*           | as input and return the result to   | */
-        /*           | workd(ipntr(2)).                    | */
-        /*           %-------------------------------------% */
+        /* ----------------------------------- */
+        /*        Perform  y <--- M*x          */
+        /* The matrix vector multiplication    */
+        /* routine should take workd(ipntr(1)) */
+        /* as input and return the result to   */
+        /* workd(ipntr(2)).                    */
+        /* ----------------------------------- */
 
         mv_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
 
-        /*           %-----------------------------------------% */
-        /*           | L O O P   B A C K to call SNAUPD again. | */
-        /*           %-----------------------------------------% */
+        /* --------------------------------------- */
+        /* L O O P   B A C K to call SNAUPD again. */
+        /* --------------------------------------- */
 
         goto L10;
     }
 
-    /*     %-----------------------------------------% */
-    /*     | Either we have convergence, or there is | */
-    /*     | an error.                               | */
-    /*     %-----------------------------------------% */
+    /* --------------------------------------- */
+    /* Either we have convergence, or there is */
+    /* an error.                               */
+    /* --------------------------------------- */
 
     if (info < 0)
     {
 
-        /*        %--------------------------% */
-        /*        | Error message. Check the | */
-        /*        | documentation in SNAUPD. | */
-        /*        %--------------------------% */
+        /* ------------------------ */
+        /* Error message. Check the */
+        /* documentation in SNAUPD. */
+        /* ------------------------ */
 
         s_wsle(&io___33);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -375,38 +351,38 @@ L10:
     else
     {
 
-        /*        %-------------------------------------------% */
-        /*        | No fatal errors occurred.                 | */
-        /*        | Post-Process using SNEUPD.                | */
-        /*        |                                           | */
-        /*        | Computed eigenvalues may be extracted.    | */
-        /*        |                                           | */
-        /*        | Eigenvectors may also be computed now if  | */
-        /*        | desired.  (indicated by rvec = .true.)    | */
-        /*        %-------------------------------------------% */
+        /* ----------------------------------------- */
+        /* No fatal errors occurred.                 */
+        /* Post-Process using SNEUPD.                */
+        /*                                           */
+        /* Computed eigenvalues may be extracted.    */
+        /*                                           */
+        /* Eigenvectors may also be computed now if  */
+        /* desired.  (indicated by rvec = .true.)    */
+        /* ----------------------------------------- */
 
         rvec = TRUE_;
         sneupd_(&rvec, "A", select, d, &d[25], v, &c__256, &sigmar, &sigmai, workev, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
-        /*        %-----------------------------------------------% */
-        /*        | The real part of the eigenvalue is returned   | */
-        /*        | in the first column of the two dimensional    | */
-        /*        | array D, and the IMAGINARY part is returned   | */
-        /*        | in the second column of D.  The corresponding | */
-        /*        | eigenvectors are returned in the first NEV    | */
-        /*        | columns of the two dimensional array V if     | */
-        /*        | requested.  Otherwise, an orthogonal basis    | */
-        /*        | for the invariant subspace corresponding to   | */
-        /*        | the eigenvalues in D is returned in V.        | */
-        /*        %-----------------------------------------------% */
+        /* --------------------------------------------- */
+        /* The real part of the eigenvalue is returned   */
+        /* in the first column of the two dimensional    */
+        /* array D, and the IMAGINARY part is returned   */
+        /* in the second column of D.  The corresponding */
+        /* eigenvectors are returned in the first NEV    */
+        /* columns of the two dimensional array V if     */
+        /* requested.  Otherwise, an orthogonal basis    */
+        /* for the invariant subspace corresponding to   */
+        /* the eigenvalues in D is returned in V.        */
+        /* --------------------------------------------- */
 
         if (ierr != 0)
         {
 
-            /*           %------------------------------------% */
-            /*           | Error condition:                   | */
-            /*           | Check the documentation of SNEUPD. | */
-            /*           %------------------------------------% */
+            /* ---------------------------------- */
+            /* Error condition:                   */
+            /* Check the documentation of SNEUPD. */
+            /* ---------------------------------- */
 
             s_wsle(&io___43);
             do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -431,25 +407,25 @@ L10:
             for (j = 1; j <= i__1; ++j)
             {
 
-                /*              %---------------------------% */
-                /*              | Compute the residual norm | */
-                /*              |                           | */
-                /*              |  ||  A*x - lambda*M*x ||  | */
-                /*              |                           | */
-                /*              | for the NCONV accurately  | */
-                /*              | computed eigenvalues and  | */
-                /*              | eigenvectors.  (iparam(5) | */
-                /*              | indicates how many are    | */
-                /*              | accurate to the requested | */
-                /*              | tolerance)                | */
-                /*              %---------------------------% */
+                /* ------------------------- */
+                /* Compute the residual norm */
+                /*                           */
+                /*  ||  A*x - lambda*M*x ||  */
+                /*                           */
+                /* for the NCONV accurately  */
+                /* computed eigenvalues and  */
+                /* eigenvectors.  (iparam(5) */
+                /* indicates how many are    */
+                /* accurate to the requested */
+                /* tolerance)                */
+                /* ------------------------- */
 
                 if (d[j + 24] == 0.f)
                 {
 
-                    /*                 %--------------------% */
-                    /*                 | Ritz value is real | */
-                    /*                 %--------------------% */
+                    /* ------------------ */
+                    /* Ritz value is real */
+                    /* ------------------ */
 
                     av_(&n, &v[(j << 8) - 256], ax);
                     mv_(&n, &v[(j << 8) - 256], mx);
@@ -461,12 +437,12 @@ L10:
                 else if (first)
                 {
 
-                    /*                 %------------------------% */
-                    /*                 | Ritz value is complex  | */
-                    /*                 | Residual of one Ritz   | */
-                    /*                 | value of the conjugate | */
-                    /*                 | pair is computed.      | */
-                    /*                 %------------------------% */
+                    /* ---------------------- */
+                    /* Ritz value is complex  */
+                    /* Residual of one Ritz   */
+                    /* value of the conjugate */
+                    /* pair is computed.      */
+                    /* ---------------------- */
 
                     av_(&n, &v[(j << 8) - 256], ax);
                     mv_(&n, &v[(j << 8) - 256], mx);
@@ -498,16 +474,16 @@ L10:
                 /* L30: */
             }
 
-            /*           %-----------------------------% */
-            /*           | Display computed residuals. | */
-            /*           %-----------------------------% */
+            /* --------------------------- */
+            /* Display computed residuals. */
+            /* --------------------------- */
 
             smout_(&c__6, &nconv, &c__3, d, &c__25, &c_n6,"Ritz values (Real,Imag) and relative residuals");
         }
 
-        /*        %------------------------------------------% */
-        /*        | Print additional convergence information | */
-        /*        %------------------------------------------% */
+        /* ---------------------------------------- */
+        /* Print additional convergence information */
+        /* ---------------------------------------- */
 
         if (info == 1)
         {
@@ -586,9 +562,9 @@ L10:
         e_wsle();
     }
 
-    /*     %---------------------------% */
-    /*     | Done with program sndrv3. | */
-    /*     %---------------------------% */
+    /* ------------------------- */
+    /* Done with program sndrv3. */
+    /* ------------------------- */
 
 L9000:
 
@@ -620,7 +596,6 @@ int av_(a_int *n, float *v, float *w)
     --w;
     --v;
 
-    /* Function Body */
     h = 1.f / (float)(*n + 1);
     s = 5.f;
     dd = 2.f / h;
@@ -656,7 +631,6 @@ int mv_(a_int *n, float *v, float *w)
     --w;
     --v;
 
-    /* Function Body */
     w[1] = v[1] * 4.f + v[2] * 1.f;
     i__1 = *n - 1;
     for (j = 2; j <= i__1; ++j)

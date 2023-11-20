@@ -114,55 +114,31 @@ static a_int c_n6 = -6;
 
     /* ---------------------------------------------------------------------- */
 
-    /*     %-------------------------------------% */
-    /*     | Define leading dimensions for all   | */
-    /*     | arrays.                             | */
-    /*     | MAXN   - Maximum size of the matrix | */
-    /*     | MAXNEV - Maximum number of          | */
-    /*     |          eigenvalues to be computed | */
-    /*     | MAXNCV - Maximum number of Arnoldi  | */
-    /*     |          vectors stored             | */
-    /*     | MAXBDW - Maximum bandwidth          | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* Define leading dimensions for all   */
+    /* arrays.                             */
+    /* MAXN   - Maximum size of the matrix */
+    /* MAXNEV - Maximum number of          */
+    /*          eigenvalues to be computed */
+    /* MAXNCV - Maximum number of Arnoldi  */
+    /*          vectors stored             */
+    /* MAXBDW - Maximum bandwidth          */
+    /* ----------------------------------- */
 
-    /*     %--------------% */
-    /*     | Local Arrays | */
-    /*     %--------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %-----------------------------% */
-    /*     | BLAS & LAPACK routines used | */
-    /*     %-----------------------------% */
-
-    /*     %--------------------% */
-    /*     | Intrinsic function | */
-    /*     %--------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
-    /*     %--------------------------------------------------% */
-    /*     | The number N is the dimension of the matrix.  A  | */
-    /*     | generalized eigenvalue problem is solved         | */
-    /*     | (BMAT = 'G').  NEV is the number of eigenvalues  | */
-    /*     | to be approximated.  Since the Cayley mode is    | */
-    /*     | used, WHICH is set to 'LM'.  The user can        | */
-    /*     | modify N, NEV, NCV and SIGMA to solve problems   | */
-    /*     | of different sizes, and to get different parts   | */
-    /*     | the spectrum.  However, the following conditions | */
-    /*     | must be satisfied:                               | */
-    /*     |                   N <= MAXN                      | */
-    /*     |                 NEV <= MAXNEV                    | */
-    /*     |           NEV + 1 <= NCV <= MAXNCV               | */
-    /*     %--------------------------------------------------% */
+    /* ------------------------------------------------ */
+    /* The number N is the dimension of the matrix.  A  */
+    /* generalized eigenvalue problem is solved         */
+    /* (BMAT = 'G').  NEV is the number of eigenvalues  */
+    /* to be approximated.  Since the Cayley mode is    */
+    /* used, WHICH is set to 'LM'.  The user can        */
+    /* modify N, NEV, NCV and SIGMA to solve problems   */
+    /* of different sizes, and to get different parts   */
+    /* the spectrum.  However, the following conditions */
+    /* must be satisfied:                               */
+    /*                   N <= MAXN                      */
+    /*                 NEV <= MAXNEV                    */
+    /*           NEV + 1 <= NCV <= MAXNCV               */
+    /* ------------------------------------------------ */
 
     n = 100;
     nev = 4;
@@ -192,16 +168,16 @@ static a_int c_n6 = -6;
     strcpy(which, "LM");
     sigma = 150.f;
 
-    /*     %-----------------------------------------------------% */
-    /*     | The work array WORKL is used in DSAUPD  as           | */
-    /*     | workspace.  Its dimension LWORKL is set as          | */
-    /*     | illustrated below.  The parameter TOL determines    | */
-    /*     | the stopping criterion. If TOL<=0, machine          | */
-    /*     | precision is used.  The variable IDO is used for    | */
-    /*     | reverse communication, and is initially set to 0.   | */
-    /*     | Setting INFO=0 indicates that a random vector is    | */
-    /*     | generated in DSAUPD  to start the Arnoldi iteration. | */
-    /*     %-----------------------------------------------------% */
+    /* --------------------------------------------------- */
+    /* The work array WORKL is used in DSAUPD  as           */
+    /* workspace.  Its dimension LWORKL is set as          */
+    /* illustrated below.  The parameter TOL determines    */
+    /* the stopping criterion. If TOL<=0, machine          */
+    /* precision is used.  The variable IDO is used for    */
+    /* reverse communication, and is initially set to 0.   */
+    /* Setting INFO=0 indicates that a random vector is    */
+    /* generated in DSAUPD  to start the Arnoldi iteration. */
+    /* --------------------------------------------------- */
 
     /* Computing 2nd power */
     i__1 = ncv;
@@ -210,13 +186,13 @@ static a_int c_n6 = -6;
     ido = 0;
     info = 0;
 
-    /*     %---------------------------------------------------% */
-    /*     | IPARAM(3) specifies the maximum number of Arnoldi | */
-    /*     | iterations allowed.  Mode 5 of DSAUPD  is used     | */
-    /*     | (IPARAM(7) = 5). All these options can be changed | */
-    /*     | by the user. For details, see the documentation   | */
-    /*     | in SBAND.                                         | */
-    /*     %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* IPARAM(3) specifies the maximum number of Arnoldi */
+    /* iterations allowed.  Mode 5 of DSAUPD  is used     */
+    /* (IPARAM(7) = 5). All these options can be changed */
+    /* by the user. For details, see the documentation   */
+    /* in SBAND.                                         */
+    /* ------------------------------------------------- */
 
     maxitr = 300;
     mode = 5;
@@ -224,31 +200,31 @@ static a_int c_n6 = -6;
     iparam[2] = maxitr;
     iparam[6] = mode;
 
-    /*     %----------------------------------------% */
-    /*     | Construct the matrix A in LAPACK-style | */
-    /*     | banded form.                           | */
-    /*     %----------------------------------------% */
+    /* -------------------------------------- */
+    /* Construct the matrix A in LAPACK-style */
+    /* banded form.                           */
+    /* -------------------------------------- */
 
-    /*     %---------------------------------------------% */
-    /*     | Zero out the workspace for banded matrices. | */
-    /*     %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Zero out the workspace for banded matrices. */
+    /* ------------------------------------------- */
 
     dlaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50);
     dlaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50);
     dlaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50);
 
-    /*     %-------------------------------------% */
-    /*     | KU, KL are number of superdiagonals | */
-    /*     | and subdiagonals within the band of | */
-    /*     | matrices A and M.                   | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* KU, KL are number of superdiagonals */
+    /* and subdiagonals within the band of */
+    /* matrices A and M.                   */
+    /* ----------------------------------- */
 
     kl = 1;
     ku = 1;
 
-    /*     %---------------% */
-    /*     | Main diagonal | */
-    /*     %---------------% */
+    /* ------------- */
+    /* Main diagonal */
+    /* ------------- */
 
     h = 1. / (double)(n + 1);
     r1 = .66666666666666663;
@@ -261,9 +237,9 @@ static a_int c_n6 = -6;
         /* L30: */
     }
 
-    /*     %-------------------------------------% */
-    /*     | First subdiagonal and superdiagonal | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* First subdiagonal and superdiagonal */
+    /* ----------------------------------- */
 
     r2 = .16666666666666666;
     isup = kl + ku;
@@ -278,14 +254,14 @@ static a_int c_n6 = -6;
         /* L60: */
     }
 
-    /*     %-------------------------------------% */
-    /*     | Call DSBAND  to find eigenvalues and | */
-    /*     | eigenvectors.  Eigenvalues are      | */
-    /*     | returned in the first column of D.  | */
-    /*     | Eigenvectors are returned in the    | */
-    /*     | first NCONV (=IPARAM(5)) columns of | */
-    /*     | V.                                  | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* Call DSBAND  to find eigenvalues and */
+    /* eigenvectors.  Eigenvalues are      */
+    /* returned in the first column of D.  */
+    /* Eigenvectors are returned in the    */
+    /* first NCONV (=IPARAM(5)) columns of */
+    /* V.                                  */
+    /* ----------------------------------- */
 
     rvec = TRUE_;
     dsband_(&rvec, "A", select, d, v, &c__1000, &sigma, &n, a, m, &c__50, rfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, iwork, &info);
@@ -295,9 +271,9 @@ static a_int c_n6 = -6;
 
         nconv = iparam[4];
 
-        /*        %-----------------------------------% */
-        /*        | Print out convergence information | */
-        /*        %-----------------------------------% */
+        /* --------------------------------- */
+        /* Print out convergence information */
+        /* --------------------------------- */
 
         s_wsle(&io___38);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -349,10 +325,10 @@ static a_int c_n6 = -6;
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
         e_wsle();
 
-        /*        %----------------------------% */
-        /*        | Compute the residual norm. | */
-        /*        |    ||  A*x - lambda*x ||   | */
-        /*        %----------------------------% */
+        /* -------------------------- */
+        /* Compute the residual norm. */
+        /*    ||  A*x - lambda*x ||   */
+        /* -------------------------- */
 
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
@@ -371,11 +347,11 @@ static a_int c_n6 = -6;
     else
     {
 
-        /*        %-------------------------------------% */
-        /*        | Either convergence failed, or there | */
-        /*        | is error.  Check the documentation  | */
-        /*        | for DSBAND .                         | */
-        /*        %-------------------------------------% */
+        /* ----------------------------------- */
+        /* Either convergence failed, or there */
+        /* is error.  Check the documentation  */
+        /* for DSBAND .                         */
+        /* ----------------------------------- */
 
         s_wsle(&io___53);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);

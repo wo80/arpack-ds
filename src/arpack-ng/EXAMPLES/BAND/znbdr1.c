@@ -121,54 +121,34 @@ static a_int c_n6 = -6;
 
     /* ---------------------------------------------------------------------- */
 
-    /*     %-------------------------------------% */
-    /*     | Define leading dimensions for all   | */
-    /*     | arrays.                             | */
-    /*     | MAXN   - Maximum size of the matrix | */
-    /*     | MAXNEV - Maximum number of          | */
-    /*     |          eigenvalues to be computed | */
-    /*     | MAXNCV - Maximum number of Arnoldi  | */
-    /*     |          vectors stored             | */
-    /*     | MAXBDW - Maximum bandwidth          | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* Define leading dimensions for all   */
+    /* arrays.                             */
+    /* MAXN   - Maximum size of the matrix */
+    /* MAXNEV - Maximum number of          */
+    /*          eigenvalues to be computed */
+    /* MAXNCV - Maximum number of Arnoldi  */
+    /*          vectors stored             */
+    /* MAXBDW - Maximum bandwidth          */
+    /* ----------------------------------- */
 
-    /*     %--------------% */
-    /*     | Local Arrays | */
-    /*     %--------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %-----------------------------% */
-    /*     | BLAS & LAPACK routines used | */
-    /*     %-----------------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
-    /*     %-------------------------------------------------% */
-    /*     | The number NX is the number of interior points  | */
-    /*     | in the discretization of the 2-dimensional      | */
-    /*     | convection-diffusion operator on the unit       | */
-    /*     | square with zero Dirichlet boundary condition.  | */
-    /*     | The number N(=NX*NX) is the dimension of the    | */
-    /*     | matrix.  A standard eigenvalue problem is       | */
-    /*     | solved (BMAT = 'I').  NEV is the number of      | */
-    /*     | eigenvalues to be approximated. The user can    | */
-    /*     | modify NX, NEV, NCV and WHICH to solve problems | */
-    /*     | of different sizes, and to get different parts  | */
-    /*     | the spectrum.  However, the following           | */
-    /*     | conditions must be satisfied:                   | */
-    /*     |                   N <= MAXN                     | */
-    /*     |                 NEV <= MAXNEV                   | */
-    /*     |           NEV + 2 <= NCV <= MAXNCV              | */
-    /*     %-------------------------------------------------% */
+    /* ----------------------------------------------- */
+    /* The number NX is the number of interior points  */
+    /* in the discretization of the 2-dimensional      */
+    /* convection-diffusion operator on the unit       */
+    /* square with zero Dirichlet boundary condition.  */
+    /* The number N(=NX*NX) is the dimension of the    */
+    /* matrix.  A standard eigenvalue problem is       */
+    /* solved (BMAT = 'I').  NEV is the number of      */
+    /* eigenvalues to be approximated. The user can    */
+    /* modify NX, NEV, NCV and WHICH to solve problems */
+    /* of different sizes, and to get different parts  */
+    /* the spectrum.  However, the following           */
+    /* conditions must be satisfied:                   */
+    /*                   N <= MAXN                     */
+    /*                 NEV <= MAXNEV                   */
+    /*           NEV + 2 <= NCV <= MAXNCV              */
+    /* ----------------------------------------------- */
 
     nx = 10;
     n = nx * nx;
@@ -198,15 +178,15 @@ static a_int c_n6 = -6;
     *bmat = 'I';
     strcpy(which, "LM");
 
-    /*     %-----------------------------------------------------% */
-    /*     | The work array WORKL is used in ZNAUPD  as           | */
-    /*     | workspace.  Its dimension LWORKL is set as          | */
-    /*     | illustrated below.  The parameter TOL determines    | */
-    /*     | the stopping criterion. If TOL<=0, machine          | */
-    /*     | precision is used.  Setting INFO=0 indicates that a | */
-    /*     | random vector is generated in ZNAUPD  to start the   | */
-    /*     | Arnoldi iteration.                                  | */
-    /*     %-----------------------------------------------------% */
+    /* --------------------------------------------------- */
+    /* The work array WORKL is used in ZNAUPD  as           */
+    /* workspace.  Its dimension LWORKL is set as          */
+    /* illustrated below.  The parameter TOL determines    */
+    /* the stopping criterion. If TOL<=0, machine          */
+    /* precision is used.  Setting INFO=0 indicates that a */
+    /* random vector is generated in ZNAUPD  to start the   */
+    /* Arnoldi iteration.                                  */
+    /* --------------------------------------------------- */
 
     /* Computing 2nd power */
     i__1 = ncv;
@@ -214,13 +194,13 @@ static a_int c_n6 = -6;
     tol = 0.f;
     info = 0;
 
-    /*     %---------------------------------------------------% */
-    /*     | IPARAM(3) specifies the maximum number of Arnoldi | */
-    /*     | iterations allowed.  Mode 1 of ZNAUPD  is used     | */
-    /*     | (IPARAM(7) = 1). All these options can be changed | */
-    /*     | by the user. For details, see the documentation   | */
-    /*     | in znband .                                        | */
-    /*     %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* IPARAM(3) specifies the maximum number of Arnoldi */
+    /* iterations allowed.  Mode 1 of ZNAUPD  is used     */
+    /* (IPARAM(7) = 1). All these options can be changed */
+    /* by the user. For details, see the documentation   */
+    /* in znband .                                        */
+    /* ------------------------------------------------- */
 
     maxitr = 300;
     mode = 1;
@@ -228,31 +208,31 @@ static a_int c_n6 = -6;
     iparam[2] = maxitr;
     iparam[6] = mode;
 
-    /*     %----------------------------------------% */
-    /*     | Construct the matrix A in LAPACK-style | */
-    /*     | banded form.                           | */
-    /*     %----------------------------------------% */
+    /* -------------------------------------- */
+    /* Construct the matrix A in LAPACK-style */
+    /* banded form.                           */
+    /* -------------------------------------- */
 
-    /*     %---------------------------------------------% */
-    /*     | Zero out the workspace for banded matrices. | */
-    /*     %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Zero out the workspace for banded matrices. */
+    /* ------------------------------------------- */
 
     zlaset_("A", &c__50, &n, &c_b2, &c_b2, a, &c__50);
     zlaset_("A", &c__50, &n, &c_b2, &c_b2, m, &c__50);
     zlaset_("A", &c__50, &n, &c_b2, &c_b2, fac, &c__50);
 
-    /*     %-------------------------------------% */
-    /*     | KU, KL are number of superdiagonals | */
-    /*     | and subdiagonals within the band of | */
-    /*     | matrices A and M.                   | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* KU, KL are number of superdiagonals */
+    /* and subdiagonals within the band of */
+    /* matrices A and M.                   */
+    /* ----------------------------------- */
 
     kl = nx;
     ku = nx;
 
-    /*     %---------------% */
-    /*     | Main diagonal | */
-    /*     %---------------% */
+    /* ------------- */
+    /* Main diagonal */
+    /* ------------- */
 
     i__1 = nx + 1;
     z__2.r = (double)i__1, z__2.i = 0.;
@@ -271,9 +251,9 @@ static a_int c_n6 = -6;
         /* L30: */
     }
 
-    /*     %-------------------------------------% */
-    /*     | First subdiagonal and superdiagonal | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* First subdiagonal and superdiagonal */
+    /* ----------------------------------- */
 
     rho.r = 100., rho.i = 0.;
     isup = kl + ku;
@@ -304,10 +284,10 @@ static a_int c_n6 = -6;
         /* L50: */
     }
 
-    /*     %------------------------------------% */
-    /*     | KL-th subdiagonal and KU-th super- | */
-    /*     | diagonal.                          | */
-    /*     %------------------------------------% */
+    /* ---------------------------------- */
+    /* KL-th subdiagonal and KU-th super- */
+    /* diagonal.                          */
+    /* ---------------------------------- */
 
     isup = kl + 1;
     isub = (kl << 1) + ku + 1;
@@ -331,13 +311,13 @@ static a_int c_n6 = -6;
         /* L80: */
     }
 
-    /*     %-----------------------------------------------% */
-    /*     | Call ARPACK banded solver to find eigenvalues | */
-    /*     | and eigenvectors. Eigenvalues are returned in | */
-    /*     | the one dimensional array D.  Eigenvectors    | */
-    /*     | are returned in the first NCONV (=IPARAM(5))  | */
-    /*     | columns of V.                                 | */
-    /*     %-----------------------------------------------% */
+    /* --------------------------------------------- */
+    /* Call ARPACK banded solver to find eigenvalues */
+    /* and eigenvectors. Eigenvalues are returned in */
+    /* the one dimensional array D.  Eigenvectors    */
+    /* are returned in the first NCONV (=IPARAM(5))  */
+    /* columns of V.                                 */
+    /* --------------------------------------------- */
 
     rvec = TRUE_;
     znband_(&rvec, "A", select, d, v, &c__1000, &sigma, workev, &n, a, m, &c__50, fac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, rwork, iwork, &info);
@@ -347,9 +327,9 @@ static a_int c_n6 = -6;
 
         nconv = iparam[4];
 
-        /*        %-----------------------------------% */
-        /*        | Print out convergence information | */
-        /*        %-----------------------------------% */
+        /* --------------------------------- */
+        /* Print out convergence information */
+        /* --------------------------------- */
 
         s_wsle(&io___42);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
@@ -401,19 +381,19 @@ static a_int c_n6 = -6;
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
         e_wsle();
 
-        /*        %----------------------------% */
-        /*        | Compute the residual norm. | */
-        /*        |    ||  A*x - lambda*x ||   | */
-        /*        %----------------------------% */
+        /* -------------------------- */
+        /* Compute the residual norm. */
+        /*    ||  A*x - lambda*x ||   */
+        /* -------------------------- */
 
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
         {
 
-            /*           %---------------------------% */
-            /*           | Compute the residual norm | */
-            /*           |   ||  A*x - lambda*x ||   | */
-            /*           %---------------------------% */
+            /* ------------------------- */
+            /* Compute the residual norm */
+            /*   ||  A*x - lambda*x ||   */
+            /* ------------------------- */
 
             zgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, ax, &c__1);
             i__2 = j - 1;
@@ -431,11 +411,11 @@ static a_int c_n6 = -6;
     else
     {
 
-        /*        %-------------------------------------% */
-        /*        | Either convergence failed, or there | */
-        /*        | is error.  Check the documentation  | */
-        /*        | for znband .                         | */
-        /*        %-------------------------------------% */
+        /* ----------------------------------- */
+        /* Either convergence failed, or there */
+        /* is error.  Check the documentation  */
+        /* for znband .                         */
+        /* ----------------------------------- */
 
         s_wsle(&io___57);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);

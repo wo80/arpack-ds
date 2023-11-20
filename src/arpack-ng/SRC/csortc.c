@@ -1,112 +1,84 @@
 /* SRC\csortc.f -- translated by f2c (version 20230428). */
 
 #include "arpack_internal.h"
-
-/* \BeginDoc */
-
-/* \Name: csortc */
-
-/* \Description: */
-/*  Sorts the Complex array in X into the order */
-/*  specified by WHICH and optionally applies the permutation to the */
-/*  Real  array Y. */
-
-/* \Usage: */
-/*  call csortc */
-/*     ( WHICH, APPLY, N, X, Y ) */
-
-/* \Arguments */
-/*  WHICH   Character*2.  (Input) */
-/*          'LM' -> sort X into increasing order of magnitude. */
-/*          'SM' -> sort X into decreasing order of magnitude. */
-/*          'LR' -> sort X with real(X) in increasing algebraic order */
-/*          'SR' -> sort X with real(X) in decreasing algebraic order */
-/*          'LI' -> sort X with imag(X) in increasing algebraic order */
-/*          'SI' -> sort X with imag(X) in decreasing algebraic order */
-
-/*  APPLY   Logical.  (Input) */
-/*          APPLY = .TRUE.  -> apply the sorted order to array Y. */
-/*          APPLY = .FALSE. -> do not apply the sorted order to array Y. */
-
-/*  N       Integer.  (INPUT) */
-/*          Size of the arrays. */
-
-/*  X       Complex array of length N.  (INPUT/OUTPUT) */
-/*          This is the array to be sorted. */
-
-/*  Y       Complex array of length N.  (INPUT/OUTPUT) */
-
-/* \EndDoc */
-
-/* ----------------------------------------------------------------------- */
-
-/* \BeginLib */
-
-/* \Routines called: */
-/*     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-
-/* \Author */
-/*     Danny Sorensen               Phuong Vu */
-/*     Richard Lehoucq              CRPC / Rice University */
-/*     Dept. of Computational &     Houston, Texas */
-/*     Applied Mathematics */
-/*     Rice University */
-/*     Houston, Texas */
-
-/*     Adapted from the sort routine in LANSO. */
-
-/* \SCCS Information: @(#) */
-/* FILE: sortc.F   SID: 2.2   DATE OF SID: 4/20/96   RELEASE: 2 */
-
-/* \EndLib */
-
-/* ----------------------------------------------------------------------- */
-
+/**
+ * \BeginDoc
+ *
+ * \Name: csortc
+ *
+ * \Description:
+ *  Sorts the Complex array in X into the order
+ *  specified by WHICH and optionally applies the permutation to the
+ *  Real  array Y.
+ *
+ * \Usage:
+ *  call csortc
+ *     ( WHICH, APPLY, N, X, Y )
+ *
+ * \Arguments
+ *  WHICH   Character*2.  (Input)
+ *          'LM' -> sort X into increasing order of magnitude.
+ *          'SM' -> sort X into decreasing order of magnitude.
+ *          'LR' -> sort X with real(X) in increasing algebraic order
+ *          'SR' -> sort X with real(X) in decreasing algebraic order
+ *          'LI' -> sort X with imag(X) in increasing algebraic order
+ *          'SI' -> sort X with imag(X) in decreasing algebraic order
+ *
+ *  APPLY   Logical.  (Input)
+ *          APPLY = .TRUE.  -> apply the sorted order to array Y.
+ *          APPLY = .FALSE. -> do not apply the sorted order to array Y.
+ *
+ *  N       Integer.  (INPUT)
+ *          Size of the arrays.
+ *
+ *  X       Complex array of length N.  (INPUT/OUTPUT)
+ *          This is the array to be sorted.
+ *
+ *  Y       Complex array of length N.  (INPUT/OUTPUT)
+ *
+ * \EndDoc
+ *
+ * -----------------------------------------------------------------------
+ *
+ * \BeginLib
+ *
+ * \Routines called:
+ *     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *
+ * \Author
+ *     Danny Sorensen               Phuong Vu
+ *     Richard Lehoucq              CRPC / Rice University
+ *     Dept. of Computational &     Houston, Texas
+ *     Applied Mathematics
+ *     Rice University
+ *     Houston, Texas
+ *
+ *     Adapted from the sort routine in LANSO.
+ *
+ * \SCCS Information: @(#)
+ * FILE: sortc.F   SID: 2.2   DATE OF SID: 4/20/96   RELEASE: 2
+ *
+ * \EndLib
+ */
 int csortc_(const char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomplex *y)
 {
     /* System generated locals */
     a_int i__1, i__2, i__3;
     float r__1, r__2;
 
-    /* Builtin functions */
-
     /* Local variables */
     a_int i, j, igap;
     a_fcomplex temp;
     float temp1, temp2;
-
-    /*     %------------------% */
-    /*     | Scalar Arguments | */
-    /*     %------------------% */
-
-    /*     %-----------------% */
-    /*     | Array Arguments | */
-    /*     %-----------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %--------------------% */
-    /*     | External functions | */
-    /*     %--------------------% */
-
-    /*     %--------------------% */
-    /*     | Intrinsic Functions | */
-    /*     %--------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
 
     igap = *n / 2;
 
     if (strcmp(which, "LM") == 0)
     {
 
-        /*        %--------------------------------------------% */
-        /*        | Sort X into increasing order of magnitude. | */
-        /*        %--------------------------------------------% */
+        /* ------------------------------------------ */
+        /* Sort X into increasing order of magnitude. */
+        /* ------------------------------------------ */
 
     L10:
         if (igap == 0)
@@ -169,9 +141,9 @@ int csortc_(const char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomple
     else if (strcmp(which, "SM") == 0)
     {
 
-        /*        %--------------------------------------------% */
-        /*        | Sort X into decreasing order of magnitude. | */
-        /*        %--------------------------------------------% */
+        /* ------------------------------------------ */
+        /* Sort X into decreasing order of magnitude. */
+        /* ------------------------------------------ */
 
     L40:
         if (igap == 0)
@@ -234,9 +206,9 @@ int csortc_(const char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomple
     else if (strcmp(which, "LR") == 0)
     {
 
-        /*        %------------------------------------------------% */
-        /*        | Sort XREAL into increasing order of algebraic. | */
-        /*        %------------------------------------------------% */
+        /* ---------------------------------------------- */
+        /* Sort XREAL into increasing order of algebraic. */
+        /* ---------------------------------------------- */
 
     L70:
         if (igap == 0)
@@ -292,9 +264,9 @@ int csortc_(const char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomple
     else if (strcmp(which, "SR") == 0)
     {
 
-        /*        %------------------------------------------------% */
-        /*        | Sort XREAL into decreasing order of algebraic. | */
-        /*        %------------------------------------------------% */
+        /* ---------------------------------------------- */
+        /* Sort XREAL into decreasing order of algebraic. */
+        /* ---------------------------------------------- */
 
     L100:
         if (igap == 0)
@@ -349,9 +321,9 @@ int csortc_(const char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomple
     else if (strcmp(which, "LI") == 0)
     {
 
-        /*        %--------------------------------------------% */
-        /*        | Sort XIMAG into increasing algebraic order | */
-        /*        %--------------------------------------------% */
+        /* ------------------------------------------ */
+        /* Sort XIMAG into increasing algebraic order */
+        /* ------------------------------------------ */
 
     L130:
         if (igap == 0)
@@ -404,9 +376,9 @@ int csortc_(const char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomple
     else if (strcmp(which, "SI") == 0)
     {
 
-        /*        %---------------------------------------------% */
-        /*        | Sort XIMAG into decreasing algebraic order  | */
-        /*        %---------------------------------------------% */
+        /* ------------------------------------------- */
+        /* Sort XIMAG into decreasing algebraic order  */
+        /* ------------------------------------------- */
 
     L160:
         if (igap == 0)
@@ -460,8 +432,8 @@ int csortc_(const char *which, a_bool *apply, a_int *n, a_fcomplex *x, a_fcomple
 L9000:
     return 0;
 
-    /*     %---------------% */
-    /*     | End of csortc | */
-    /*     %---------------% */
+    /* ------------- */
+    /* End of csortc */
+    /* ------------- */
 
 } /* csortc_ */

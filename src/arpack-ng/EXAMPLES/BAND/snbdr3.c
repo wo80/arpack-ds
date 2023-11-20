@@ -121,54 +121,30 @@ static a_int c_n6 = -6;
 
     /* ------------------------------------------------------------------------- */
 
-    /*     %-------------------------------------% */
-    /*     | Define leading dimensions for all   | */
-    /*     | arrays.                             | */
-    /*     | MAXN   - Maximum size of the matrix | */
-    /*     | MAXNEV - Maximum number of          | */
-    /*     |          eigenvalues to be computed | */
-    /*     | MAXNCV - Maximum number of Arnoldi  | */
-    /*     |          vectors stored             | */
-    /*     | MAXBDW - Maximum bandwidth          | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* Define leading dimensions for all   */
+    /* arrays.                             */
+    /* MAXN   - Maximum size of the matrix */
+    /* MAXNEV - Maximum number of          */
+    /*          eigenvalues to be computed */
+    /* MAXNCV - Maximum number of Arnoldi  */
+    /*          vectors stored             */
+    /* MAXBDW - Maximum bandwidth          */
+    /* ----------------------------------- */
 
-    /*     %--------------% */
-    /*     | Local Arrays | */
-    /*     %--------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %-----------------------------% */
-    /*     | BLAS & LAPACK routines used | */
-    /*     %-----------------------------% */
-
-    /*     %--------------------% */
-    /*     | Intrinsic function | */
-    /*     %--------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
-    /*     %-------------------------------------------------% */
-    /*     | The number N is the dimension of the matrix.  A | */
-    /*     | generalized eigenvalue problem is solved        | */
-    /*     | (BMAT = 'G').  NEV is the number of eigenvalues | */
-    /*     | to be approximated. The user can modify N, NEV, | */
-    /*     | NCV and WHICH to solve problems of different    | */
-    /*     | sizes, and to get different parts the spectrum. | */
-    /*     | However, the following conditions must be       | */
-    /*     | satisfied:                                      | */
-    /*     |                   N <= MAXN                     | */
-    /*     |                 NEV <= MAXNEV                   | */
-    /*     |           NEV + 2 <= NCV <= MAXNCV              | */
-    /*     %-------------------------------------------------% */
+    /* ----------------------------------------------- */
+    /* The number N is the dimension of the matrix.  A */
+    /* generalized eigenvalue problem is solved        */
+    /* (BMAT = 'G').  NEV is the number of eigenvalues */
+    /* to be approximated. The user can modify N, NEV, */
+    /* NCV and WHICH to solve problems of different    */
+    /* sizes, and to get different parts the spectrum. */
+    /* However, the following conditions must be       */
+    /* satisfied:                                      */
+    /*                   N <= MAXN                     */
+    /*                 NEV <= MAXNEV                   */
+    /*           NEV + 2 <= NCV <= MAXNCV              */
+    /* ----------------------------------------------- */
 
     n = 100;
     nev = 4;
@@ -197,17 +173,17 @@ static a_int c_n6 = -6;
     *bmat = 'G';
     strcpy(which, "LM");
 
-    /*     %----------------------------------------------------% */
-    /*     | The work array WORKL is used in SNAUPD as          | */
-    /*     | workspace.  Its dimension LWORKL has to be set as  | */
-    /*     | illustrated below.  The parameter TOL determines   | */
-    /*     | the stopping criterion. If TOL<=0, machine machine | */
-    /*     | precision is used.  The number IDO is used for     | */
-    /*     | reverse communication and has to be set to 0 at    | */
-    /*     | the beginning.  Setting INFO=0 indicates that we   | */
-    /*     | using a randomly generated vector to start the     | */
-    /*     | the ARNOLDI process.                               | */
-    /*     %----------------------------------------------------% */
+    /* -------------------------------------------------- */
+    /* The work array WORKL is used in SNAUPD as          */
+    /* workspace.  Its dimension LWORKL has to be set as  */
+    /* illustrated below.  The parameter TOL determines   */
+    /* the stopping criterion. If TOL<=0, machine machine */
+    /* precision is used.  The number IDO is used for     */
+    /* reverse communication and has to be set to 0 at    */
+    /* the beginning.  Setting INFO=0 indicates that we   */
+    /* using a randomly generated vector to start the     */
+    /* the ARNOLDI process.                               */
+    /* -------------------------------------------------- */
 
     /* Computing 2nd power */
     i__1 = ncv;
@@ -216,13 +192,13 @@ static a_int c_n6 = -6;
     tol = 0.f;
     ido = 0;
 
-    /*     %---------------------------------------------------% */
-    /*     | IPARAM(3) specifies the maximum number of Arnoldi | */
-    /*     | iterations allowed.  Mode 2 of SNAUPD is used     | */
-    /*     | (IPARAM(7) = 2). All these options can be changed | */
-    /*     | by the user. For details, see the documentation   | */
-    /*     | in SNBAND.                                        | */
-    /*     %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* IPARAM(3) specifies the maximum number of Arnoldi */
+    /* iterations allowed.  Mode 2 of SNAUPD is used     */
+    /* (IPARAM(7) = 2). All these options can be changed */
+    /* by the user. For details, see the documentation   */
+    /* in SNBAND.                                        */
+    /* ------------------------------------------------- */
 
     mode = 2;
     maxitr = 300;
@@ -230,31 +206,31 @@ static a_int c_n6 = -6;
     iparam[2] = maxitr;
     iparam[6] = mode;
 
-    /*     %--------------------------------------------% */
-    /*     | Construct matrices A and M in LAPACK-style | */
-    /*     | banded form.                               | */
-    /*     %--------------------------------------------% */
+    /* ------------------------------------------ */
+    /* Construct matrices A and M in LAPACK-style */
+    /* banded form.                               */
+    /* ------------------------------------------ */
 
-    /*     %---------------------------------------------% */
-    /*     | Zero out the workspace for banded matrices. | */
-    /*     %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Zero out the workspace for banded matrices. */
+    /* ------------------------------------------- */
 
     slaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50);
     slaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50);
     slaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50);
 
-    /*     %-------------------------------------% */
-    /*     | KU, KL are number of superdiagonals | */
-    /*     | and subdiagonals within the band of | */
-    /*     | matrices A and M.                   | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* KU, KL are number of superdiagonals */
+    /* and subdiagonals within the band of */
+    /* matrices A and M.                   */
+    /* ----------------------------------- */
 
     kl = 1;
     ku = 1;
 
-    /*     %---------------% */
-    /*     | Main diagonal | */
-    /*     %---------------% */
+    /* ------------- */
+    /* Main diagonal */
+    /* ------------- */
 
     h = 1.f / (float)(n + 1);
 
@@ -267,9 +243,9 @@ static a_int c_n6 = -6;
         /* L30: */
     }
 
-    /*     %-------------------------------------% */
-    /*     | First subdiagonal and superdiagonal | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* First subdiagonal and superdiagonal */
+    /* ----------------------------------- */
 
     isup = kl + ku;
     isub = kl + ku + 2;
@@ -284,14 +260,14 @@ static a_int c_n6 = -6;
         /* L50: */
     }
 
-    /*     %------------------------------------------------% */
-    /*     | Call ARPACK banded solver to find eigenvalues  | */
-    /*     | and eigenvectors. The real parts of the        | */
-    /*     | eigenvalues are returned in the first column   | */
-    /*     | of D, the imaginary parts are returned in the  | */
-    /*     | second column of D.  Eigenvectors are returned | */
-    /*     | in the first NCONV (=IPARAM(5)) columns of V.  | */
-    /*     %------------------------------------------------% */
+    /* ---------------------------------------------- */
+    /* Call ARPACK banded solver to find eigenvalues  */
+    /* and eigenvectors. The real parts of the        */
+    /* eigenvalues are returned in the first column   */
+    /* of D, the imaginary parts are returned in the  */
+    /* second column of D.  Eigenvectors are returned */
+    /* in the first NCONV (=IPARAM(5)) columns of V.  */
+    /* ---------------------------------------------- */
 
     rvec = TRUE_;
     snband_(&rvec, "A", select, d, &d[50], v, &c__1000, &sigmar, &sigmai, workev, &n, a, m, &c__50, rfac, cfac, &kl, &ku, which, bmat, &nev, &tol, resid, &ncv, v, &c__1000, iparam, workd, workl, &lworkl, workc, iwork, &info);
@@ -299,9 +275,9 @@ static a_int c_n6 = -6;
     if (info == 0)
     {
 
-        /*        %-----------------------------------% */
-        /*        | Print out convergence information | */
-        /*        %-----------------------------------% */
+        /* --------------------------------- */
+        /* Print out convergence information */
+        /* --------------------------------- */
 
         nconv = iparam[4];
 
@@ -355,10 +331,10 @@ static a_int c_n6 = -6;
         do_lio(&c__9, &c__1, " ", (ftnlen)1);
         e_wsle();
 
-        /*        %----------------------------% */
-        /*        | Compute the residual norm. | */
-        /*        |    ||  A*x - lambda*x ||   | */
-        /*        %----------------------------% */
+        /* -------------------------- */
+        /* Compute the residual norm. */
+        /*    ||  A*x - lambda*x ||   */
+        /* -------------------------- */
 
         first = TRUE_;
         i__1 = nconv;
@@ -368,9 +344,9 @@ static a_int c_n6 = -6;
             if (d[j + 49] == 0.f)
             {
 
-                /*              %--------------------% */
-                /*              | Ritz value is real | */
-                /*              %--------------------% */
+                /* ------------------ */
+                /* Ritz value is real */
+                /* ------------------ */
 
                 sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
                 sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
@@ -382,12 +358,12 @@ static a_int c_n6 = -6;
             else if (first)
             {
 
-                /*              %------------------------% */
-                /*              | Ritz value is complex  | */
-                /*              | Residual of one Ritz   | */
-                /*              | value of the conjugate | */
-                /*              | pair is computed.      | */
-                /*              %------------------------% */
+                /* ---------------------- */
+                /* Ritz value is complex  */
+                /* Residual of one Ritz   */
+                /* value of the conjugate */
+                /* pair is computed.      */
+                /* ---------------------- */
 
                 sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
                 sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
@@ -421,11 +397,11 @@ static a_int c_n6 = -6;
     else
     {
 
-        /*        %-------------------------------------% */
-        /*        | Either convergence failed, or there | */
-        /*        | is error.  Check the documentation  | */
-        /*        | for SNBAND.                         | */
-        /*        %-------------------------------------% */
+        /* ----------------------------------- */
+        /* Either convergence failed, or there */
+        /* is error.  Check the documentation  */
+        /* for SNBAND.                         */
+        /* ----------------------------------- */
 
         s_wsle(&io___57);
         do_lio(&c__9, &c__1, " ", (ftnlen)1);

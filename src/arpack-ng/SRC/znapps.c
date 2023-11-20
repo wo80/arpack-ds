@@ -7,140 +7,138 @@
 static a_dcomplex z_one = {1., 0.};
 static a_dcomplex z_zero = {0., 0.};
 static a_int i_one = 1;
-
-/* \BeginDoc */
-
-/* \Name: znapps */
-
-/* \Description: */
-/*  Given the Arnoldi factorization */
-
-/*     A*V_{k} - V_{k}*H_{k} = r_{k+p}*e_{k+p}^T, */
-
-/*  apply NP implicit shifts resulting in */
-
-/*     A*(V_{k}*Q) - (V_{k}*Q)*(Q^T* H_{k}*Q) = r_{k+p}*e_{k+p}^T * Q */
-
-/*  where Q is an orthogonal matrix which is the product of rotations */
-/*  and reflections resulting from the NP bulge change sweeps. */
-/*  The updated Arnoldi factorization becomes: */
-
-/*     A*VNEW_{k} - VNEW_{k}*HNEW_{k} = rnew_{k}*e_{k}^T. */
-
-/* \Usage: */
-/*  call znapps */
-/*     ( N, KEV, NP, SHIFT, V, LDV, H, LDH, RESID, Q, LDQ, */
-/*       WORKL, WORKD ) */
-
-/* \Arguments */
-/*  N       Integer.  (INPUT) */
-/*          Problem size, i.e. size of matrix A. */
-
-/*  KEV     Integer.  (INPUT/OUTPUT) */
-/*          KEV+NP is the size of the input matrix H. */
-/*          KEV is the size of the updated matrix HNEW. */
-
-/*  NP      Integer.  (INPUT) */
-/*          Number of implicit shifts to be applied. */
-
-/*  SHIFT   Complex*16 array of length NP.  (INPUT) */
-/*          The shifts to be applied. */
-
-/*  V       Complex*16 N by (KEV+NP) array.  (INPUT/OUTPUT) */
-/*          On INPUT, V contains the current KEV+NP Arnoldi vectors. */
-/*          On OUTPUT, V contains the updated KEV Arnoldi vectors */
-/*          in the first KEV columns of V. */
-
-/*  LDV     Integer.  (INPUT) */
-/*          Leading dimension of V exactly as declared in the calling */
-/*          program. */
-
-/*  H       Complex*16 (KEV+NP) by (KEV+NP) array.  (INPUT/OUTPUT) */
-/*          On INPUT, H contains the current KEV+NP by KEV+NP upper */
-/*          Hessenberg matrix of the Arnoldi factorization. */
-/*          On OUTPUT, H contains the updated KEV by KEV upper Hessenberg */
-/*          matrix in the KEV leading submatrix. */
-
-/*  LDH     Integer.  (INPUT) */
-/*          Leading dimension of H exactly as declared in the calling */
-/*          program. */
-
-/*  RESID   Complex*16 array of length N.  (INPUT/OUTPUT) */
-/*          On INPUT, RESID contains the the residual vector r_{k+p}. */
-/*          On OUTPUT, RESID is the update residual vector rnew_{k} */
-/*          in the first KEV locations. */
-
-/*  Q       Complex*16 KEV+NP by KEV+NP work array.  (WORKSPACE) */
-/*          Work array used to accumulate the rotations and reflections */
-/*          during the bulge chase sweep. */
-
-/*  LDQ     Integer.  (INPUT) */
-/*          Leading dimension of Q exactly as declared in the calling */
-/*          program. */
-
-/*  WORKL   Complex*16 work array of length (KEV+NP).  (WORKSPACE) */
-/*          Private (replicated) array on each PE or array allocated on */
-/*          the front end. */
-
-/*  WORKD   Complex*16 work array of length 2*N.  (WORKSPACE) */
-/*          Distributed array used in the application of the accumulated */
-/*          orthogonal matrix Q. */
-
-/* \EndDoc */
-
-/* ----------------------------------------------------------------------- */
-
-/* \BeginLib */
-
-/* \Local variables: */
-/*     xxxxxx  Complex*16 */
-
-/* \References: */
-/*  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in */
-/*     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992), */
-/*     pp 357-385. */
-
-/* \Routines called: */
-/*     ivout   ARPACK utility routine that prints integers. */
-/*     arscnd  ARPACK utility routine for timing. */
-/*     zmout   ARPACK utility routine that prints matrices */
-/*     zvout   ARPACK utility routine that prints vectors. */
-/*     zlacpy  LAPACK matrix copy routine. */
-/*     zlanhs  LAPACK routine that computes various norms of a matrix. */
-/*     zlartg  LAPACK Givens rotation construction routine. */
-/*     zlaset  LAPACK matrix initialization routine. */
-/*     dlabad  LAPACK routine for defining the underflow and overflow */
-/*             limits. */
-/*     dlamch  LAPACK routine that determines machine constants. */
-/*     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-/*     zgemv   Level 2 BLAS routine for matrix vector multiplication. */
-/*     zaxpy   Level 1 BLAS that computes a vector triad. */
-/*     zcopy   Level 1 BLAS that copies one vector to another. */
-/*     zscal   Level 1 BLAS that scales a vector. */
-
-/* \Author */
-/*     Danny Sorensen               Phuong Vu */
-/*     Richard Lehoucq              CRPC / Rice University */
-/*     Dept. of Computational &     Houston, Texas */
-/*     Applied Mathematics */
-/*     Rice University */
-/*     Houston, Texas */
-
-/* \SCCS Information: @(#) */
-/* FILE: napps.F   SID: 2.3   DATE OF SID: 3/28/97   RELEASE: 2 */
-
-/* \Remarks */
-/*  1. In this version, each shift is applied to all the sublocks of */
-/*     the Hessenberg matrix H and not just to the submatrix that it */
-/*     comes from. Deflation as in LAPACK routine zlahqr (QR algorithm */
-/*     for upper Hessenberg matrices ) is used. */
-/*     Upon output, the subdiagonals of H are enforced to be non-negative */
-/*     real numbers. */
-
-/* \EndLib */
-
-/* ----------------------------------------------------------------------- */
-
+/**
+ * \BeginDoc
+ *
+ * \Name: znapps
+ *
+ * \Description:
+ *  Given the Arnoldi factorization
+ *
+ *     A*V_{k} - V_{k}*H_{k} = r_{k+p}*e_{k+p}^T,
+ *
+ *  apply NP implicit shifts resulting in
+ *
+ *     A*(V_{k}*Q) - (V_{k}*Q)*(Q^T* H_{k}*Q) = r_{k+p}*e_{k+p}^T * Q
+ *
+ *  where Q is an orthogonal matrix which is the product of rotations
+ *  and reflections resulting from the NP bulge change sweeps.
+ *  The updated Arnoldi factorization becomes:
+ *
+ *     A*VNEW_{k} - VNEW_{k}*HNEW_{k} = rnew_{k}*e_{k}^T.
+ *
+ * \Usage:
+ *  call znapps
+ *     ( N, KEV, NP, SHIFT, V, LDV, H, LDH, RESID, Q, LDQ,
+ *       WORKL, WORKD )
+ *
+ * \Arguments
+ *  N       Integer.  (INPUT)
+ *          Problem size, i.e. size of matrix A.
+ *
+ *  KEV     Integer.  (INPUT/OUTPUT)
+ *          KEV+NP is the size of the input matrix H.
+ *          KEV is the size of the updated matrix HNEW.
+ *
+ *  NP      Integer.  (INPUT)
+ *          Number of implicit shifts to be applied.
+ *
+ *  SHIFT   Complex*16 array of length NP.  (INPUT)
+ *          The shifts to be applied.
+ *
+ *  V       Complex*16 N by (KEV+NP) array.  (INPUT/OUTPUT)
+ *          On INPUT, V contains the current KEV+NP Arnoldi vectors.
+ *          On OUTPUT, V contains the updated KEV Arnoldi vectors
+ *          in the first KEV columns of V.
+ *
+ *  LDV     Integer.  (INPUT)
+ *          Leading dimension of V exactly as declared in the calling
+ *          program.
+ *
+ *  H       Complex*16 (KEV+NP) by (KEV+NP) array.  (INPUT/OUTPUT)
+ *          On INPUT, H contains the current KEV+NP by KEV+NP upper
+ *          Hessenberg matrix of the Arnoldi factorization.
+ *          On OUTPUT, H contains the updated KEV by KEV upper Hessenberg
+ *          matrix in the KEV leading submatrix.
+ *
+ *  LDH     Integer.  (INPUT)
+ *          Leading dimension of H exactly as declared in the calling
+ *          program.
+ *
+ *  RESID   Complex*16 array of length N.  (INPUT/OUTPUT)
+ *          On INPUT, RESID contains the the residual vector r_{k+p}.
+ *          On OUTPUT, RESID is the update residual vector rnew_{k}
+ *          in the first KEV locations.
+ *
+ *  Q       Complex*16 KEV+NP by KEV+NP work array.  (WORKSPACE)
+ *          Work array used to accumulate the rotations and reflections
+ *          during the bulge chase sweep.
+ *
+ *  LDQ     Integer.  (INPUT)
+ *          Leading dimension of Q exactly as declared in the calling
+ *          program.
+ *
+ *  WORKL   Complex*16 work array of length (KEV+NP).  (WORKSPACE)
+ *          Private (replicated) array on each PE or array allocated on
+ *          the front end.
+ *
+ *  WORKD   Complex*16 work array of length 2*N.  (WORKSPACE)
+ *          Distributed array used in the application of the accumulated
+ *          orthogonal matrix Q.
+ *
+ * \EndDoc
+ *
+ * -----------------------------------------------------------------------
+ *
+ * \BeginLib
+ *
+ * \Local variables:
+ *     xxxxxx  Complex*16
+ *
+ * \References:
+ *  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in
+ *     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992),
+ *     pp 357-385.
+ *
+ * \Routines called:
+ *     ivout   ARPACK utility routine that prints integers.
+ *     arscnd  ARPACK utility routine for timing.
+ *     zmout   ARPACK utility routine that prints matrices
+ *     zvout   ARPACK utility routine that prints vectors.
+ *     zlacpy  LAPACK matrix copy routine.
+ *     zlanhs  LAPACK routine that computes various norms of a matrix.
+ *     zlartg  LAPACK Givens rotation construction routine.
+ *     zlaset  LAPACK matrix initialization routine.
+ *     dlabad  LAPACK routine for defining the underflow and overflow
+ *             limits.
+ *     dlamch  LAPACK routine that determines machine constants.
+ *     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     zgemv   Level 2 BLAS routine for matrix vector multiplication.
+ *     zaxpy   Level 1 BLAS that computes a vector triad.
+ *     zcopy   Level 1 BLAS that copies one vector to another.
+ *     zscal   Level 1 BLAS that scales a vector.
+ *
+ * \Author
+ *     Danny Sorensen               Phuong Vu
+ *     Richard Lehoucq              CRPC / Rice University
+ *     Dept. of Computational &     Houston, Texas
+ *     Applied Mathematics
+ *     Rice University
+ *     Houston, Texas
+ *
+ * \SCCS Information: @(#)
+ * FILE: napps.F   SID: 2.3   DATE OF SID: 3/28/97   RELEASE: 2
+ *
+ * \Remarks
+ *  1. In this version, each shift is applied to all the sublocks of
+ *     the Hessenberg matrix H and not just to the submatrix that it
+ *     comes from. Deflation as in LAPACK routine zlahqr (QR algorithm
+ *     for upper Hessenberg matrices ) is used.
+ *     Upon output, the subdiagonals of H are enforced to be non-negative
+ *     real numbers.
+ *
+ * \EndLib
+ */
 int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a_int *ldv, a_dcomplex *h, a_int *ldh, a_dcomplex *resid, a_dcomplex *q, a_int *ldq, a_dcomplex *workl, a_dcomplex *workd)
 {
     /* Initialized data */
@@ -151,8 +149,6 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     a_int h_dim1, h_offset, v_dim1, v_offset, q_dim1, q_offset, i__1, i__2, i__3, i__4, i__5, i__6;
     double d__1, d__2, d__3, d__4;
     a_dcomplex z__1, z__2, z__3, z__4, z__5;
-
-    /* Builtin functions */
 
     /* Local variables */
     double c;
@@ -170,60 +166,6 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     a_int istart, kplusp, msglvl;
     static double smlnum;
 
-    /*     %----------------------------------------------------% */
-    /*     | Include files for debugging and timing information | */
-    /*     %----------------------------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %---------------------------------% */
-    /*     | See debug.doc for documentation | */
-    /*     %---------------------------------% */
-
-    /*     %------------------% */
-    /*     | Scalar Arguments | */
-    /*     %------------------% */
-
-    /*     %--------------------------------% */
-    /*     | See stat.doc for documentation | */
-    /*     %--------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %-----------------% */
-    /*     | Array Arguments | */
-    /*     %-----------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %------------------------% */
-    /*     | Local Scalars & Arrays | */
-    /*     %------------------------% */
-
-    /*     %----------------------% */
-    /*     | External Subroutines | */
-    /*     %----------------------% */
-
-    /*     %--------------------% */
-    /*     | External Functions | */
-    /*     %--------------------% */
-
-    /*     %----------------------% */
-    /*     | Intrinsics Functions | */
-    /*     %----------------------% */
-
-    /*     %---------------------% */
-    /*     | Statement Functions | */
-    /*     %---------------------% */
-
-    /*     %----------------% */
-    /*     | Data statements | */
-    /*     %----------------% */
-
     /* Parameter adjustments */
     --workd;
     --resid;
@@ -239,21 +181,15 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     q_offset = 1 + q_dim1;
     q -= q_offset;
 
-    /* Function Body */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
     if (first)
     {
 
-        /*        %-----------------------------------------------% */
-        /*        | Set machine-dependent constants for the       | */
-        /*        | stopping criterion. If norm(H) <= sqrt(OVFL), | */
-        /*        | overflow should not occur.                    | */
-        /*        | REFERENCE: LAPACK subroutine zlahqr           | */
-        /*        %-----------------------------------------------% */
+        /* --------------------------------------------- */
+        /* Set machine-dependent constants for the       */
+        /* stopping criterion. If norm(H) <= sqrt(OVFL), */
+        /* overflow should not occur.                    */
+        /* REFERENCE: LAPACK subroutine zlahqr           */
+        /* --------------------------------------------- */
 
         unfl = dlamch_("safe minimum");
         z__1.r = 1. / unfl, z__1.i = 0. / unfl;
@@ -264,37 +200,37 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
         first = FALSE_;
     }
 
-    /*     %-------------------------------% */
-    /*     | Initialize timing statistics  | */
-    /*     | & message level for debugging | */
-    /*     %-------------------------------% */
+    /* ----------------------------- */
+    /* Initialize timing statistics  */
+    /* & message level for debugging */
+    /* ----------------------------- */
 
     arscnd_(&t0);
     msglvl = debug_1.mcapps;
 
     kplusp = *kev + *np;
 
-    /*     %--------------------------------------------% */
-    /*     | Initialize Q to the identity to accumulate | */
-    /*     | the rotations and reflections              | */
-    /*     %--------------------------------------------% */
+    /* ------------------------------------------ */
+    /* Initialize Q to the identity to accumulate */
+    /* the rotations and reflections              */
+    /* ------------------------------------------ */
 
     zlaset_("All", &kplusp, &kplusp, &z_zero, &z_one, &q[q_offset], ldq);
 
-    /*     %----------------------------------------------% */
-    /*     | Quick return if there are no shifts to apply | */
-    /*     %----------------------------------------------% */
+    /* -------------------------------------------- */
+    /* Quick return if there are no shifts to apply */
+    /* -------------------------------------------- */
 
     if (*np == 0)
     {
         goto L9000;
     }
 
-    /*     %----------------------------------------------% */
-    /*     | Chase the bulge with the application of each | */
-    /*     | implicit shift. Each shift is applied to the | */
-    /*     | whole matrix including each block.           | */
-    /*     %----------------------------------------------% */
+    /* -------------------------------------------- */
+    /* Chase the bulge with the application of each */
+    /* implicit shift. Each shift is applied to the */
+    /* whole matrix including each block.           */
+    /* -------------------------------------------- */
 
     i__1 = *np;
     for (jj = 1; jj <= i__1; ++jj)
@@ -315,11 +251,11 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
         for (i = istart; i <= i__2; ++i)
         {
 
-            /*           %----------------------------------------% */
-            /*           | Check for splitting and deflation. Use | */
-            /*           | a standard test as in the QR algorithm | */
-            /*           | REFERENCE: LAPACK subroutine zlahqr    | */
-            /*           %----------------------------------------% */
+            /* -------------------------------------- */
+            /* Check for splitting and deflation. Use */
+            /* a standard test as in the QR algorithm */
+            /* REFERENCE: LAPACK subroutine zlahqr    */
+            /* -------------------------------------- */
 
             i__3 = i + i * h_dim1;
             i__4 = i + 1 + (i + 1) * h_dim1;
@@ -356,11 +292,11 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
             ivout_(1, &iend, debug_1.ndigit, "_napps: End of current block ");
         }
 
-        /*        %------------------------------------------------% */
-        /*        | No reason to apply a shift to block of order 1 | */
-        /*        | or if the current block starts after the point | */
-        /*        | of compression since we'll discard this stuff  | */
-        /*        %------------------------------------------------% */
+        /* ---------------------------------------------- */
+        /* No reason to apply a shift to block of order 1 */
+        /* or if the current block starts after the point */
+        /* of compression since we'll discard this stuff  */
+        /* ---------------------------------------------- */
 
         if (istart == iend || istart > *kev)
         {
@@ -379,9 +315,9 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
         for (i = istart; i <= i__2; ++i)
         {
 
-            /*           %------------------------------------------------------% */
-            /*           | Construct the plane rotation G to zero out the bulge | */
-            /*           %------------------------------------------------------% */
+            /* ---------------------------------------------------- */
+            /* Construct the plane rotation G to zero out the bulge */
+            /* ---------------------------------------------------- */
 
             zlartg_(&f, &g, &c, &s, &r);
             if (i > istart)
@@ -392,9 +328,9 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
                 h[i__3].r = 0., h[i__3].i = 0.;
             }
 
-            /*           %---------------------------------------------% */
-            /*           | Apply rotation to the left of H;  H <- G'*H | */
-            /*           %---------------------------------------------% */
+            /* ------------------------------------------- */
+            /* Apply rotation to the left of H;  H <- G'*H */
+            /* ------------------------------------------- */
 
             i__3 = kplusp;
             for (j = i; j <= i__3; ++j)
@@ -419,9 +355,9 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
                 /* L50: */
             }
 
-            /*           %---------------------------------------------% */
-            /*           | Apply rotation to the right of H;  H <- H*G | */
-            /*           %---------------------------------------------% */
+            /* ------------------------------------------- */
+            /* Apply rotation to the right of H;  H <- H*G */
+            /* ------------------------------------------- */
 
             /* Computing MIN */
             i__4 = i + 2;
@@ -448,9 +384,9 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
                 /* L60: */
             }
 
-            /*           %-----------------------------------------------------% */
-            /*           | Accumulate the rotation in the matrix Q;  Q <- Q*G' | */
-            /*           %-----------------------------------------------------% */
+            /* --------------------------------------------------- */
+            /* Accumulate the rotation in the matrix Q;  Q <- Q*G' */
+            /* --------------------------------------------------- */
 
             /* Computing MIN */
             i__4 = i + jj;
@@ -477,9 +413,9 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
                 /* L70: */
             }
 
-            /*           %---------------------------% */
-            /*           | Prepare for next rotation | */
-            /*           %---------------------------% */
+            /* ------------------------- */
+            /* Prepare for next rotation */
+            /* ------------------------- */
 
             if (i < iend - 1)
             {
@@ -491,15 +427,15 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
             /* L80: */
         }
 
-        /*        %-------------------------------% */
-        /*        | Finished applying the shift.  | */
-        /*        %-------------------------------% */
+        /* ----------------------------- */
+        /* Finished applying the shift.  */
+        /* ----------------------------- */
 
     L100:
 
-        /*        %---------------------------------------------------------% */
-        /*        | Apply the same shift to the next block if there is any. | */
-        /*        %---------------------------------------------------------% */
+        /* ------------------------------------------------------- */
+        /* Apply the same shift to the next block if there is any. */
+        /* ------------------------------------------------------- */
 
         istart = iend + 1;
         if (iend < kplusp)
@@ -507,18 +443,18 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
             goto L20;
         }
 
-        /*        %---------------------------------------------% */
-        /*        | Loop back to the top to get the next shift. | */
-        /*        %---------------------------------------------% */
+        /* ------------------------------------------- */
+        /* Loop back to the top to get the next shift. */
+        /* ------------------------------------------- */
 
         /* L110: */
     }
 
-    /*     %---------------------------------------------------% */
-    /*     | Perform a similarity transformation that makes    | */
-    /*     | sure that the compressed H will have non-negative | */
-    /*     | real subdiagonal elements.                        | */
-    /*     %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* Perform a similarity transformation that makes    */
+    /* sure that the compressed H will have non-negative */
+    /* real subdiagonal elements.                        */
+    /* ------------------------------------------------- */
 
     i__1 = *kev;
     for (j = 1; j <= i__1; ++j)
@@ -557,14 +493,14 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     for (i = 1; i <= i__1; ++i)
     {
 
-        /*        %--------------------------------------------% */
-        /*        | Final check for splitting and deflation.   | */
-        /*        | Use a standard test as in the QR algorithm | */
-        /*        | REFERENCE: LAPACK subroutine zlahqr.       | */
-        /*        | Note: Since the subdiagonals of the        | */
-        /*        | compressed H are nonnegative real numbers, | */
-        /*        | we take advantage of this.                 | */
-        /*        %--------------------------------------------% */
+        /* ------------------------------------------ */
+        /* Final check for splitting and deflation.   */
+        /* Use a standard test as in the QR algorithm */
+        /* REFERENCE: LAPACK subroutine zlahqr.       */
+        /* Note: Since the subdiagonals of the        */
+        /* compressed H are nonnegative real numbers, */
+        /* we take advantage of this.                 */
+        /* ------------------------------------------ */
 
         i__2 = i + i * h_dim1;
         i__3 = i + 1 + (i + 1) * h_dim1;
@@ -584,13 +520,13 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
         /* L130: */
     }
 
-    /*     %-------------------------------------------------% */
-    /*     | Compute the (kev+1)-st column of (V*Q) and      | */
-    /*     | temporarily store the result in WORKD(N+1:2*N). | */
-    /*     | This is needed in the residual update since we  | */
-    /*     | cannot GUARANTEE that the corresponding entry   | */
-    /*     | of H would be zero as in exact arithmetic.      | */
-    /*     %-------------------------------------------------% */
+    /* ----------------------------------------------- */
+    /* Compute the (kev+1)-st column of (V*Q) and      */
+    /* temporarily store the result in WORKD(N+1:2*N). */
+    /* This is needed in the residual update since we  */
+    /* cannot GUARANTEE that the corresponding entry   */
+    /* of H would be zero as in exact arithmetic.      */
+    /* ----------------------------------------------- */
 
     i__1 = *kev + 1 + *kev * h_dim1;
     if (h[i__1].r > 0.)
@@ -598,10 +534,10 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
         zgemv_("N", n, &kplusp, &z_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &z_zero, &workd[*n + 1], &i_one);
     }
 
-    /*     %----------------------------------------------------------% */
-    /*     | Compute column 1 to kev of (V*Q) in backward order       | */
-    /*     | taking advantage of the upper Hessenberg structure of Q. | */
-    /*     %----------------------------------------------------------% */
+    /* -------------------------------------------------------- */
+    /* Compute column 1 to kev of (V*Q) in backward order       */
+    /* taking advantage of the upper Hessenberg structure of Q. */
+    /* -------------------------------------------------------- */
 
     i__1 = *kev;
     for (i = 1; i <= i__1; ++i)
@@ -612,15 +548,15 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
         /* L140: */
     }
 
-    /*     %-------------------------------------------------% */
-    /*     |  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). | */
-    /*     %-------------------------------------------------% */
+    /* ----------------------------------------------- */
+    /*  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). */
+    /* ----------------------------------------------- */
 
     zlacpy_("A", n, kev, &v[(kplusp - *kev + 1) * v_dim1 + 1], ldv, &v[v_offset], ldv);
 
-    /*     %--------------------------------------------------------------% */
-    /*     | Copy the (kev+1)-st column of (V*Q) in the appropriate place | */
-    /*     %--------------------------------------------------------------% */
+    /* ------------------------------------------------------------ */
+    /* Copy the (kev+1)-st column of (V*Q) in the appropriate place */
+    /* ------------------------------------------------------------ */
 
     i__1 = *kev + 1 + *kev * h_dim1;
     if (h[i__1].r > 0.)
@@ -628,13 +564,13 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
         zcopy_(n, &workd[*n + 1], &i_one, &v[(*kev + 1) * v_dim1 + 1], &i_one);
     }
 
-    /*     %-------------------------------------% */
-    /*     | Update the residual vector:         | */
-    /*     |    r <- sigmak*r + betak*v(:,kev+1) | */
-    /*     | where                               | */
-    /*     |    sigmak = (e_{kev+p}'*Q)*e_{kev}  | */
-    /*     |    betak = e_{kev+1}'*H*e_{kev}     | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* Update the residual vector:         */
+    /*    r <- sigmak*r + betak*v(:,kev+1) */
+    /* where                               */
+    /*    sigmak = (e_{kev+p}'*Q)*e_{kev}  */
+    /*    betak = e_{kev+1}'*H*e_{kev}     */
+    /* ----------------------------------- */
 
     zscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &i_one);
     i__1 = *kev + 1 + *kev * h_dim1;
@@ -660,8 +596,8 @@ L9000:
 
     return 0;
 
-    /*     %---------------% */
-    /*     | End of znapps | */
-    /*     %---------------% */
+    /* ------------- */
+    /* End of znapps */
+    /* ------------- */
 
 } /* znapps_ */

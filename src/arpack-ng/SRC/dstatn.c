@@ -2,10 +2,10 @@
 
 #include "arpack_internal.h"
 
-/*     %---------------------------------------------% */
+     /* ------------------------------------------- */
 /*     | Initialize statistic and timing information | */
 /*     | for nonsymmetric Arnoldi code.              | */
-/*     %---------------------------------------------% */
+     /* ------------------------------------------- */
 
 /* \Author */
 /*     Danny Sorensen               Phuong Vu */
@@ -20,21 +20,6 @@
 
 int dstatn_(void)
 {
-
-    /*     %--------------------------------% */
-    /*     | See stat.doc for documentation | */
-    /*     %--------------------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
-    /*     %--------------------------------% */
-    /*     | See stat.doc for documentation | */
-    /*     %--------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
 
     timing_1.nopx = 0;
     timing_1.nbx = 0;
@@ -53,17 +38,17 @@ int dstatn_(void)
     timing_1.tgetv0 = 0.f;
     timing_1.trvec = 0.f;
 
-    /*     %----------------------------------------------------% */
-    /*     | User time including reverse communication overhead | */
-    /*     %----------------------------------------------------% */
+    /* -------------------------------------------------- */
+    /* User time including reverse communication overhead */
+    /* -------------------------------------------------- */
 
     timing_1.tmvopx = 0.f;
     timing_1.tmvbx = 0.f;
 
     return 0;
 
-    /*     %---------------% */
-    /*     | End of dstatn | */
-    /*     %---------------% */
+    /* ------------- */
+    /* End of dstatn */
+    /* ------------- */
 
 } /* dstatn_ */

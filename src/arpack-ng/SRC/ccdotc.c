@@ -8,8 +8,6 @@
     a_int i__1, i__2;
     a_fcomplex q__1, q__2, q__3;
 
-    /* Builtin functions */
-
     /* Local variables */
     a_int i, ix, iy;
     a_fcomplex ztemp;
@@ -22,7 +20,6 @@
     --zy;
     --zx;
 
-    /* Function Body */
     ztemp.r = 0.f, ztemp.i = 0.f;
     ret_val->r = 0.f, ret_val->i = 0.f;
     if (*n <= 0)

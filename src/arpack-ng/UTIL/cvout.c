@@ -20,7 +20,6 @@ void cvout_(const int n, const a_fcomplex *cx, const int idigit, const char *ifm
     char line[80];
     int ndigit;
 
-    /* Function Body */
     len = strlen(ifmt);
     len = min(len,80);
     for (i = 0; i < len; ++i)

@@ -10,214 +10,212 @@ static a_int i_one = 1;
 static a_bool b_false = FALSE_;
 static double d_one = 1.;
 static a_int i_two = 2;
-
-/* \BeginDoc */
-
-/* \Name: znaitr */
-
-/* \Description: */
-/*  Reverse communication interface for applying NP additional steps to */
-/*  a K step nonsymmetric Arnoldi factorization. */
-
-/*  Input:  OP*V_{k}  -  V_{k}*H = r_{k}*e_{k}^T */
-
-/*          with (V_{k}^T)*B*V_{k} = I, (V_{k}^T)*B*r_{k} = 0. */
-
-/*  Output: OP*V_{k+p}  -  V_{k+p}*H = r_{k+p}*e_{k+p}^T */
-
-/*          with (V_{k+p}^T)*B*V_{k+p} = I, (V_{k+p}^T)*B*r_{k+p} = 0. */
-
-/*  where OP and B are as in znaupd.  The B-norm of r_{k+p} is also */
-/*  computed and returned. */
-
-/* \Usage: */
-/*  call znaitr */
-/*     ( IDO, BMAT, N, K, NP, NB, RESID, RNORM, V, LDV, H, LDH, */
-/*       IPNTR, WORKD, INFO ) */
-
-/* \Arguments */
-/*  IDO     Integer.  (INPUT/OUTPUT) */
-/*          Reverse communication flag. */
-/*          ------------------------------------------------------------- */
-/*          IDO =  0: first call to the reverse communication interface */
-/*          IDO = -1: compute  Y = OP * X  where */
-/*                    IPNTR(1) is the pointer into WORK for X, */
-/*                    IPNTR(2) is the pointer into WORK for Y. */
-/*                    This is for the restart phase to force the new */
-/*                    starting vector into the range of OP. */
-/*          IDO =  1: compute  Y = OP * X  where */
-/*                    IPNTR(1) is the pointer into WORK for X, */
-/*                    IPNTR(2) is the pointer into WORK for Y, */
-/*                    IPNTR(3) is the pointer into WORK for B * X. */
-/*          IDO =  2: compute  Y = B * X  where */
-/*                    IPNTR(1) is the pointer into WORK for X, */
-/*                    IPNTR(2) is the pointer into WORK for Y. */
-/*          IDO = 99: done */
-/*          ------------------------------------------------------------- */
-/*          When the routine is used in the "shift-and-invert" mode, the */
-/*          vector B * Q is already available and do not need to be */
-/*          recomputed in forming OP * Q. */
-
-/*  BMAT    Character*1.  (INPUT) */
-/*          BMAT specifies the type of the matrix B that defines the */
-/*          semi-inner product for the operator OP.  See znaupd. */
-/*          B = 'I' -> standard eigenvalue problem A*x = lambda*x */
-/*          B = 'G' -> generalized eigenvalue problem A*x = lambda*M**x */
-
-/*  N       Integer.  (INPUT) */
-/*          Dimension of the eigenproblem. */
-
-/*  K       Integer.  (INPUT) */
-/*          Current size of V and H. */
-
-/*  NP      Integer.  (INPUT) */
-/*          Number of additional Arnoldi steps to take. */
-
-/*  NB      Integer.  (INPUT) */
-/*          Blocksize to be used in the recurrence. */
-/*          Only work for NB = 1 right now.  The goal is to have a */
-/*          program that implement both the block and non-block method. */
-
-/*  RESID   Complex*16 array of length N.  (INPUT/OUTPUT) */
-/*          On INPUT:  RESID contains the residual vector r_{k}. */
-/*          On OUTPUT: RESID contains the residual vector r_{k+p}. */
-
-/*  RNORM   Double precision scalar.  (INPUT/OUTPUT) */
-/*          B-norm of the starting residual on input. */
-/*          B-norm of the updated residual r_{k+p} on output. */
-
-/*  V       Complex*16 N by K+NP array.  (INPUT/OUTPUT) */
-/*          On INPUT:  V contains the Arnoldi vectors in the first K */
-/*          columns. */
-/*          On OUTPUT: V contains the new NP Arnoldi vectors in the next */
-/*          NP columns.  The first K columns are unchanged. */
-
-/*  LDV     Integer.  (INPUT) */
-/*          Leading dimension of V exactly as declared in the calling */
-/*          program. */
-
-/*  H       Complex*16 (K+NP) by (K+NP) array.  (INPUT/OUTPUT) */
-/*          H is used to store the generated upper Hessenberg matrix. */
-
-/*  LDH     Integer.  (INPUT) */
-/*          Leading dimension of H exactly as declared in the calling */
-/*          program. */
-
-/*  IPNTR   Integer array of length 3.  (OUTPUT) */
-/*          Pointer to mark the starting locations in the WORK for */
-/*          vectors used by the Arnoldi iteration. */
-/*          ------------------------------------------------------------- */
-/*          IPNTR(1): pointer to the current operand vector X. */
-/*          IPNTR(2): pointer to the current result vector Y. */
-/*          IPNTR(3): pointer to the vector B * X when used in the */
-/*                    shift-and-invert mode.  X is the current operand. */
-/*          ------------------------------------------------------------- */
-
-/*  WORKD   Complex*16 work array of length 3*N.  (REVERSE COMMUNICATION) */
-/*          Distributed array to be used in the basic Arnoldi iteration */
-/*          for reverse communication.  The calling program should not */
-/*          use WORKD as temporary workspace during the iteration !!!!!! */
-/*          On input, WORKD(1:N) = B*RESID and is used to save some */
-/*          computation at the first step. */
-
-/*  INFO    Integer.  (OUTPUT) */
-/*          = 0: Normal exit. */
-/*          > 0: Size of the spanning invariant subspace of OP found. */
-
-/* \EndDoc */
-
-/* ----------------------------------------------------------------------- */
-
-/* \BeginLib */
-
-/* \Local variables: */
-/*     xxxxxx  Complex*16 */
-
-/* \References: */
-/*  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in */
-/*     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992), */
-/*     pp 357-385. */
-/*  2. R.B. Lehoucq, "Analysis and Implementation of an Implicitly */
-/*     Restarted Arnoldi Iteration", Rice University Technical Report */
-/*     TR95-13, Department of Computational and Applied Mathematics. */
-
-/* \Routines called: */
-/*     zgetv0  ARPACK routine to generate the initial vector. */
-/*     ivout   ARPACK utility routine that prints integers. */
-/*     arscnd  ARPACK utility routine for timing. */
-/*     zmout   ARPACK utility routine that prints matrices */
-/*     zvout   ARPACK utility routine that prints vectors. */
-/*     zlanhs  LAPACK routine that computes various norms of a matrix. */
-/*     zlascl  LAPACK routine for careful scaling of a matrix. */
-/*     dlabad  LAPACK routine for defining the underflow and overflow */
-/*             limits. */
-/*     dlamch  LAPACK routine that determines machine constants. */
-/*     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-/*     zgemv   Level 2 BLAS routine for matrix vector multiplication. */
-/*     zaxpy   Level 1 BLAS that computes a vector triad. */
-/*     zcopy   Level 1 BLAS that copies one vector to another . */
-/*     zdotc   Level 1 BLAS that computes the scalar product of two vectors. */
-/*     zscal   Level 1 BLAS that scales a vector. */
-/*     zdscal  Level 1 BLAS that scales a complex vector by a real number. */
-/*     dznrm2  Level 1 BLAS that computes the norm of a vector. */
-
-/* \Author */
-/*     Danny Sorensen               Phuong Vu */
-/*     Richard Lehoucq              CRPC / Rice University */
-/*     Dept. of Computational &     Houston, Texas */
-/*     Applied Mathematics */
-/*     Rice University */
-/*     Houston, Texas */
-
-/* \SCCS Information: @(#) */
-/* FILE: naitr.F   SID: 2.3   DATE OF SID: 8/27/96   RELEASE: 2 */
-
-/* \Remarks */
-/*  The algorithm implemented is: */
-
-/*  restart = .false. */
-/*  Given V_{k} = [v_{1}, ..., v_{k}], r_{k}; */
-/*  r_{k} contains the initial residual vector even for k = 0; */
-/*  Also assume that rnorm = || B*r_{k} || and B*r_{k} are already */
-/*  computed by the calling program. */
-
-/*  betaj = rnorm ; p_{k+1} = B*r_{k} ; */
-/*  For  j = k+1, ..., k+np  Do */
-/*     1) if ( betaj < tol ) stop or restart depending on j. */
-/*        ( At present tol is zero ) */
-/*        if ( restart ) generate a new starting vector. */
-/*     2) v_{j} = r(j-1)/betaj;  V_{j} = [V_{j-1}, v_{j}]; */
-/*        p_{j} = p_{j}/betaj */
-/*     3) r_{j} = OP*v_{j} where OP is defined as in znaupd */
-/*        For shift-invert mode p_{j} = B*v_{j} is already available. */
-/*        wnorm = || OP*v_{j} || */
-/*     4) Compute the j-th step residual vector. */
-/*        w_{j} =  V_{j}^T * B * OP * v_{j} */
-/*        r_{j} =  OP*v_{j} - V_{j} * w_{j} */
-/*        H(:,j) = w_{j}; */
-/*        H(j,j-1) = rnorm */
-/*        rnorm = || r_(j) || */
-/*        If (rnorm > 0.717*wnorm) accept step and go back to 1) */
-/*     5) Re-orthogonalization step: */
-/*        s = V_{j}'*B*r_{j} */
-/*        r_{j} = r_{j} - V_{j}*s;  rnorm1 = || r_{j} || */
-/*        alphaj = alphaj + s_{j}; */
-/*     6) Iterative refinement step: */
-/*        If (rnorm1 > 0.717*rnorm) then */
-/*           rnorm = rnorm1 */
-/*           accept step and go back to 1) */
-/*        Else */
-/*           rnorm = rnorm1 */
-/*           If this is the first time in step 6), go to 5) */
-/*           Else r_{j} lies in the span of V_{j} numerically. */
-/*              Set r_{j} = 0 and rnorm = 0; go to 1) */
-/*        EndIf */
-/*  End Do */
-
-/* \EndLib */
-
-/* ----------------------------------------------------------------------- */
-
+/**
+ * \BeginDoc
+ *
+ * \Name: znaitr
+ *
+ * \Description:
+ *  Reverse communication interface for applying NP additional steps to
+ *  a K step nonsymmetric Arnoldi factorization.
+ *
+ *  Input:  OP*V_{k}  -  V_{k}*H = r_{k}*e_{k}^T
+ *
+ *          with (V_{k}^T)*B*V_{k} = I, (V_{k}^T)*B*r_{k} = 0.
+ *
+ *  Output: OP*V_{k+p}  -  V_{k+p}*H = r_{k+p}*e_{k+p}^T
+ *
+ *          with (V_{k+p}^T)*B*V_{k+p} = I, (V_{k+p}^T)*B*r_{k+p} = 0.
+ *
+ *  where OP and B are as in znaupd.  The B-norm of r_{k+p} is also
+ *  computed and returned.
+ *
+ * \Usage:
+ *  call znaitr
+ *     ( IDO, BMAT, N, K, NP, NB, RESID, RNORM, V, LDV, H, LDH,
+ *       IPNTR, WORKD, INFO )
+ *
+ * \Arguments
+ *  IDO     Integer.  (INPUT/OUTPUT)
+ *          Reverse communication flag.
+ *          -------------------------------------------------------------
+ *          IDO =  0: first call to the reverse communication interface
+ *          IDO = -1: compute  Y = OP * X  where
+ *                    IPNTR(1) is the pointer into WORK for X,
+ *                    IPNTR(2) is the pointer into WORK for Y.
+ *                    This is for the restart phase to force the new
+ *                    starting vector into the range of OP.
+ *          IDO =  1: compute  Y = OP * X  where
+ *                    IPNTR(1) is the pointer into WORK for X,
+ *                    IPNTR(2) is the pointer into WORK for Y,
+ *                    IPNTR(3) is the pointer into WORK for B * X.
+ *          IDO =  2: compute  Y = B * X  where
+ *                    IPNTR(1) is the pointer into WORK for X,
+ *                    IPNTR(2) is the pointer into WORK for Y.
+ *          IDO = 99: done
+ *          -------------------------------------------------------------
+ *          When the routine is used in the "shift-and-invert" mode, the
+ *          vector B * Q is already available and do not need to be
+ *          recomputed in forming OP * Q.
+ *
+ *  BMAT    Character*1.  (INPUT)
+ *          BMAT specifies the type of the matrix B that defines the
+ *          semi-inner product for the operator OP.  See znaupd.
+ *          B = 'I' -> standard eigenvalue problem A*x = lambda*x
+ *          B = 'G' -> generalized eigenvalue problem A*x = lambda*M**x
+ *
+ *  N       Integer.  (INPUT)
+ *          Dimension of the eigenproblem.
+ *
+ *  K       Integer.  (INPUT)
+ *          Current size of V and H.
+ *
+ *  NP      Integer.  (INPUT)
+ *          Number of additional Arnoldi steps to take.
+ *
+ *  NB      Integer.  (INPUT)
+ *          Blocksize to be used in the recurrence.
+ *          Only work for NB = 1 right now.  The goal is to have a
+ *          program that implement both the block and non-block method.
+ *
+ *  RESID   Complex*16 array of length N.  (INPUT/OUTPUT)
+ *          On INPUT:  RESID contains the residual vector r_{k}.
+ *          On OUTPUT: RESID contains the residual vector r_{k+p}.
+ *
+ *  RNORM   Double precision scalar.  (INPUT/OUTPUT)
+ *          B-norm of the starting residual on input.
+ *          B-norm of the updated residual r_{k+p} on output.
+ *
+ *  V       Complex*16 N by K+NP array.  (INPUT/OUTPUT)
+ *          On INPUT:  V contains the Arnoldi vectors in the first K
+ *          columns.
+ *          On OUTPUT: V contains the new NP Arnoldi vectors in the next
+ *          NP columns.  The first K columns are unchanged.
+ *
+ *  LDV     Integer.  (INPUT)
+ *          Leading dimension of V exactly as declared in the calling
+ *          program.
+ *
+ *  H       Complex*16 (K+NP) by (K+NP) array.  (INPUT/OUTPUT)
+ *          H is used to store the generated upper Hessenberg matrix.
+ *
+ *  LDH     Integer.  (INPUT)
+ *          Leading dimension of H exactly as declared in the calling
+ *          program.
+ *
+ *  IPNTR   Integer array of length 3.  (OUTPUT)
+ *          Pointer to mark the starting locations in the WORK for
+ *          vectors used by the Arnoldi iteration.
+ *          -------------------------------------------------------------
+ *          IPNTR(1): pointer to the current operand vector X.
+ *          IPNTR(2): pointer to the current result vector Y.
+ *          IPNTR(3): pointer to the vector B * X when used in the
+ *                    shift-and-invert mode.  X is the current operand.
+ *          -------------------------------------------------------------
+ *
+ *  WORKD   Complex*16 work array of length 3*N.  (REVERSE COMMUNICATION)
+ *          Distributed array to be used in the basic Arnoldi iteration
+ *          for reverse communication.  The calling program should not
+ *          use WORKD as temporary workspace during the iteration !!!!!!
+ *          On input, WORKD(1:N) = B*RESID and is used to save some
+ *          computation at the first step.
+ *
+ *  INFO    Integer.  (OUTPUT)
+ *          = 0: Normal exit.
+ *          > 0: Size of the spanning invariant subspace of OP found.
+ *
+ * \EndDoc
+ *
+ * -----------------------------------------------------------------------
+ *
+ * \BeginLib
+ *
+ * \Local variables:
+ *     xxxxxx  Complex*16
+ *
+ * \References:
+ *  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in
+ *     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992),
+ *     pp 357-385.
+ *  2. R.B. Lehoucq, "Analysis and Implementation of an Implicitly
+ *     Restarted Arnoldi Iteration", Rice University Technical Report
+ *     TR95-13, Department of Computational and Applied Mathematics.
+ *
+ * \Routines called:
+ *     zgetv0  ARPACK routine to generate the initial vector.
+ *     ivout   ARPACK utility routine that prints integers.
+ *     arscnd  ARPACK utility routine for timing.
+ *     zmout   ARPACK utility routine that prints matrices
+ *     zvout   ARPACK utility routine that prints vectors.
+ *     zlanhs  LAPACK routine that computes various norms of a matrix.
+ *     zlascl  LAPACK routine for careful scaling of a matrix.
+ *     dlabad  LAPACK routine for defining the underflow and overflow
+ *             limits.
+ *     dlamch  LAPACK routine that determines machine constants.
+ *     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     zgemv   Level 2 BLAS routine for matrix vector multiplication.
+ *     zaxpy   Level 1 BLAS that computes a vector triad.
+ *     zcopy   Level 1 BLAS that copies one vector to another .
+ *     zdotc   Level 1 BLAS that computes the scalar product of two vectors.
+ *     zscal   Level 1 BLAS that scales a vector.
+ *     zdscal  Level 1 BLAS that scales a complex vector by a real number.
+ *     dznrm2  Level 1 BLAS that computes the norm of a vector.
+ *
+ * \Author
+ *     Danny Sorensen               Phuong Vu
+ *     Richard Lehoucq              CRPC / Rice University
+ *     Dept. of Computational &     Houston, Texas
+ *     Applied Mathematics
+ *     Rice University
+ *     Houston, Texas
+ *
+ * \SCCS Information: @(#)
+ * FILE: naitr.F   SID: 2.3   DATE OF SID: 8/27/96   RELEASE: 2
+ *
+ * \Remarks
+ *  The algorithm implemented is:
+ *
+ *  restart = .false.
+ *  Given V_{k} = [v_{1}, ..., v_{k}], r_{k};
+ *  r_{k} contains the initial residual vector even for k = 0;
+ *  Also assume that rnorm = || B*r_{k} || and B*r_{k} are already
+ *  computed by the calling program.
+ *
+ *  betaj = rnorm ; p_{k+1} = B*r_{k} ;
+ *  For  j = k+1, ..., k+np  Do
+ *     1) if ( betaj < tol ) stop or restart depending on j.
+ *        ( At present tol is zero )
+ *        if ( restart ) generate a new starting vector.
+ *     2) v_{j} = r(j-1)/betaj;  V_{j} = [V_{j-1}, v_{j}];
+ *        p_{j} = p_{j}/betaj
+ *     3) r_{j} = OP*v_{j} where OP is defined as in znaupd
+ *        For shift-invert mode p_{j} = B*v_{j} is already available.
+ *        wnorm = || OP*v_{j} ||
+ *     4) Compute the j-th step residual vector.
+ *        w_{j} =  V_{j}^T * B * OP * v_{j}
+ *        r_{j} =  OP*v_{j} - V_{j} * w_{j}
+ *        H(:,j) = w_{j};
+ *        H(j,j-1) = rnorm
+ *        rnorm = || r_(j) ||
+ *        If (rnorm > 0.717*wnorm) accept step and go back to 1)
+ *     5) Re-orthogonalization step:
+ *        s = V_{j}'*B*r_{j}
+ *        r_{j} = r_{j} - V_{j}*s;  rnorm1 = || r_{j} ||
+ *        alphaj = alphaj + s_{j};
+ *     6) Iterative refinement step:
+ *        If (rnorm1 > 0.717*rnorm) then
+ *           rnorm = rnorm1
+ *           accept step and go back to 1)
+ *        Else
+ *           rnorm = rnorm1
+ *           If this is the first time in step 6), go to 5)
+ *           Else r_{j} lies in the span of V_{j} numerically.
+ *              Set r_{j} = 0 and rnorm = 0; go to 1)
+ *        EndIf
+ *  End Do
+ *
+ * \EndLib
+ */
 int znaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *nb, a_dcomplex *resid,
      double *rnorm, a_dcomplex *v, a_int *ldv, a_dcomplex *h, a_int *ldh, a_int *ipntr,
      a_dcomplex *workd, a_int *info)
@@ -257,60 +255,6 @@ int znaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
     static a_int msglvl;
     static double smlnum;
 
-    /*     %----------------------------------------------------% */
-    /*     | Include files for debugging and timing information | */
-    /*     %----------------------------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %---------------------------------% */
-    /*     | See debug.doc for documentation | */
-    /*     %---------------------------------% */
-
-    /*     %------------------% */
-    /*     | Scalar Arguments | */
-    /*     %------------------% */
-
-    /*     %--------------------------------% */
-    /*     | See stat.doc for documentation | */
-    /*     %--------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %-----------------% */
-    /*     | Array Arguments | */
-    /*     %-----------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %--------------% */
-    /*     | Local Arrays | */
-    /*     %--------------% */
-
-    /*     %---------------% */
-    /*     | Local Scalars | */
-    /*     %---------------% */
-
-    /*     %----------------------% */
-    /*     | External Subroutines | */
-    /*     %----------------------% */
-
-    /*     %--------------------% */
-    /*     | External Functions | */
-    /*     %--------------------% */
-
-    /*     %---------------------% */
-    /*     | Intrinsic Functions | */
-    /*     %---------------------% */
-
-    /*     %-----------------% */
-    /*     | Data statements | */
-    /*     %-----------------% */
-
     /* Parameter adjustments */
     --workd;
     --resid;
@@ -322,22 +266,16 @@ int znaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
     h -= h_offset;
     --ipntr;
 
-    /* Function Body */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
     if (first)
     {
 
-        /*        %-----------------------------------------% */
-        /*        | Set machine-dependent constants for the | */
-        /*        | the splitting and deflation criterion.  | */
-        /*        | If norm(H) <= sqrt(OVFL),               | */
-        /*        | overflow should not occur.              | */
-        /*        | REFERENCE: LAPACK subroutine zlahqr     | */
-        /*        %-----------------------------------------% */
+        /* --------------------------------------- */
+        /* Set machine-dependent constants for the */
+        /* the splitting and deflation criterion.  */
+        /* If norm(H) <= sqrt(OVFL),               */
+        /* overflow should not occur.              */
+        /* REFERENCE: LAPACK subroutine zlahqr     */
+        /* --------------------------------------- */
 
         unfl = dlamch_("safe minimum");
         z__1.r = 1. / unfl, z__1.i = 0. / unfl;
@@ -351,17 +289,17 @@ int znaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
     if (*ido == 0)
     {
 
-        /*        %-------------------------------% */
-        /*        | Initialize timing statistics  | */
-        /*        | & message level for debugging | */
-        /*        %-------------------------------% */
+        /* ----------------------------- */
+        /* Initialize timing statistics  */
+        /* & message level for debugging */
+        /* ----------------------------- */
 
         arscnd_(&t0);
         msglvl = debug_1.mcaitr;
 
-        /*        %------------------------------% */
-        /*        | Initial call to this routine | */
-        /*        %------------------------------% */
+        /* ---------------------------- */
+        /* Initial call to this routine */
+        /* ---------------------------- */
 
         *info = 0;
         step3 = FALSE_;
@@ -375,18 +313,18 @@ int znaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
         ivj = irj + *n;
     }
 
-    /*     %-------------------------------------------------% */
-    /*     | When in reverse communication mode one of:      | */
-    /*     | STEP3, STEP4, ORTH1, ORTH2, RSTART              | */
-    /*     | will be .true. when ....                        | */
-    /*     | STEP3: return from computing OP*v_{j}.          | */
-    /*     | STEP4: return from computing B-norm of OP*v_{j} | */
-    /*     | ORTH1: return from computing B-norm of r_{j+1}  | */
-    /*     | ORTH2: return from computing B-norm of          | */
-    /*     |        correction to the residual vector.       | */
-    /*     | RSTART: return from OP computations needed by   | */
-    /*     |         zgetv0.                                 | */
-    /*     %-------------------------------------------------% */
+    /* ----------------------------------------------- */
+    /* When in reverse communication mode one of:      */
+    /* STEP3, STEP4, ORTH1, ORTH2, RSTART              */
+    /* will be .true. when ....                        */
+    /* STEP3: return from computing OP*v_{j}.          */
+    /* STEP4: return from computing B-norm of OP*v_{j} */
+    /* ORTH1: return from computing B-norm of r_{j+1}  */
+    /* ORTH2: return from computing B-norm of          */
+    /*        correction to the residual vector.       */
+    /* RSTART: return from OP computations needed by   */
+    /*         zgetv0.                                 */
+    /* ----------------------------------------------- */
 
     if (step3)
     {
@@ -409,16 +347,16 @@ int znaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
         goto L30;
     }
 
-/*     %-----------------------------% */
+     /* --------------------------- */
 /*     | Else this is the first step | */
-/*     %-----------------------------% */
+     /* --------------------------- */
 
-/*     %--------------------------------------------------------------% */
+     /* ------------------------------------------------------------ */
 /*     |                                                              | */
 /*     |        A R N O L D I     I T E R A T I O N     L O O P       | */
 /*     |                                                              | */
 /*     | Note:  B*r_{j-1} is already in WORKD(1:N)=WORKD(IPJ:IPJ+N-1) | */
-/*     %--------------------------------------------------------------% */
+     /* ------------------------------------------------------------ */
 L1000:
 
     if (msglvl > 1)
@@ -427,11 +365,11 @@ L1000:
         dvout_(1, rnorm, debug_1.ndigit, "_naitr: B-norm of the current residual is");
     }
 
-    /*        %---------------------------------------------------% */
-    /*        | STEP 1: Check if the B norm of j-th residual      | */
-    /*        | vector is zero. Equivalent to determine whether   | */
-    /*        | an exact j-step Arnoldi factorization is present. | */
-    /*        %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* STEP 1: Check if the B norm of j-th residual      */
+    /* vector is zero. Equivalent to determine whether   */
+    /* an exact j-step Arnoldi factorization is present. */
+    /* ------------------------------------------------- */
 
     betaj = *rnorm;
     if (*rnorm > 0.)
@@ -439,22 +377,22 @@ L1000:
         goto L40;
     }
 
-    /*           %---------------------------------------------------% */
-    /*           | Invariant subspace found, generate a new starting | */
-    /*           | vector which is orthogonal to the current Arnoldi | */
-    /*           | basis and continue the iteration.                 | */
-    /*           %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* Invariant subspace found, generate a new starting */
+    /* vector which is orthogonal to the current Arnoldi */
+    /* basis and continue the iteration.                 */
+    /* ------------------------------------------------- */
 
     if (msglvl > 0)
     {
         ivout_(1, &j, debug_1.ndigit, "_naitr: ****** RESTART AT STEP ******");
     }
 
-    /*           %---------------------------------------------% */
-    /*           | ITRY is the loop variable that controls the | */
-    /*           | maximum amount of times that a restart is   | */
-    /*           | attempted. NRSTRT is used by stat.h         | */
-    /*           %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* ITRY is the loop variable that controls the */
+    /* maximum amount of times that a restart is   */
+    /* attempted. NRSTRT is used by stat.h         */
+    /* ------------------------------------------- */
 
     betaj = 0.;
     ++timing_1.nrstrt;
@@ -464,10 +402,10 @@ L20:
     *ido = 0;
 L30:
 
-    /*           %--------------------------------------% */
-    /*           | If in reverse communication mode and | */
-    /*           | RSTART = .true. flow returns here.   | */
-    /*           %--------------------------------------% */
+    /* ------------------------------------ */
+    /* If in reverse communication mode and */
+    /* RSTART = .true. flow returns here.   */
+    /* ------------------------------------ */
 
     zgetv0_(ido, bmat, &itry, &b_false, n, &j, &v[v_offset], ldv, &resid[1], rnorm, &ipntr[1], &workd[1], &ierr);
     if (*ido != 99)
@@ -482,11 +420,11 @@ L30:
             goto L20;
         }
 
-        /*              %------------------------------------------------% */
-        /*              | Give up after several restart attempts.        | */
-        /*              | Set INFO to the size of the invariant subspace | */
-        /*              | which spans OP and exit.                       | */
-        /*              %------------------------------------------------% */
+        /* ---------------------------------------------- */
+        /* Give up after several restart attempts.        */
+        /* Set INFO to the size of the invariant subspace */
+        /* which spans OP and exit.                       */
+        /* ---------------------------------------------- */
 
         *info = j - 1;
         arscnd_(&t1);
@@ -497,12 +435,12 @@ L30:
 
 L40:
 
-    /*        %---------------------------------------------------------% */
-    /*        | STEP 2:  v_{j} = r_{j-1}/rnorm and p_{j} = p_{j}/rnorm  | */
-    /*        | Note that p_{j} = B*r_{j-1}. In order to avoid overflow | */
-    /*        | when reciprocating a small RNORM, test against lower    | */
-    /*        | machine bound.                                          | */
-    /*        %---------------------------------------------------------% */
+    /* ------------------------------------------------------- */
+    /* STEP 2:  v_{j} = r_{j-1}/rnorm and p_{j} = p_{j}/rnorm  */
+    /* Note that p_{j} = B*r_{j-1}. In order to avoid overflow */
+    /* when reciprocating a small RNORM, test against lower    */
+    /* machine bound.                                          */
+    /* ------------------------------------------------------- */
 
     zcopy_(n, &resid[1], &i_one, &v[j * v_dim1 + 1], &i_one);
     if (*rnorm >= unfl)
@@ -514,19 +452,19 @@ L40:
     else
     {
 
-        /*            %-----------------------------------------% */
-        /*            | To scale both v_{j} and p_{j} carefully | */
-        /*            | use LAPACK routine zlascl               | */
-        /*            %-----------------------------------------% */
+        /* --------------------------------------- */
+        /* To scale both v_{j} and p_{j} carefully */
+        /* use LAPACK routine zlascl               */
+        /* --------------------------------------- */
 
         zlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol);
         zlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol);
     }
 
-    /*        %------------------------------------------------------% */
-    /*        | STEP 3:  r_{j} = OP*v_{j}; Note that p_{j} = B*v_{j} | */
-    /*        | Note that this is not quite yet r_{j}. See STEP 4    | */
-    /*        %------------------------------------------------------% */
+    /* ---------------------------------------------------- */
+    /* STEP 3:  r_{j} = OP*v_{j}; Note that p_{j} = B*v_{j} */
+    /* Note that this is not quite yet r_{j}. See STEP 4    */
+    /* ---------------------------------------------------- */
 
     step3 = TRUE_;
     ++timing_1.nopx;
@@ -537,33 +475,33 @@ L40:
     ipntr[3] = ipj;
     *ido = 1;
 
-    /*        %-----------------------------------% */
-    /*        | Exit in order to compute OP*v_{j} | */
-    /*        %-----------------------------------% */
+    /* --------------------------------- */
+    /* Exit in order to compute OP*v_{j} */
+    /* --------------------------------- */
 
     goto L9000;
 L50:
 
-    /*        %----------------------------------% */
-    /*        | Back from reverse communication; | */
-    /*        | WORKD(IRJ:IRJ+N-1) := OP*v_{j}   | */
-    /*        | if step3 = .true.                | */
-    /*        %----------------------------------% */
+    /* -------------------------------- */
+    /* Back from reverse communication; */
+    /* WORKD(IRJ:IRJ+N-1) := OP*v_{j}   */
+    /* if step3 = .true.                */
+    /* -------------------------------- */
 
     arscnd_(&t3);
     timing_1.tmvopx += t3 - t2;
     step3 = FALSE_;
 
-    /*        %------------------------------------------% */
-    /*        | Put another copy of OP*v_{j} into RESID. | */
-    /*        %------------------------------------------% */
+    /* ---------------------------------------- */
+    /* Put another copy of OP*v_{j} into RESID. */
+    /* ---------------------------------------- */
 
     zcopy_(n, &workd[irj], &i_one, &resid[1], &i_one);
 
-    /*        %---------------------------------------% */
-    /*        | STEP 4:  Finish extending the Arnoldi | */
-    /*        |          factorization to length j.   | */
-    /*        %---------------------------------------% */
+    /* ------------------------------------- */
+    /* STEP 4:  Finish extending the Arnoldi */
+    /*          factorization to length j.   */
+    /* ------------------------------------- */
 
     arscnd_(&t2);
     if (*bmat == 'G')
@@ -574,9 +512,9 @@ L50:
         ipntr[2] = ipj;
         *ido = 2;
 
-        /*           %-------------------------------------% */
-        /*           | Exit in order to compute B*OP*v_{j} | */
-        /*           %-------------------------------------% */
+        /* ----------------------------------- */
+        /* Exit in order to compute B*OP*v_{j} */
+        /* ----------------------------------- */
 
         goto L9000;
     }
@@ -586,11 +524,11 @@ L50:
     }
 L60:
 
-    /*        %----------------------------------% */
-    /*        | Back from reverse communication; | */
-    /*        | WORKD(IPJ:IPJ+N-1) := B*OP*v_{j} | */
-    /*        | if step4 = .true.                | */
-    /*        %----------------------------------% */
+    /* -------------------------------- */
+    /* Back from reverse communication; */
+    /* WORKD(IPJ:IPJ+N-1) := B*OP*v_{j} */
+    /* if step4 = .true.                */
+    /* -------------------------------- */
 
     if (*bmat == 'G')
     {
@@ -600,10 +538,10 @@ L60:
 
     step4 = FALSE_;
 
-    /*        %-------------------------------------% */
-    /*        | The following is needed for STEP 5. | */
-    /*        | Compute the B-norm of OP*v_{j}.     | */
-    /*        %-------------------------------------% */
+    /* ----------------------------------- */
+    /* The following is needed for STEP 5. */
+    /* Compute the B-norm of OP*v_{j}.     */
+    /* ----------------------------------- */
 
     if (*bmat == 'G')
     {
@@ -618,25 +556,25 @@ L60:
         wnorm = dznrm2_(n, &resid[1], &i_one);
     }
 
-    /*        %-----------------------------------------% */
-    /*        | Compute the j-th residual corresponding | */
-    /*        | to the j step factorization.            | */
-    /*        | Use Classical Gram Schmidt and compute: | */
-    /*        | w_{j} <-  V_{j}^T * B * OP * v_{j}      | */
-    /*        | r_{j} <-  OP*v_{j} - V_{j} * w_{j}      | */
-    /*        %-----------------------------------------% */
+    /* --------------------------------------- */
+    /* Compute the j-th residual corresponding */
+    /* to the j step factorization.            */
+    /* Use Classical Gram Schmidt and compute: */
+    /* w_{j} <-  V_{j}^T * B * OP * v_{j}      */
+    /* r_{j} <-  OP*v_{j} - V_{j} * w_{j}      */
+    /* --------------------------------------- */
 
-    /*        %------------------------------------------% */
-    /*        | Compute the j Fourier coefficients w_{j} | */
-    /*        | WORKD(IPJ:IPJ+N-1) contains B*OP*v_{j}.  | */
-    /*        %------------------------------------------% */
+    /* ---------------------------------------- */
+    /* Compute the j Fourier coefficients w_{j} */
+    /* WORKD(IPJ:IPJ+N-1) contains B*OP*v_{j}.  */
+    /* ---------------------------------------- */
 
     zgemv_("C", n, &j, &z_one, &v[v_offset], ldv, &workd[ipj], &i_one, &z_zero, &h[j * h_dim1 + 1], &i_one);
 
-    /*        %--------------------------------------% */
-    /*        | Orthogonalize r_{j} against V_{j}.   | */
-    /*        | RESID contains OP*v_{j}. See STEP 3. | */
-    /*        %--------------------------------------% */
+    /* ------------------------------------ */
+    /* Orthogonalize r_{j} against V_{j}.   */
+    /* RESID contains OP*v_{j}. See STEP 3. */
+    /* ------------------------------------ */
 
     z__1.r = -1., z__1.i = -0.;
     zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &h[j * h_dim1 + 1], &i_one, &z_one, &resid[1], &i_one);
@@ -661,9 +599,9 @@ L60:
         ipntr[2] = ipj;
         *ido = 2;
 
-        /*           %----------------------------------% */
-        /*           | Exit in order to compute B*r_{j} | */
-        /*           %----------------------------------% */
+        /* -------------------------------- */
+        /* Exit in order to compute B*r_{j} */
+        /* -------------------------------- */
 
         goto L9000;
     }
@@ -673,10 +611,10 @@ L60:
     }
 L70:
 
-    /*        %---------------------------------------------------% */
-    /*        | Back from reverse communication if ORTH1 = .true. | */
-    /*        | WORKD(IPJ:IPJ+N-1) := B*r_{j}.                    | */
-    /*        %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* Back from reverse communication if ORTH1 = .true. */
+    /* WORKD(IPJ:IPJ+N-1) := B*r_{j}.                    */
+    /* ------------------------------------------------- */
 
     if (*bmat == 'G')
     {
@@ -686,9 +624,9 @@ L70:
 
     orth1 = FALSE_;
 
-    /*        %------------------------------% */
-    /*        | Compute the B-norm of r_{j}. | */
-    /*        %------------------------------% */
+    /* ---------------------------- */
+    /* Compute the B-norm of r_{j}. */
+    /* ---------------------------- */
 
     if (*bmat == 'G')
     {
@@ -703,23 +641,23 @@ L70:
         *rnorm = dznrm2_(n, &resid[1], &i_one);
     }
 
-    /*        %-----------------------------------------------------------% */
-    /*        | STEP 5: Re-orthogonalization / Iterative refinement phase | */
-    /*        | Maximum NITER_ITREF tries.                                | */
-    /*        |                                                           | */
-    /*        |          s      = V_{j}^T * B * r_{j}                     | */
-    /*        |          r_{j}  = r_{j} - V_{j}*s                         | */
-    /*        |          alphaj = alphaj + s_{j}                          | */
-    /*        |                                                           | */
-    /*        | The stopping criteria used for iterative refinement is    | */
-    /*        | discussed in Parlett's book SEP, page 107 and in Gragg &  | */
-    /*        | Reichel ACM TOMS paper; Algorithm 686, Dec. 1990.         | */
-    /*        | Determine if we need to correct the residual. The goal is | */
-    /*        | to enforce ||v(:,1:j)^T * r_{j}|| .le. eps * || r_{j} ||  | */
-    /*        | The following test determines whether the sine of the     | */
-    /*        | angle between  OP*x and the computed residual is less     | */
-    /*        | than or equal to 0.717.                                   | */
-    /*        %-----------------------------------------------------------% */
+    /* --------------------------------------------------------- */
+    /* STEP 5: Re-orthogonalization / Iterative refinement phase */
+    /* Maximum NITER_ITREF tries.                                */
+    /*                                                           */
+    /*          s      = V_{j}^T * B * r_{j}                     */
+    /*          r_{j}  = r_{j} - V_{j}*s                         */
+    /*          alphaj = alphaj + s_{j}                          */
+    /*                                                           */
+    /* The stopping criteria used for iterative refinement is    */
+    /* discussed in Parlett's book SEP, page 107 and in Gragg &  */
+    /* Reichel ACM TOMS paper; Algorithm 686, Dec. 1990.         */
+    /* Determine if we need to correct the residual. The goal is */
+    /* to enforce ||v(:,1:j)^T * r_{j}|| .le. eps * || r_{j} ||  */
+    /* The following test determines whether the sine of the     */
+    /* angle between  OP*x and the computed residual is less     */
+    /* than or equal to 0.717.                                   */
+    /* --------------------------------------------------------- */
 
     if (*rnorm > wnorm * .717f)
     {
@@ -729,12 +667,12 @@ L70:
     iter = 0;
     ++timing_1.nrorth;
 
-    /*        %---------------------------------------------------% */
-    /*        | Enter the Iterative refinement phase. If further  | */
-    /*        | refinement is necessary, loop back here. The loop | */
-    /*        | variable is ITER. Perform a step of Classical     | */
-    /*        | Gram-Schmidt using all the Arnoldi vectors V_{j}  | */
-    /*        %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* Enter the Iterative refinement phase. If further  */
+    /* refinement is necessary, loop back here. The loop */
+    /* variable is ITER. Perform a step of Classical     */
+    /* Gram-Schmidt using all the Arnoldi vectors V_{j}  */
+    /* ------------------------------------------------- */
 
 L80:
 
@@ -746,19 +684,19 @@ L80:
         zvout_(j, &h[j * h_dim1 + 1], debug_1.ndigit, "_naitr: j-th column of H");
     }
 
-    /*        %----------------------------------------------------% */
-    /*        | Compute V_{j}^T * B * r_{j}.                       | */
-    /*        | WORKD(IRJ:IRJ+J-1) = v(:,1:J)'*WORKD(IPJ:IPJ+N-1). | */
-    /*        %----------------------------------------------------% */
+    /* -------------------------------------------------- */
+    /* Compute V_{j}^T * B * r_{j}.                       */
+    /* WORKD(IRJ:IRJ+J-1) = v(:,1:J)'*WORKD(IPJ:IPJ+N-1). */
+    /* -------------------------------------------------- */
 
     zgemv_("C", n, &j, &z_one, &v[v_offset], ldv, &workd[ipj], &i_one, &z_zero, &workd[irj], &i_one);
 
-    /*        %---------------------------------------------% */
-    /*        | Compute the correction to the residual:     | */
-    /*        | r_{j} = r_{j} - V_{j} * WORKD(IRJ:IRJ+J-1). | */
-    /*        | The correction to H is v(:,1:J)*H(1:J,1:J)  | */
-    /*        | + v(:,1:J)*WORKD(IRJ:IRJ+J-1)*e'_j.         | */
-    /*        %---------------------------------------------% */
+    /* ------------------------------------------- */
+    /* Compute the correction to the residual:     */
+    /* r_{j} = r_{j} - V_{j} * WORKD(IRJ:IRJ+J-1). */
+    /* The correction to H is v(:,1:J)*H(1:J,1:J)  */
+    /* + v(:,1:J)*WORKD(IRJ:IRJ+J-1)*e'_j.         */
+    /* ------------------------------------------- */
 
     z__1.r = -1., z__1.i = -0.;
     zgemv_("N", n, &j, &z__1, &v[v_offset], ldv, &workd[irj], &i_one, &z_one, &resid[1], &i_one);
@@ -774,10 +712,10 @@ L80:
         ipntr[2] = ipj;
         *ido = 2;
 
-        /*           %-----------------------------------% */
-        /*           | Exit in order to compute B*r_{j}. | */
-        /*           | r_{j} is the corrected residual.  | */
-        /*           %-----------------------------------% */
+        /* --------------------------------- */
+        /* Exit in order to compute B*r_{j}. */
+        /* r_{j} is the corrected residual.  */
+        /* --------------------------------- */
 
         goto L9000;
     }
@@ -787,9 +725,9 @@ L80:
     }
 L90:
 
-    /*        %---------------------------------------------------% */
-    /*        | Back from reverse communication if ORTH2 = .true. | */
-    /*        %---------------------------------------------------% */
+    /* ------------------------------------------------- */
+    /* Back from reverse communication if ORTH2 = .true. */
+    /* ------------------------------------------------- */
 
     if (*bmat == 'G')
     {
@@ -797,9 +735,9 @@ L90:
         timing_1.tmvbx += t3 - t2;
     }
 
-    /*        %-----------------------------------------------------% */
-    /*        | Compute the B-norm of the corrected residual r_{j}. | */
-    /*        %-----------------------------------------------------% */
+    /* --------------------------------------------------- */
+    /* Compute the B-norm of the corrected residual r_{j}. */
+    /* --------------------------------------------------- */
 
     if (*bmat == 'G')
     {
@@ -825,33 +763,33 @@ L90:
         }
     }
 
-    /*        %-----------------------------------------% */
-    /*        | Determine if we need to perform another | */
-    /*        | step of re-orthogonalization.           | */
-    /*        %-----------------------------------------% */
+    /* --------------------------------------- */
+    /* Determine if we need to perform another */
+    /* step of re-orthogonalization.           */
+    /* --------------------------------------- */
 
     if (rnorm1 > *rnorm * .717f)
     {
 
-        /*           %---------------------------------------% */
-        /*           | No need for further refinement.       | */
-        /*           | The cosine of the angle between the   | */
-        /*           | corrected residual vector and the old | */
-        /*           | residual vector is greater than 0.717 | */
-        /*           | In other words the corrected residual | */
-        /*           | and the old residual vector share an  | */
-        /*           | angle of less than arcCOS(0.717)      | */
-        /*           %---------------------------------------% */
+        /* ------------------------------------- */
+        /* No need for further refinement.       */
+        /* The cosine of the angle between the   */
+        /* corrected residual vector and the old */
+        /* residual vector is greater than 0.717 */
+        /* In other words the corrected residual */
+        /* and the old residual vector share an  */
+        /* angle of less than arcCOS(0.717)      */
+        /* ------------------------------------- */
 
         *rnorm = rnorm1;
     }
     else
     {
 
-        /*           %-------------------------------------------% */
-        /*           | Another step of iterative refinement step | */
-        /*           | is required. NITREF is used by stat.h     | */
-        /*           %-------------------------------------------% */
+        /* ----------------------------------------- */
+        /* Another step of iterative refinement step */
+        /* is required. NITREF is used by stat.h     */
+        /* ----------------------------------------- */
 
         ++timing_1.nitref;
         *rnorm = rnorm1;
@@ -861,9 +799,9 @@ L90:
             goto L80;
         }
 
-        /*           %-------------------------------------------------% */
-        /*           | Otherwise RESID is numerically in the span of V | */
-        /*           %-------------------------------------------------% */
+        /* ----------------------------------------------- */
+        /* Otherwise RESID is numerically in the span of V */
+        /* ----------------------------------------------- */
 
         i__1 = *n;
         for (jj = 1; jj <= i__1; ++jj)
@@ -875,11 +813,11 @@ L90:
         *rnorm = 0.;
     }
 
-    /*        %----------------------------------------------% */
-    /*        | Branch here directly if iterative refinement | */
-    /*        | wasn't necessary or after at most NITER_REF  | */
-    /*        | steps of iterative refinement.               | */
-    /*        %----------------------------------------------% */
+    /* -------------------------------------------- */
+    /* Branch here directly if iterative refinement */
+    /* wasn't necessary or after at most NITER_REF  */
+    /* steps of iterative refinement.               */
+    /* -------------------------------------------- */
 
 L100:
 
@@ -889,9 +827,9 @@ L100:
     arscnd_(&t5);
     timing_1.titref += t5 - t4;
 
-    /*        %------------------------------------% */
-    /*        | STEP 6: Update  j = j+1;  Continue | */
-    /*        %------------------------------------% */
+    /* ---------------------------------- */
+    /* STEP 6: Update  j = j+1;  Continue */
+    /* ---------------------------------- */
 
     ++j;
     if (j > *k + *np)
@@ -903,11 +841,11 @@ L100:
         for (i = max(1, *k); i <= i__1; ++i)
         {
 
-            /*              %--------------------------------------------% */
-            /*              | Check for splitting and deflation.         | */
-            /*              | Use a standard test as in the QR algorithm | */
-            /*              | REFERENCE: LAPACK subroutine zlahqr        | */
-            /*              %--------------------------------------------% */
+            /* ------------------------------------------ */
+            /* Check for splitting and deflation.         */
+            /* Use a standard test as in the QR algorithm */
+            /* REFERENCE: LAPACK subroutine zlahqr        */
+            /* ------------------------------------------ */
 
             i__2 = i + i * h_dim1;
             d__1 = h[i__2].r;
@@ -944,23 +882,23 @@ L100:
         goto L9000;
     }
 
-    /*        %--------------------------------------------------------% */
-    /*        | Loop back to extend the factorization by another step. | */
-    /*        %--------------------------------------------------------% */
+    /* ------------------------------------------------------ */
+    /* Loop back to extend the factorization by another step. */
+    /* ------------------------------------------------------ */
 
     goto L1000;
 
-    /*     %---------------------------------------------------------------% */
-    /*     |                                                               | */
-    /*     |  E N D     O F     M A I N     I T E R A T I O N     L O O P  | */
-    /*     |                                                               | */
-    /*     %---------------------------------------------------------------% */
+    /* ------------------------------------------------------------- */
+    /*                                                               */
+    /*  E N D     O F     M A I N     I T E R A T I O N     L O O P  */
+    /*                                                               */
+    /* ------------------------------------------------------------- */
 
 L9000:
     return 0;
 
-    /*     %---------------% */
-    /*     | End of znaitr | */
-    /*     %---------------% */
+    /* ------------- */
+    /* End of znaitr */
+    /* ------------- */
 
 } /* znaitr_ */

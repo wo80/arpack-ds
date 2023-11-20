@@ -9,148 +9,146 @@ static float s_one = 1.f;
 static a_int i_one = 1;
 static float s_n1 = -1.f;
 
-/* ----------------------------------------------------------------------- */
-/* \BeginDoc */
-
-/* \Name: snapps */
-
-/* \Description: */
-/*  Given the Arnoldi factorization */
-
-/*     A*V_{k} - V_{k}*H_{k} = r_{k+p}*e_{k+p}^T, */
-
-/*  apply NP implicit shifts resulting in */
-
-/*     A*(V_{k}*Q) - (V_{k}*Q)*(Q^T* H_{k}*Q) = r_{k+p}*e_{k+p}^T * Q */
-
-/*  where Q is an orthogonal matrix which is the product of rotations */
-/*  and reflections resulting from the NP bulge change sweeps. */
-/*  The updated Arnoldi factorization becomes: */
-
-/*     A*VNEW_{k} - VNEW_{k}*HNEW_{k} = rnew_{k}*e_{k}^T. */
-
-/* \Usage: */
-/*  call snapps */
-/*     ( N, KEV, NP, SHIFTR, SHIFTI, V, LDV, H, LDH, RESID, Q, LDQ, */
-/*       WORKL, WORKD ) */
-
-/* \Arguments */
-/*  N       Integer.  (INPUT) */
-/*          Problem size, i.e. size of matrix A. */
-
-/*  KEV     Integer.  (INPUT/OUTPUT) */
-/*          KEV+NP is the size of the input matrix H. */
-/*          KEV is the size of the updated matrix HNEW.  KEV is only */
-/*          updated on output when fewer than NP shifts are applied in */
-/*          order to keep the conjugate pair together. */
-
-/*  NP      Integer.  (INPUT) */
-/*          Number of implicit shifts to be applied. */
-
-/*  SHIFTR, Real array of length NP.  (INPUT) */
-/*  SHIFTI  Real and imaginary part of the shifts to be applied. */
-/*          Upon, entry to snapps, the shifts must be sorted so that the */
-/*          conjugate pairs are in consecutive locations. */
-
-/*  V       Real N by (KEV+NP) array.  (INPUT/OUTPUT) */
-/*          On INPUT, V contains the current KEV+NP Arnoldi vectors. */
-/*          On OUTPUT, V contains the updated KEV Arnoldi vectors */
-/*          in the first KEV columns of V. */
-
-/*  LDV     Integer.  (INPUT) */
-/*          Leading dimension of V exactly as declared in the calling */
-/*          program. */
-
-/*  H       Real (KEV+NP) by (KEV+NP) array.  (INPUT/OUTPUT) */
-/*          On INPUT, H contains the current KEV+NP by KEV+NP upper */
-/*          Hessenber matrix of the Arnoldi factorization. */
-/*          On OUTPUT, H contains the updated KEV by KEV upper Hessenberg */
-/*          matrix in the KEV leading submatrix. */
-
-/*  LDH     Integer.  (INPUT) */
-/*          Leading dimension of H exactly as declared in the calling */
-/*          program. */
-
-/*  RESID   Real array of length N.  (INPUT/OUTPUT) */
-/*          On INPUT, RESID contains the the residual vector r_{k+p}. */
-/*          On OUTPUT, RESID is the update residual vector rnew_{k} */
-/*          in the first KEV locations. */
-
-/*  Q       Real KEV+NP by KEV+NP work array.  (WORKSPACE) */
-/*          Work array used to accumulate the rotations and reflections */
-/*          during the bulge chase sweep. */
-
-/*  LDQ     Integer.  (INPUT) */
-/*          Leading dimension of Q exactly as declared in the calling */
-/*          program. */
-
-/*  WORKL   Real work array of length (KEV+NP).  (WORKSPACE) */
-/*          Private (replicated) array on each PE or array allocated on */
-/*          the front end. */
-
-/*  WORKD   Real work array of length 2*N.  (WORKSPACE) */
-/*          Distributed array used in the application of the accumulated */
-/*          orthogonal matrix Q. */
-
-/* \EndDoc */
-
-/* ----------------------------------------------------------------------- */
-
-/* \BeginLib */
-
-/* \Local variables: */
-/*     xxxxxx  real */
-
-/* \References: */
-/*  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in */
-/*     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992), */
-/*     pp 357-385. */
-
-/* \Routines called: */
-/*     ivout   ARPACK utility routine that prints integers. */
-/*     arscnd  ARPACK utility routine for timing. */
-/*     smout   ARPACK utility routine that prints matrices. */
-/*     svout   ARPACK utility routine that prints vectors. */
-/*     slabad  LAPACK routine that computes machine constants. */
-/*     slacpy  LAPACK matrix copy routine. */
-/*     slamch  LAPACK routine that determines machine constants. */
-/*     slanhs  LAPACK routine that computes various norms of a matrix. */
-/*     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-/*     slarf   LAPACK routine that applies Householder reflection to */
-/*             a matrix. */
-/*     slarfg  LAPACK Householder reflection construction routine. */
-/*     slartg  LAPACK Givens rotation construction routine. */
-/*     slaset  LAPACK matrix initialization routine. */
-/*     sgemv   Level 2 BLAS routine for matrix vector multiplication. */
-/*     saxpy   Level 1 BLAS that computes a vector triad. */
-/*     scopy   Level 1 BLAS that copies one vector to another . */
-/*     sscal   Level 1 BLAS that scales a vector. */
-
-/* \Author */
-/*     Danny Sorensen               Phuong Vu */
-/*     Richard Lehoucq              CRPC / Rice University */
-/*     Dept. of Computational &     Houston, Texas */
-/*     Applied Mathematics */
-/*     Rice University */
-/*     Houston, Texas */
-
-/* \Revision history: */
-/*     xx/xx/92: Version ' 2.4' */
-
-/* \SCCS Information: @(#) */
-/* FILE: napps.F   SID: 2.4   DATE OF SID: 3/28/97   RELEASE: 2 */
-
-/* \Remarks */
-/*  1. In this version, each shift is applied to all the sublocks of */
-/*     the Hessenberg matrix H and not just to the submatrix that it */
-/*     comes from. Deflation as in LAPACK routine slahqr (QR algorithm */
-/*     for upper Hessenberg matrices ) is used. */
-/*     The subdiagonals of H are enforced to be non-negative. */
-
-/* \EndLib */
-
-/* ----------------------------------------------------------------------- */
-
+/**
+ * \BeginDoc
+ *
+ * \Name: snapps
+ *
+ * \Description:
+ *  Given the Arnoldi factorization
+ *
+ *     A*V_{k} - V_{k}*H_{k} = r_{k+p}*e_{k+p}^T,
+ *
+ *  apply NP implicit shifts resulting in
+ *
+ *     A*(V_{k}*Q) - (V_{k}*Q)*(Q^T* H_{k}*Q) = r_{k+p}*e_{k+p}^T * Q
+ *
+ *  where Q is an orthogonal matrix which is the product of rotations
+ *  and reflections resulting from the NP bulge change sweeps.
+ *  The updated Arnoldi factorization becomes:
+ *
+ *     A*VNEW_{k} - VNEW_{k}*HNEW_{k} = rnew_{k}*e_{k}^T.
+ *
+ * \Usage:
+ *  call snapps
+ *     ( N, KEV, NP, SHIFTR, SHIFTI, V, LDV, H, LDH, RESID, Q, LDQ,
+ *       WORKL, WORKD )
+ *
+ * \Arguments
+ *  N       Integer.  (INPUT)
+ *          Problem size, i.e. size of matrix A.
+ *
+ *  KEV     Integer.  (INPUT/OUTPUT)
+ *          KEV+NP is the size of the input matrix H.
+ *          KEV is the size of the updated matrix HNEW.  KEV is only
+ *          updated on output when fewer than NP shifts are applied in
+ *          order to keep the conjugate pair together.
+ *
+ *  NP      Integer.  (INPUT)
+ *          Number of implicit shifts to be applied.
+ *
+ *  SHIFTR, Real array of length NP.  (INPUT)
+ *  SHIFTI  Real and imaginary part of the shifts to be applied.
+ *          Upon, entry to snapps, the shifts must be sorted so that the
+ *          conjugate pairs are in consecutive locations.
+ *
+ *  V       Real N by (KEV+NP) array.  (INPUT/OUTPUT)
+ *          On INPUT, V contains the current KEV+NP Arnoldi vectors.
+ *          On OUTPUT, V contains the updated KEV Arnoldi vectors
+ *          in the first KEV columns of V.
+ *
+ *  LDV     Integer.  (INPUT)
+ *          Leading dimension of V exactly as declared in the calling
+ *          program.
+ *
+ *  H       Real (KEV+NP) by (KEV+NP) array.  (INPUT/OUTPUT)
+ *          On INPUT, H contains the current KEV+NP by KEV+NP upper
+ *          Hessenber matrix of the Arnoldi factorization.
+ *          On OUTPUT, H contains the updated KEV by KEV upper Hessenberg
+ *          matrix in the KEV leading submatrix.
+ *
+ *  LDH     Integer.  (INPUT)
+ *          Leading dimension of H exactly as declared in the calling
+ *          program.
+ *
+ *  RESID   Real array of length N.  (INPUT/OUTPUT)
+ *          On INPUT, RESID contains the the residual vector r_{k+p}.
+ *          On OUTPUT, RESID is the update residual vector rnew_{k}
+ *          in the first KEV locations.
+ *
+ *  Q       Real KEV+NP by KEV+NP work array.  (WORKSPACE)
+ *          Work array used to accumulate the rotations and reflections
+ *          during the bulge chase sweep.
+ *
+ *  LDQ     Integer.  (INPUT)
+ *          Leading dimension of Q exactly as declared in the calling
+ *          program.
+ *
+ *  WORKL   Real work array of length (KEV+NP).  (WORKSPACE)
+ *          Private (replicated) array on each PE or array allocated on
+ *          the front end.
+ *
+ *  WORKD   Real work array of length 2*N.  (WORKSPACE)
+ *          Distributed array used in the application of the accumulated
+ *          orthogonal matrix Q.
+ *
+ * \EndDoc
+ *
+ * -----------------------------------------------------------------------
+ *
+ * \BeginLib
+ *
+ * \Local variables:
+ *     xxxxxx  real
+ *
+ * \References:
+ *  1. D.C. Sorensen, "Implicit Application of Polynomial Filters in
+ *     a k-Step Arnoldi Method", SIAM J. Matr. Anal. Apps., 13 (1992),
+ *     pp 357-385.
+ *
+ * \Routines called:
+ *     ivout   ARPACK utility routine that prints integers.
+ *     arscnd  ARPACK utility routine for timing.
+ *     smout   ARPACK utility routine that prints matrices.
+ *     svout   ARPACK utility routine that prints vectors.
+ *     slabad  LAPACK routine that computes machine constants.
+ *     slacpy  LAPACK matrix copy routine.
+ *     slamch  LAPACK routine that determines machine constants.
+ *     slanhs  LAPACK routine that computes various norms of a matrix.
+ *     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     slarf   LAPACK routine that applies Householder reflection to
+ *             a matrix.
+ *     slarfg  LAPACK Householder reflection construction routine.
+ *     slartg  LAPACK Givens rotation construction routine.
+ *     slaset  LAPACK matrix initialization routine.
+ *     sgemv   Level 2 BLAS routine for matrix vector multiplication.
+ *     saxpy   Level 1 BLAS that computes a vector triad.
+ *     scopy   Level 1 BLAS that copies one vector to another .
+ *     sscal   Level 1 BLAS that scales a vector.
+ *
+ * \Author
+ *     Danny Sorensen               Phuong Vu
+ *     Richard Lehoucq              CRPC / Rice University
+ *     Dept. of Computational &     Houston, Texas
+ *     Applied Mathematics
+ *     Rice University
+ *     Houston, Texas
+ *
+ * \Revision history:
+ *     xx/xx/92: Version ' 2.4'
+ *
+ * \SCCS Information: @(#)
+ * FILE: napps.F   SID: 2.4   DATE OF SID: 3/28/97   RELEASE: 2
+ *
+ * \Remarks
+ *  1. In this version, each shift is applied to all the sublocks of
+ *     the Hessenberg matrix H and not just to the submatrix that it
+ *     comes from. Deflation as in LAPACK routine slahqr (QR algorithm
+ *     for upper Hessenberg matrices ) is used.
+ *     The subdiagonals of H are enforced to be non-negative.
+ *
+ * \EndLib
+ */
 int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float *v, a_int *ldv, float *h, a_int *ldh, float *resid, float *q, a_int *ldq, float *workl, float *workd)
 {
     /* Initialized data */
@@ -179,56 +177,6 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     a_int istart, kplusp, msglvl;
     static float smlnum;
 
-    /*     %----------------------------------------------------% */
-    /*     | Include files for debugging and timing information | */
-    /*     %----------------------------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %---------------------------------% */
-    /*     | See debug.doc for documentation | */
-    /*     %---------------------------------% */
-
-    /*     %------------------% */
-    /*     | Scalar Arguments | */
-    /*     %------------------% */
-
-    /*     %--------------------------------% */
-    /*     | See stat.doc for documentation | */
-    /*     %--------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %-----------------% */
-    /*     | Array Arguments | */
-    /*     %-----------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %------------------------% */
-    /*     | Local Scalars & Arrays | */
-    /*     %------------------------% */
-
-    /*     %----------------------% */
-    /*     | External Subroutines | */
-    /*     %----------------------% */
-
-    /*     %--------------------% */
-    /*     | External Functions | */
-    /*     %--------------------% */
-
-    /*     %----------------------% */
-    /*     | Intrinsics Functions | */
-    /*     %----------------------% */
-
-    /*     %----------------% */
-    /*     | Data statements | */
-    /*     %----------------% */
-
     /* Parameter adjustments */
     --workd;
     --resid;
@@ -245,21 +193,15 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     q_offset = 1 + q_dim1;
     q -= q_offset;
 
-    /* Function Body */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
     if (first)
     {
 
-        /*        %-----------------------------------------------% */
-        /*        | Set machine-dependent constants for the       | */
-        /*        | stopping criterion. If norm(H) <= sqrt(OVFL), | */
-        /*        | overflow should not occur.                    | */
-        /*        | REFERENCE: LAPACK subroutine slahqr           | */
-        /*        %-----------------------------------------------% */
+        /* --------------------------------------------- */
+        /* Set machine-dependent constants for the       */
+        /* stopping criterion. If norm(H) <= sqrt(OVFL), */
+        /* overflow should not occur.                    */
+        /* REFERENCE: LAPACK subroutine slahqr           */
+        /* --------------------------------------------- */
 
         unfl = slamch_("safe minimum");
         ovfl = 1.f / unfl;
@@ -269,36 +211,36 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         first = FALSE_;
     }
 
-    /*     %-------------------------------% */
-    /*     | Initialize timing statistics  | */
-    /*     | & message level for debugging | */
-    /*     %-------------------------------% */
+    /* ----------------------------- */
+    /* Initialize timing statistics  */
+    /* & message level for debugging */
+    /* ----------------------------- */
 
     arscnd_(&t0);
     msglvl = debug_1.mnapps;
     kplusp = *kev + *np;
 
-    /*     %--------------------------------------------% */
-    /*     | Initialize Q to the identity to accumulate | */
-    /*     | the rotations and reflections              | */
-    /*     %--------------------------------------------% */
+    /* ------------------------------------------ */
+    /* Initialize Q to the identity to accumulate */
+    /* the rotations and reflections              */
+    /* ------------------------------------------ */
 
     slaset_("All", &kplusp, &kplusp, &s_zero, &s_one, &q[q_offset], ldq);
 
-    /*     %----------------------------------------------% */
-    /*     | Quick return if there are no shifts to apply | */
-    /*     %----------------------------------------------% */
+    /* -------------------------------------------- */
+    /* Quick return if there are no shifts to apply */
+    /* -------------------------------------------- */
 
     if (*np == 0)
     {
         goto L9000;
     }
 
-    /*     %----------------------------------------------% */
-    /*     | Chase the bulge with the application of each | */
-    /*     | implicit shift. Each shift is applied to the | */
-    /*     | whole matrix including each block.           | */
-    /*     %----------------------------------------------% */
+    /* -------------------------------------------- */
+    /* Chase the bulge with the application of each */
+    /* implicit shift. Each shift is applied to the */
+    /* whole matrix including each block.           */
+    /* -------------------------------------------- */
 
     cconj = FALSE_;
     i__1 = *np;
@@ -314,19 +256,19 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             svout_(1, &sigmai, debug_1.ndigit, "_napps: The imaginary part of the shift ");
         }
 
-        /*        %-------------------------------------------------% */
-        /*        | The following set of conditionals is necessary  | */
-        /*        | in order that complex conjugate pairs of shifts | */
-        /*        | are applied together or not at all.             | */
-        /*        %-------------------------------------------------% */
+        /* ----------------------------------------------- */
+        /* The following set of conditionals is necessary  */
+        /* in order that complex conjugate pairs of shifts */
+        /* are applied together or not at all.             */
+        /* ----------------------------------------------- */
 
         if (cconj)
         {
 
-            /*           %-----------------------------------------% */
-            /*           | cconj = .true. means the previous shift | */
-            /*           | had non-zero imaginary part.            | */
-            /*           %-----------------------------------------% */
+            /* --------------------------------------- */
+            /* cconj = .true. means the previous shift */
+            /* had non-zero imaginary part.            */
+            /* --------------------------------------- */
 
             cconj = FALSE_;
             goto L110;
@@ -334,21 +276,21 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         else if (jj < *np && dabs(sigmai) > 0.f)
         {
 
-            /*           %------------------------------------% */
-            /*           | Start of a complex conjugate pair. | */
-            /*           %------------------------------------% */
+            /* ---------------------------------- */
+            /* Start of a complex conjugate pair. */
+            /* ---------------------------------- */
 
             cconj = TRUE_;
         }
         else if (jj == *np && dabs(sigmai) > 0.f)
         {
 
-            /*           %----------------------------------------------% */
-            /*           | The last shift has a nonzero imaginary part. | */
-            /*           | Don't apply it; thus the order of the        | */
-            /*           | compressed H is order KEV+1 since only np-1  | */
-            /*           | were applied.                                | */
-            /*           %----------------------------------------------% */
+            /* -------------------------------------------- */
+            /* The last shift has a nonzero imaginary part. */
+            /* Don't apply it; thus the order of the        */
+            /* compressed H is order KEV+1 since only np-1  */
+            /* were applied.                                */
+            /* -------------------------------------------- */
 
             ++(*kev);
             goto L110;
@@ -356,26 +298,26 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         istart = 1;
     L20:
 
-        /*        %--------------------------------------------------% */
-        /*        | if sigmai = 0 then                               | */
-        /*        |    Apply the jj-th shift ...                     | */
-        /*        | else                                             | */
-        /*        |    Apply the jj-th and (jj+1)-th together ...    | */
-        /*        |    (Note that jj < np at this point in the code) | */
-        /*        | end                                              | */
-        /*        | to the current block of H. The next do loop      | */
-        /*        | determines the current block ;                   | */
-        /*        %--------------------------------------------------% */
+        /* ------------------------------------------------ */
+        /* if sigmai = 0 then                               */
+        /*    Apply the jj-th shift ...                     */
+        /* else                                             */
+        /*    Apply the jj-th and (jj+1)-th together ...    */
+        /*    (Note that jj < np at this point in the code) */
+        /* end                                              */
+        /* to the current block of H. The next do loop      */
+        /* determines the current block ;                   */
+        /* ------------------------------------------------ */
 
         i__2 = kplusp - 1;
         for (i = istart; i <= i__2; ++i)
         {
 
-            /*           %----------------------------------------% */
-            /*           | Check for splitting and deflation. Use | */
-            /*           | a standard test as in the QR algorithm | */
-            /*           | REFERENCE: LAPACK subroutine slahqr    | */
-            /*           %----------------------------------------% */
+            /* -------------------------------------- */
+            /* Check for splitting and deflation. Use */
+            /* a standard test as in the QR algorithm */
+            /* REFERENCE: LAPACK subroutine slahqr    */
+            /* -------------------------------------- */
 
             tst1 = (r__1 = h[i + i * h_dim1], dabs(r__1)) + (r__2 = h[i + 1 + (i + 1) * h_dim1], dabs(r__2));
             if (tst1 == 0.f)
@@ -408,19 +350,19 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             ivout_(1, &iend, debug_1.ndigit, "_napps: End of current block ");
         }
 
-        /*        %------------------------------------------------% */
-        /*        | No reason to apply a shift to block of order 1 | */
-        /*        %------------------------------------------------% */
+        /* ---------------------------------------------- */
+        /* No reason to apply a shift to block of order 1 */
+        /* ---------------------------------------------- */
 
         if (istart == iend)
         {
             goto L100;
         }
 
-        /*        %------------------------------------------------------% */
-        /*        | If istart + 1 = iend then no reason to apply a       | */
-        /*        | complex conjugate pair of shifts on a 2 by 2 matrix. | */
-        /*        %------------------------------------------------------% */
+        /* ---------------------------------------------------- */
+        /* If istart + 1 = iend then no reason to apply a       */
+        /* complex conjugate pair of shifts on a 2 by 2 matrix. */
+        /* ---------------------------------------------------- */
 
         if (istart + 1 == iend && dabs(sigmai) > 0.f)
         {
@@ -432,9 +374,9 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         if (dabs(sigmai) <= 0.f)
         {
 
-            /*           %---------------------------------------------% */
-            /*           | Real-valued shift ==> apply single shift QR | */
-            /*           %---------------------------------------------% */
+            /* ------------------------------------------- */
+            /* Real-valued shift ==> apply single shift QR */
+            /* ------------------------------------------- */
 
             f = h11 - sigmar;
             g = h21;
@@ -443,19 +385,19 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             for (i = istart; i <= i__2; ++i)
             {
 
-                /*              %-----------------------------------------------------% */
-                /*              | Construct the plane rotation G to zero out the bulge | */
-                /*              %-----------------------------------------------------% */
+                /* --------------------------------------------------- */
+                /* Construct the plane rotation G to zero out the bulge */
+                /* --------------------------------------------------- */
 
                 slartg_(&f, &g, &c, &s, &r);
                 if (i > istart)
                 {
 
-                    /*                 %-------------------------------------------% */
-                    /*                 | The following ensures that h(1:iend-1,1), | */
-                    /*                 | the first iend-2 off diagonal of elements | */
-                    /*                 | H, remain non negative.                   | */
-                    /*                 %-------------------------------------------% */
+                    /* ----------------------------------------- */
+                    /* The following ensures that h(1:iend-1,1), */
+                    /* the first iend-2 off diagonal of elements */
+                    /* H, remain non negative.                   */
+                    /* ----------------------------------------- */
 
                     if (r < 0.f)
                     {
@@ -467,9 +409,9 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                     h[i + 1 + (i - 1) * h_dim1] = 0.f;
                 }
 
-                /*              %---------------------------------------------% */
-                /*              | Apply rotation to the left of H;  H <- G'*H | */
-                /*              %---------------------------------------------% */
+                /* ------------------------------------------- */
+                /* Apply rotation to the left of H;  H <- G'*H */
+                /* ------------------------------------------- */
 
                 i__3 = kplusp;
                 for (j = i; j <= i__3; ++j)
@@ -480,9 +422,9 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                     /* L50: */
                 }
 
-                /*              %---------------------------------------------% */
-                /*              | Apply rotation to the right of H;  H <- H*G | */
-                /*              %---------------------------------------------% */
+                /* ------------------------------------------- */
+                /* Apply rotation to the right of H;  H <- H*G */
+                /* ------------------------------------------- */
 
                 /* Computing MIN */
                 i__4 = i + 2;
@@ -495,9 +437,9 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                     /* L60: */
                 }
 
-                /*              %----------------------------------------------------% */
-                /*              | Accumulate the rotation in the matrix Q;  Q <- Q*G | */
-                /*              %----------------------------------------------------% */
+                /* -------------------------------------------------- */
+                /* Accumulate the rotation in the matrix Q;  Q <- Q*G */
+                /* -------------------------------------------------- */
 
                 /* Computing MIN */
                 i__4 = i + jj;
@@ -510,9 +452,9 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                     /* L70: */
                 }
 
-                /*              %---------------------------% */
-                /*              | Prepare for next rotation | */
-                /*              %---------------------------% */
+                /* ------------------------- */
+                /* Prepare for next rotation */
+                /* ------------------------- */
 
                 if (i < iend - 1)
                 {
@@ -522,24 +464,24 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                 /* L80: */
             }
 
-            /*           %-----------------------------------% */
-            /*           | Finished applying the real shift. | */
-            /*           %-----------------------------------% */
+            /* --------------------------------- */
+            /* Finished applying the real shift. */
+            /* --------------------------------- */
         }
         else
         {
 
-            /*           %----------------------------------------------------% */
-            /*           | Complex conjugate shifts ==> apply double shift QR | */
-            /*           %----------------------------------------------------% */
+            /* -------------------------------------------------- */
+            /* Complex conjugate shifts ==> apply double shift QR */
+            /* -------------------------------------------------- */
 
             h12 = h[istart + (istart + 1) * h_dim1];
             h22 = h[istart + 1 + (istart + 1) * h_dim1];
             h32 = h[istart + 2 + (istart + 1) * h_dim1];
 
-            /*           %---------------------------------------------------------% */
-            /*           | Compute 1st column of (H - shift*I)*(H - conj(shift)*I) | */
-            /*           %---------------------------------------------------------% */
+            /* ------------------------------------------------------- */
+            /* Compute 1st column of (H - shift*I)*(H - conj(shift)*I) */
+            /* ------------------------------------------------------- */
 
             s = sigmar * 2.f;
             t = slapy2_(&sigmar, &sigmai);
@@ -555,10 +497,10 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                 i__3 = 3, i__4 = iend - i + 1;
                 nr = min(i__3, i__4);
 
-                /*              %-----------------------------------------------------% */
-                /*              | Construct Householder reflector G to zero out u(1). | */
-                /*              | G is of the form I - tau*( 1 u )' * ( 1 u' ).       | */
-                /*              %-----------------------------------------------------% */
+                /* --------------------------------------------------- */
+                /* Construct Householder reflector G to zero out u(1). */
+                /* G is of the form I - tau*( 1 u )' * ( 1 u' ).       */
+                /* --------------------------------------------------- */
 
                 slarfg_(&nr, u, &u[1], &i_one, &tau);
 
@@ -573,31 +515,31 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                 }
                 u[0] = 1.f;
 
-                /*              %--------------------------------------% */
-                /*              | Apply the reflector to the left of H | */
-                /*              %--------------------------------------% */
+                /* ------------------------------------ */
+                /* Apply the reflector to the left of H */
+                /* ------------------------------------ */
 
                 i__3 = kplusp - i + 1;
                 slarf_("Left", &nr, &i__3, u, &i_one, &tau, &h[i + i * h_dim1], ldh, &workl[1]);
 
-                /*              %---------------------------------------% */
-                /*              | Apply the reflector to the right of H | */
-                /*              %---------------------------------------% */
+                /* ------------------------------------- */
+                /* Apply the reflector to the right of H */
+                /* ------------------------------------- */
 
                 /* Computing MIN */
                 i__3 = i + 3;
                 ir = min(i__3, iend);
                 slarf_("Right", &ir, &nr, u, &i_one, &tau, &h[i * h_dim1 + 1], ldh, &workl[1]);
 
-                /*              %-----------------------------------------------------% */
-                /*              | Accumulate the reflector in the matrix Q;  Q <- Q*G | */
-                /*              %-----------------------------------------------------% */
+                /* --------------------------------------------------- */
+                /* Accumulate the reflector in the matrix Q;  Q <- Q*G */
+                /* --------------------------------------------------- */
 
                 slarf_("Right", &kplusp, &nr, u, &i_one, &tau, &q[i * q_dim1 + 1], ldq, &workl[1]);
 
-                /*              %----------------------------% */
-                /*              | Prepare for next reflector | */
-                /*              %----------------------------% */
+                /* -------------------------- */
+                /* Prepare for next reflector */
+                /* -------------------------- */
 
                 if (i < iend - 1)
                 {
@@ -612,17 +554,17 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                 /* L90: */
             }
 
-            /*           %--------------------------------------------% */
-            /*           | Finished applying a complex pair of shifts | */
-            /*           | to the current block                       | */
-            /*           %--------------------------------------------% */
+            /* ------------------------------------------ */
+            /* Finished applying a complex pair of shifts */
+            /* to the current block                       */
+            /* ------------------------------------------ */
         }
 
     L100:
 
-        /*        %---------------------------------------------------------% */
-        /*        | Apply the same shift to the next block if there is any. | */
-        /*        %---------------------------------------------------------% */
+        /* ------------------------------------------------------- */
+        /* Apply the same shift to the next block if there is any. */
+        /* ------------------------------------------------------- */
 
         istart = iend + 1;
         if (iend < kplusp)
@@ -630,17 +572,17 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
             goto L20;
         }
 
-        /*        %---------------------------------------------% */
-        /*        | Loop back to the top to get the next shift. | */
-        /*        %---------------------------------------------% */
+        /* ------------------------------------------- */
+        /* Loop back to the top to get the next shift. */
+        /* ------------------------------------------- */
 
     L110:;
     }
 
-    /*     %--------------------------------------------------% */
-    /*     | Perform a similarity transformation that makes   | */
-    /*     | sure that H will have non negative sub diagonals | */
-    /*     %--------------------------------------------------% */
+    /* ------------------------------------------------ */
+    /* Perform a similarity transformation that makes   */
+    /* sure that H will have non negative sub diagonals */
+    /* ------------------------------------------------ */
 
     i__1 = *kev;
     for (j = 1; j <= i__1; ++j)
@@ -665,11 +607,11 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     for (i = 1; i <= i__1; ++i)
     {
 
-        /*        %--------------------------------------------% */
-        /*        | Final check for splitting and deflation.   | */
-        /*        | Use a standard test as in the QR algorithm | */
-        /*        | REFERENCE: LAPACK subroutine slahqr        | */
-        /*        %--------------------------------------------% */
+        /* ------------------------------------------ */
+        /* Final check for splitting and deflation.   */
+        /* Use a standard test as in the QR algorithm */
+        /* REFERENCE: LAPACK subroutine slahqr        */
+        /* ------------------------------------------ */
 
         tst1 = (r__1 = h[i + i * h_dim1], dabs(r__1)) + (r__2 = h[i + 1 + (i + 1) * h_dim1], dabs(r__2));
         if (tst1 == 0.f)
@@ -685,23 +627,23 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         /* L130: */
     }
 
-    /*     %-------------------------------------------------% */
-    /*     | Compute the (kev+1)-st column of (V*Q) and      | */
-    /*     | temporarily store the result in WORKD(N+1:2*N). | */
-    /*     | This is needed in the residual update since we  | */
-    /*     | cannot GUARANTEE that the corresponding entry   | */
-    /*     | of H would be zero as in exact arithmetic.      | */
-    /*     %-------------------------------------------------% */
+    /* ----------------------------------------------- */
+    /* Compute the (kev+1)-st column of (V*Q) and      */
+    /* temporarily store the result in WORKD(N+1:2*N). */
+    /* This is needed in the residual update since we  */
+    /* cannot GUARANTEE that the corresponding entry   */
+    /* of H would be zero as in exact arithmetic.      */
+    /* ----------------------------------------------- */
 
     if (h[*kev + 1 + *kev * h_dim1] > 0.f)
     {
         sgemv_("N", n, &kplusp, &s_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &s_zero, &workd[*n + 1], &i_one);
     }
 
-    /*     %----------------------------------------------------------% */
-    /*     | Compute column 1 to kev of (V*Q) in backward order       | */
-    /*     | taking advantage of the upper Hessenberg structure of Q. | */
-    /*     %----------------------------------------------------------% */
+    /* -------------------------------------------------------- */
+    /* Compute column 1 to kev of (V*Q) in backward order       */
+    /* taking advantage of the upper Hessenberg structure of Q. */
+    /* -------------------------------------------------------- */
 
     i__1 = *kev;
     for (i = 1; i <= i__1; ++i)
@@ -712,28 +654,28 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         /* L140: */
     }
 
-    /*     %-------------------------------------------------% */
-    /*     |  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). | */
-    /*     %-------------------------------------------------% */
+    /* ----------------------------------------------- */
+    /*  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). */
+    /* ----------------------------------------------- */
 
     slacpy_("A", n, kev, &v[(kplusp - *kev + 1) * v_dim1 + 1], ldv, &v[v_offset], ldv);
 
-    /*     %--------------------------------------------------------------% */
-    /*     | Copy the (kev+1)-st column of (V*Q) in the appropriate place | */
-    /*     %--------------------------------------------------------------% */
+    /* ------------------------------------------------------------ */
+    /* Copy the (kev+1)-st column of (V*Q) in the appropriate place */
+    /* ------------------------------------------------------------ */
 
     if (h[*kev + 1 + *kev * h_dim1] > 0.f)
     {
         scopy_(n, &workd[*n + 1], &i_one, &v[(*kev + 1) * v_dim1 + 1], &i_one);
     }
 
-    /*     %-------------------------------------% */
-    /*     | Update the residual vector:         | */
-    /*     |    r <- sigmak*r + betak*v(:,kev+1) | */
-    /*     | where                               | */
-    /*     |    sigmak = (e_{kplusp}'*Q)*e_{kev} | */
-    /*     |    betak = e_{kev+1}'*H*e_{kev}     | */
-    /*     %-------------------------------------% */
+    /* ----------------------------------- */
+    /* Update the residual vector:         */
+    /*    r <- sigmak*r + betak*v(:,kev+1) */
+    /* where                               */
+    /*    sigmak = (e_{kplusp}'*Q)*e_{kev} */
+    /*    betak = e_{kev+1}'*H*e_{kev}     */
+    /* ----------------------------------- */
 
     sscal_(n, &q[kplusp + *kev * q_dim1], &resid[1], &i_one);
     if (h[*kev + 1 + *kev * h_dim1] > 0.f)
@@ -758,8 +700,8 @@ L9000:
 
     return 0;
 
-    /*     %---------------% */
-    /*     | End of snapps | */
-    /*     %---------------% */
+    /* ------------- */
+    /* End of snapps */
+    /* ------------- */
 
 } /* snapps_ */

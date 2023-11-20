@@ -9,104 +9,100 @@ static a_int i_one = 1;
 static double d_one = 1.;
 static double d_zero = 0.;
 
-/* ----------------------------------------------------------------------- */
-/* \BeginDoc */
-
-/* \Name: dneigh */
-
-/* \Description: */
-/*  Compute the eigenvalues of the current upper Hessenberg matrix */
-/*  and the corresponding Ritz estimates given the current residual norm. */
-
-/* \Usage: */
-/*  call dneigh */
-/*     ( RNORM, N, H, LDH, RITZR, RITZI, BOUNDS, Q, LDQ, WORKL, IERR ) */
-
-/* \Arguments */
-/*  RNORM   Double precision scalar.  (INPUT) */
-/*          Residual norm corresponding to the current upper Hessenberg */
-/*          matrix H. */
-
-/*  N       Integer.  (INPUT) */
-/*          Size of the matrix H. */
-
-/*  H       Double precision N by N array.  (INPUT) */
-/*          H contains the current upper Hessenberg matrix. */
-
-/*  LDH     Integer.  (INPUT) */
-/*          Leading dimension of H exactly as declared in the calling */
-/*          program. */
-
-/*  RITZR,  Double precision arrays of length N.  (OUTPUT) */
-/*  RITZI   On output, RITZR(1:N) (resp. RITZI(1:N)) contains the real */
-/*          (respectively imaginary) parts of the eigenvalues of H. */
-
-/*  BOUNDS  Double precision array of length N.  (OUTPUT) */
-/*          On output, BOUNDS contains the Ritz estimates associated with */
-/*          the eigenvalues RITZR and RITZI.  This is equal to RNORM */
-/*          times the last components of the eigenvectors corresponding */
-/*          to the eigenvalues in RITZR and RITZI. */
-
-/*  Q       Double precision N by N array.  (WORKSPACE) */
-/*          Workspace needed to store the eigenvectors of H. */
-
-/*  LDQ     Integer.  (INPUT) */
-/*          Leading dimension of Q exactly as declared in the calling */
-/*          program. */
-
-/*  WORKL   Double precision work array of length N**2 + 3*N.  (WORKSPACE) */
-/*          Private (replicated) array on each PE or array allocated on */
-/*          the front end.  This is needed to keep the full Schur form */
-/*          of H and also in the calculation of the eigenvectors of H. */
-
-/*  IERR    Integer.  (OUTPUT) */
-/*          Error exit flag from dlahqr or dtrevc. */
-
-/* \EndDoc */
-
-/* ----------------------------------------------------------------------- */
-
-/* \BeginLib */
-
-/* \Local variables: */
-/*     xxxxxx  real */
-
-/* \Routines called: */
-/*     dlahqr  LAPACK routine to compute the real Schur form of an */
-/*             upper Hessenberg matrix and last row of the Schur vectors. */
-/*     arscnd  ARPACK utility routine for timing. */
-/*     dmout   ARPACK utility routine that prints matrices */
-/*     dvout   ARPACK utility routine that prints vectors. */
-/*     dlacpy  LAPACK matrix copy routine. */
-/*     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-/*     dtrevc  LAPACK routine to compute the eigenvectors of a matrix */
-/*             in upper quasi-triangular form */
-/*     dgemv   Level 2 BLAS routine for matrix vector multiplication. */
-/*     dcopy   Level 1 BLAS that copies one vector to another . */
-/*     dnrm2   Level 1 BLAS that computes the norm of a vector. */
-/*     dscal   Level 1 BLAS that scales a vector. */
-
-/* \Author */
-/*     Danny Sorensen               Phuong Vu */
-/*     Richard Lehoucq              CRPC / Rice University */
-/*     Dept. of Computational &     Houston, Texas */
-/*     Applied Mathematics */
-/*     Rice University */
-/*     Houston, Texas */
-
-/* \Revision history: */
-/*     xx/xx/92: Version ' 2.1' */
-
-/* \SCCS Information: @(#) */
-/* FILE: neigh.F   SID: 2.3   DATE OF SID: 4/20/96   RELEASE: 2 */
-
-/* \Remarks */
-/*     None */
-
-/* \EndLib */
-
-/* ----------------------------------------------------------------------- */
-
+/**
+ * \BeginDoc
+ *
+ * \Name: dneigh
+ *
+ * \Description:
+ *  Compute the eigenvalues of the current upper Hessenberg matrix
+ *  and the corresponding Ritz estimates given the current residual norm.
+ *
+ * \Usage:
+ *  call dneigh
+ *     ( RNORM, N, H, LDH, RITZR, RITZI, BOUNDS, Q, LDQ, WORKL, IERR )
+ *
+ * \Arguments
+ *  RNORM   Double precision scalar.  (INPUT)
+ *          Residual norm corresponding to the current upper Hessenberg
+ *          matrix H.
+ *
+ *  N       Integer.  (INPUT)
+ *          Size of the matrix H.
+ *
+ *  H       Double precision N by N array.  (INPUT)
+ *          H contains the current upper Hessenberg matrix.
+ *
+ *  LDH     Integer.  (INPUT)
+ *          Leading dimension of H exactly as declared in the calling
+ *          program.
+ *
+ *  RITZR,  Double precision arrays of length N.  (OUTPUT)
+ *  RITZI   On output, RITZR(1:N) (resp. RITZI(1:N)) contains the real
+ *          (respectively imaginary) parts of the eigenvalues of H.
+ *
+ *  BOUNDS  Double precision array of length N.  (OUTPUT)
+ *          On output, BOUNDS contains the Ritz estimates associated with
+ *          the eigenvalues RITZR and RITZI.  This is equal to RNORM
+ *          times the last components of the eigenvectors corresponding
+ *          to the eigenvalues in RITZR and RITZI.
+ *
+ *  Q       Double precision N by N array.  (WORKSPACE)
+ *          Workspace needed to store the eigenvectors of H.
+ *
+ *  LDQ     Integer.  (INPUT)
+ *          Leading dimension of Q exactly as declared in the calling
+ *          program.
+ *
+ *  WORKL   Double precision work array of length N**2 + 3*N.  (WORKSPACE)
+ *          Private (replicated) array on each PE or array allocated on
+ *          the front end.  This is needed to keep the full Schur form
+ *          of H and also in the calculation of the eigenvectors of H.
+ *
+ *  IERR    Integer.  (OUTPUT)
+ *          Error exit flag from dlahqr or dtrevc.
+ *
+ * \EndDoc
+ *
+ * -----------------------------------------------------------------------
+ *
+ * \BeginLib
+ *
+ * \Local variables:
+ *     xxxxxx  real
+ *
+ * \Routines called:
+ *     dlahqr  LAPACK routine to compute the real Schur form of an
+ *             upper Hessenberg matrix and last row of the Schur vectors.
+ *     arscnd  ARPACK utility routine for timing.
+ *     dmout   ARPACK utility routine that prints matrices
+ *     dvout   ARPACK utility routine that prints vectors.
+ *     dlacpy  LAPACK matrix copy routine.
+ *     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     dtrevc  LAPACK routine to compute the eigenvectors of a matrix
+ *             in upper quasi-triangular form
+ *     dgemv   Level 2 BLAS routine for matrix vector multiplication.
+ *     dcopy   Level 1 BLAS that copies one vector to another .
+ *     dnrm2   Level 1 BLAS that computes the norm of a vector.
+ *     dscal   Level 1 BLAS that scales a vector.
+ *
+ * \Author
+ *     Danny Sorensen               Phuong Vu
+ *     Richard Lehoucq              CRPC / Rice University
+ *     Dept. of Computational &     Houston, Texas
+ *     Applied Mathematics
+ *     Rice University
+ *     Houston, Texas
+ *
+ * \Revision history:
+ *     xx/xx/92: Version ' 2.1'
+ *
+ * \SCCS Information: @(#)
+ * FILE: neigh.F   SID: 2.3   DATE OF SID: 4/20/96   RELEASE: 2
+ *
+ *
+ * \EndLib
+ */
 int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, double *ritzi, double *bounds, double *q, a_int *ldq, double *workl, a_int *ierr)
 {
     /* System generated locals */
@@ -121,60 +117,10 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
     a_bool select[1];
     a_int msglvl;
 
-    /*     %----------------------------------------------------% */
-    /*     | Include files for debugging and timing information | */
-    /*     %----------------------------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: debug.h   SID: 2.3   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %---------------------------------% */
-    /*     | See debug.doc for documentation | */
-    /*     %---------------------------------% */
-
-    /*     %------------------% */
-    /*     | Scalar Arguments | */
-    /*     %------------------% */
-
-    /*     %--------------------------------% */
-    /*     | See stat.doc for documentation | */
-    /*     %--------------------------------% */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: stat.h   SID: 2.2   DATE OF SID: 11/16/95   RELEASE: 2 */
-
-    /*     %-----------------% */
-    /*     | Array Arguments | */
-    /*     %-----------------% */
-
-    /*     %------------% */
-    /*     | Parameters | */
-    /*     %------------% */
-
-    /*     %------------------------% */
-    /*     | Local Scalars & Arrays | */
-    /*     %------------------------% */
-
-    /*     %----------------------% */
-    /*     | External Subroutines | */
-    /*     %----------------------% */
-
-    /*     %--------------------% */
-    /*     | External Functions | */
-    /*     %--------------------% */
-
-    /*     %---------------------% */
-    /*     | Intrinsic Functions | */
-    /*     %---------------------% */
-
-    /*     %-----------------------% */
-    /*     | Executable Statements | */
-    /*     %-----------------------% */
-
-    /*     %-------------------------------% */
-    /*     | Initialize timing statistics  | */
-    /*     | & message level for debugging | */
-    /*     %-------------------------------% */
+    /* ----------------------------- */
+    /* Initialize timing statistics  */
+    /* & message level for debugging */
+    /* ----------------------------- */
 
     /* Parameter adjustments */
     --workl;
@@ -188,7 +134,6 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
     q_offset = 1 + q_dim1;
     q -= q_offset;
 
-    /* Function Body */
     arscnd_(&t0);
     msglvl = debug_1.mneigh;
 
@@ -197,13 +142,13 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
         dmout_(n, n, &h[h_offset], ldh, debug_1.ndigit, "_neigh: Entering upper Hessenberg matrix H ");
     }
 
-    /*     %-----------------------------------------------------------% */
-    /*     | 1. Compute the eigenvalues, the last components of the    | */
-    /*     |    corresponding Schur vectors and the full Schur form T  | */
-    /*     |    of the current upper Hessenberg matrix H.              | */
-    /*     | dlahqr returns the full Schur form of H in WORKL(1:N**2)  | */
-    /*     | and the last components of the Schur vectors in BOUNDS.   | */
-    /*     %-----------------------------------------------------------% */
+    /* --------------------------------------------------------- */
+    /* 1. Compute the eigenvalues, the last components of the    */
+    /*    corresponding Schur vectors and the full Schur form T  */
+    /*    of the current upper Hessenberg matrix H.              */
+    /* dlahqr returns the full Schur form of H in WORKL(1:N**2)  */
+    /* and the last components of the Schur vectors in BOUNDS.   */
+    /* --------------------------------------------------------- */
 
     dlacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n);
     i__1 = *n - 1;
@@ -224,15 +169,15 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
         dvout_(n, &bounds[1], debug_1.ndigit, "_neigh: last row of the Schur matrix for H");
     }
 
-    /*     %-----------------------------------------------------------% */
-    /*     | 2. Compute the eigenvectors of the full Schur form T and  | */
-    /*     |    apply the last components of the Schur vectors to get  | */
-    /*     |    the last components of the corresponding eigenvectors. | */
-    /*     | Remember that if the i-th and (i+1)-st eigenvalues are    | */
-    /*     | complex conjugate pairs, then the real & imaginary part   | */
-    /*     | of the eigenvector components are split across adjacent   | */
-    /*     | columns of Q.                                             | */
-    /*     %-----------------------------------------------------------% */
+    /* --------------------------------------------------------- */
+    /* 2. Compute the eigenvectors of the full Schur form T and  */
+    /*    apply the last components of the Schur vectors to get  */
+    /*    the last components of the corresponding eigenvectors. */
+    /* Remember that if the i-th and (i+1)-st eigenvalues are    */
+    /* complex conjugate pairs, then the real & imaginary part   */
+    /* of the eigenvector components are split across adjacent   */
+    /* columns of Q.                                             */
+    /* --------------------------------------------------------- */
 
     dtrevc_("R", "A", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], ierr);
 
@@ -241,14 +186,14 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
         goto L9000;
     }
 
-    /*     %------------------------------------------------% */
-    /*     | Scale the returning eigenvectors so that their | */
-    /*     | euclidean norms are all one. LAPACK subroutine | */
-    /*     | dtrevc returns each eigenvector normalized so  | */
-    /*     | that the element of largest magnitude has      | */
-    /*     | magnitude 1; here the magnitude of a complex   | */
-    /*     | number (x,y) is taken to be |x| + |y|.         | */
-    /*     %------------------------------------------------% */
+    /* ---------------------------------------------- */
+    /* Scale the returning eigenvectors so that their */
+    /* euclidean norms are all one. LAPACK subroutine */
+    /* dtrevc returns each eigenvector normalized so  */
+    /* that the element of largest magnitude has      */
+    /* magnitude 1; here the magnitude of a complex   */
+    /* number (x,y) is taken to be |x| + |y|.         */
+    /* ---------------------------------------------- */
 
     iconj = 0;
     i__1 = *n;
@@ -257,9 +202,9 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
         if ((d__1 = ritzi[i], abs(d__1)) <= 0.)
         {
 
-            /*           %----------------------% */
-            /*           | Real eigenvalue case | */
-            /*           %----------------------% */
+            /* -------------------- */
+            /* Real eigenvalue case */
+            /* -------------------- */
 
             temp = dnrm2_(n, &q[i * q_dim1 + 1], &i_one);
             d__1 = 1. / temp;
@@ -268,13 +213,13 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
         else
         {
 
-            /*           %-------------------------------------------% */
-            /*           | Complex conjugate pair case. Note that    | */
-            /*           | since the real and imaginary part of      | */
-            /*           | the eigenvector are stored in consecutive | */
-            /*           | columns, we further normalize by the      | */
-            /*           | square root of two.                       | */
-            /*           %-------------------------------------------% */
+            /* ----------------------------------------- */
+            /* Complex conjugate pair case. Note that    */
+            /* since the real and imaginary part of      */
+            /* the eigenvector are stored in consecutive */
+            /* columns, we further normalize by the      */
+            /* square root of two.                       */
+            /* ----------------------------------------- */
 
             if (iconj == 0)
             {
@@ -302,9 +247,9 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
         dvout_(n, &workl[1], debug_1.ndigit, "_neigh: Last row of the eigenvector matrix for H");
     }
 
-    /*     %----------------------------% */
-    /*     | Compute the Ritz estimates | */
-    /*     %----------------------------% */
+    /* -------------------------- */
+    /* Compute the Ritz estimates */
+    /* -------------------------- */
 
     iconj = 0;
     i__1 = *n;
@@ -313,22 +258,22 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
         if ((d__1 = ritzi[i], abs(d__1)) <= 0.)
         {
 
-            /*           %----------------------% */
-            /*           | Real eigenvalue case | */
-            /*           %----------------------% */
+            /* -------------------- */
+            /* Real eigenvalue case */
+            /* -------------------- */
 
             bounds[i] = *rnorm * (d__1 = workl[i], abs(d__1));
         }
         else
         {
 
-            /*           %-------------------------------------------% */
-            /*           | Complex conjugate pair case. Note that    | */
-            /*           | since the real and imaginary part of      | */
-            /*           | the eigenvector are stored in consecutive | */
-            /*           | columns, we need to take the magnitude    | */
-            /*           | of the last components of the two vectors | */
-            /*           %-------------------------------------------% */
+            /* ----------------------------------------- */
+            /* Complex conjugate pair case. Note that    */
+            /* since the real and imaginary part of      */
+            /* the eigenvector are stored in consecutive */
+            /* columns, we need to take the magnitude    */
+            /* of the last components of the two vectors */
+            /* ----------------------------------------- */
 
             if (iconj == 0)
             {
@@ -357,8 +302,8 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
 L9000:
     return 0;
 
-    /*     %---------------% */
-    /*     | End of dneigh | */
-    /*     %---------------% */
+    /* ------------- */
+    /* End of dneigh */
+    /* ------------- */
 
 } /* dneigh_ */

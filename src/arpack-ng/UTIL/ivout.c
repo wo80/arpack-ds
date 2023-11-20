@@ -20,7 +20,6 @@ void ivout_(const int n, const int *ix, const int idigit, const char *ifmt)
     char line[80];
     int ndigit;
 
-    /* Function Body */
     len = strlen(ifmt);
     len = min(len,80);
     for (i = 0; i < len; ++i)
