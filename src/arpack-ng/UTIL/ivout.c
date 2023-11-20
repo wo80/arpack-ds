@@ -2,291 +2,107 @@
 
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_int c__1 = 1;
-
-/* ----------------------------------------------------------------------- */
-/*  Routine:    IVOUT */
-
-/*  Purpose:    Integer vector output routine. */
-
-/*  Usage:      CALL IVOUT (LOUT, N, IX, IDIGIT, IFMT) */
-
-/*  Arguments */
-/*     N      - Length of array IX. (Input) */
-/*     IX     - Integer array to be printed. (Input) */
-/*     IFMT   - Format to be used in printing array IX. (Input) */
-/*     IDIGIT - Print up to ABS(IDIGIT) decimal digits / number. (Input) */
-/*              If IDIGIT .LT. 0, printing is done with 72 columns. */
-/*              If IDIGIT .GT. 0, printing is done with 132 columns. */
-
-/* ----------------------------------------------------------------------- */
-
-int ivout_(a_int *lout, a_int *n, a_int *ix, a_int *idigit, char *ifmt)
+/**
+ * \Name: IVOUT
+ *        Integer vector output routine.
+ *
+ *     N      - Length of array IX. (Input)
+ *     IX     - Integer array to be printed. (Input)
+ *     IFMT   - Format to be used in printing array IX. (Input)
+ *     IDIGIT - Print up to ABS(IDIGIT) decimal digits / number. (Input)
+ *              If IDIGIT .LT. 0, printing is done with 72 columns.
+ *              If IDIGIT .GT. 0, printing is done with 132 columns.
+ */
+void ivout_(const int n, const int *ix, const int idigit, const char *ifmt)
 {
-    /* Format strings */
-    static char fmt_2000[] = "(/1x,a/1x,a)";
-    static char fmt_1000[] = "(1x,i4,\002 - \002,i4,\002:\002,20(1x,i5))";
-    static char fmt_1001[] = "(1x,i4,\002 - \002,i4,\002:\002,15(1x,i7))";
-    static char fmt_1002[] = "(1x,i4,\002 - \002,i4,\002:\002,10(1x,i11))";
-    static char fmt_1003[] = "(1x,i4,\002 - \002,i4,\002:\002,7(1x,i15))";
-    static char fmt_1004[] = "(1x,\002 \002)";
-
-    /* System generated locals */
-    a_int i__1, i__2, i__3;
-
-    /* Builtin functions */
-    a_int i_len(char *, ftnlen), s_wsfe(cilist *), do_fio(a_int *, char *, ftnlen), e_wsfe(void);
-
     /* Local variables */
-    a_int i, k1, k2, lll;
+    int i, j, k, len, m;
     char line[80];
-    a_int ndigit;
-
-    /* Fortran I/O blocks */
-    static cilist io___4 = {0, 0, 0, fmt_2000, 0};
-    static cilist io___8 = {0, 0, 0, fmt_1000, 0};
-    static cilist io___9 = {0, 0, 0, fmt_1001, 0};
-    static cilist io___10 = {0, 0, 0, fmt_1002, 0};
-    static cilist io___11 = {0, 0, 0, fmt_1003, 0};
-    static cilist io___12 = {0, 0, 0, fmt_1000, 0};
-    static cilist io___13 = {0, 0, 0, fmt_1001, 0};
-    static cilist io___14 = {0, 0, 0, fmt_1002, 0};
-    static cilist io___15 = {0, 0, 0, fmt_1003, 0};
-    static cilist io___16 = {0, 0, 0, fmt_1004, 0};
-
-    /*     ... */
-    /*     ... SPECIFICATIONS FOR ARGUMENTS */
-    /*     ... */
-    /*     ... SPECIFICATIONS FOR LOCAL VARIABLES */
-    /*     ... */
-    /*     ... SPECIFICATIONS INTRINSICS */
-
-    /* Parameter adjustments */
-    --ix;
+    int ndigit;
 
     /* Function Body */
-    /* Computing MIN */
-    i__1 = i_len(ifmt, ifmt_len);
-    lll = min(i__1, 80);
-    i__1 = lll;
-    for (i = 1; i <= i__1; ++i)
+    len = strlen(ifmt);
+    len = min(len,80);
+    for (i = 0; i < len; ++i)
     {
-        *&line[i - 1] = '-';
-        /* L1: */
+        line[i] = '-';
     }
+    i = min(i,79);
+    line[i] = '\0';
 
-    for (i = lll + 1; i <= 80; ++i)
+    printf("\n %s\n %s", ifmt, line);
+
+    if (n <= 0)
     {
-        *&line[i - 1] = ' ';
-        /* L2: */
+        return;
     }
-
-    io___4.ciunit = *lout;
-    s_wsfe(&io___4);
-    do_fio(&c__1, ifmt, ifmt_len);
-    do_fio(&c__1, line, lll);
-    e_wsfe();
-
-    if (*n <= 0)
-    {
-        return 0;
-    }
-    ndigit = *idigit;
-    if (*idigit == 0)
+    ndigit = idigit;
+    if (ndigit == 0)
     {
         ndigit = 4;
+    }
+    else if (ndigit < 0)
+    {
+        /* 132 COLUMNS FORMAT WAS REMOVED */
+        ndigit = -ndigit;
     }
 
     /* ======================================================================= */
     /*             CODE FOR OUTPUT USING 72 COLUMNS FORMAT */
     /* ======================================================================= */
 
-    if (*idigit < 0)
+    if (ndigit <= 4)
     {
-
-        ndigit = -(*idigit);
-        if (ndigit <= 4)
+        for (j = 0; j < n; j += 10)
         {
-            i__1 = *n;
-            for (k1 = 1; k1 <= i__1; k1 += 10)
+            m = j + 10;
+            k = min(n,m);
+            printf("\n  %4d - %4d: ", j, k);
+            for (i = j; i < k; ++i)
             {
-                /* Computing MIN */
-                i__2 = *n, i__3 = k1 + 9;
-                k2 = min(i__2, i__3);
-                io___8.ciunit = *lout;
-                s_wsfe(&io___8);
-                do_fio(&c__1, (char *)&k1, (ftnlen)sizeof(a_int));
-                do_fio(&c__1, (char *)&k2, (ftnlen)sizeof(a_int));
-                i__2 = k2;
-                for (i = k1; i <= i__2; ++i)
-                {
-                    do_fio(&c__1, (char *)&ix[i], (ftnlen)sizeof(a_int));
-                }
-                e_wsfe();
-                /* L10: */
+                printf("   %5d", ix[i]);
             }
         }
-        else if (ndigit <= 6)
+    }
+    else if (ndigit <= 6)
+    {
+        for (j = 0; j < n; j += 7)
         {
-            i__1 = *n;
-            for (k1 = 1; k1 <= i__1; k1 += 7)
+            m = j + 7;
+            k = min(n,m);
+            printf("\n  %4d - %4d: ", j, k);
+            for (i = j; i < k; ++i)
             {
-                /* Computing MIN */
-                i__2 = *n, i__3 = k1 + 6;
-                k2 = min(i__2, i__3);
-                io___9.ciunit = *lout;
-                s_wsfe(&io___9);
-                do_fio(&c__1, (char *)&k1, (ftnlen)sizeof(a_int));
-                do_fio(&c__1, (char *)&k2, (ftnlen)sizeof(a_int));
-                i__2 = k2;
-                for (i = k1; i <= i__2; ++i)
-                {
-                    do_fio(&c__1, (char *)&ix[i], (ftnlen)sizeof(a_int));
-                }
-                e_wsfe();
-                /* L30: */
+                printf("  %7d", ix[i]);
             }
         }
-        else if (ndigit <= 10)
+    }
+    else if (ndigit <= 10)
+    {
+        for (j = 0; j < n; j += 5)
         {
-            i__1 = *n;
-            for (k1 = 1; k1 <= i__1; k1 += 5)
+            m = j + 5;
+            k = min(n,m);
+            printf("\n  %4d - %4d: ", j, k);
+            for (i = j; i < k; ++i)
             {
-                /* Computing MIN */
-                i__2 = *n, i__3 = k1 + 4;
-                k2 = min(i__2, i__3);
-                io___10.ciunit = *lout;
-                s_wsfe(&io___10);
-                do_fio(&c__1, (char *)&k1, (ftnlen)sizeof(a_int));
-                do_fio(&c__1, (char *)&k2, (ftnlen)sizeof(a_int));
-                i__2 = k2;
-                for (i = k1; i <= i__2; ++i)
-                {
-                    do_fio(&c__1, (char *)&ix[i], (ftnlen)sizeof(a_int));
-                }
-                e_wsfe();
-                /* L50: */
+                printf("  %11d", ix[i]);
             }
         }
-        else
-        {
-            i__1 = *n;
-            for (k1 = 1; k1 <= i__1; k1 += 3)
-            {
-                /* Computing MIN */
-                i__2 = *n, i__3 = k1 + 2;
-                k2 = min(i__2, i__3);
-                io___11.ciunit = *lout;
-                s_wsfe(&io___11);
-                do_fio(&c__1, (char *)&k1, (ftnlen)sizeof(a_int));
-                do_fio(&c__1, (char *)&k2, (ftnlen)sizeof(a_int));
-                i__2 = k2;
-                for (i = k1; i <= i__2; ++i)
-                {
-                    do_fio(&c__1, (char *)&ix[i], (ftnlen)sizeof(a_int));
-                }
-                e_wsfe();
-                /* L70: */
-            }
-        }
-
-        /* ======================================================================= */
-        /*             CODE FOR OUTPUT USING 132 COLUMNS FORMAT */
-        /* ======================================================================= */
     }
     else
     {
-
-        if (ndigit <= 4)
+        for (j = 0; j < n; j += 3)
         {
-            i__1 = *n;
-            for (k1 = 1; k1 <= i__1; k1 += 20)
+            m = j + 3;
+            k = min(n,m);
+            printf("\n  %4d - %4d: ", j, k);
+            for (i = j; i < k; ++i)
             {
-                /* Computing MIN */
-                i__2 = *n, i__3 = k1 + 19;
-                k2 = min(i__2, i__3);
-                io___12.ciunit = *lout;
-                s_wsfe(&io___12);
-                do_fio(&c__1, (char *)&k1, (ftnlen)sizeof(a_int));
-                do_fio(&c__1, (char *)&k2, (ftnlen)sizeof(a_int));
-                i__2 = k2;
-                for (i = k1; i <= i__2; ++i)
-                {
-                    do_fio(&c__1, (char *)&ix[i], (ftnlen)sizeof(a_int));
-                }
-                e_wsfe();
-                /* L90: */
-            }
-        }
-        else if (ndigit <= 6)
-        {
-            i__1 = *n;
-            for (k1 = 1; k1 <= i__1; k1 += 15)
-            {
-                /* Computing MIN */
-                i__2 = *n, i__3 = k1 + 14;
-                k2 = min(i__2, i__3);
-                io___13.ciunit = *lout;
-                s_wsfe(&io___13);
-                do_fio(&c__1, (char *)&k1, (ftnlen)sizeof(a_int));
-                do_fio(&c__1, (char *)&k2, (ftnlen)sizeof(a_int));
-                i__2 = k2;
-                for (i = k1; i <= i__2; ++i)
-                {
-                    do_fio(&c__1, (char *)&ix[i], (ftnlen)sizeof(a_int));
-                }
-                e_wsfe();
-                /* L110: */
-            }
-        }
-        else if (ndigit <= 10)
-        {
-            i__1 = *n;
-            for (k1 = 1; k1 <= i__1; k1 += 10)
-            {
-                /* Computing MIN */
-                i__2 = *n, i__3 = k1 + 9;
-                k2 = min(i__2, i__3);
-                io___14.ciunit = *lout;
-                s_wsfe(&io___14);
-                do_fio(&c__1, (char *)&k1, (ftnlen)sizeof(a_int));
-                do_fio(&c__1, (char *)&k2, (ftnlen)sizeof(a_int));
-                i__2 = k2;
-                for (i = k1; i <= i__2; ++i)
-                {
-                    do_fio(&c__1, (char *)&ix[i], (ftnlen)sizeof(a_int));
-                }
-                e_wsfe();
-                /* L130: */
-            }
-        }
-        else
-        {
-            i__1 = *n;
-            for (k1 = 1; k1 <= i__1; k1 += 7)
-            {
-                /* Computing MIN */
-                i__2 = *n, i__3 = k1 + 6;
-                k2 = min(i__2, i__3);
-                io___15.ciunit = *lout;
-                s_wsfe(&io___15);
-                do_fio(&c__1, (char *)&k1, (ftnlen)sizeof(a_int));
-                do_fio(&c__1, (char *)&k2, (ftnlen)sizeof(a_int));
-                i__2 = k2;
-                for (i = k1; i <= i__2; ++i)
-                {
-                    do_fio(&c__1, (char *)&ix[i], (ftnlen)sizeof(a_int));
-                }
-                e_wsfe();
-                /* L150: */
+                printf("  %15d", ix[i]);
             }
         }
     }
-    io___16.ciunit = *lout;
-    s_wsfe(&io___16);
-    e_wsfe();
 
-    return 0;
-} /* ivout_ */
+    printf("\n");
+}
