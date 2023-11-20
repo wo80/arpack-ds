@@ -260,7 +260,7 @@ int dsaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
         /* that 1/sfmin does not overflow */
         /* ------------------------------ */
 
-        safmin = dlamch_("safmin");
+        safmin = dlamch_("S");
     }
 
     if (*ido == 0)
@@ -444,8 +444,8 @@ L40:
         /* use LAPACK routine SLASCL               */
         /* --------------------------------------- */
 
-        dlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol);
-        dlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol);
+        dlascl_("G", &i, &i, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol);
+        dlascl_("G", &i, &i, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol);
     }
 
     /* ---------------------------------------------------- */

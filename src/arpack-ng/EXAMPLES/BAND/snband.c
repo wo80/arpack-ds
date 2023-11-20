@@ -529,7 +529,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
     --workc;
     --iwork;
 
-    safmin = slamch_("safmin", (ftnlen)6);
+    safmin = slamch_("S");
 
     /* -------------------------------------------------------------- */
     /* Set type of the problem to be solved. Check consistency        */

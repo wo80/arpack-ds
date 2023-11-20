@@ -203,10 +203,10 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
         /* REFERENCE: LAPACK subroutine slahqr           */
         /* --------------------------------------------- */
 
-        unfl = slamch_("safe minimum");
+        unfl = slamch_("S");
         ovfl = 1.f / unfl;
         slabad_(&unfl, &ovfl);
-        ulp = slamch_("precision");
+        ulp = slamch_("P");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -225,7 +225,7 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
     /* the rotations and reflections              */
     /* ------------------------------------------ */
 
-    slaset_("All", &kplusp, &kplusp, &s_zero, &s_one, &q[q_offset], ldq);
+    slaset_("A", &kplusp, &kplusp, &s_zero, &s_one, &q[q_offset], ldq);
 
     /* -------------------------------------------- */
     /* Quick return if there are no shifts to apply */
@@ -520,7 +520,7 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                 /* ------------------------------------ */
 
                 i__3 = kplusp - i + 1;
-                slarf_("Left", &nr, &i__3, u, &i_one, &tau, &h[i + i * h_dim1], ldh, &workl[1]);
+                slarf_("L", &nr, &i__3, u, &i_one, &tau, &h[i + i * h_dim1], ldh, &workl[1]);
 
                 /* ------------------------------------- */
                 /* Apply the reflector to the right of H */
@@ -529,13 +529,13 @@ int snapps_(a_int *n, a_int *kev, a_int *np, float *shiftr, float *shifti, float
                 /* Computing MIN */
                 i__3 = i + 3;
                 ir = min(i__3, iend);
-                slarf_("Right", &ir, &nr, u, &i_one, &tau, &h[i * h_dim1 + 1], ldh, &workl[1]);
+                slarf_("R", &ir, &nr, u, &i_one, &tau, &h[i * h_dim1 + 1], ldh, &workl[1]);
 
                 /* --------------------------------------------------- */
                 /* Accumulate the reflector in the matrix Q;  Q <- Q*G */
                 /* --------------------------------------------------- */
 
-                slarf_("Right", &kplusp, &nr, u, &i_one, &tau, &q[i * q_dim1 + 1], ldq, &workl[1]);
+                slarf_("R", &kplusp, &nr, u, &i_one, &tau, &q[i * q_dim1 + 1], ldq, &workl[1]);
 
                 /* -------------------------- */
                 /* Prepare for next reflector */

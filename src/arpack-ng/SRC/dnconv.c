@@ -100,7 +100,7 @@ int dnconv_(a_int *n, double *ritzr, double *ritzi, double *bounds, double *tol,
     /* Get machine dependent constant. */
     /* ------------------------------- */
 
-    eps23 = dlamch_("Epsilon-Machine");
+    eps23 = dlamch_("E");
     eps23 = pow(eps23, TWO_THIRDS);
 
     *nconv = 0;

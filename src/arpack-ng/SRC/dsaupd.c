@@ -539,7 +539,7 @@ int dsaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         }
         if (*tol <= 0.)
         {
-            *tol = dlamch_("EpsMach");
+            *tol = dlamch_("E");
         }
 
         /* -------------------------------------------- */

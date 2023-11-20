@@ -318,7 +318,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
     /* Get machine dependent constant. */
     /* ------------------------------- */
 
-    eps23 = slamch_("Epsilon-Machine");
+    eps23 = slamch_("E");
     eps23 = pow((double)eps23, TWO_THIRDS);
 
     /* ----------------------------- */
@@ -567,7 +567,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
 
         i__1 = ldh * *ncv;
         ccopy_(&i__1, &workl[ih], &i_one, &workl[iuptri], &i_one);
-        claset_("All", ncv, ncv, &c_zero, &c_one, &workl[invsub], &ldq);
+        claset_("A", ncv, ncv, &c_zero, &c_one, &workl[invsub], &ldq);
         clahqr_(&b_true, &b_true, ncv, &i_one, ncv, &workl[iuptri], &ldh, &workl[iheig], &i_one, ncv, &workl[invsub], &ldq, &ierr);
         ccopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
 
@@ -594,7 +594,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
             /* Reorder the computed upper triangular matrix. */
             /* --------------------------------------------- */
 
-            ctrsen_("None", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheig], &nconv2, &conds, &sep, &workev[1], ncv, &ierr);
+            ctrsen_("N", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheig], &nconv2, &conds, &sep, &workev[1], ncv, &ierr);
 
             if (nconv2 < nconv)
             {
@@ -655,8 +655,8 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
         /* NCONV in workl(iuptri).                                */
         /* ------------------------------------------------------ */
 
-        cunm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr);
-        clacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
+        cunm2r_("R", "N", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr);
+        clacpy_("A", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
 
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
@@ -705,7 +705,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
                 /* L30: */
             }
 
-            ctrevc_("Right", "Select", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &rwork[1], &ierr);
+            ctrevc_("R", "S", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &rwork[1], &ierr);
 
             if (ierr != 0)
             {
@@ -764,7 +764,7 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
             /* Form Z*Q.                                    */
             /* -------------------------------------------- */
 
-            ctrmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &c_one, &workl[invsub], &ldq, &z[z_offset], ldz);
+            ctrmm_("R", "U", "N", "N", n, &nconv, &c_one, &workl[invsub], &ldq, &z[z_offset], ldz);
         }
     }
     else

@@ -101,7 +101,7 @@ int snconv_(a_int *n, float *ritzr, float *ritzi, float *bounds, float *tol, a_i
     /* Get machine dependent constant. */
     /* ------------------------------- */
 
-    eps23 = slamch_("Epsilon-Machine");
+    eps23 = slamch_("E");
     eps23 = pow((double)eps23, TWO_THIRDS);
 
     *nconv = 0;

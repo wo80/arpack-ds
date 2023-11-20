@@ -203,10 +203,10 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
         /* REFERENCE: LAPACK subroutine dlahqr           */
         /* --------------------------------------------- */
 
-        unfl = dlamch_("safe minimum");
+        unfl = dlamch_("S");
         ovfl = 1. / unfl;
         dlabad_(&unfl, &ovfl);
-        ulp = dlamch_("precision");
+        ulp = dlamch_("P");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -225,7 +225,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
     /* the rotations and reflections              */
     /* ------------------------------------------ */
 
-    dlaset_("All", &kplusp, &kplusp, &d_zero, &d_one, &q[q_offset], ldq);
+    dlaset_("A", &kplusp, &kplusp, &d_zero, &d_one, &q[q_offset], ldq);
 
     /* -------------------------------------------- */
     /* Quick return if there are no shifts to apply */
@@ -520,7 +520,7 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
                 /* ------------------------------------ */
 
                 i__3 = kplusp - i + 1;
-                dlarf_("Left", &nr, &i__3, u, &i_one, &tau, &h[i + i * h_dim1], ldh, &workl[1]);
+                dlarf_("L", &nr, &i__3, u, &i_one, &tau, &h[i + i * h_dim1], ldh, &workl[1]);
 
                 /* ------------------------------------- */
                 /* Apply the reflector to the right of H */
@@ -529,13 +529,13 @@ int dnapps_(a_int *n, a_int *kev, a_int *np, double *shiftr, double *shifti, dou
                 /* Computing MIN */
                 i__3 = i + 3;
                 ir = min(i__3, iend);
-                dlarf_("Right", &ir, &nr, u, &i_one, &tau, &h[i * h_dim1 + 1], ldh, &workl[1]);
+                dlarf_("R", &ir, &nr, u, &i_one, &tau, &h[i * h_dim1 + 1], ldh, &workl[1]);
 
                 /* --------------------------------------------------- */
                 /* Accumulate the reflector in the matrix Q;  Q <- Q*G */
                 /* --------------------------------------------------- */
 
-                dlarf_("Right", &kplusp, &nr, u, &i_one, &tau, &q[i * q_dim1 + 1], ldq, &workl[1]);
+                dlarf_("R", &kplusp, &nr, u, &i_one, &tau, &q[i * q_dim1 + 1], ldq, &workl[1]);
 
                 /* -------------------------- */
                 /* Prepare for next reflector */

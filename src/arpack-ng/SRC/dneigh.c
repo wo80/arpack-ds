@@ -150,7 +150,7 @@ int dneigh_(double *rnorm, a_int *n, double *h, a_int *ldh, double *ritzr, doubl
     /* and the last components of the Schur vectors in BOUNDS.   */
     /* --------------------------------------------------------- */
 
-    dlacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n);
+    dlacpy_("A", n, n, &h[h_offset], ldh, &workl[1], n);
     i__1 = *n - 1;
     for (j = 1; j <= i__1; ++j)
     {

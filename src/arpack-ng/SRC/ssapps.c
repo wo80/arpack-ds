@@ -174,7 +174,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
 
     if (first)
     {
-        epsmch = slamch_("Epsilon-Machine");
+        epsmch = slamch_("E");
         first = FALSE_;
     }
     itop = 1;
@@ -194,7 +194,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     /* kplusp used to accumulate the rotations.     */
     /* -------------------------------------------- */
 
-    slaset_("All", &kplusp, &kplusp, &s_zero, &s_one, &q[q_offset], ldq);
+    slaset_("A", &kplusp, &kplusp, &s_zero, &s_one, &q[q_offset], ldq);
 
     /* -------------------------------------------- */
     /* Quick return if there are no shifts to apply */
@@ -477,7 +477,7 @@ int ssapps_(a_int *n, a_int *kev, a_int *np, float *shift, float *v, a_int *ldv,
     /*  Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev). */
     /* ----------------------------------------------- */
 
-    slacpy_("All", n, kev, &v[(*np + 1) * v_dim1 + 1], ldv, &v[v_offset], ldv);
+    slacpy_("A", n, kev, &v[(*np + 1) * v_dim1 + 1], ldv, &v[v_offset], ldv);
 
     /* ------------------------------------------ */
     /* Copy the (kev+1)-st column of (V*Q) in the */

@@ -372,7 +372,7 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
     /* Get machine dependent constant. */
     /* ------------------------------- */
 
-    eps23 = slamch_("Epsilon-Machine");
+    eps23 = slamch_("E");
     eps23 = pow((double)eps23, TWO_THIRDS);
 
     /* ------------ */
@@ -627,7 +627,7 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
 
         i__1 = ldh * *ncv;
         scopy_(&i__1, &workl[ih], &i_one, &workl[iuptri], &i_one);
-        slaset_("All", ncv, ncv, &s_zero, &s_one, &workl[invsub], &ldq);
+        slaset_("A", ncv, ncv, &s_zero, &s_one, &workl[invsub], &ldq);
         slahqr_(&b_true, &b_true, ncv, &i_one, ncv, &workl[iuptri], &ldh, &workl[iheigr], &workl[iheigi], &i_one, ncv, &workl[invsub], &ldq, &ierr);
         scopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
 
@@ -655,7 +655,7 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
             /* Reorder the computed upper quasi-triangular matrix. */
             /* --------------------------------------------------- */
 
-            strsen_("None", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheigr], &workl[iheigi], &nconv2, &conds, &sep, &workl[ihbds], ncv, iwork, &i_one, &ierr);
+            strsen_("N", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheigr], &workl[iheigi], &nconv2, &conds, &sep, &workl[ihbds], ncv, iwork, &i_one, &ierr);
 
             if (nconv2 < nconv)
             {
@@ -718,8 +718,8 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
         /* matrix of order NCONV in workl(iuptri)                  */
         /* ------------------------------------------------------- */
 
-        sorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr);
-        slacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
+        sorm2r_("R", "N", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr);
+        slacpy_("A", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
 
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
@@ -765,7 +765,7 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
                 /* L30: */
             }
 
-            strevc_("Right", "Select", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &ierr);
+            strevc_("R", "S", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &ierr);
 
             if (ierr != 0)
             {
@@ -889,9 +889,9 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
             /* in workl(iheigr) and workl(iheigi).          */
             /* -------------------------------------------- */
 
-            sorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &z[z_offset], ldz, &workd[*n + 1], &ierr);
+            sorm2r_("R", "N", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &z[z_offset], ldz, &workd[*n + 1], &ierr);
 
-            strmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &s_one, &workl[invsub], &ldq, &z[z_offset], ldz);
+            strmm_("R", "U", "N", "N", n, &nconv, &s_one, &workl[invsub], &ldq, &z[z_offset], ldz);
         }
     }
     else

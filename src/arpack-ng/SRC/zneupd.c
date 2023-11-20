@@ -316,7 +316,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
     /* Get machine dependent constant. */
     /* ------------------------------- */
 
-    eps23 = dlamch_("Epsilon-Machine");
+    eps23 = dlamch_("E");
     eps23 = pow(eps23, TWO_THIRDS);
 
     /* ----------------------------- */
@@ -565,7 +565,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
 
         i__1 = ldh * *ncv;
         zcopy_(&i__1, &workl[ih], &i_one, &workl[iuptri], &i_one);
-        zlaset_("All", ncv, ncv, &z_zero, &z_one, &workl[invsub], &ldq);
+        zlaset_("A", ncv, ncv, &z_zero, &z_one, &workl[invsub], &ldq);
         zlahqr_(&b_true, &b_true, ncv, &i_one, ncv, &workl[iuptri], &ldh, &workl[iheig], &i_one, ncv, &workl[invsub], &ldq, &ierr);
         zcopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
 
@@ -592,7 +592,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
             /* Reorder the computed upper triangular matrix. */
             /* --------------------------------------------- */
 
-            ztrsen_("None", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheig], &nconv2, &conds, &sep, &workev[1], ncv, &ierr);
+            ztrsen_("N", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheig], &nconv2, &conds, &sep, &workev[1], ncv, &ierr);
 
             if (nconv2 < nconv)
             {
@@ -653,8 +653,8 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
         /* NCONV in workl(iuptri).                                */
         /* ------------------------------------------------------ */
 
-        zunm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr);
-        zlacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
+        zunm2r_("R", "N", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr);
+        zlacpy_("A", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
 
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
@@ -703,7 +703,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
                 /* L30: */
             }
 
-            ztrevc_("Right", "Select", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &rwork[1], &ierr);
+            ztrevc_("R", "S", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &rwork[1], &ierr);
 
             if (ierr != 0)
             {
@@ -762,7 +762,7 @@ int zneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_dcomplex *d, a_d
             /* Form Z*Q.                                    */
             /* -------------------------------------------- */
 
-            ztrmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &z_one, &workl[invsub], &ldq, &z[z_offset], ldz);
+            ztrmm_("R", "U", "N", "N", n, &nconv, &z_one, &workl[invsub], &ldq, &z[z_offset], ldz);
         }
     }
     else

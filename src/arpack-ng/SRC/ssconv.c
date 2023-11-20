@@ -78,7 +78,7 @@ int ssconv_(a_int *n, float *ritz, float *bounds, float *tol, a_int *nconv)
 
     arscnd_(&t0);
 
-    eps23 = slamch_("Epsilon-Machine");
+    eps23 = slamch_("E");
     eps23 = pow((double)eps23, TWO_THIRDS);
 
     *nconv = 0;

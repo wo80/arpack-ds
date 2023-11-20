@@ -433,7 +433,7 @@ int dseupd_(a_bool *rvec, const char *howmny, a_bool *select, double *d, double 
     /* Set machine dependent constant. */
     /* ------------------------------- */
 
-    eps23 = dlamch_("Epsilon-Machine");
+    eps23 = dlamch_("E");
     eps23 = pow(eps23, TWO_THIRDS);
 
     /* ------------------------------------- */
@@ -551,7 +551,7 @@ int dseupd_(a_bool *rvec, const char *howmny, a_bool *select, double *d, double 
         dcopy_(&i__1, &workl[ih + 1], &i_one, &workl[ihb], &i_one);
         dcopy_(ncv, &workl[ih + ldh], &i_one, &workl[ihd], &i_one);
 
-        dsteqr_("Identity", ncv, &workl[ihd], &workl[ihb], &workl[iq], &ldq, &workl[iw], &ierr);
+        dsteqr_("I", ncv, &workl[ihd], &workl[ihb], &workl[iq], &ldq, &workl[iw], &ierr);
 
         if (ierr != 0)
         {
@@ -782,8 +782,8 @@ int dseupd_(a_bool *rvec, const char *howmny, a_bool *select, double *d, double 
         /* the Ritz values in workl(ihd).                         */
         /* ------------------------------------------------------ */
 
-        dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[iq], &ldq, &workl[iw + *ncv], &v[v_offset], ldv, &workd[*n + 1], &ierr);
-        dlacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
+        dorm2r_("R", "N", n, ncv, &nconv, &workl[iq], &ldq, &workl[iw + *ncv], &v[v_offset], ldv, &workd[*n + 1], &ierr);
+        dlacpy_("A", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
 
         /* --------------------------------------------------- */
         /* In order to compute the Ritz estimates for the Ritz */
@@ -798,7 +798,7 @@ int dseupd_(a_bool *rvec, const char *howmny, a_bool *select, double *d, double 
             /* L65: */
         }
         workl[ihb + *ncv - 1] = 1.;
-        dorm2r_("Left", "Transpose", ncv, &i_one, &nconv, &workl[iq], &ldq, &workl[iw + *ncv], &workl[ihb], ncv, &temp, &ierr);
+        dorm2r_("L", "T", ncv, &i_one, &nconv, &workl[iq], &ldq, &workl[iw + *ncv], &workl[ihb], ncv, &temp, &ierr);
 
         /* --------------------------------------------------- */
         /* Make a copy of the last row into                    */

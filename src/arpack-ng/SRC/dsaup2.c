@@ -250,7 +250,7 @@ int dsaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         /* Set machine dependent constant. */
         /* ------------------------------- */
 
-        eps23 = dlamch_("Epsilon-Machine");
+        eps23 = dlamch_("E");
         eps23 = pow(eps23, TWO_THIRDS);
 
         /* ----------------------------------- */

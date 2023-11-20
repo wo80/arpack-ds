@@ -373,7 +373,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
     /* Get machine dependent constant. */
     /* ------------------------------- */
 
-    eps23 = dlamch_("Epsilon-Machine");
+    eps23 = dlamch_("E");
     eps23 = pow(eps23, TWO_THIRDS);
 
     /* ------------ */
@@ -628,7 +628,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
 
         i__1 = ldh * *ncv;
         dcopy_(&i__1, &workl[ih], &i_one, &workl[iuptri], &i_one);
-        dlaset_("All", ncv, ncv, &d_zero, &d_one, &workl[invsub], &ldq);
+        dlaset_("A", ncv, ncv, &d_zero, &d_one, &workl[invsub], &ldq);
         dlahqr_(&b_true, &b_true, ncv, &i_one, ncv, &workl[iuptri], &ldh, &workl[iheigr], &workl[iheigi], &i_one, ncv, &workl[invsub], &ldq, &ierr);
         dcopy_(ncv, &workl[invsub + *ncv - 1], &ldq, &workl[ihbds], &i_one);
 
@@ -656,7 +656,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
             /* Reorder the computed upper quasi-triangular matrix. */
             /* --------------------------------------------------- */
 
-            dtrsen_("None", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheigr], &workl[iheigi], &nconv2, &conds, &sep, &workl[ihbds], ncv, iwork, &i_one, &ierr);
+            dtrsen_("N", "V", &select[1], ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq, &workl[iheigr], &workl[iheigi], &nconv2, &conds, &sep, &workl[ihbds], ncv, iwork, &i_one, &ierr);
 
             if (nconv2 < nconv)
             {
@@ -719,8 +719,8 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
         /* matrix of order NCONV in workl(iuptri)                  */
         /* ------------------------------------------------------- */
 
-        dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr);
-        dlacpy_("All", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
+        dorm2r_("R", "N", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &v[v_offset], ldv, &workd[*n + 1], &ierr);
+        dlacpy_("A", n, &nconv, &v[v_offset], ldv, &z[z_offset], ldz);
 
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
@@ -766,7 +766,7 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
                 /* L30: */
             }
 
-            dtrevc_("Right", "Select", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &ierr);
+            dtrevc_("R", "S", &select[1], ncv, &workl[iuptri], &ldq, vl, &i_one, &workl[invsub], &ldq, ncv, &outncv, &workev[1], &ierr);
 
             if (ierr != 0)
             {
@@ -890,9 +890,9 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
             /* in workl(iheigr) and workl(iheigi).          */
             /* -------------------------------------------- */
 
-            dorm2r_("Right", "Notranspose", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &z[z_offset], ldz, &workd[*n + 1], &ierr);
+            dorm2r_("R", "N", n, ncv, &nconv, &workl[invsub], &ldq, &workev[1], &z[z_offset], ldz, &workd[*n + 1], &ierr);
 
-            dtrmm_("Right", "Upper", "No transpose", "Non-unit", n, &nconv, &d_one, &workl[invsub], &ldq, &z[z_offset], ldz);
+            dtrmm_("R", "U", "N", "N", n, &nconv, &d_one, &workl[invsub], &ldq, &z[z_offset], ldz);
         }
     }
     else

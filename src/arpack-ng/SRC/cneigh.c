@@ -150,8 +150,8 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
     /*    in WORKL(1:N**2), and the Schur vectors in q.         */
     /* -------------------------------------------------------- */
 
-    clacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n);
-    claset_("All", n, n, &c_zero, &c_one, &q[q_offset], ldq);
+    clacpy_("A", n, n, &h[h_offset], ldh, &workl[1], n);
+    claset_("A", n, n, &c_zero, &c_one, &q[q_offset], ldq);
     clahqr_(&b_true, &b_true, n, &i_one, n, &workl[1], ldh, &ritz[1], &i_one, n, &q[q_offset], ldq, ierr);
     if (*ierr != 0)
     {
@@ -170,7 +170,7 @@ int cneigh_(float *rnorm, a_int *n, a_fcomplex *h, a_int *ldh, a_fcomplex *ritz,
     /*    eigenvectors.                                         */
     /* -------------------------------------------------------- */
 
-    ctrevc_("Right", "Back", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], &rwork[1], ierr);
+    ctrevc_("R", "B", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], &rwork[1], ierr);
 
     if (*ierr != 0)
     {

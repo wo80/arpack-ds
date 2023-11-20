@@ -191,11 +191,11 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
         /* REFERENCE: LAPACK subroutine clahqr           */
         /* --------------------------------------------- */
 
-        unfl = slamch_("safe minimum");
+        unfl = slamch_("S");
         q__1.r = 1.f / unfl, q__1.i = 0.f / unfl;
         ovfl = q__1.r;
         slabad_(&unfl, &ovfl);
-        ulp = slamch_("precision");
+        ulp = slamch_("P");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -215,7 +215,7 @@ int cnapps_(a_int *n, a_int *kev, a_int *np, a_fcomplex *shift, a_fcomplex *v, a
     /* the rotations and reflections              */
     /* ------------------------------------------ */
 
-    claset_("All", &kplusp, &kplusp, &c_zero, &c_one, &q[q_offset], ldq);
+    claset_("A", &kplusp, &kplusp, &c_zero, &c_one, &q[q_offset], ldq);
 
     /* -------------------------------------------- */
     /* Quick return if there are no shifts to apply */

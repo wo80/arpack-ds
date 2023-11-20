@@ -242,7 +242,7 @@ int snaup2_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         /* Get the machine dependent constant. */
         /* ----------------------------------- */
 
-        eps23 = slamch_("Epsilon-Machine");
+        eps23 = slamch_("E");
         eps23 = pow((double)eps23, TWO_THIRDS);
 
         nev0 = *nev;

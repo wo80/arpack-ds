@@ -150,7 +150,7 @@ int sneigh_(float *rnorm, a_int *n, float *h, a_int *ldh, float *ritzr, float *r
     /* and the last components of the Schur vectors in BOUNDS.   */
     /* --------------------------------------------------------- */
 
-    slacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n);
+    slacpy_("A", n, n, &h[h_offset], ldh, &workl[1], n);
     i__1 = *n - 1;
     for (j = 1; j <= i__1; ++j)
     {

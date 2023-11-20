@@ -277,11 +277,11 @@ int znaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
         /* REFERENCE: LAPACK subroutine zlahqr     */
         /* --------------------------------------- */
 
-        unfl = dlamch_("safe minimum");
+        unfl = dlamch_("S");
         z__1.r = 1. / unfl, z__1.i = 0. / unfl;
         ovfl = z__1.r;
         dlabad_(&unfl, &ovfl);
-        ulp = dlamch_("precision");
+        ulp = dlamch_("P");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -457,8 +457,8 @@ L40:
         /* use LAPACK routine zlascl               */
         /* --------------------------------------- */
 
-        zlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol);
-        zlascl_("General", &i, &i, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol);
+        zlascl_("G", &i, &i, rnorm, &d_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol);
+        zlascl_("G", &i, &i, rnorm, &d_one, n, &i_one, &workd[ipj], n, &infol);
     }
 
     /* ---------------------------------------------------- */

@@ -189,11 +189,11 @@ int dstqrb_(a_int *n, double *d, double *e, double *z, double *work, a_int *info
 
     /*     determine the unit roundoff and over/underflow thresholds. */
 
-    eps = dlamch_("e");
+    eps = dlamch_("E");
     /* Computing 2nd power */
     d__1 = eps;
     eps2 = d__1 * d__1;
-    safmin = dlamch_("s");
+    safmin = dlamch_("S");
     safmax = 1. / safmin;
     ssfmax = sqrt(safmax) / 3.;
     ssfmin = sqrt(safmin) / eps2;
@@ -281,17 +281,17 @@ L30:
     {
         iscale = 1;
         i__1 = lend - l + 1;
-        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &d[l], n, info);
+        dlascl_("G", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &d[l], n, info);
         i__1 = lend - l;
-        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &e[l], n, info);
+        dlascl_("G", &i_zero, &i_zero, &anorm, &ssfmax, &i__1, &i_one, &e[l], n, info);
     }
     else if (anorm < ssfmin)
     {
         iscale = 2;
         i__1 = lend - l + 1;
-        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &d[l], n, info);
+        dlascl_("G", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &d[l], n, info);
         i__1 = lend - l;
-        dlascl_("g", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &e[l], n, info);
+        dlascl_("G", &i_zero, &i_zero, &anorm, &ssfmin, &i__1, &i_one, &e[l], n, info);
     }
 
     /*     choose between ql and qr iteration */
@@ -607,16 +607,16 @@ L140:
     if (iscale == 1)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &d[lsv], n, info);
+        dlascl_("G", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &d[lsv], n, info);
         i__1 = lendsv - lsv;
-        dlascl_("g", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &e[lsv], n, info);
+        dlascl_("G", &i_zero, &i_zero, &ssfmax, &anorm, &i__1, &i_one, &e[lsv], n, info);
     }
     else if (iscale == 2)
     {
         i__1 = lendsv - lsv + 1;
-        dlascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &d[lsv], n, info);
+        dlascl_("G", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &d[lsv], n, info);
         i__1 = lendsv - lsv;
-        dlascl_("g", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &e[lsv], n, info);
+        dlascl_("G", &i_zero, &i_zero, &ssfmin, &anorm, &i__1, &i_one, &e[lsv], n, info);
     }
 
     /*     check for no convergence to an eigenvalue after a total */

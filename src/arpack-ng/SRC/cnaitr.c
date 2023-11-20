@@ -274,11 +274,11 @@ int cnaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
         /* REFERENCE: LAPACK subroutine clahqr     */
         /* --------------------------------------- */
 
-        unfl = slamch_("safe minimum");
+        unfl = slamch_("S");
         q__1.r = 1.f / unfl, q__1.i = 0.f / unfl;
         ovfl = q__1.r;
         slabad_(&unfl, &ovfl);
-        ulp = slamch_("precision");
+        ulp = slamch_("P");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -454,8 +454,8 @@ L40:
         /* use LAPACK routine clascl               */
         /* --------------------------------------- */
 
-        clascl_("General", &i, &i, rnorm, &s_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol);
-        clascl_("General", &i, &i, rnorm, &s_one, n, &i_one, &workd[ipj], n, &infol);
+        clascl_("G", &i, &i, rnorm, &s_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol);
+        clascl_("G", &i, &i, rnorm, &s_one, n, &i_one, &workd[ipj], n, &infol);
     }
 
     /* ---------------------------------------------------- */

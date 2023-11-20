@@ -174,7 +174,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
 
     if (first)
     {
-        epsmch = dlamch_("Epsilon-Machine");
+        epsmch = dlamch_("E");
         first = FALSE_;
     }
     itop = 1;
@@ -194,7 +194,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /* kplusp used to accumulate the rotations.     */
     /* -------------------------------------------- */
 
-    dlaset_("All", &kplusp, &kplusp, &c_b4, &c_b5, &q[q_offset], ldq);
+    dlaset_("A", &kplusp, &kplusp, &c_b4, &c_b5, &q[q_offset], ldq);
 
     /* -------------------------------------------- */
     /* Quick return if there are no shifts to apply */

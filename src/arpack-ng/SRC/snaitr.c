@@ -273,10 +273,10 @@ int snaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
         /* REFERENCE: LAPACK subroutine slahqr     */
         /* --------------------------------------- */
 
-        unfl = slamch_("safe minimum");
+        unfl = slamch_("S");
         ovfl = 1.f / unfl;
         slabad_(&unfl, &ovfl);
-        ulp = slamch_("precision");
+        ulp = slamch_("P");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -452,8 +452,8 @@ L40:
         /* use LAPACK routine SLASCL               */
         /* --------------------------------------- */
 
-        slascl_("General", &i, &i, rnorm, &s_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol);
-        slascl_("General", &i, &i, rnorm, &s_one, n, &i_one, &workd[ipj], n, &infol);
+        slascl_("G", &i, &i, rnorm, &s_one, n, &i_one, &v[j * v_dim1 + 1], n, &infol);
+        slascl_("G", &i, &i, rnorm, &s_one, n, &i_one, &workd[ipj], n, &infol);
     }
 
     /* ---------------------------------------------------- */

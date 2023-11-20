@@ -150,8 +150,8 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
     /*    in WORKL(1:N**2), and the Schur vectors in q.         */
     /* -------------------------------------------------------- */
 
-    zlacpy_("All", n, n, &h[h_offset], ldh, &workl[1], n);
-    zlaset_("All", n, n, &z_zero, &z_one, &q[q_offset], ldq);
+    zlacpy_("A", n, n, &h[h_offset], ldh, &workl[1], n);
+    zlaset_("A", n, n, &z_zero, &z_one, &q[q_offset], ldq);
     zlahqr_(&b_true, &b_true, n, &i_one, n, &workl[1], ldh, &ritz[1], &i_one, n, &q[q_offset], ldq, ierr);
     if (*ierr != 0)
     {
@@ -170,7 +170,7 @@ int zneigh_(double *rnorm, a_int *n, a_dcomplex *h, a_int *ldh, a_dcomplex *ritz
     /*    eigenvectors.                                         */
     /* -------------------------------------------------------- */
 
-    ztrevc_("Right", "Back", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], &rwork[1], ierr);
+    ztrevc_("R", "B", select, n, &workl[1], n, vl, n, &q[q_offset], ldq, n, n, &workl[*n * *n + 1], &rwork[1], ierr);
 
     if (*ierr != 0)
     {

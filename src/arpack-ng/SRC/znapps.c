@@ -191,11 +191,11 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
         /* REFERENCE: LAPACK subroutine zlahqr           */
         /* --------------------------------------------- */
 
-        unfl = dlamch_("safe minimum");
+        unfl = dlamch_("S");
         z__1.r = 1. / unfl, z__1.i = 0. / unfl;
         ovfl = z__1.r;
         dlabad_(&unfl, &ovfl);
-        ulp = dlamch_("precision");
+        ulp = dlamch_("P");
         smlnum = unfl * (*n / ulp);
         first = FALSE_;
     }
@@ -215,7 +215,7 @@ int znapps_(a_int *n, a_int *kev, a_int *np, a_dcomplex *shift, a_dcomplex *v, a
     /* the rotations and reflections              */
     /* ------------------------------------------ */
 
-    zlaset_("All", &kplusp, &kplusp, &z_zero, &z_one, &q[q_offset], ldq);
+    zlaset_("A", &kplusp, &kplusp, &z_zero, &z_one, &q[q_offset], ldq);
 
     /* -------------------------------------------- */
     /* Quick return if there are no shifts to apply */

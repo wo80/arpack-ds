@@ -528,7 +528,7 @@ int dnband_(a_bool *rvec, char *howmny, a_bool *select, double *dr, double *di, 
     --workc;
     --iwork;
 
-    safmin = dlamch_("safmin", (ftnlen)6);
+    safmin = dlamch_("S");
 
     /* -------------------------------------------------------------- */
     /* Set type of the problem to be solved. Check consistency        */
