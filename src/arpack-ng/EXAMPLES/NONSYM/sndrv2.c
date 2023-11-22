@@ -448,7 +448,7 @@ L20:
     free(workl);
     free(workev);
 
-    return 0;
+    return nconv < nev ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
 /* ------------------------------------------------------------------- */

@@ -459,7 +459,7 @@ L10:
     free(workd);
     free(workl);
 
-    return 0;
+    return nconv < nev ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
 /* ------------------------------------------------------------------ */

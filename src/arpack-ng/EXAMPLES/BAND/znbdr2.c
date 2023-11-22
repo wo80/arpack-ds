@@ -214,6 +214,7 @@ int main()
         i__2 = idiag + j * 50 - 51;
         ar_z_div(&z__1, &c_b26, &h2);
         a[i__2].r = z__1.r, a[i__2].i = z__1.i;
+        m[i__2].r = 1., m[i__2].i = 0.;
     }
 
     /* ----------------------------------- */
@@ -361,5 +362,5 @@ int main()
     free(rd);
     free(rwork);
 
-    return 0;
+    return nconv < nev ? EXIT_FAILURE : EXIT_SUCCESS;
 }

@@ -358,5 +358,5 @@ int main()
     free(rd);
     free(rwork);
 
-    return 0;
+    return nconv < nev ? EXIT_FAILURE : EXIT_SUCCESS;
 }
