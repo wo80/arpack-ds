@@ -27,7 +27,7 @@ int main()
     a_int ipntr[14];
     a_bool rvec, first;
     a_fcomplex c1, c2, c3;
-    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int j, n, ido, ncv, nev, info, ierr = 0;
     a_int mode, nconv, ishfts, lworkl, maxitr;
     char *bmat, *which;
     float tol, deni, denr, numi, numr, sigmai, sigmar;
@@ -168,7 +168,6 @@ int main()
         cdd[i__2].r = c2.r, cdd[i__2].i = c2.i;
         i__2 = j - 1;
         cdu[i__2].r = c3.r, cdu[i__2].i = c3.i;
-        /* L10: */
     }
     i__1 = n - 1;
     cdd[i__1].r = c2.r, cdd[i__1].i = c2.i;
@@ -197,6 +196,7 @@ int main()
     tol = 0.f;
     ido = 0;
     info = 0;
+    nconv = 0;
 
     a_fcomplex* ctemp = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 256);
     float* d = (float*)malloc(sizeof(float) * 25 * 3);
@@ -263,7 +263,6 @@ L20:
             i__3 = ipntr[1] + j - 2;
             q__1.r = workd[i__3], q__1.i = 0.f;
             ctemp[i__2].r = q__1.r, ctemp[i__2].i = q__1.i;
-            /* L30: */
         }
 
         cgttrs_("N", &n, &c__1, cdl, cdd, cdu, cdu2, ipiv, ctemp, &c__256, &ierr);
@@ -278,7 +277,6 @@ L20:
         for (j = 1; j <= i__1; ++j)
         {
             workd[ipntr[1] + j - 2] = ctemp[j - 1].i;
-            /* L40: */
         }
 
         /* --------------------------------------- */
@@ -306,7 +304,6 @@ L20:
             i__3 = ipntr[2] + j - 2;
             q__1.r = workd[i__3], q__1.i = 0.f;
             ctemp[i__2].r = q__1.r, ctemp[i__2].i = q__1.i;
-            /* L50: */
         }
         cgttrs_("N", &n, &c__1, cdl, cdd, cdu, cdu2, ipiv, ctemp, &c__256, &ierr);
         if (ierr != 0)
@@ -320,7 +317,6 @@ L20:
         for (j = 1; j <= i__1; ++j)
         {
             workd[ipntr[1] + j - 2] = ctemp[j - 1].i;
-            /* L60: */
         }
 
         /* --------------------------------------- */
@@ -362,7 +358,7 @@ L20:
         /* ------------------------ */
 
         printf(" \n");
-        printf(" Error with _naupd info = %d", info);
+        printf(" Error with _naupd info = %d\n", info);
         printf(" Check the documentation of _naupd.\n");
         printf(" \n");
     }
@@ -403,7 +399,7 @@ L20:
             /* ---------------------------------- */
 
             printf(" \n");
-            printf(" Error with _neupd info = %d", ierr);
+            printf(" Error with _neupd info = %d\n", ierr);
             printf(" Check the documentation of _neupd. \n");
             printf(" \n");
         }
@@ -488,8 +484,6 @@ L20:
                     d[j + 24] = -d[j + 23];
                     first = TRUE_;
                 }
-
-                /* L70: */
             }
 
             /* ------------------------- */
@@ -559,8 +553,6 @@ L20:
                 {
                     first = TRUE_;
                 }
-
-                /* L80: */
             }
 
             /* --------------------------- */
@@ -592,14 +584,14 @@ L20:
         printf(" _NDRV6 \n");
         printf(" ====== \n");
         printf(" \n");
-        printf(" Size of the matrix is %d", n);
-        printf(" The number of Ritz values requested is %d", nev);
-        printf(" The number of Arnoldi vectors generated (NCV) is %d", ncv);
-        printf(" What portion of the spectrum: %s", which);
-        printf(" The number of converged Ritz values is %d", nconv);
-        printf(" The number of Implicit Arnoldi update iterations taken is %d", iparam[2]);
-        printf(" The number of OP*x is %d", iparam[8]);
-        printf(" The convergence criterion is %e", tol);
+        printf(" Size of the matrix is %d\n", n);
+        printf(" The number of Ritz values requested is %d\n", nev);
+        printf(" The number of Arnoldi vectors generated (NCV) is %d\n", ncv);
+        printf(" What portion of the spectrum: %s\n", which);
+        printf(" The number of converged Ritz values is %d\n", nconv);
+        printf(" The number of Implicit Arnoldi update iterations taken is %d\n", iparam[2]);
+        printf(" The number of OP*x is %d\n", iparam[8]);
+        printf(" The convergence criterion is %e\n", tol);
         printf(" \n");
     }
 
@@ -650,7 +642,6 @@ int mv_(a_int *n, float *v, float *w)
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = v[j - 1] * 1.f + v[j] * 4.f + v[j + 1] * 1.f;
-        /* L10: */
     }
     w[*n] = v[*n - 1] * 1.f + v[*n] * 4.f;
     return 0;
@@ -678,7 +669,6 @@ int av_(a_int *n, float *v, float *w)
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = v[j - 1] * -2.f + v[j] * 2.f + v[j + 1] * 3.f;
-        /* L10: */
     }
     w[*n] = v[*n - 1] * -2.f + v[*n] * 2.f;
     return 0;

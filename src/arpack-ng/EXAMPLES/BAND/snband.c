@@ -560,7 +560,6 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
             for (j = 1; j <= i__1; ++j)
             {
                 rfac[imid + j * rfac_dim1] = ab[imid + j * ab_dim1] - *sigmar;
-                /* L10: */
             }
             sgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
             if (ierr != 0)
@@ -589,9 +588,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
                     i__4 = i + j * ab_dim1;
                     q__1.r = ab[i__4], q__1.i = 0.f;
                     cfac[i__3].r = q__1.r, cfac[i__3].i = q__1.i;
-                    /* L20: */
                 }
-                /* L30: */
             }
 
             i__1 = *n;
@@ -602,7 +599,6 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
                 q__2.r = *sigmar, q__2.i = *sigmai;
                 q__1.r = cfac[i__3].r - q__2.r, q__1.i = cfac[i__3].i - q__2.i;
                 cfac[i__2].r = q__1.r, cfac[i__2].i = q__1.i;
-                /* L40: */
             }
 
             cgbtrf_(n, n, kl, ku, &cfac[cfac_offset], lda, &iwork[1], &ierr);
@@ -657,9 +653,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
                 for (i = itop; i <= i__2; ++i)
                 {
                     rfac[i + j * rfac_dim1] = ab[i + j * ab_dim1] - *sigmar * mb[i + j * mb_dim1];
-                    /* L50: */
                 }
-                /* L60: */
             }
 
             sgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
@@ -690,9 +684,7 @@ int snband_(a_bool *rvec, char *howmny, a_bool *select, float *dr, float *di, fl
                     r__2 = -(*sigmai) * mb[i + j * mb_dim1];
                     q__1.r = r__1, q__1.i = r__2;
                     cfac[i__3].r = q__1.r, cfac[i__3].i = q__1.i;
-                    /* L70: */
                 }
-                /* L80: */
             }
 
             cgbtrf_(n, n, kl, ku, &cfac[cfac_offset], lda, &iwork[1], &ierr);
@@ -724,7 +716,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
         }
         else if (type == 2)
         {
@@ -740,7 +732,7 @@ L90:
                 /* -------------------------------- */
 
                 scopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -766,10 +758,9 @@ L90:
                     i__3 = ipntr[0] + j - 1;
                     q__1.r = workd[i__3], q__1.i = 0.f;
                     workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
-                    /* L100: */
                 }
 
-                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -783,7 +774,6 @@ L90:
                 {
                     i__2 = j;
                     workd[ipntr[1] + j - 1] = workc[i__2].r;
-                    /* L110: */
                 }
             }
         }
@@ -796,9 +786,9 @@ L90:
             /* the range of OP.                  */
             /* --------------------------------- */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
 
-            sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -817,7 +807,7 @@ L90:
             /* range of OP.                            */
             /* --------------------------------------- */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
 
             if (*sigmai == 0.f)
             {
@@ -827,7 +817,7 @@ L90:
                 /* in real arithmetic. */
                 /* ------------------- */
 
-                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -850,10 +840,9 @@ L90:
                     i__3 = ipntr[1] + i - 1;
                     q__1.r = workd[i__3], q__1.i = 0.f;
                     workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
-                    /* L120: */
                 }
 
-                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -867,7 +856,6 @@ L90:
                 {
                     i__2 = i;
                     workd[ipntr[1] + i - 1] = workc[i__2].r;
-                    /* L130: */
                 }
             }
         }
@@ -888,10 +876,9 @@ L90:
                 i__3 = ipntr[0] + j - 1;
                 q__1.r = workd[i__3], q__1.i = 0.f;
                 workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
-                /* L140: */
             }
 
-            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -904,7 +891,6 @@ L90:
             for (j = 1; j <= i__1; ++j)
             {
                 workd[ipntr[1] + j - 1] = workc[j].i;
-                /* L150: */
             }
         }
         else if (type == 6)
@@ -917,7 +903,7 @@ L90:
             /* range of OP.                           */
             /* -------------------------------------- */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
 
             i__1 = *n;
             for (i = 1; i <= i__1; ++i)
@@ -926,10 +912,9 @@ L90:
                 i__3 = ipntr[1] + i - 1;
                 q__1.r = workd[i__3], q__1.i = 0.f;
                 workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
-                /* L160: */
             }
 
-            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -942,7 +927,6 @@ L90:
             for (i = 1; i <= i__1; ++i)
             {
                 workd[ipntr[1] + i - 1] = workc[i].i;
-                /* L170: */
             }
         }
     }
@@ -956,7 +940,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
         }
         else if (type == 2)
         {
@@ -970,7 +954,7 @@ L90:
                 /* -------------------------------- */
 
                 scopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             }
             else
             {
@@ -988,10 +972,9 @@ L90:
                     i__3 = ipntr[0] + j - 1;
                     q__1.r = workd[i__3], q__1.i = 0.f;
                     workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
-                    /* L180: */
                 }
 
-                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -1005,7 +988,6 @@ L90:
                 {
                     i__2 = j;
                     workd[ipntr[1] + j - 1] = workc[i__2].r;
-                    /* L190: */
                 }
             }
         }
@@ -1016,9 +998,9 @@ L90:
             /* Perform  y <--- OP*x = inv[M]*A*x */
             /* --------------------------------- */
 
-            sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
 
-            sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -1045,7 +1027,7 @@ L90:
                 /* ---------------------- */
 
                 scopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-                sgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -1068,10 +1050,9 @@ L90:
                     i__3 = ipntr[2] + i - 1;
                     q__1.r = workd[i__3], q__1.i = 0.f;
                     workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
-                    /* L200: */
                 }
 
-                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -1085,7 +1066,6 @@ L90:
                 {
                     i__2 = i;
                     workd[ipntr[1] + i - 1] = workc[i__2].r;
-                    /* L210: */
                 }
             }
         }
@@ -1104,10 +1084,9 @@ L90:
                 i__3 = ipntr[0] + j - 1;
                 q__1.r = workd[i__3], q__1.i = 0.f;
                 workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
-                /* L220: */
             }
 
-            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -1120,7 +1099,6 @@ L90:
             for (j = 1; j <= i__1; ++j)
             {
                 workd[ipntr[1] + j - 1] = workc[j].i;
-                /* L230: */
             }
         }
         else if (type == 6)
@@ -1138,10 +1116,9 @@ L90:
                 i__3 = ipntr[2] + i - 1;
                 q__1.r = workd[i__3], q__1.i = 0.f;
                 workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
-                /* L240: */
             }
 
-            cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -1154,7 +1131,6 @@ L90:
             for (i = 1; i <= i__1; ++i)
             {
                 workd[ipntr[1] + i - 1] = workc[i].i;
-                /* L250: */
             }
         }
     }
@@ -1167,7 +1143,7 @@ L90:
         /* type = 1,2.        */
         /* ------------------ */
 
-        sgbmv_("Notranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+        sgbmv_("N", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
     }
     else
     {
@@ -1260,7 +1236,7 @@ L90:
                                     q__1.r = workd[i__4], q__1.i = 0.f;
                                     workc[i__3].r = q__1.r, workc[i__3].i = q__1.i;
                                 }
-                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1322,7 +1298,7 @@ L90:
                                 /* Compute inv(A-sigma*M)*M*x */
                                 /* -------------------------- */
 
-                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
 
                                 /* ----------------------------- */
                                 /* Compute x'*inv(A-sigma*M)*M*x */
@@ -1390,8 +1366,6 @@ L90:
                                 di[j] = -di[j - 1];
                                 first = TRUE_;
                             }
-
-                            /* L270: */
                         }
                     }
                     else if (type == 2 || type == 5)
@@ -1424,7 +1398,7 @@ L90:
                                     q__1.r = z[i__4], q__1.i = 0.f;
                                     workc[i__3].r = q__1.r, workc[i__3].i = q__1.i;
                                 }
-                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1480,7 +1454,7 @@ L90:
                                 /* Compute inv[A-sigma*I]*x. */
                                 /* ------------------------- */
 
-                                cgbtrs_("Notranspose", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
 
                                 /* --------------------------- */
                                 /* Compute x'*inv(A-sigma*I)*x */
@@ -1548,8 +1522,6 @@ L90:
                                 di[j] = -di[j - 1];
                                 first = TRUE_;
                             }
-
-                            /* L280: */
                         }
                     }
                 }

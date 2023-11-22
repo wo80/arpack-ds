@@ -145,6 +145,7 @@ int main()
     tol = 0.;
     ido = 0;
     info = 0;
+    nconv = 0;
 
     a_dcomplex* cfac = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 50 * 1000);
     a_dcomplex* workc = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 1000);
@@ -207,7 +208,6 @@ int main()
     {
         a[idiag + j * 50 - 51] = 4.;
         m[idiag + j * 50 - 51] = 4.;
-        /* L30: */
     }
 
     /* ----------------------------------- */
@@ -227,9 +227,7 @@ int main()
         {
             a[isub + (j + 1) * 50 - 51] = h * rho / 2. - 1.;
             a[isup + j * 50 - 51] = -1. - h * rho / 2.;
-            /* L40: */
         }
-        /* L50: */
     }
 
     i__1 = n - 1;
@@ -237,7 +235,6 @@ int main()
     {
         m[isub + (j + 1) * 50 - 51] = 1.;
         m[isup + j * 50 - 51] = 1.;
-        /* L60: */
     }
 
     /* ---------------------------------- */
@@ -256,9 +253,7 @@ int main()
         {
             a[isup + (nx + j) * 50 - 51] = -1.;
             a[isub + j * 50 - 51] = -1.;
-            /* L70: */
         }
-        /* L80: */
     }
 
     /* ---------------------------------------------- */
@@ -286,14 +281,14 @@ int main()
         printf(" _NBDR6 \n");
         printf(" ====== \n");
         printf(" \n");
-        printf(" The size of the matrix is %d", n);
-        printf(" Number of eigenvalue requested is %d", nev);
-        printf(" The number of Arnoldi vectors generated (NCV) is %d", ncv);
-        printf(" The number of converged Ritz values is %d", nconv);
-        printf(" What portion of the spectrum %s", which);
-        printf(" The number of Implicit Arnoldi update iterations taken is %d", iparam[2]);
-        printf(" The number of OP*x is %d", iparam[8]);
-        printf(" The convergence tolerance is %e", tol);
+        printf(" The size of the matrix is %d\n", n);
+        printf(" Number of eigenvalue requested is %d\n", nev);
+        printf(" The number of Arnoldi vectors generated (NCV) is %d\n", ncv);
+        printf(" The number of converged Ritz values is %d\n", nconv);
+        printf(" What portion of the spectrum %s\n", which);
+        printf(" The number of Implicit Arnoldi update iterations taken is %d\n", iparam[2]);
+        printf(" The number of OP*x is %d\n", iparam[8]);
+        printf(" The convergence tolerance is %e\n", tol);
         printf(" \n");
 
         /* -------------------------- */
@@ -313,8 +308,8 @@ int main()
                 /* Ritz value is real */
                 /* ------------------ */
 
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
+                dgbmv_("N", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                dgbmv_("N", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
                 d[j + 99] = dnrm2_(&n, ax, &c__1);
@@ -330,18 +325,18 @@ int main()
                 /* pair is computed.      */
                 /* ---------------------- */
 
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
+                dgbmv_("N", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                dgbmv_("N", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
+                dgbmv_("N", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 daxpy_(&n, &d[j + 49], mx, &c__1, ax, &c__1);
                 d[j + 99] = dnrm2_(&n, ax, &c__1);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
+                dgbmv_("N", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                dgbmv_("N", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
-                dgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
+                dgbmv_("N", &n, &n, &kl, &ku, &c_b101, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
                 d__1 = -d[j + 49];
                 daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
                 d__1 = dnrm2_(&n, ax, &c__1);
@@ -354,8 +349,6 @@ int main()
             {
                 first = TRUE_;
             }
-
-            /* L90: */
         }
         dmout_(nconv, 3, d, 50, -6, "Ritz values (Real,Imag) and relative residuals");
     }
@@ -369,12 +362,10 @@ int main()
         /* ----------------------------------- */
 
         printf(" \n");
-        printf(" Error with _nband info= %d", info);
+        printf(" Error with _nband info= %d\n", info);
         printf(" Check the documentation of _nband \n");
         printf(" \n");
     }
-
-L9000:
 
     free(cfac);
     free(workc);

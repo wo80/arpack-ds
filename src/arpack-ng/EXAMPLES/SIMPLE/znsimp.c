@@ -249,6 +249,7 @@ int main()
     tol = 0.f;
     ido = 0;
     info = 0;
+    nconv = 0;
 
     a_dcomplex* d = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 30);
     a_dcomplex* v = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256 * 30);
@@ -335,7 +336,7 @@ L10:
         /* ------------------------ */
 
         printf(" \n");
-        printf(" Error with _naupd info = %d", info);
+        printf(" Error with _naupd info = %d\n", info);
         printf(" Check the documentation of _naupd\n");
         printf(" \n");
     }
@@ -382,7 +383,7 @@ L10:
             /* ---------------------------------- */
 
             printf(" \n");
-            printf(" Error with _neupd info = %d", ierr);
+            printf(" Error with _neupd info = %d\n", ierr);
             printf(" Check the documentation of _neupd. \n");
             printf(" \n");
         }
@@ -416,7 +417,6 @@ L10:
                 rd[j + 29] = d[j - 1].i;
                 rd[j + 59] = dznrm2_(&n, ax, &c__1);
                 rd[j + 59] /= dlapy2_(&rd[j - 1], &rd[j + 29]);
-                /* L20: */
             }
 
             /* --------------------------- */
@@ -448,14 +448,14 @@ L10:
         printf("_NSIMP \n");
         printf("====== \n");
         printf(" \n");
-        printf(" Size of the matrix is %d", n);
-        printf(" The number of Ritz values requested is %d", nev);
-        printf(" The number of Arnoldi vectors generated (NCV) is %d", ncv);
-        printf(" What portion of the spectrum: %s", which);
-        printf(" The number of converged Ritz values is %d", nconv);
-        printf(" The number of Implicit Arnoldi update iterations taken is %d", iparam[2]);
-        printf(" The number of OP*x is %d", iparam[8]);
-        printf(" The convergence criterion is %e", tol);
+        printf(" Size of the matrix is %d\n", n);
+        printf(" The number of Ritz values requested is %d\n", nev);
+        printf(" The number of Arnoldi vectors generated (NCV) is %d\n", ncv);
+        printf(" What portion of the spectrum: %s\n", which);
+        printf(" The number of converged Ritz values is %d\n", nconv);
+        printf(" The number of Implicit Arnoldi update iterations taken is %d\n", iparam[2]);
+        printf(" The number of OP*x is %d\n", iparam[8]);
+        printf(" The convergence criterion is %e\n", tol);
         printf(" \n");
     }
 
@@ -535,7 +535,6 @@ int av_(a_int *nx, a_dcomplex *v, a_dcomplex *w)
         z__2.r = -1., z__2.i = -0.;
         ar_z_div(&z__1, &z__2, &h2);
         zaxpy_(nx, &z__1, &v[lo + *nx + 1], &c__1, &w[lo + 1], &c__1);
-        /* L10: */
     }
 
     lo = (*nx - 1) * *nx;
@@ -605,7 +604,6 @@ int tv_(a_int *nx, a_dcomplex *x, a_dcomplex *y)
         z__5.r = du.r * x[i__5].r - du.i * x[i__5].i, z__5.i = du.r * x[i__5].i + du.i * x[i__5].r;
         z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
         y[i__2].r = z__1.r, y[i__2].i = z__1.i;
-        /* L10: */
     }
     i__1 = *nx;
     i__2 = *nx - 1;

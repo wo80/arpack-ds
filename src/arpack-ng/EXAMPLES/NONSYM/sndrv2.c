@@ -32,7 +32,7 @@ int main()
     a_int iparam[11];
     a_int ipntr[14];
     a_bool rvec, first;
-    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int j, n, ido, ncv, nev, info, ierr = 0;
     a_int mode, nconv, ishfts, lworkl, maxitr;
     char *bmat, *which;
     float h, s, s1, s2, s3, tol, sigmai;
@@ -167,7 +167,6 @@ int main()
         dl[j - 1] = s1;
         dd[j - 1] = s2;
         du[j - 1] = s3;
-        /* L10: */
     }
     dd[n - 1] = s2;
 
@@ -195,6 +194,7 @@ int main()
     tol = 0.f;
     ido = 0;
     info = 0;
+    nconv = 0;
 
     float* d = (float*)malloc(sizeof(float) * 25 * 3);
     float* v = (float*)malloc(sizeof(float) * 256 * 25);
@@ -279,7 +279,7 @@ L20:
         /* ------------------------ */
 
         printf(" \n");
-        printf(" Error with _naupd info = %d", info);
+        printf(" Error with _naupd info = %d\n", info);
         printf(" Check the documentation in _naupd.\n");
         printf(" \n");
     }
@@ -321,7 +321,7 @@ L20:
             /* ---------------------------------- */
 
             printf(" \n");
-            printf(" Error with _neupd info = %d", ierr);
+            printf(" Error with _neupd info = %d\n", ierr);
             printf(" Check the documentation of _neupd. \n");
             printf(" \n");
         }
@@ -389,8 +389,6 @@ L20:
                 {
                     first = TRUE_;
                 }
-
-                /* L30: */
             }
 
             /* --------------------------- */
@@ -422,14 +420,14 @@ L20:
         printf(" _NDRV2 \n");
         printf(" ====== \n");
         printf(" \n");
-        printf(" Size of the matrix is %d", n);
-        printf(" The number of Ritz values requested is %d", nev);
-        printf(" The number of Arnoldi vectors generated (NCV) is %d", ncv);
-        printf(" What portion of the spectrum: %s", which);
-        printf(" The number of converged Ritz values is %d", nconv);
-        printf(" The number of Implicit Arnoldi update iterations taken is %d", iparam[2]);
-        printf(" The number of OP*x is %d", iparam[8]);
-        printf(" The convergence criterion is %e", tol);
+        printf(" Size of the matrix is %d\n", n);
+        printf(" The number of Ritz values requested is %d\n", nev);
+        printf(" The number of Arnoldi vectors generated (NCV) is %d\n", ncv);
+        printf(" What portion of the spectrum: %s\n", which);
+        printf(" The number of converged Ritz values is %d\n", nconv);
+        printf(" The number of Implicit Arnoldi update iterations taken is %d\n", iparam[2]);
+        printf(" The number of OP*x is %d\n", iparam[8]);
+        printf(" The convergence criterion is %e\n", tol);
         printf(" \n");
     }
 
@@ -488,7 +486,6 @@ int av_(a_int *n, float *v, float *w)
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = dl * v[j - 1] + dd * v[j] + du * v[j + 1];
-        /* L10: */
     }
     w[*n] = dl * v[*n - 1] + dd * v[*n];
     return 0;

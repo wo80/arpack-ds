@@ -143,6 +143,7 @@ int main()
     tol = 0.f;
     ido = 0;
     info = 0;
+    nconv = 0;
 
     a_int* iwork = (a_int*)malloc(sizeof(a_int) * 1000);
     float* a = (float*)malloc(sizeof(float) * 50 * 1000);
@@ -201,7 +202,6 @@ int main()
     for (j = 1; j <= i__1; ++j)
     {
         a[idiag + j * 50 - 51] = 4.f / h2;
-        /* L30: */
     }
 
     /* ----------------------------------- */
@@ -219,9 +219,7 @@ int main()
         {
             a[isup + (j + 1) * 50 - 51] = -1.f / h2;
             a[isub + j * 50 - 51] = -1.f / h2;
-            /* L40: */
         }
-        /* L50: */
     }
 
     /* ---------------------------------- */
@@ -240,9 +238,7 @@ int main()
         {
             a[isup + (nx + j) * 50 - 51] = -1.f / h2;
             a[isub + j * 50 - 51] = -1.f / h2;
-            /* L70: */
         }
-        /* L80: */
     }
 
     /* ----------------------------------- */
@@ -270,14 +266,14 @@ int main()
         printf(" _SBDR2 \n");
         printf(" ====== \n");
         printf(" \n");
-        printf(" The size of the matrix is %d", n);
-        printf(" Number of eigenvalue requested is %d", nev);
-        printf(" The number of Lanczos vectors generated (NCV) is %d", ncv);
-        printf(" The number of converged Ritz values is %d", nconv);
-        printf(" What portion of the spectrum %s", which);
-        printf(" The number of Implicit Arnoldi update iterations taken is %d", iparam[2]);
-        printf(" The number of OP*x is %d", iparam[8]);
-        printf(" The convergence tolerance is %e", tol);
+        printf(" The size of the matrix is %d\n", n);
+        printf(" Number of eigenvalue requested is %d\n", nev);
+        printf(" The number of Lanczos vectors generated (NCV) is %d\n", ncv);
+        printf(" The number of converged Ritz values is %d\n", nconv);
+        printf(" What portion of the spectrum %s\n", which);
+        printf(" The number of Implicit Arnoldi update iterations taken is %d\n", iparam[2]);
+        printf(" The number of OP*x is %d\n", iparam[8]);
+        printf(" The convergence tolerance is %e\n", tol);
         printf(" \n");
 
         /* -------------------------- */
@@ -288,13 +284,11 @@ int main()
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
         {
-            sgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b100, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+            sgbmv_("N", &n, &n, &kl, &ku, &c_b100, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
             r__1 = -d[j - 1];
             saxpy_(&n, &r__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
             d[j + 49] = snrm2_(&n, ax, &c__1);
             d[j + 49] /= (r__1 = d[j - 1], dabs(r__1));
-
-            /* L90: */
         }
         smout_(nconv, 2, d, 50, -6, "Ritz values and relative residuals");
     }
@@ -308,12 +302,10 @@ int main()
         /* ----------------------------------- */
 
         printf(" \n");
-        printf(" Error with _sband info= %d", info);
+        printf(" Error with _sband info= %d\n", info);
         printf(" Check the documentation of _sband \n");
         printf(" \n");
     }
-
-L9000:
 
     free(iwork);
     free(a);

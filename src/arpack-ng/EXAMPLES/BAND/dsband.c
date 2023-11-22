@@ -456,7 +456,6 @@ int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
         for (j = 1; j <= i__1; ++j)
         {
             rfac[imid + j * rfac_dim1] = ab[imid + j * ab_dim1] - *sigma;
-            /* L10: */
         }
         dgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
         if (ierr != 0)
@@ -505,9 +504,7 @@ int dsband_(a_bool *rvec, char *howmny, a_bool *select, double *d, double *z, a_
             for (i = itop; i <= i__2; ++i)
             {
                 rfac[i + j * rfac_dim1] = ab[i + j * ab_dim1] - *sigma * mb[i + j * mb_dim1];
-                /* L50: */
             }
-            /* L60: */
         }
 
         dgbtrf_(n, n, kl, ku, &rfac[rfac_offset], lda, &iwork[1], &ierr);
@@ -538,7 +535,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
         }
         else if (type == 2)
         {
@@ -551,7 +548,7 @@ L90:
             /* -------------------------------- */
 
             dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -569,9 +566,9 @@ L90:
             /* the range of OP.                  */
             /* --------------------------------- */
 
-            dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
             dcopy_(n, &workd[ipntr[1]], &c__1, &workd[ipntr[0]], &c__1);
-            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -590,8 +587,8 @@ L90:
             /* range of OP.                            */
             /* --------------------------------------- */
 
-            dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbmv_("N", n, n, kl, ku, &c_b50, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -610,8 +607,8 @@ L90:
             /* range of OP.                          */
             /* ------------------------------------- */
 
-            dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
 
             if (ierr != 0)
             {
@@ -633,16 +630,16 @@ L90:
 
             if (*bmat == 'G')
             {
-                dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-                dgbmv_("Notranspose", n, n, kl, ku, sigma, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b50, &workd[ipntr[1]], &c__1);
+                dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+                dgbmv_("N", n, n, kl, ku, sigma, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b50, &workd[ipntr[1]], &c__1);
             }
             else
             {
                 dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, sigma, &workd[ipntr[1]], &c__1);
+                dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, sigma, &workd[ipntr[1]], &c__1);
             }
 
-            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
 
             if (ierr != 0)
             {
@@ -663,7 +660,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
         }
         else if (type == 2)
         {
@@ -674,7 +671,7 @@ L90:
             /* -------------------------------- */
 
             dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -690,9 +687,9 @@ L90:
             /* Perform  y <--- OP*x = inv[M]*A*x */
             /* --------------------------------- */
 
-            dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
             dcopy_(n, &workd[ipntr[1]], &c__1, &workd[ipntr[0]], &c__1);
-            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -711,7 +708,7 @@ L90:
             /* ----------------------------------- */
 
             dcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -731,7 +728,7 @@ L90:
             /* ----------------------------- */
 
             dcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -752,15 +749,15 @@ L90:
 
             if (*bmat == 'G')
             {
-                dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+                dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
                 daxpy_(n, sigma, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
             }
             else
             {
                 dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, sigma, &workd[ipntr[1]], &c__1);
+                dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, sigma, &workd[ipntr[1]], &c__1);
             }
-            dgbtrs_("Notranspose", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
         }
     }
     else if (ido == 2)
@@ -779,11 +776,11 @@ L90:
             /* Buckling Mode, B=A. */
             /* ------------------- */
 
-            dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
         }
         else
         {
-            dgbmv_("Notranspose", n, n, kl, ku, &c_b50, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &c_b50, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
         }
     }
     else

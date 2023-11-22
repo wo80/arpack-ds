@@ -276,6 +276,7 @@ int main()
     lworkl = ncv * (ncv + 8);
     tol = 0.;
     info = 0;
+    nconv = 0;
     ido = 0;
 
     double* s = (double*)malloc(sizeof(double) * 25 * 2);
@@ -361,7 +362,7 @@ L10:
         /* ------------------------ */
 
         printf(" \n");
-        printf(" Error with _saupd info = %d", info);
+        printf(" Error with _saupd info = %d\n", info);
         printf(" Check documentation in _saupd \n");
         printf(" \n");
     }
@@ -402,7 +403,7 @@ L10:
             /* ---------------------------------- */
 
             printf(" \n");
-            printf(" Error with _seupd info = %d", ierr);
+            printf(" Error with _seupd info = %d\n", ierr);
             printf(" Check the documentation of _seupd. \n");
             printf(" \n");
         }
@@ -450,8 +451,6 @@ L10:
                 d__1 = -s[j - 1];
                 daxpy_(&m, &d__1, &u[j * 500 - 500], &c__1, ax, &c__1);
                 s[j + 24] = dnrm2_(&m, ax, &c__1);
-
-                /* L20: */
             }
 
             /* ----------------------------- */
@@ -483,14 +482,14 @@ L10:
         printf(" _SVD \n");
         printf(" ==== \n");
         printf(" \n");
-        printf(" Size of the matrix is %d", n);
-        printf(" The number of Ritz values requested is %d", nev);
-        printf(" The number of Arnoldi vectors generated (NCV) is %d", ncv);
-        printf(" What portion of the spectrum: %s", which);
-        printf(" The number of converged Ritz values is %d", nconv);
-        printf(" The number of Implicit Arnoldi update iterations taken is %d", iparam[2]);
-        printf(" The number of OP*x is %d", iparam[8]);
-        printf(" The convergence criterion is %e", tol);
+        printf(" Size of the matrix is %d\n", n);
+        printf(" The number of Ritz values requested is %d\n", nev);
+        printf(" The number of Arnoldi vectors generated (NCV) is %d\n", ncv);
+        printf(" What portion of the spectrum: %s\n", which);
+        printf(" The number of converged Ritz values is %d\n", nconv);
+        printf(" The number of Implicit Arnoldi update iterations taken is %d\n", iparam[2]);
+        printf(" The number of OP*x is %d\n", iparam[8]);
+        printf(" The convergence criterion is %e\n", tol);
         printf(" \n");
     }
 
@@ -554,7 +553,6 @@ int av_(a_int *m, a_int *n, double *x, double *w)
     for (i = 1; i <= i__1; ++i)
     {
         w[i] = 0.;
-        /* L5: */
     }
     t = 0.;
 
@@ -568,16 +566,13 @@ int av_(a_int *m, a_int *n, double *x, double *w)
         {
             s += h;
             w[i] += k * s * (t - 1.) * x[j];
-            /* L10: */
         }
         i__2 = *m;
         for (i = j + 1; i <= i__2; ++i)
         {
             s += h;
             w[i] += k * t * (s - 1.) * x[j];
-            /* L20: */
         }
-        /* L30: */
     }
 
     return 0;
@@ -607,7 +602,6 @@ int atv_(a_int *m, a_int *n, double *w, double *y)
     for (i = 1; i <= i__1; ++i)
     {
         y[i] = 0.;
-        /* L5: */
     }
     t = 0.;
 
@@ -621,16 +615,13 @@ int atv_(a_int *m, a_int *n, double *w, double *y)
         {
             s += h;
             y[j] += k * s * (t - 1.) * w[i];
-            /* L10: */
         }
         i__2 = *m;
         for (i = j + 1; i <= i__2; ++i)
         {
             s += h;
             y[j] += k * t * (s - 1.) * w[i];
-            /* L20: */
         }
-        /* L30: */
     }
 
     return 0;

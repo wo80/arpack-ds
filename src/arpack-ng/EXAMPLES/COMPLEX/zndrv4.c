@@ -36,7 +36,7 @@ int main()
     a_int ipntr[14];
     a_bool rvec;
     a_dcomplex h, s, s1, s2, s3, sigma;
-    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int j, n, ido, ncv, nev, info, ierr = 0;
     a_int mode, nconv, ishfts, lworkl, maxitr;
     char *bmat, *which;
     double tol;
@@ -198,7 +198,6 @@ int main()
         dd[i__2].r = s2.r, dd[i__2].i = s2.i;
         i__2 = j - 1;
         du[i__2].r = s3.r, du[i__2].i = s3.i;
-        /* L10: */
     }
     i__1 = n - 1;
     dd[i__1].r = s2.r, dd[i__1].i = s2.i;
@@ -227,6 +226,7 @@ int main()
     tol = 0.f;
     ido = 0;
     info = 0;
+    nconv = 0;
 
     a_dcomplex* d = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 25);
     a_dcomplex* v = (a_dcomplex*)malloc(sizeof(a_dcomplex) * 256 * 25);
@@ -364,7 +364,7 @@ L20:
         /* -------------------------- */
 
         printf(" \n");
-        printf(" Error with _naupd info = %d", info);
+        printf(" Error with _naupd info = %d\n", info);
         printf(" Check the documentation of _naupd.\n");
         printf(" \n");
     }
@@ -405,7 +405,7 @@ L20:
             /* ---------------------------------- */
 
             printf(" \n");
-            printf(" Error with _neupd info = %d", ierr);
+            printf(" Error with _neupd info = %d\n", ierr);
             printf(" Check the documentation of _neupd. \n");
             printf(" \n");
         }
@@ -427,7 +427,6 @@ L20:
                 rd[j + 24] = d[j - 1].i;
                 rd[j + 49] = dznrm2_(&n, ax, &c__1);
                 rd[j + 49] /= dlapy2_(&rd[j - 1], &rd[j + 24]);
-                /* L80: */
             }
 
             /* --------------------------- */
@@ -459,14 +458,14 @@ L20:
         printf("_NDRV4 \n");
         printf("====== \n");
         printf(" \n");
-        printf(" Size of the matrix is %d", n);
-        printf(" The number of Ritz values requested is %d", nev);
-        printf(" The number of Arnoldi vectors generated (NCV) is %d", ncv);
-        printf(" What portion of the spectrum: %s", which);
-        printf(" The number of converged Ritz values is %d", nconv);
-        printf(" The number of Implicit Arnoldi update iterations taken is %d", iparam[2]);
-        printf(" The number of OP*x is %d", iparam[8]);
-        printf(" The convergence criterion is %e", tol);
+        printf(" Size of the matrix is %d\n", n);
+        printf(" The number of Ritz values requested is %d\n", nev);
+        printf(" The number of Arnoldi vectors generated (NCV) is %d\n", ncv);
+        printf(" What portion of the spectrum: %s\n", which);
+        printf(" The number of converged Ritz values is %d\n", nconv);
+        printf(" The number of Implicit Arnoldi update iterations taken is %d\n", iparam[2]);
+        printf(" The number of OP*x is %d\n", iparam[8]);
+        printf(" The convergence criterion is %e\n", tol);
         printf(" \n");
     }
 
@@ -530,7 +529,6 @@ int mv_(a_int *n, a_dcomplex *v, a_dcomplex *w)
         z__2.r = z__3.r + z__6.r, z__2.i = z__3.i + z__6.i;
         ar_z_div(&z__1, &z__2, &c_b5);
         w[i__2].r = z__1.r, w[i__2].i = z__1.i;
-        /* L40: */
     }
     i__1 = *n;
     i__2 = *n - 1;
@@ -599,7 +597,6 @@ int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
         z__5.r = du.r * v[i__5].r - du.i * v[i__5].i, z__5.i = du.r * v[i__5].i + du.i * v[i__5].r;
         z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
         w[i__2].r = z__1.r, w[i__2].i = z__1.i;
-        /* L40: */
     }
     i__1 = *n;
     i__2 = *n - 1;

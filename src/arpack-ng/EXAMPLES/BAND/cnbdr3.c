@@ -140,6 +140,7 @@ int main()
 
     lworkl = ncv * ncv * 3 + ncv * 5;
     info = 0;
+    nconv = 0;
     tol = 0.f;
 
     a_fcomplex* a = (a_fcomplex*)malloc(sizeof(a_fcomplex) * 50 * 1000);
@@ -212,7 +213,6 @@ int main()
         i__2 = idiag + j * 50 - 51;
         q__1.r = h.r * 4.f - h.i * 0.f, q__1.i = h.r * 0.f + h.i * 4.f;
         m[i__2].r = q__1.r, m[i__2].i = q__1.i;
-        /* L30: */
     }
 
     /* ----------------------------------- */
@@ -243,7 +243,6 @@ int main()
         i__2 = isub + j * 50 - 51;
         q__1.r = h.r * 1.f - h.i * 0.f, q__1.i = h.i * 1.f + h.r * 0.f;
         m[i__2].r = q__1.r, m[i__2].i = q__1.i;
-        /* L40: */
     }
 
     /* --------------------------------------------- */
@@ -270,14 +269,14 @@ int main()
         printf("_NBDR3 \n");
         printf("====== \n");
         printf(" \n");
-        printf(" The size of the matrix is %d", n);
-        printf(" Number of eigenvalue requested is %d", nev);
-        printf(" The number of Arnoldi vectors generated (NCV) is %d", ncv);
-        printf(" The number of converged Ritz values is %d", nconv);
-        printf(" What portion of the spectrum %s", which);
-        printf(" The number of Implicit Arnoldi update iterations taken is %d", iparam[2]);
-        printf(" The number of OP*x is %d", iparam[8]);
-        printf(" The convergence tolerance is %e", tol);
+        printf(" The size of the matrix is %d\n", n);
+        printf(" Number of eigenvalue requested is %d\n", nev);
+        printf(" The number of Arnoldi vectors generated (NCV) is %d\n", ncv);
+        printf(" The number of converged Ritz values is %d\n", nconv);
+        printf(" What portion of the spectrum %s\n", which);
+        printf(" The number of Implicit Arnoldi update iterations taken is %d\n", iparam[2]);
+        printf(" The number of OP*x is %d\n", iparam[8]);
+        printf(" The convergence tolerance is %e\n", tol);
         printf(" \n");
 
         i__1 = nconv;
@@ -289,8 +288,8 @@ int main()
             /*    ||  A*x - lambda*x ||   */
             /* -------------------------- */
 
-            cgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, ax, &c__1);
-            cgbmv_("Notranspose", &n, &n, &kl, &ku, &c_b1, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, mx, &c__1);
+            cgbmv_("N", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, ax, &c__1);
+            cgbmv_("N", &n, &n, &kl, &ku, &c_b1, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, mx, &c__1);
             i__2 = j - 1;
             q__1.r = -d[i__2].r, q__1.i = -d[i__2].i;
             caxpy_(&n, &q__1, mx, &c__1, ax, &c__1);
@@ -299,7 +298,6 @@ int main()
             rd[j + 49] = d[j - 1].i;
             rd[j + 99] = scnrm2_(&n, ax, &c__1);
             rd[j + 99] /= slapy2_(&rd[j - 1], &rd[j + 49]);
-            /* L50: */
         }
         smout_(nconv, 3, rd, 50, -6, "Ritz values (Real,Imag) and relative residuals");
     }
@@ -313,12 +311,10 @@ int main()
         /* ----------------------------------- */
 
         printf(" \n");
-        printf(" Error with _band info= %d", info);
+        printf(" Error with _band info= %d\n", info);
         printf(" Check the documentation of _band \n");
         printf(" \n");
     }
-
-L9000:
 
     free(a);
     free(d);

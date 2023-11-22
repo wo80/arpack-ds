@@ -26,7 +26,7 @@ int main()
     a_int iparam[11];
     a_int ipntr[11];
     a_bool rvec;
-    a_int j, n, ido, ncv, nev, ierr, info;
+    a_int j, n, ido, ncv, nev, info, ierr = 0;
     a_int mode, nconv, ishfts, lworkl, maxitr;
     char *bmat, *which;
     float h, r1, r2, tol, sigma;
@@ -151,6 +151,7 @@ int main()
     tol = 0.f;
     ido = 0;
     info = 0;
+    nconv = 0;
 
     a_int* ipiv = (a_int*)malloc(sizeof(a_int) * 256);
     float* d = (float*)malloc(sizeof(float) * 25 * 2);
@@ -200,7 +201,6 @@ int main()
     {
         ad[j - 1] = 2.f / h - sigma * r1;
         adl[j - 1] = -1.f / h - sigma * r2;
-        /* L20: */
     }
     scopy_(&n, adl, &c__1, adu, &c__1);
     sgttrf_(&n, adl, ad, adu, adu2, ipiv, &ierr);
@@ -244,7 +244,7 @@ L10:
         mv_(&n, &workd[ipntr[0] - 1], temp);
         saxpy_(&n, &sigma, temp, &c__1, &workd[ipntr[1] - 1], &c__1);
 
-        sgttrs_("Notranspose", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
+        sgttrs_("N", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             printf(" \n");
@@ -276,7 +276,7 @@ L10:
 
         av_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
         saxpy_(&n, &sigma, &workd[ipntr[2] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
-        sgttrs_("Notranspose", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
+        sgttrs_("N", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             printf(" \n");
@@ -324,7 +324,7 @@ L10:
         /* ------------------------ */
 
         printf(" \n");
-        printf(" Error with _saupd info = %d", info);
+        printf(" Error with _saupd info = %d\n", info);
         printf(" Check the documentation of _saupd. \n");
         printf(" \n");
     }
@@ -365,7 +365,7 @@ L10:
             /* ---------------------------------- */
 
             printf(" \n");
-            printf(" Error with _seupd info = %d", ierr);
+            printf(" Error with _seupd info = %d\n", ierr);
             printf(" Check the documentation of _seupd \n");
             printf(" \n");
         }
@@ -395,7 +395,6 @@ L10:
                 saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
                 d[j + 24] = snrm2_(&n, ax, &c__1);
                 d[j + 24] /= (r__1 = d[j - 1], dabs(r__1));
-                /* L30: */
             }
 
             smout_(nconv, 2, d, 25, -6, "Ritz values and relative residuals");
@@ -423,14 +422,14 @@ L10:
         printf(" _SDRV6 \n");
         printf(" ====== \n");
         printf(" \n");
-        printf(" Size of the matrix is %d", n);
-        printf(" The number of Ritz values requested is %d", nev);
-        printf(" The number of Arnoldi vectors generated (NCV) is %d", ncv);
-        printf(" What portion of the spectrum: %s", which);
-        printf(" The number of converged Ritz values is %d", nconv);
-        printf(" The number of Implicit Arnoldi update iterations taken is %d", iparam[2]);
-        printf(" The number of OP*x is %d", iparam[8]);
-        printf(" The convergence criterion is %e", tol);
+        printf(" Size of the matrix is %d\n", n);
+        printf(" The number of Ritz values requested is %d\n", nev);
+        printf(" The number of Arnoldi vectors generated (NCV) is %d\n", ncv);
+        printf(" What portion of the spectrum: %s\n", which);
+        printf(" The number of converged Ritz values is %d\n", nconv);
+        printf(" The number of Implicit Arnoldi update iterations taken is %d\n", iparam[2]);
+        printf(" The number of OP*x is %d\n", iparam[8]);
+        printf(" The convergence criterion is %e\n", tol);
         printf(" \n");
     }
 
@@ -479,7 +478,6 @@ int mv_(a_int *n, float *v, float *w)
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = v[j - 1] + v[j] * 4.f + v[j + 1];
-        /* L100: */
     }
     j = *n;
     w[j] = v[j - 1] + v[j] * 4.f;
@@ -517,7 +515,6 @@ int av_(a_int *n, float *v, float *w)
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = -v[j - 1] + v[j] * 2.f - v[j + 1];
-        /* L100: */
     }
     j = *n;
     w[j] = -v[j - 1] + v[j] * 2.f;
