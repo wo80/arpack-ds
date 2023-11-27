@@ -3,17 +3,52 @@
 #include <stdlib.h>
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_int c__9 = 9;
-static a_int c__1 = 1;
+static a_int i_one = 1;
 static a_int c__256 = 256;
-static a_int c__3 = 3;
-static a_int c__6 = 6;
-static a_int c__30 = 30;
-static a_int c_n6 = -6;
-static a_int c__5 = 5;
 
+void av_(const a_int nx, double *v, double *w);
+void tv_(const a_int nx, double *x, double *y);
+
+/**
+ * \BeginDoc
+ *
+ *     Example program to illustrate the idea of reverse communication
+ *     for a standard nonsymmetric eigenvalue problem.
+ *
+ *     We implement example one of ex-nonsym.doc in DOCUMENTS directory
+ *
+ * \Example-1
+ *     ... Suppose we want to solve A*x = lambda*x in regular mode,
+ *         where A is obtained from the standard central difference
+ *         discretization of the convection-diffusion operator
+ *                 (Laplacian u) + rho*(du / dx)
+ *         on the unit square [0,1]x[0,1] with zero Dirichlet boundary
+ *         condition.
+ *
+ *     ... OP = A  and  B = I.
+ *
+ *     ... Assume "call av (nx,x,y)" computes y = A*x.c
+ *
+ *     ... Use mode 1 of DNAUPD.
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     dnaupd  ARPACK reverse communication interface routine.
+ *     dneupd  ARPACK routine that returns Ritz values and (optionally)
+ *             Ritz vectors.
+ *     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     daxpy   Level 1 BLAS that computes y <- alpha*x+y.
+ *     dnrm2   Level 1 BLAS that computes the norm of a vector.
+ *     av      Matrix vector multiplication routine that computes A*x.
+ *     tv      Matrix vector multiplication routine that computes T*x,
+ *             where T is a tridiagonal matrix.  It is used in routine
+ *             av.
+ *
+ * \EndLib
+ */
 int main()
 {
     /* System generated locals */
@@ -30,65 +65,11 @@ int main()
     char *bmat, *which;
     double tol, sigmai, sigmar;
 
-    /*     Example program to illustrate the idea of reverse communication */
-    /*     for a standard nonsymmetric eigenvalue problem. */
+    /* Define maximum dimensions for all arrays. */
 
-    /*     We implement example one of ex-nonsym.doc in DOCUMENTS directory */
-
-    /* \Example-1 */
-    /*     ... Suppose we want to solve A*x = lambda*x in regular mode, */
-    /*         where A is obtained from the standard central difference */
-    /*         discretization of the convection-diffusion operator */
-    /*                 (Laplacian u) + rho*(du / dx) */
-    /*         on the unit square [0,1]x[0,1] with zero Dirichlet boundary */
-    /*         condition. */
-
-    /*     ... OP = A  and  B = I. */
-
-    /*     ... Assume "call av (nx,x,y)" computes y = A*x.c */
-
-    /*     ... Use mode 1 of DNAUPD. */
-
-    /* \BeginLib */
-
-    /* \Routines called: */
-    /*     dnaupd  ARPACK reverse communication interface routine. */
-    /*     dneupd  ARPACK routine that returns Ritz values and (optionally) */
-    /*             Ritz vectors. */
-    /*     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-    /*     daxpy   Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     dnrm2   Level 1 BLAS that computes the norm of a vector. */
-    /*     av      Matrix vector multiplication routine that computes A*x. */
-    /*     tv      Matrix vector multiplication routine that computes T*x, */
-    /*             where T is a tridiagonal matrix.  It is used in routine */
-    /*             av. */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: ndrv1.F   SID: 2.5   DATE OF SID: 10/17/00   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-    /* --------------------------------------------------------------------------- */
-
-    /* --------------------------- */
-    /* Define maximum dimensions   */
-    /* for all arrays.             */
-    /* MAXN:   Maximum dimension   */
-    /*         of the A allowed.   */
-    /* MAXNEV: Maximum NEV allowed */
-    /* MAXNCV: Maximum NCV allowed */
-    /* --------------------------- */
+    const int MAXN   = 256; /* Maximum dimension of the A allowed. */
+    const int MAXNEV =  12; /* Maximum NEV allowed */
+    const int MAXNCV =  30; /* Maximum NCV allowed */
 
     /* ------------------------------------------------ */
     /* The number NX is the number of interior points   */
@@ -201,7 +182,7 @@ L10:
         /* product to workd(ipntr(2)).               */
         /* ----------------------------------------- */
 
-        av_(&nx, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
+        av_(nx, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
 
         /* --------------------------------------- */
         /* L O O P   B A C K to call DNAUPD again. */
@@ -299,10 +280,10 @@ L10:
                     /* Ritz value is real */
                     /* ------------------ */
 
-                    av_(&nx, &v[(j << 8) - 256], ax);
+                    av_(nx, &v[(j << 8) - 256], ax);
                     d__1 = -d[j - 1];
-                    daxpy_(&n, &d__1, &v[(j << 8) - 256], &c__1, ax, &c__1);
-                    d[j + 59] = dnrm2_(&n, ax, &c__1);
+                    daxpy_(&n, &d__1, &v[(j << 8) - 256], &i_one, ax, &i_one);
+                    d[j + 59] = dnrm2_(&n, ax, &i_one);
                     d[j + 59] /= (d__1 = d[j - 1], abs(d__1));
                 }
                 else if (first)
@@ -315,17 +296,17 @@ L10:
                     /* pair is computed.      */
                     /* ---------------------- */
 
-                    av_(&nx, &v[(j << 8) - 256], ax);
+                    av_(nx, &v[(j << 8) - 256], ax);
                     d__1 = -d[j - 1];
-                    daxpy_(&n, &d__1, &v[(j << 8) - 256], &c__1, ax, &c__1);
-                    daxpy_(&n, &d[j + 29], &v[(j + 1 << 8) - 256], &c__1, ax, &c__1);
-                    d[j + 59] = dnrm2_(&n, ax, &c__1);
-                    av_(&nx, &v[(j + 1 << 8) - 256], ax);
+                    daxpy_(&n, &d__1, &v[(j << 8) - 256], &i_one, ax, &i_one);
+                    daxpy_(&n, &d[j + 29], &v[(j + 1 << 8) - 256], &i_one, ax, &i_one);
+                    d[j + 59] = dnrm2_(&n, ax, &i_one);
+                    av_(nx, &v[(j + 1 << 8) - 256], ax);
                     d__1 = -d[j + 29];
-                    daxpy_(&n, &d__1, &v[(j << 8) - 256], &c__1, ax, &c__1);
+                    daxpy_(&n, &d__1, &v[(j << 8) - 256], &i_one, ax, &i_one);
                     d__1 = -d[j - 1];
-                    daxpy_(&n, &d__1, &v[(j + 1 << 8) - 256], &c__1, ax, &c__1);
-                    d__1 = dnrm2_(&n, ax, &c__1);
+                    daxpy_(&n, &d__1, &v[(j + 1 << 8) - 256], &i_one, ax, &i_one);
+                    d__1 = dnrm2_(&n, ax, &i_one);
                     d[j + 59] = dlapy2_(&d[j + 59], &d__1);
                     d[j + 59] /= dlapy2_(&d[j - 1], &d[j + 29]);
                     d[j + 60] = d[j + 59];
@@ -399,7 +380,7 @@ L10:
 /*     The matrix used is the 2 dimensional convection-diffusion */
 /*     operator discretized using central difference. */
 
-int av_(a_int *nx, double *v, double *w)
+void av_(const a_int nx, double *v, double *w)
 {
     /* System generated locals */
     a_int i__1;
@@ -434,33 +415,31 @@ int av_(a_int *nx, double *v, double *w)
     --w;
     --v;
 
-    h2 = 1. / (double)((*nx + 1) * (*nx + 1));
+    h2 = 1. / (double)((nx + 1) * (nx + 1));
 
     tv_(nx, &v[1], &w[1]);
     d__1 = -1. / h2;
-    daxpy_(nx, &d__1, &v[*nx + 1], &c__1, &w[1], &c__1);
+    daxpy_(&nx, &d__1, &v[nx + 1], &i_one, &w[1], &i_one);
 
-    i__1 = *nx - 1;
+    i__1 = nx - 1;
     for (j = 2; j <= i__1; ++j)
     {
-        lo = (j - 1) * *nx;
+        lo = (j - 1) * nx;
         tv_(nx, &v[lo + 1], &w[lo + 1]);
         d__1 = -1. / h2;
-        daxpy_(nx, &d__1, &v[lo - *nx + 1], &c__1, &w[lo + 1], &c__1);
+        daxpy_(&nx, &d__1, &v[lo - nx + 1], &i_one, &w[lo + 1], &i_one);
         d__1 = -1. / h2;
-        daxpy_(nx, &d__1, &v[lo + *nx + 1], &c__1, &w[lo + 1], &c__1);
+        daxpy_(&nx, &d__1, &v[lo + nx + 1], &i_one, &w[lo + 1], &i_one);
     }
 
-    lo = (*nx - 1) * *nx;
+    lo = (nx - 1) * nx;
     tv_(nx, &v[lo + 1], &w[lo + 1]);
     d__1 = -1. / h2;
-    daxpy_(nx, &d__1, &v[lo - *nx + 1], &c__1, &w[lo + 1], &c__1);
-
-    return 0;
+    daxpy_(&nx, &d__1, &v[lo - nx + 1], &i_one, &w[lo + 1], &i_one);
 } /* av_ */
 
 /* ========================================================================= */
-int tv_(a_int *nx, double *x, double *y)
+void tv_(const a_int nx, double *x, double *y)
 {
     /* System generated locals */
     a_int i__1;
@@ -482,18 +461,17 @@ int tv_(a_int *nx, double *x, double *y)
     --y;
     --x;
 
-    h = 1. / (double)(*nx + 1);
+    h = 1. / (double)(nx + 1);
     h2 = h * h;
     dd = 4. / h2;
     dl = -1. / h2 - 0. / h;
     du = -1. / h2 + 0. / h;
 
     y[1] = dd * x[1] + du * x[2];
-    i__1 = *nx - 1;
+    i__1 = nx - 1;
     for (j = 2; j <= i__1; ++j)
     {
         y[j] = dl * x[j - 1] + dd * x[j] + du * x[j + 1];
     }
-    y[*nx] = dl * x[*nx - 1] + dd * x[*nx];
-    return 0;
+    y[nx] = dl * x[nx - 1] + dd * x[nx];
 } /* tv_ */

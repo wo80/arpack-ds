@@ -2,13 +2,11 @@
 
 #include "arpack_internal.h"
 
-/* Table of constant values */
+static a_fcomplex one = {1.f, 0.f};
+static a_fcomplex zero = {0.f, 0.f};
 
-static a_fcomplex c_b1 = {1.f, 0.f};
-static a_fcomplex c_b2 = {0.f, 0.f};
-static a_int c__9 = 9;
-static a_int c__1 = 1;
-static a_int c__3 = 3;
+static a_int i_one = 1;
+
 /**
  * \BeginDoc
  *
@@ -275,7 +273,7 @@ static a_int c__3 = 3;
  *
  * \BeginLib
  *
- * \Routines called
+ * Routines called
  *     cnaupd  ARPACK reverse communication interface routine.
  *     cneupd  ARPACK routine that returns Ritz values and (optionally)
  *             Ritz vectors.
@@ -464,7 +462,7 @@ L40:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            cgbmv_("N", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+            cgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (mode == 2)
         {
@@ -473,9 +471,9 @@ L40:
             /* Perform  y <--- OP*x = inv[M]*A*x */
             /* --------------------------------- */
 
-            cgbmv_("N", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+            cgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
-            cgbtrs_("N", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            cgbtrs_("N", n, kl, ku, &i_one, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -494,9 +492,9 @@ L40:
             /*           | range of OP.                            | */
             /* --------------------------------------- */
 
-            cgbmv_("N", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+            cgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
-            cgbtrs_("N", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            cgbtrs_("N", n, kl, ku, &i_one, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -516,7 +514,7 @@ L40:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            cgbmv_("N", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+            cgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (mode == 2)
         {
@@ -525,9 +523,9 @@ L40:
             /* Perform  y <--- OP*x = inv[M]*A*x */
             /* --------------------------------- */
 
-            cgbmv_("N", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+            cgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
-            cgbtrs_("N", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], ldv, &ierr);
+            cgbtrs_("N", n, kl, ku, &i_one, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], ldv, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -546,8 +544,8 @@ L40:
                 /* Perform  y <-- inv(A-sigma*I)*x. */
                 /* -------------------------------- */
 
-                ccopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                cgbtrs_("N", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                ccopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+                cgbtrs_("N", n, kl, ku, &i_one, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -565,8 +563,8 @@ L40:
                 /* in workd(ipntr(3)).                  */
                 /* ------------------------------------ */
 
-                ccopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-                cgbtrs_("N", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                ccopy_(n, &workd[ipntr[2]], &i_one, &workd[ipntr[1]], &i_one);
+                cgbtrs_("N", n, kl, ku, &i_one, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -584,7 +582,7 @@ L40:
         /* Perform y <-- M*x  */
         /* ------------------ */
 
-        cgbmv_("N", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+        cgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
     }
     else
     {

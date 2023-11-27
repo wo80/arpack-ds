@@ -3,19 +3,44 @@
 #include <stdlib.h>
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_int c__9 = 9;
 static a_int c__1 = 1;
 static a_int c__50 = 50;
-static float c_b15 = 0.f;
 static a_int c__1000 = 1000;
-static a_int c__3 = 3;
-static a_int c__4 = 4;
-static float c_b101 = 1.f;
-static a_int c__6 = 6;
-static a_int c_n6 = -6;
 
+static float zero = 0.f;
+static float one = 1.f;
+
+/**
+ * \BeginDoc
+ *
+ * Construct matrices A and M in LAPACK-style band form.
+ * The matrix A is a block tridiagonal matrix.  Each
+ * diagonal block is a tridiagonal matrix with
+ * 4 on the diagonal, 1-rho*h/2 on the subdiagonal and
+ * 1+rho*h/2 on the superdiagonal.  Each off-diagonal block
+ * of A is an identity matrices.
+ *
+ * Define COMPLEX shift SIGMA = (SIGMAR,SIGMAI), SIGMAI .ne. 0.
+ *
+ * Call SNBAND to find eigenvalues LAMBDA closest to SIGMA
+ * such that
+ *               A*x = LAMBDA*x.
+ *
+ * Use mode 4 of SNAUPD.
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     snband  ARPACK banded eigenproblem solver.
+ *     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     slaset  LAPACK routine to initialize a matrix to zero.
+ *     saxpy   Level 1 BLAS that computes y <- alpha*x+y.
+ *     snrm2   Level 1 BLAS that computes the norm of a vector.
+ *     sgbmv   Level 2 BLAS that computes the band matrix vector product.
+ *
+ * \EndLib */
 int main()
 {
     /* System generated locals */
@@ -31,50 +56,6 @@ int main()
     a_int idiag, nconv, lworkl, maxitr;
     char *bmat, *which;
     float h, rho, tol, sigmai, sigmar;
-
-    /*     ... Construct matrices A and M in LAPACK-style band form. */
-    /*         The matrix A is a block tridiagonal matrix.  Each */
-    /*         diagonal block is a tridiagonal matrix with */
-    /*         4 on the diagonal, 1-rho*h/2 on the subdiagonal and */
-    /*         1+rho*h/2 on the superdiagonal.  Each off-diagonal block */
-    /*         of A is an identity matrices. */
-
-    /*     ... Define COMPLEX shift SIGMA = (SIGMAR,SIGMAI), SIGMAI .ne. 0. */
-
-    /*     ... Call SNBAND to find eigenvalues LAMBDA closest to SIGMA */
-    /*         such that */
-    /*                       A*x = LAMBDA*x. */
-
-    /*     ... Use mode 4 of SNAUPD. */
-
-    /* \BeginLib */
-
-    /* \Routines called: */
-    /*     snband  ARPACK banded eigenproblem solver. */
-    /*     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-    /*     slaset  LAPACK routine to initialize a matrix to zero. */
-    /*     saxpy   Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     snrm2   Level 1 BLAS that computes the norm of a vector. */
-    /*     sgbmv   Level 2 BLAS that computes the band matrix vector product. */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: nbdr5.F   SID: 2.5   DATE OF SID: 08/26/96   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-
-    /* ------------------------------------------------------------------------- */
 
     /* ----------------------------------- */
     /* Define leading dimensions for all   */
@@ -182,9 +163,9 @@ int main()
     /* Zero out the workspace for banded matrices. */
     /* ------------------------------------------- */
 
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50);
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50);
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50);
+    slaset_("A", &c__50, &n, &zero, &zero, a, &c__50);
+    slaset_("A", &c__50, &n, &zero, &zero, m, &c__50);
+    slaset_("A", &c__50, &n, &zero, &zero, rfac, &c__50);
 
     /* ----------------------------------- */
     /* KU, KL are number of superdiagonals */
@@ -305,7 +286,7 @@ int main()
                 /* Ritz value is real */
                 /* ------------------ */
 
-                sgbmv_("N", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                sgbmv_("N", &n, &n, &kl, &ku, &one, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &zero, ax, &c__1);
                 r__1 = -d[j - 1];
                 saxpy_(&n, &r__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
                 d[j + 99] = snrm2_(&n, ax, &c__1);
@@ -321,12 +302,12 @@ int main()
                 /* pair is computed.      */
                 /* ---------------------- */
 
-                sgbmv_("N", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                sgbmv_("N", &n, &n, &kl, &ku, &one, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &zero, ax, &c__1);
                 r__1 = -d[j - 1];
                 saxpy_(&n, &r__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
                 saxpy_(&n, &d[j + 49], &v[(j + 1) * 1000 - 1000], &c__1, ax, &c__1);
                 d[j + 99] = snrm2_(&n, ax, &c__1);
-                sgbmv_("N", &n, &n, &kl, &ku, &c_b101, &a[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                sgbmv_("N", &n, &n, &kl, &ku, &one, &a[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &zero, ax, &c__1);
                 r__1 = -d[j - 1];
                 saxpy_(&n, &r__1, &v[(j + 1) * 1000 - 1000], &c__1, ax, &c__1);
                 r__1 = -d[j + 49];

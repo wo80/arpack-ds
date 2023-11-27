@@ -10,17 +10,55 @@ struct
 
 #define convct_1 convct_
 
-/* Table of constant values */
-
-static a_int c__9 = 9;
-static a_int c__1 = 1;
+static a_int i_one = 1;
 static a_int c__256 = 256;
-static a_int c__3 = 3;
-static a_int c__6 = 6;
-static a_int c__25 = 25;
-static a_int c_n6 = -6;
-static a_int c__4 = 4;
 
+void mv_(const a_int n, float *v, float *w);
+void av_(const a_int n, float *v, float *w);
+
+/**
+ * \BeginDoc
+ *
+ *     Simple program to illustrate the idea of reverse communication
+ *     in shift-invert mode for a generalized nonsymmetric eigenvalue
+ *     problem.
+ *
+ *     We implement example four of ex-nonsym.doc in DOCUMENTS directory
+ *
+ * \Example-4
+ *     ... Suppose we want to solve A*x = lambda*B*x in inverse mode,
+ *         where A and B are derived from the finite element discretization
+ *         of the 1-dimensional convection-diffusion operator
+ *                           (d^2u / dx^2) + rho*(du/dx)
+ *         on the interval [0,1] with zero Dirichlet boundary condition
+ *         using linear elements.
+ *
+ *     ... The shift sigma is a real number.
+ *
+ *     ... OP = inv[A-SIGMA*M]*M  and  B = M.
+ *
+ *     ... Use mode 3 of SNAUPD.
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     snaupd  ARPACK reverse communication interface routine.
+ *     sneupd  ARPACK routine that returns Ritz values and (optionally)
+ *             Ritz vectors.
+ *     sgttrf  LAPACK tridiagonal factorization routine.
+ *     sgttrs  LAPACK tridiagonal linear system solve routine.
+ *     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     saxpy   Level 1 BLAS that computes y <- alpha*x+y.
+ *     scopy   Level 1 BLAS that copies one vector to another.
+ *     sdot    Level 1 BLAS that computes the dot product of two vectors.
+ *     snrm2   Level 1 BLAS that computes the norm of a vector.
+ *     av      Matrix vector multiplication routine that computes A*x.
+ *     mv      Matrix vector multiplication routine that computes M*x.
+ *
+ * \EndLib
+ */
 int main()
 {
     /* System generated locals */
@@ -38,68 +76,12 @@ int main()
     float h, s, s1, s2, s3, tol, sigmai;
     float sigmar;
 
-    /*     Simple program to illustrate the idea of reverse communication */
-    /*     in shift-invert mode for a generalized nonsymmetric eigenvalue */
-    /*     problem. */
 
-    /*     We implement example four of ex-nonsym.doc in DOCUMENTS directory */
+    /* Define maximum dimensions for all arrays. */
 
-    /* \Example-4 */
-    /*     ... Suppose we want to solve A*x = lambda*B*x in inverse mode, */
-    /*         where A and B are derived from the finite element discretization */
-    /*         of the 1-dimensional convection-diffusion operator */
-    /*                           (d^2u / dx^2) + rho*(du/dx) */
-    /*         on the interval [0,1] with zero Dirichlet boundary condition */
-    /*         using linear elements. */
-
-    /*     ... The shift sigma is a real number. */
-
-    /*     ... OP = inv[A-SIGMA*M]*M  and  B = M. */
-
-    /*     ... Use mode 3 of SNAUPD. */
-
-    /* \BeginLib */
-
-    /* \Routines called: */
-    /*     snaupd  ARPACK reverse communication interface routine. */
-    /*     sneupd  ARPACK routine that returns Ritz values and (optionally) */
-    /*             Ritz vectors. */
-    /*     sgttrf  LAPACK tridiagonal factorization routine. */
-    /*     sgttrs  LAPACK tridiagonal linear system solve routine. */
-    /*     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-    /*     saxpy   Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     scopy   Level 1 BLAS that copies one vector to another. */
-    /*     sdot    Level 1 BLAS that computes the dot product of two vectors. */
-    /*     snrm2   Level 1 BLAS that computes the norm of a vector. */
-    /*     av      Matrix vector multiplication routine that computes A*x. */
-    /*     mv      Matrix vector multiplication routine that computes M*x. */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: ndrv4.F   SID: 2.5   DATE OF SID: 10/17/00   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-    /* ----------------------------------------------------------------------- */
-
-    /* --------------------------- */
-    /* Define leading dimensions   */
-    /* for all arrays.             */
-    /* MAXN:   Maximum dimension   */
-    /*         of the A allowed.   */
-    /* MAXNEV: Maximum NEV allowed */
-    /* MAXNCV: Maximum NCV allowed */
-    /* --------------------------- */
+    const int MAXN   = 256; /* Maximum dimension of the A allowed. */
+    const int MAXNEV =  10; /* Maximum NEV allowed */
+    const int MAXNCV =  25; /* Maximum NCV allowed */
 
     /* -------------------------------------------------- */
     /* The number N is the dimension of the matrix.  A    */
@@ -259,8 +241,8 @@ L20:
         /* workd(ipntr(2)).                          */
         /* ----------------------------------------- */
 
-        mv_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
-        sgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
+        mv_(n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
+        sgttrs_("N", &n, &i_one, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             printf(" \n");
@@ -287,8 +269,8 @@ L20:
         /* workd(ipntr(2)).                        */
         /* --------------------------------------- */
 
-        scopy_(&n, &workd[ipntr[2] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
-        sgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
+        scopy_(&n, &workd[ipntr[2] - 1], &i_one, &workd[ipntr[1] - 1], &i_one);
+        sgttrs_("N", &n, &i_one, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             printf(" \n");
@@ -313,7 +295,7 @@ L20:
         /* and returns the result to workd(ipntr(2)).  */
         /* ------------------------------------------- */
 
-        mv_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
+        mv_(n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
 
         /* --------------------------------------- */
         /* L O O P   B A C K to call SNAUPD again. */
@@ -410,11 +392,11 @@ L20:
                     /* Ritz value is real */
                     /* ------------------ */
 
-                    av_(&n, &v[(j << 8) - 256], ax);
-                    mv_(&n, &v[(j << 8) - 256], mx);
+                    av_(n, &v[(j << 8) - 256], ax);
+                    mv_(n, &v[(j << 8) - 256], mx);
                     r__1 = -d[j - 1];
-                    saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
-                    d[j + 49] = snrm2_(&n, ax, &c__1);
+                    saxpy_(&n, &r__1, mx, &i_one, ax, &i_one);
+                    d[j + 49] = snrm2_(&n, ax, &i_one);
                     d[j + 49] /= (r__1 = d[j - 1], dabs(r__1));
                 }
                 else if (first)
@@ -427,21 +409,21 @@ L20:
                     /* pair is computed.      */
                     /* ---------------------- */
 
-                    av_(&n, &v[(j << 8) - 256], ax);
-                    mv_(&n, &v[(j << 8) - 256], mx);
+                    av_(n, &v[(j << 8) - 256], ax);
+                    mv_(n, &v[(j << 8) - 256], mx);
                     r__1 = -d[j - 1];
-                    saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
-                    mv_(&n, &v[(j + 1 << 8) - 256], mx);
-                    saxpy_(&n, &d[j + 24], mx, &c__1, ax, &c__1);
-                    d[j + 49] = snrm2_(&n, ax, &c__1);
-                    av_(&n, &v[(j + 1 << 8) - 256], ax);
-                    mv_(&n, &v[(j + 1 << 8) - 256], mx);
+                    saxpy_(&n, &r__1, mx, &i_one, ax, &i_one);
+                    mv_(n, &v[(j + 1 << 8) - 256], mx);
+                    saxpy_(&n, &d[j + 24], mx, &i_one, ax, &i_one);
+                    d[j + 49] = snrm2_(&n, ax, &i_one);
+                    av_(n, &v[(j + 1 << 8) - 256], ax);
+                    mv_(n, &v[(j + 1 << 8) - 256], mx);
                     r__1 = -d[j - 1];
-                    saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
-                    mv_(&n, &v[(j << 8) - 256], mx);
+                    saxpy_(&n, &r__1, mx, &i_one, ax, &i_one);
+                    mv_(n, &v[(j << 8) - 256], mx);
                     r__1 = -d[j + 24];
-                    saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
-                    r__1 = snrm2_(&n, ax, &c__1);
+                    saxpy_(&n, &r__1, mx, &i_one, ax, &i_one);
+                    r__1 = snrm2_(&n, ax, &i_one);
                     d[j + 49] = slapy2_(&d[j + 49], &r__1);
                     d[j + 49] /= slapy2_(&d[j - 1], &d[j + 24]);
                     d[j + 50] = d[j + 49];
@@ -518,7 +500,7 @@ L20:
 
 /*     matrix vector multiplication subroutine */
 
-int mv_(a_int *n, float *v, float *w)
+void mv_(const a_int n, float *v, float *w)
 {
     /* System generated locals */
     a_int i__1;
@@ -536,20 +518,19 @@ int mv_(a_int *n, float *v, float *w)
     --v;
 
     w[1] = (v[1] * 4.f + v[2] * 1.f) / 6.f;
-    i__1 = *n - 1;
+    i__1 = n - 1;
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = (v[j - 1] * 1.f + v[j] * 4.f + v[j + 1] * 1.f) / 6.f;
     }
-    w[*n] = (v[*n - 1] * 1.f + v[*n] * 4.f) / 6.f;
+    w[n] = (v[n - 1] * 1.f + v[n] * 4.f) / 6.f;
 
-    h = 1.f / (float)(*n + 1);
-    sscal_(n, &h, &w[1], &c__1);
-    return 0;
+    h = 1.f / (float)(n + 1);
+    sscal_(&n, &h, &w[1], &i_one);
 } /* mv_ */
 
 /* ------------------------------------------------------------------ */
-int av_(a_int *n, float *v, float *w)
+void av_(const a_int n, float *v, float *w)
 {
     /* System generated locals */
     a_int i__1;
@@ -571,18 +552,17 @@ int av_(a_int *n, float *v, float *w)
     --w;
     --v;
 
-    h = 1.f / (float)(*n + 1);
+    h = 1.f / (float)(n + 1);
     s = convct_1.rho / 2.f;
     dd = 2.f / h;
     dl = -1.f / h - s;
     du = -1.f / h + s;
 
     w[1] = dd * v[1] + du * v[2];
-    i__1 = *n - 1;
+    i__1 = n - 1;
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = dl * v[j - 1] + dd * v[j] + du * v[j + 1];
     }
-    w[*n] = dl * v[*n - 1] + dd * v[*n];
-    return 0;
+    w[n] = dl * v[n - 1] + dd * v[n];
 } /* av_ */

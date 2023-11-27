@@ -4,11 +4,10 @@
 
 /* Table of constant values */
 
-static a_int c__9 = 9;
-static a_int c__1 = 1;
-static float c_b50 = 1.f;
-static float c_b52 = 0.f;
-static a_int c__3 = 3;
+static a_int i_one = 1;
+static float one = 1.f;
+static float zero = 0.f;
+
 /**
  * \BeginDoc
  *
@@ -307,7 +306,7 @@ static a_int c__3 = 3;
  *     Restarted Arnoldi Iteration", Ph.D thesis, TR95-13, Rice Univ,
  *     May 1995.
  *
- * \Routines called:
+ * Routines called:
  *     ssaupd  ARPACK reverse communication interface routine.
  *     sseupd  ARPACK routine that returns Ritz values and (optionally)
  *             Ritz vectors.
@@ -535,7 +534,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (type == 2)
         {
@@ -547,8 +546,8 @@ L90:
             /* into the range of OP.            */
             /* -------------------------------- */
 
-            scopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            scopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -566,9 +565,9 @@ L90:
             /* the range of OP.                  */
             /* --------------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-            scopy_(n, &workd[ipntr[1]], &c__1, &workd[ipntr[0]], &c__1);
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+            scopy_(n, &workd[ipntr[1]], &i_one, &workd[ipntr[0]], &i_one);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -587,8 +586,8 @@ L90:
             /* range of OP.                            */
             /* --------------------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b50, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            sgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -607,8 +606,8 @@ L90:
             /* range of OP.                          */
             /* ------------------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
 
             if (ierr != 0)
             {
@@ -630,16 +629,16 @@ L90:
 
             if (*bmat == 'G')
             {
-                sgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-                sgbmv_("N", n, n, kl, ku, sigma, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b50, &workd[ipntr[1]], &c__1);
+                sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+                sgbmv_("N", n, n, kl, ku, sigma, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &one, &workd[ipntr[1]], &i_one);
             }
             else
             {
-                scopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                sgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, sigma, &workd[ipntr[1]], &c__1);
+                scopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+                sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, sigma, &workd[ipntr[1]], &i_one);
             }
 
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
 
             if (ierr != 0)
             {
@@ -660,7 +659,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (type == 2)
         {
@@ -670,8 +669,8 @@ L90:
             /* y <--- OP*x = inv[A-sigma*I]*x.  */
             /* -------------------------------- */
 
-            scopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            scopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -687,9 +686,9 @@ L90:
             /* Perform  y <--- OP*x = inv[M]*A*x */
             /* --------------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-            scopy_(n, &workd[ipntr[1]], &c__1, &workd[ipntr[0]], &c__1);
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+            scopy_(n, &workd[ipntr[1]], &i_one, &workd[ipntr[0]], &i_one);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -707,8 +706,8 @@ L90:
             /* in workd(ipntr(3)).                 */
             /* ----------------------------------- */
 
-            scopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            scopy_(n, &workd[ipntr[2]], &i_one, &workd[ipntr[1]], &i_one);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -727,8 +726,8 @@ L90:
             /* and saved in workd(ipntr(3)). */
             /* ----------------------------- */
 
-            scopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            scopy_(n, &workd[ipntr[2]], &i_one, &workd[ipntr[1]], &i_one);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -749,15 +748,15 @@ L90:
 
             if (*bmat == 'G')
             {
-                sgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-                saxpy_(n, sigma, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
+                sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+                saxpy_(n, sigma, &workd[ipntr[2]], &i_one, &workd[ipntr[1]], &i_one);
             }
             else
             {
-                scopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                sgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, sigma, &workd[ipntr[1]], &c__1);
+                scopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+                sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, sigma, &workd[ipntr[1]], &i_one);
             }
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
         }
     }
     else if (ido == 2)
@@ -776,11 +775,11 @@ L90:
             /* Buckling Mode, B=A. */
             /* ------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else
         {
-            sgbmv_("N", n, n, kl, ku, &c_b50, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
     }
     else

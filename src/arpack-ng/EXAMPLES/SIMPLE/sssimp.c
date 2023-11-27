@@ -3,19 +3,80 @@
 #include <stdlib.h>
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_int c__9 = 9;
-static a_int c__1 = 1;
+static a_int i_one = 1;
 static a_int c__256 = 256;
-static a_int c__3 = 3;
-static a_int c__6 = 6;
-static a_int c__2 = 2;
-static a_int c__25 = 25;
-static a_int c_n6 = -6;
-static a_int c__4 = 4;
-static float c_b138 = -1.f;
 
+static float minus_one = -1.f;
+
+void av_(const a_int nx, float *v, float *w);
+void tv_(const a_int nx, float *x, float *y);
+
+/**
+ * \BeginDoc
+ *
+ *     This example program is intended to illustrate the
+ *     simplest case of using ARPACK in considerable detail.
+ *     This code may be used to understand basic usage of ARPACK
+ *     and as a template for creating an interface to ARPACK.
+ *
+ *     This code shows how to use ARPACK to find a few eigenvalues
+ *     (lambda) and corresponding eigenvectors (x) for the standard
+ *     eigenvalue problem:
+ *
+ *                        A*x = lambda*x
+ *
+ *     where A is an n by n real symmetric matrix.
+ *
+ *     The main points illustrated here are
+ *
+ *        1) How to declare sufficient memory to find NEV
+ *           eigenvalues of largest magnitude.  Other options
+ *           are available.
+ *
+ *        2) Illustration of the reverse communication interface
+ *           needed to utilize the top level ARPACK routine SSAUPD
+ *           that computes the quantities needed to construct
+ *           the desired eigenvalues and eigenvectors(if requested).
+ *
+ *        3) How to extract the desired eigenvalues and eigenvectors
+ *           using the ARPACK routine SSEUPD.
+ *
+ *     The only thing that must be supplied in order to use this
+ *     routine on your problem is to change the array dimensions
+ *     appropriately, to specify WHICH eigenvalues you want to compute
+ *     and to supply a matrix-vector product
+ *
+ *                         w <-  Av
+ *
+ *     in place of the call to AV( ) below.
+ *
+ *     Once usage of this routine is understood, you may wish to explore
+ *     the other available options to improve convergence, to solve generalized
+ *     problems, etc.  Look at the file ex-sym.doc in DOCUMENTS directory.
+ *     This codes implements
+ *
+ * \Example-1
+ *     ... Suppose we want to solve A*x = lambda*x in regular mode,
+ *         where A is derived from the central difference discretization
+ *         of the 2-dimensional Laplacian on the unit square with
+ *         zero Dirichlet boundary condition.
+ *     ... OP = A  and  B = I.
+ *     ... Assume "call av (n,x,y)" computes y = A*x
+ *     ... Use mode 1 of SSAUPD.
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     ssaupd  ARPACK reverse communication interface routine.
+ *     sseupd  ARPACK routine that returns Ritz values and (optionally)
+ *             Ritz vectors.
+ *     snrm2   Level 1 BLAS that computes the norm of a vector.
+ *     saxpy   Level 1 BLAS that computes y <- alpha*x+y.
+ *
+ * \EndLib
+ */
 int main()
 {
     /* System generated locals */
@@ -31,84 +92,6 @@ int main()
     a_int info, mode1, nconv, ishfts, lworkl, maxitr;
     char *bmat, *which;
     float tol, sigma;
-
-    /*     This example program is intended to illustrate the */
-    /*     simplest case of using ARPACK in considerable detail. */
-    /*     This code may be used to understand basic usage of ARPACK */
-    /*     and as a template for creating an interface to ARPACK. */
-
-    /*     This code shows how to use ARPACK to find a few eigenvalues */
-    /*     (lambda) and corresponding eigenvectors (x) for the standard */
-    /*     eigenvalue problem: */
-
-    /*                        A*x = lambda*x */
-
-    /*     where A is an n by n real symmetric matrix. */
-
-    /*     The main points illustrated here are */
-
-    /*        1) How to declare sufficient memory to find NEV */
-    /*           eigenvalues of largest magnitude.  Other options */
-    /*           are available. */
-
-    /*        2) Illustration of the reverse communication interface */
-    /*           needed to utilize the top level ARPACK routine SSAUPD */
-    /*           that computes the quantities needed to construct */
-    /*           the desired eigenvalues and eigenvectors(if requested). */
-
-    /*        3) How to extract the desired eigenvalues and eigenvectors */
-    /*           using the ARPACK routine SSEUPD. */
-
-    /*     The only thing that must be supplied in order to use this */
-    /*     routine on your problem is to change the array dimensions */
-    /*     appropriately, to specify WHICH eigenvalues you want to compute */
-    /*     and to supply a matrix-vector product */
-
-    /*                         w <-  Av */
-
-    /*     in place of the call to AV( ) below. */
-
-    /*     Once usage of this routine is understood, you may wish to explore */
-    /*     the other available options to improve convergence, to solve generalized */
-    /*     problems, etc.  Look at the file ex-sym.doc in DOCUMENTS directory. */
-    /*     This codes implements */
-
-    /* \Example-1 */
-    /*     ... Suppose we want to solve A*x = lambda*x in regular mode, */
-    /*         where A is derived from the central difference discretization */
-    /*         of the 2-dimensional Laplacian on the unit square with */
-    /*         zero Dirichlet boundary condition. */
-    /*     ... OP = A  and  B = I. */
-    /*     ... Assume "call av (n,x,y)" computes y = A*x */
-    /*     ... Use mode 1 of SSAUPD. */
-
-    /* \BeginLib */
-
-    /* \Routines called: */
-    /*     ssaupd  ARPACK reverse communication interface routine. */
-    /*     sseupd  ARPACK routine that returns Ritz values and (optionally) */
-    /*             Ritz vectors. */
-    /*     snrm2   Level 1 BLAS that computes the norm of a vector. */
-    /*     saxpy   Level 1 BLAS that computes y <- alpha*x+y. */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: ssimp.F   SID: 2.6   DATE OF SID: 10/17/00   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-
-    /* ----------------------------------------------------------------------- */
 
     /* ---------------------------------------------------- */
     /* Storage Declarations:                                */
@@ -306,7 +289,7 @@ L10:
         /* workd(ipntr(2)).                     */
         /* ------------------------------------ */
 
-        av_(&nx, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
+        av_(nx, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
 
         /* --------------------------------------- */
         /* L O O P   B A C K to call SSAUPD again. */
@@ -354,7 +337,7 @@ L10:
 
         rvec = TRUE_;
 
-        sseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
+        sseupd_(&rvec, "A", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /* -------------------------------------------- */
         /* Eigenvalues are returned in the first column */
@@ -401,10 +384,10 @@ L10:
                 /* tolerance)                */
                 /* ------------------------- */
 
-                av_(&nx, &v[(j << 8) - 256], ax);
+                av_(nx, &v[(j << 8) - 256], ax);
                 r__1 = -d[j - 1];
-                saxpy_(&n, &r__1, &v[(j << 8) - 256], &c__1, ax, &c__1);
-                d[j + 24] = snrm2_(&n, ax, &c__1);
+                saxpy_(&n, &r__1, &v[(j << 8) - 256], &i_one, ax, &i_one);
+                d[j + 24] = snrm2_(&n, ax, &i_one);
                 d[j + 24] /= (r__1 = d[j - 1], dabs(r__1));
             }
 
@@ -479,7 +462,7 @@ L10:
 
 /*     The subroutine TV is called to computed y<---T*x. */
 
-int av_(a_int *nx, float *v, float *w)
+void av_(const a_int nx, float *v, float *w)
 {
     /* System generated locals */
     a_int i__1;
@@ -495,32 +478,31 @@ int av_(a_int *nx, float *v, float *w)
     --v;
 
     tv_(nx, &v[1], &w[1]);
-    saxpy_(nx, &c_b138, &v[*nx + 1], &c__1, &w[1], &c__1);
+    saxpy_(&nx, &minus_one, &v[nx + 1], &i_one, &w[1], &i_one);
 
-    i__1 = *nx - 1;
+    i__1 = nx - 1;
     for (j = 2; j <= i__1; ++j)
     {
-        lo = (j - 1) * *nx;
+        lo = (j - 1) * nx;
         tv_(nx, &v[lo + 1], &w[lo + 1]);
-        saxpy_(nx, &c_b138, &v[lo - *nx + 1], &c__1, &w[lo + 1], &c__1);
-        saxpy_(nx, &c_b138, &v[lo + *nx + 1], &c__1, &w[lo + 1], &c__1);
+        saxpy_(&nx, &minus_one, &v[lo - nx + 1], &i_one, &w[lo + 1], &i_one);
+        saxpy_(&nx, &minus_one, &v[lo + nx + 1], &i_one, &w[lo + 1], &i_one);
     }
 
-    lo = (*nx - 1) * *nx;
+    lo = (nx - 1) * nx;
     tv_(nx, &v[lo + 1], &w[lo + 1]);
-    saxpy_(nx, &c_b138, &v[lo - *nx + 1], &c__1, &w[lo + 1], &c__1);
+    saxpy_(&nx, &minus_one, &v[lo - nx + 1], &i_one, &w[lo + 1], &i_one);
 
     /*     Scale the vector w by (1/h^2), where h is the mesh size */
 
-    n2 = *nx * *nx;
-    h2 = 1.f / (float)((*nx + 1) * (*nx + 1));
+    n2 = nx * nx;
+    h2 = 1.f / (float)((nx + 1) * (nx + 1));
     r__1 = 1.f / h2;
-    sscal_(&n2, &r__1, &w[1], &c__1);
-    return 0;
+    sscal_(&n2, &r__1, &w[1], &i_one);
 } /* av_ */
 
 /* ------------------------------------------------------------------- */
-int tv_(a_int *nx, float *x, float *y)
+void tv_(const a_int nx, float *x, float *y)
 {
     /* System generated locals */
     a_int i__1;
@@ -542,11 +524,10 @@ int tv_(a_int *nx, float *x, float *y)
     du = -1.f;
 
     y[1] = dd * x[1] + du * x[2];
-    i__1 = *nx - 1;
+    i__1 = nx - 1;
     for (j = 2; j <= i__1; ++j)
     {
         y[j] = dl * x[j - 1] + dd * x[j] + du * x[j + 1];
     }
-    y[*nx] = dl * x[*nx - 1] + dd * x[*nx];
-    return 0;
+    y[nx] = dl * x[nx - 1] + dd * x[nx];
 } /* tv_ */

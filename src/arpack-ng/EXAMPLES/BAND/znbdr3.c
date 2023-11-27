@@ -3,20 +3,45 @@
 #include <stdlib.h>
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_dcomplex c_b1 = {1., 0.};
-static a_dcomplex c_b2 = {0., 0.};
-static a_dcomplex c_b3 = {2., 0.};
-static a_int c__9 = 9;
 static a_int c__1 = 1;
 static a_int c__50 = 50;
 static a_int c__1000 = 1000;
-static a_int c__3 = 3;
-static a_int c__5 = 5;
-static a_int c__6 = 6;
-static a_int c_n6 = -6;
 
+static a_dcomplex zero = {0., 0.};
+static a_dcomplex one = {1., 0.};
+static a_dcomplex two = {2., 0.};
+
+/**
+ * \BeginDoc
+ *
+ * Construct matrices A and M in LAPACK-style band form.
+ * Matrices A and M are derived from the finite
+ * element discretization of the 1-dimensional
+ * convection-diffusion operator
+ *                 (d^2u/dx^2) + rho*(du/dx)
+ * on the interval [0,1] with zero boundary condition using
+ * piecewise linear elements.
+ *
+ * Call ZNBAND  to find eigenvalues LAMBDA such that
+ *            A*x = M*x*LAMBDA.
+ *
+ * Eigenvalues with largest real parts are sought.
+ *
+ * Use mode 2 of ZNAUPD .
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     znband   ARPACK banded eigenproblem solver.
+ *     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     zlaset   LAPACK routine to initialize a matrix to zero.
+ *     zaxpy    Level 1 BLAS that computes y <- alpha*x+y.
+ *     dznrm2   Level 1 BLAS that computes the norm of a vector.
+ *     zgbmv    Level 2 BLAS that computes the band matrix vector product.
+ *
+ * \EndLib */
 int main()
 {
     /* System generated locals */
@@ -32,50 +57,6 @@ int main()
     a_int isub, isup, mode, idiag, nconv, lworkl, maxitr;
     char *bmat, *which;
     double tol;
-
-    /*     ... Construct matrices A and M in LAPACK-style band form. */
-    /*         Matrices A and M are derived from the finite */
-    /*         element discretization of the 1-dimensional */
-    /*         convection-diffusion operator */
-    /*                         (d^2u/dx^2) + rho*(du/dx) */
-    /*         on the interval [0,1] with zero boundary condition using */
-    /*         piecewise linear elements. */
-
-    /*     ... Call ZNBAND  to find eigenvalues LAMBDA such that */
-    /*                    A*x = M*x*LAMBDA. */
-
-    /*     ... Eigenvalues with largest real parts are sought. */
-
-    /*     ... Use mode 2 of ZNAUPD . */
-
-    /* \BeginLib */
-
-    /* \Routines called: */
-    /*     znband   ARPACK banded eigenproblem solver. */
-    /*     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-    /*     zlaset   LAPACK routine to initialize a matrix to zero. */
-    /*     zaxpy    Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     dznrm2   Level 1 BLAS that computes the norm of a vector. */
-    /*     zgbmv    Level 2 BLAS that computes the band matrix vector product. */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: nbdr3.F   SID: 2.4   DATE OF SID: 10/20/00   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-
-    /* ------------------------------------------------------------------------- */
 
     /* ----------------------------------- */
     /* Define leading dimensions for all   */
@@ -181,9 +162,9 @@ int main()
     /* Zero out the workspace for banded matrices. */
     /* ------------------------------------------- */
 
-    zlaset_("A", &c__50, &n, &c_b2, &c_b2, a, &c__50);
-    zlaset_("A", &c__50, &n, &c_b2, &c_b2, m, &c__50);
-    zlaset_("A", &c__50, &n, &c_b2, &c_b2, fac, &c__50);
+    zlaset_("A", &c__50, &n, &zero, &zero, a, &c__50);
+    zlaset_("A", &c__50, &n, &zero, &zero, m, &c__50);
+    zlaset_("A", &c__50, &n, &zero, &zero, fac, &c__50);
 
     /* ----------------------------------- */
     /* KU, KL are number of superdiagonals */
@@ -200,7 +181,7 @@ int main()
 
     i__1 = n + 1;
     z__2.r = (double)i__1, z__2.i = 0.;
-    ar_z_div(&z__1, &c_b1, &z__2);
+    ar_z_div(&z__1, &one, &z__2);
     h.r = z__1.r, h.i = z__1.i;
 
     idiag = kl + ku + 1;
@@ -208,7 +189,7 @@ int main()
     for (j = 1; j <= i__1; ++j)
     {
         i__2 = idiag + j * 50 - 51;
-        ar_z_div(&z__1, &c_b3, &h);
+        ar_z_div(&z__1, &two, &h);
         a[i__2].r = z__1.r, a[i__2].i = z__1.i;
         i__2 = idiag + j * 50 - 51;
         z__1.r = h.r * 4. - h.i * 0., z__1.i = h.r * 0. + h.i * 4.;
@@ -228,13 +209,13 @@ int main()
         i__2 = isup + (j + 1) * 50 - 51;
         z__3.r = -1., z__3.i = -0.;
         ar_z_div(&z__2, &z__3, &h);
-        ar_z_div(&z__4, &rho, &c_b3);
+        ar_z_div(&z__4, &rho, &two);
         z__1.r = z__2.r + z__4.r, z__1.i = z__2.i + z__4.i;
         a[i__2].r = z__1.r, a[i__2].i = z__1.i;
         i__2 = isub + j * 50 - 51;
         z__3.r = -1., z__3.i = -0.;
         ar_z_div(&z__2, &z__3, &h);
-        ar_z_div(&z__4, &rho, &c_b3);
+        ar_z_div(&z__4, &rho, &two);
         z__1.r = z__2.r - z__4.r, z__1.i = z__2.i - z__4.i;
         a[i__2].r = z__1.r, a[i__2].i = z__1.i;
         i__2 = isup + (j + 1) * 50 - 51;
@@ -288,8 +269,8 @@ int main()
             /*    ||  A*x - lambda*x ||   */
             /* -------------------------- */
 
-            zgbmv_("N", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, ax, &c__1);
-            zgbmv_("N", &n, &n, &kl, &ku, &c_b1, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, mx, &c__1);
+            zgbmv_("N", &n, &n, &kl, &ku, &one, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &zero, ax, &c__1);
+            zgbmv_("N", &n, &n, &kl, &ku, &one, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &zero, mx, &c__1);
             i__2 = j - 1;
             z__1.r = -d[i__2].r, z__1.i = -d[i__2].i;
             zaxpy_(&n, &z__1, mx, &c__1, ax, &c__1);

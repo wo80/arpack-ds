@@ -3,19 +3,83 @@
 #include <stdlib.h>
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_int c__9 = 9;
-static a_int c__1 = 1;
+static a_int i_one = 1;
 static a_int c__256 = 256;
-static a_int c__3 = 3;
-static a_int c__6 = 6;
-static a_int c__30 = 30;
-static a_int c_n6 = -6;
-static a_int c__4 = 4;
-static a_fcomplex c_b137 = {1.f, 0.f};
-static a_fcomplex c_b151 = {4.f, 0.f};
 
+static a_fcomplex one = {1.f, 0.f};
+static a_fcomplex four = {4.f, 0.f};
+
+void av_(const a_int nx, a_fcomplex* v, a_fcomplex* w);
+void tv_(const a_int nx, a_fcomplex* x, a_fcomplex* y);
+
+/**
+ * \BeginDoc
+ *
+ *     This example program is intended to illustrate the
+ *     simplest case of using ARPACK in considerable detail.
+ *     This code may be used to understand basic usage of ARPACK
+ *     and as a template for creating an interface to ARPACK.
+ *
+ *     This code shows how to use ARPACK to find a few eigenvalues
+ *     (lambda) and corresponding eigenvectors (x) for the standard
+ *     eigenvalue problem:
+ *
+ *                        A*x = lambda*x
+ *
+ *     where A is a general n by n complex matrix.
+ *
+ *     The main points illustrated here are
+ *
+ *        1) How to declare sufficient memory to find NEV
+ *           eigenvalues of largest magnitude.  Other options
+ *           are available.
+ *
+ *        2) Illustration of the reverse communication interface
+ *           needed to utilize the top level ARPACK routine CNAUPD
+ *           that computes the quantities needed to construct
+ *           the desired eigenvalues and eigenvectors(if requested).
+ *
+ *        3) How to extract the desired eigenvalues and eigenvectors
+ *           using the ARPACK routine CNEUPD.
+ *
+ *     The only thing that must be supplied in order to use this
+ *     routine on your problem is to change the array dimensions
+ *     appropriately, to specify WHICH eigenvalues you want to compute
+ *     and to supply a matrix-vector product
+ *
+ *                         w <-  Av
+ *
+ *     in place of the call to AV( )  below.
+ *
+ *     Once usage of this routine is understood, you may wish to explore
+ *     the other available options to improve convergence, to solve generalized
+ *     problems, etc.  Look at the file ex-complex.doc in DOCUMENTS directory.
+ *     This codes implements
+ *
+ * \Example-1
+ *     ... Suppose we want to solve A*x = lambda*x in regular mode,
+ *     ... OP = A  and  B = I.
+ *     ... Assume "call av (nx,x,y)" computes y = A*x
+ *     ... Use mode 1 of CNAUPD.
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called
+ *     cnaupd  ARPACK reverse communication interface routine.
+ *     cneupd  ARPACK routine that returns Ritz values and (optionally)
+ *             Ritz vectors.
+ *     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     scnrm2  Level 1 BLAS that computes the norm of a complex vector.
+ *     caxpy   Level 1 BLAS that computes y <- alpha*x+y.
+ *     av      Matrix vector multiplication routine that computes A*x.
+ *     tv      Matrix vector multiplication routine that computes T*x,
+ *             where T is a tridiagonal matrix.  It is used in routine
+ *             av.
+ *
+ * \EndLib
+ */
 int main()
 {
     /* System generated locals */
@@ -32,85 +96,6 @@ int main()
     a_int info, mode1, nconv, ishfts, lworkl, maxitr;
     char *bmat, *which;
     float tol;
-
-    /*     This example program is intended to illustrate the */
-    /*     simplest case of using ARPACK in considerable detail. */
-    /*     This code may be used to understand basic usage of ARPACK */
-    /*     and as a template for creating an interface to ARPACK. */
-
-    /*     This code shows how to use ARPACK to find a few eigenvalues */
-    /*     (lambda) and corresponding eigenvectors (x) for the standard */
-    /*     eigenvalue problem: */
-
-    /*                        A*x = lambda*x */
-
-    /*     where A is a general n by n complex matrix. */
-
-    /*     The main points illustrated here are */
-
-    /*        1) How to declare sufficient memory to find NEV */
-    /*           eigenvalues of largest magnitude.  Other options */
-    /*           are available. */
-
-    /*        2) Illustration of the reverse communication interface */
-    /*           needed to utilize the top level ARPACK routine CNAUPD */
-    /*           that computes the quantities needed to construct */
-    /*           the desired eigenvalues and eigenvectors(if requested). */
-
-    /*        3) How to extract the desired eigenvalues and eigenvectors */
-    /*           using the ARPACK routine CNEUPD. */
-
-    /*     The only thing that must be supplied in order to use this */
-    /*     routine on your problem is to change the array dimensions */
-    /*     appropriately, to specify WHICH eigenvalues you want to compute */
-    /*     and to supply a matrix-vector product */
-
-    /*                         w <-  Av */
-
-    /*     in place of the call to AV( )  below. */
-
-    /*     Once usage of this routine is understood, you may wish to explore */
-    /*     the other available options to improve convergence, to solve generalized */
-    /*     problems, etc.  Look at the file ex-complex.doc in DOCUMENTS directory. */
-    /*     This codes implements */
-
-    /* \Example-1 */
-    /*     ... Suppose we want to solve A*x = lambda*x in regular mode, */
-    /*     ... OP = A  and  B = I. */
-    /*     ... Assume "call av (nx,x,y)" computes y = A*x */
-    /*     ... Use mode 1 of CNAUPD. */
-
-    /* \BeginLib */
-
-    /* \Routines called */
-    /*     cnaupd  ARPACK reverse communication interface routine. */
-    /*     cneupd  ARPACK routine that returns Ritz values and (optionally) */
-    /*             Ritz vectors. */
-    /*     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-    /*     scnrm2  Level 1 BLAS that computes the norm of a complex vector. */
-    /*     caxpy   Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     av      Matrix vector multiplication routine that computes A*x. */
-    /*     tv      Matrix vector multiplication routine that computes T*x, */
-    /*             where T is a tridiagonal matrix.  It is used in routine */
-    /*             av. */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: nsimp.F   SID: 2.4   DATE OF SID: 10/20/00   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-    /* --------------------------------------------------------------------------- */
 
     /* ---------------------------------------------------- */
     /* Storage Declarations:                                */
@@ -313,7 +298,7 @@ L10:
         /* array workd(ipntr(2)).                    */
         /* ----------------------------------------- */
 
-        av_(&nx, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
+        av_(nx, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
 
         /* --------------------------------------- */
         /* L O O P   B A C K to call CNAUPD again. */
@@ -408,14 +393,14 @@ L10:
                 /* tolerance)                */
                 /* ------------------------- */
 
-                av_(&nx, &v[(j << 8) - 256], ax);
+                av_(nx, &v[(j << 8) - 256], ax);
                 i__2 = j - 1;
                 q__1.r = -d[i__2].r, q__1.i = -d[i__2].i;
-                caxpy_(&n, &q__1, &v[(j << 8) - 256], &c__1, ax, &c__1);
+                caxpy_(&n, &q__1, &v[(j << 8) - 256], &i_one, ax, &i_one);
                 i__2 = j - 1;
                 rd[j - 1] = d[i__2].r;
                 rd[j + 29] = d[j - 1].i;
-                rd[j + 59] = scnrm2_(&n, ax, &c__1);
+                rd[j + 59] = scnrm2_(&n, ax, &i_one);
                 rd[j + 59] /= slapy2_(&rd[j - 1], &rd[j + 29]);
             }
 
@@ -476,14 +461,28 @@ L10:
     return nconv < nev ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
-/* ========================================================================== */
-
-/*     matrix vector subroutine */
-
-/*     The matrix used is the convection-diffusion operator */
-/*     discretized using centered difference. */
-
-int av_(a_int *nx, a_fcomplex *v, a_fcomplex *w)
+/** Matrix vector subroutine.
+ *
+ * The matrix used is the convection-diffusion operator
+ * discretized using centered difference.
+ *
+ * Computes w <--- OP*v, where OP is the nx*nx by nx*nx block
+ * tridiagonal matrix
+ *
+ *                  | T -I          |
+ *                  |-I  T -I       |
+ *             OP = |   -I  T       |
+ *                  |        ...  -I|
+ *                  |           -I T|
+ *
+ * derived from the standard central difference discretization
+ * of the 2-dimensional convection-diffusion operator
+ *              (Laplacian u) + rho*(du/dx)
+ * on the unit square with zero boundary condition.
+ *
+ * The subroutine TV is called to computed y<---T*x.
+ */
+void av_(const a_int nx, a_fcomplex *v, a_fcomplex *w)
 {
     /* System generated locals */
     a_int i__1;
@@ -494,60 +493,46 @@ int av_(a_int *nx, a_fcomplex *v, a_fcomplex *w)
     a_fcomplex h2;
     a_int lo;
 
-    /*     Computes w <--- OP*v, where OP is the nx*nx by nx*nx block */
-    /*     tridiagonal matrix */
-
-    /*                  | T -I          | */
-    /*                  |-I  T -I       | */
-    /*             OP = |   -I  T       | */
-    /*                  |        ...  -I| */
-    /*                  |           -I T| */
-
-    /*     derived from the standard central difference discretization */
-    /*     of the 2-dimensional convection-diffusion operator */
-    /*                  (Laplacian u) + rho*(du/dx) */
-    /*     on the unit squqre with zero boundary condition. */
-
-    /*     The subroutine TV is called to computed y<---T*x. */
-
     /* Parameter adjustments */
     --w;
     --v;
 
-    i__1 = (*nx + 1) * (*nx + 1);
+    i__1 = (nx + 1) * (nx + 1);
     q__2.r = (float)i__1, q__2.i = 0.f;
-    ar_c_div(&q__1, &c_b137, &q__2);
+    ar_c_div(&q__1, &one, &q__2);
     h2.r = q__1.r, h2.i = q__1.i;
 
     tv_(nx, &v[1], &w[1]);
     q__2.r = -1.f, q__2.i = -0.f;
     ar_c_div(&q__1, &q__2, &h2);
-    caxpy_(nx, &q__1, &v[*nx + 1], &c__1, &w[1], &c__1);
+    caxpy_(&nx, &q__1, &v[nx + 1], &i_one, &w[1], &i_one);
 
-    i__1 = *nx - 1;
+    i__1 = nx - 1;
     for (j = 2; j <= i__1; ++j)
     {
-        lo = (j - 1) * *nx;
+        lo = (j - 1) * nx;
         tv_(nx, &v[lo + 1], &w[lo + 1]);
         q__2.r = -1.f, q__2.i = -0.f;
         ar_c_div(&q__1, &q__2, &h2);
-        caxpy_(nx, &q__1, &v[lo - *nx + 1], &c__1, &w[lo + 1], &c__1);
+        caxpy_(&nx, &q__1, &v[lo - nx + 1], &i_one, &w[lo + 1], &i_one);
         q__2.r = -1.f, q__2.i = -0.f;
         ar_c_div(&q__1, &q__2, &h2);
-        caxpy_(nx, &q__1, &v[lo + *nx + 1], &c__1, &w[lo + 1], &c__1);
+        caxpy_(&nx, &q__1, &v[lo + nx + 1], &i_one, &w[lo + 1], &i_one);
     }
 
-    lo = (*nx - 1) * *nx;
+    lo = (nx - 1) * nx;
     tv_(nx, &v[lo + 1], &w[lo + 1]);
     q__2.r = -1.f, q__2.i = -0.f;
     ar_c_div(&q__1, &q__2, &h2);
-    caxpy_(nx, &q__1, &v[lo - *nx + 1], &c__1, &w[lo + 1], &c__1);
-
-    return 0;
+    caxpy_(&nx, &q__1, &v[lo - nx + 1], &i_one, &w[lo + 1], &i_one);
 } /* av_ */
 
-/* ========================================================================= */
-int tv_(a_int *nx, a_fcomplex *x, a_fcomplex *y)
+/**
+ * Compute the matrix vector multiplication y<---T*x
+ * where T is a nx by nx tridiagonal matrix with DD on the
+ * diagonal, DL on the subdiagonal, and DU on the superdiagonal
+ */
+void tv_(const a_int nx, a_fcomplex *x, a_fcomplex *y)
 {
     /* System generated locals */
     a_int i__1, i__2, i__3, i__4, i__5;
@@ -558,21 +543,17 @@ int tv_(a_int *nx, a_fcomplex *x, a_fcomplex *y)
     a_int j;
     a_fcomplex h2, dd, dl, du;
 
-    /*     Compute the matrix vector multiplication y<---T*x */
-    /*     where T is a nx by nx tridiagonal matrix with DD on the */
-    /*     diagonal, DL on the subdiagonal, and DU on the superdiagonal */
-
     /* Parameter adjustments */
     --y;
     --x;
 
-    i__1 = *nx + 1;
+    i__1 = nx + 1;
     q__2.r = (float)i__1, q__2.i = 0.f;
-    ar_c_div(&q__1, &c_b137, &q__2);
+    ar_c_div(&q__1, &one, &q__2);
     h.r = q__1.r, h.i = q__1.i;
     q__1.r = h.r * h.r - h.i * h.i, q__1.i = h.r * h.i + h.i * h.r;
     h2.r = q__1.r, h2.i = q__1.i;
-    ar_c_div(&q__1, &c_b151, &h2);
+    ar_c_div(&q__1, &four, &h2);
     dd.r = q__1.r, dd.i = q__1.i;
     q__3.r = -1.f, q__3.i = -0.f;
     ar_c_div(&q__2, &q__3, &h2);
@@ -591,7 +572,7 @@ int tv_(a_int *nx, a_fcomplex *x, a_fcomplex *y)
     q__3.r = du.r * x[2].r - du.i * x[2].i, q__3.i = du.r * x[2].i + du.i * x[2].r;
     q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
     y[1].r = q__1.r, y[1].i = q__1.i;
-    i__1 = *nx - 1;
+    i__1 = nx - 1;
     for (j = 2; j <= i__1; ++j)
     {
         i__2 = j;
@@ -605,12 +586,11 @@ int tv_(a_int *nx, a_fcomplex *x, a_fcomplex *y)
         q__1.r = q__2.r + q__5.r, q__1.i = q__2.i + q__5.i;
         y[i__2].r = q__1.r, y[i__2].i = q__1.i;
     }
-    i__1 = *nx;
-    i__2 = *nx - 1;
+    i__1 = nx;
+    i__2 = nx - 1;
     q__2.r = dl.r * x[i__2].r - dl.i * x[i__2].i, q__2.i = dl.r * x[i__2].i + dl.i * x[i__2].r;
-    i__3 = *nx;
+    i__3 = nx;
     q__3.r = dd.r * x[i__3].r - dd.i * x[i__3].i, q__3.i = dd.r * x[i__3].i + dd.i * x[i__3].r;
     q__1.r = q__2.r + q__3.r, q__1.i = q__2.i + q__3.i;
     y[i__1].r = q__1.r, y[i__1].i = q__1.i;
-    return 0;
 } /* tv_ */

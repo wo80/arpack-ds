@@ -3,18 +3,54 @@
 #include <stdlib.h>
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_int c__9 = 9;
-static a_int c__1 = 1;
+static a_int i_one = 1;
 static a_int c__256 = 256;
-static a_int c__3 = 3;
-static a_int c__6 = 6;
-static a_int c__2 = 2;
-static a_int c__25 = 25;
-static a_int c_n6 = -6;
-static a_int c__4 = 4;
 
+void mv_(const a_int n, float *v, float *w);
+void av_(const a_int n, float *v, float *w);
+
+/**
+ * \BeginDoc
+ *
+ *     Program to illustrate the idea of reverse communication
+ *     in Cayley mode for a generalized symmetric eigenvalue
+ *     problem.  The following program uses the two LAPACK subroutines
+ *     sgttrf.f and sgttrs.f to factor and solve a tridiagonal system of
+ *     equations.
+ *
+ *     We implement example six of ex-sym.doc in DOCUMENTS directory
+ *
+ * \Example-6
+ *     ... Suppose we want to solve A*x = lambda*M*x in inverse mode,
+ *         where A and M are obtained by the finite element of the
+ *         1-dimensional discrete Laplacian
+ *                             d^2u / dx^2
+ *         on the interval [0,1] with zero Dirichlet boundary condition
+ *         using piecewise linear elements.
+ *
+ *     ... OP = (inv[A-sigma*M])*(A+sigma*M)  and  B = M.
+ *
+ *     ... Use mode 5 of SSAUPD.
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     ssaupd  ARPACK reverse communication interface routine.
+ *     sseupd  ARPACK routine that returns Ritz values and (optionally)
+ *             Ritz vectors.
+ *     sgttrf  LAPACK tridiagonal factorization routine.
+ *     sgttrs  LAPACK tridiagonal solve routine.
+ *     saxpy   Level 1 BLAS that computes y <- alpha*x+y.
+ *     scopy   Level 1 BLAS that copies one vector to another.
+ *     sscal   Level 1 BLAS that scales a vector by a scalar.
+ *     snrm2   Level 1 BLAS that computes the norm of a vector.
+ *     av      Matrix vector multiplication routine that computes A*x.
+ *     mv      Matrix vector multiplication routine that computes M*x.
+ *
+ * \EndLib
+ */
 int main()
 {
     /* System generated locals */
@@ -31,72 +67,11 @@ int main()
     char *bmat, *which;
     float h, r1, r2, tol, sigma;
 
-    /*     Program to illustrate the idea of reverse communication */
-    /*     in Cayley mode for a generalized symmetric eigenvalue */
-    /*     problem.  The following program uses the two LAPACK subroutines */
-    /*     sgttrf.f and sgttrs.f to factor and solve a tridiagonal system of */
-    /*     equations. */
+    /* Define maximum dimensions for all arrays. */
 
-    /*     We implement example six of ex-sym.doc in DOCUMENTS directory */
-
-    /* \Example-6 */
-    /*     ... Suppose we want to solve A*x = lambda*M*x in inverse mode, */
-    /*         where A and M are obtained by the finite element of the */
-    /*         1-dimensional discrete Laplacian */
-    /*                             d^2u / dx^2 */
-    /*         on the interval [0,1] with zero Dirichlet boundary condition */
-    /*         using piecewise linear elements. */
-
-    /*     ... OP = (inv[A-sigma*M])*(A+sigma*M)  and  B = M. */
-
-    /*     ... Use mode 5 of SSAUPD. */
-
-    /* \BeginLib */
-
-    /* \References: */
-    /*  1. R.G. Grimes, J.G. Lewis and H.D. Simon, "A Shifted Block Lanczos */
-    /*     Algorithm for Solving Sparse Symmetric Generalized Eigenproblems", */
-    /*     SIAM J. Matr. Anal. Apps.,  January (1993). */
-
-    /* \Routines called: */
-    /*     ssaupd  ARPACK reverse communication interface routine. */
-    /*     sseupd  ARPACK routine that returns Ritz values and (optionally) */
-    /*             Ritz vectors. */
-    /*     sgttrf  LAPACK tridiagonal factorization routine. */
-    /*     sgttrs  LAPACK tridiagonal solve routine. */
-    /*     saxpy   Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     scopy   Level 1 BLAS that copies one vector to another. */
-    /*     sscal   Level 1 BLAS that scales a vector by a scalar. */
-    /*     snrm2   Level 1 BLAS that computes the norm of a vector. */
-    /*     av      Matrix vector multiplication routine that computes A*x. */
-    /*     mv      Matrix vector multiplication routine that computes M*x. */
-
-    /* \Author */
-    /*     Danny Sorensen */
-    /*     Richard Lehoucq */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: sdrv6.F   SID: 2.5   DATE OF SID: 10/17/00   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-    /* ------------------------------------------------------------------------ */
-
-    /* --------------------------- */
-    /* Define leading dimensions   */
-    /* for all arrays.             */
-    /* MAXN:   Maximum dimension   */
-    /*         of the A allowed.   */
-    /* MAXNEV: Maximum NEV allowed */
-    /* MAXNCV: Maximum NCV allowed */
-    /* --------------------------- */
+    const int MAXN   = 256; /* Maximum dimension of the A allowed. */
+    const int MAXNEV =  10; /* Maximum NEV allowed */
+    const int MAXNCV =  25; /* Maximum NCV allowed */
 
     /* ------------------------------------------------ */
     /* The number N is the dimension of the matrix. A   */
@@ -202,7 +177,7 @@ int main()
         ad[j - 1] = 2.f / h - sigma * r1;
         adl[j - 1] = -1.f / h - sigma * r2;
     }
-    scopy_(&n, adl, &c__1, adu, &c__1);
+    scopy_(&n, adl, &i_one, adu, &i_one);
     sgttrf_(&n, adl, ad, adu, adu2, ipiv, &ierr);
     if (ierr != 0)
     {
@@ -240,11 +215,11 @@ L10:
         /* result is returned to workd(ipntr(2)).                */
         /* ----------------------------------------------------- */
 
-        av_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
-        mv_(&n, &workd[ipntr[0] - 1], temp);
-        saxpy_(&n, &sigma, temp, &c__1, &workd[ipntr[1] - 1], &c__1);
+        av_(n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
+        mv_(n, &workd[ipntr[0] - 1], temp);
+        saxpy_(&n, &sigma, temp, &i_one, &workd[ipntr[1] - 1], &i_one);
 
-        sgttrs_("N", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
+        sgttrs_("N", &n, &i_one, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             printf(" \n");
@@ -274,9 +249,9 @@ L10:
         /* returned to workd(ipntr(2)).                       */
         /* -------------------------------------------------- */
 
-        av_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
-        saxpy_(&n, &sigma, &workd[ipntr[2] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
-        sgttrs_("N", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
+        av_(n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
+        saxpy_(&n, &sigma, &workd[ipntr[2] - 1], &i_one, &workd[ipntr[1] - 1], &i_one);
+        sgttrs_("N", &n, &i_one, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             printf(" \n");
@@ -301,7 +276,7 @@ L10:
         /* and returns the result to workd(ipntr(2)). */
         /* ------------------------------------------ */
 
-        mv_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
+        mv_(n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
 
         /* --------------------------------------- */
         /* L O O P   B A C K to call SSAUPD again. */
@@ -343,7 +318,7 @@ L10:
 
         rvec = TRUE_;
 
-        sseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
+        sseupd_(&rvec, "A", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /* -------------------------------------------- */
         /* Eigenvalues are returned in the first column */
@@ -389,11 +364,11 @@ L10:
             i__1 = nconv;
             for (j = 1; j <= i__1; ++j)
             {
-                av_(&n, &v[(j << 8) - 256], ax);
-                mv_(&n, &v[(j << 8) - 256], mx);
+                av_(n, &v[(j << 8) - 256], ax);
+                mv_(n, &v[(j << 8) - 256], mx);
                 r__1 = -d[j - 1];
-                saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
-                d[j + 24] = snrm2_(&n, ax, &c__1);
+                saxpy_(&n, &r__1, mx, &i_one, ax, &i_one);
+                d[j + 24] = snrm2_(&n, ax, &i_one);
                 d[j + 24] /= (r__1 = d[j - 1], dabs(r__1));
             }
 
@@ -460,7 +435,7 @@ L10:
 /*     arising from using the piecewise linear finite element */
 /*     on the interval [0,1]. */
 
-int mv_(a_int *n, float *v, float *w)
+void mv_(const a_int n, float *v, float *w)
 {
     /* System generated locals */
     a_int i__1;
@@ -474,19 +449,18 @@ int mv_(a_int *n, float *v, float *w)
     --v;
 
     w[1] = v[1] * 4.f + v[2];
-    i__1 = *n - 1;
+    i__1 = n - 1;
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = v[j - 1] + v[j] * 4.f + v[j + 1];
     }
-    j = *n;
+    j = n;
     w[j] = v[j - 1] + v[j] * 4.f;
 
     /*     Scale the vector w by h. */
 
-    h = 1.f / ((float)(*n + 1) * 6.f);
-    sscal_(n, &h, &w[1], &c__1);
-    return 0;
+    h = 1.f / ((float)(n + 1) * 6.f);
+    sscal_(&n, &h, &w[1], &i_one);
 } /* mv_ */
 
 /* ------------------------------------------------------------------------ */
@@ -496,7 +470,7 @@ int mv_(a_int *n, float *v, float *w)
 /*     on the interval [0,1] with zero Dirichlet boundary condition */
 /*     using piecewise linear elements. */
 
-int av_(a_int *n, float *v, float *w)
+void av_(const a_int n, float *v, float *w)
 {
     /* System generated locals */
     a_int i__1;
@@ -511,18 +485,17 @@ int av_(a_int *n, float *v, float *w)
     --v;
 
     w[1] = v[1] * 2.f - v[2];
-    i__1 = *n - 1;
+    i__1 = n - 1;
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = -v[j - 1] + v[j] * 2.f - v[j + 1];
     }
-    j = *n;
+    j = n;
     w[j] = -v[j - 1] + v[j] * 2.f;
 
     /*     Scale the vector w by (1/h). */
 
-    h = 1.f / (float)(*n + 1);
+    h = 1.f / (float)(n + 1);
     r__1 = 1.f / h;
-    sscal_(n, &r__1, &w[1], &c__1);
-    return 0;
+    sscal_(&n, &r__1, &w[1], &i_one);
 } /* av_ */

@@ -3,20 +3,40 @@
 #include <stdlib.h>
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_int c__9 = 9;
 static a_int c__1 = 1;
 static a_int c__50 = 50;
-static float c_b15 = 0.f;
 static a_int c__1000 = 1000;
-static a_int c__3 = 3;
-static a_int c__4 = 4;
-static float c_b97 = 1.f;
-static a_int c__6 = 6;
-static a_int c__2 = 2;
-static a_int c_n6 = -6;
 
+static float zero = 0.f;
+static float one = 1.f;
+
+/**
+ * \BeginDoc
+ *
+ * Construct the matrix A in LAPACK-style band form.
+ * The matrix A is the 1-dimensional discrete Laplacian on [0,1]
+ * with zero Dirichlet boundary condition, M is the mass
+ * formed by using piecewise linear elements on [0,1].
+ *
+ * Call SSBAND with regular mode to find eigenvalues LAMBDA
+ * such that
+ *                  A*x = LAMBDA*M*x.
+ *
+ * Use mode 2 of SSAUPD.
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     ssband  ARPACK banded eigenproblem solver.
+ *     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     slaset  LAPACK routine to initialize a matrix to zero.
+ *     saxpy   Level 1 BLAS that computes y <- alpha*x+y.
+ *     snrm2   Level 1 BLAS that computes the norm of a vector.
+ *     sgbmv   Level 2 BLAS that computes the band matrix vector product
+ *
+ * \EndLib */
 int main()
 {
     /* System generated locals */
@@ -32,45 +52,6 @@ int main()
     a_int maxitr;
     char *bmat, *which;
     float h, r1, r2, tol, sigma;
-
-    /*     ... Construct the matrix A in LAPACK-style band form. */
-    /*         The matrix A is the 1-dimensional discrete Laplacian on [0,1] */
-    /*         with zero Dirichlet boundary condition, M is the mass */
-    /*         formed by using piecewise linear elements on [0,1]. */
-
-    /*     ... Call SSBAND with regular mode to find eigenvalues LAMBDA */
-    /*         such that */
-    /*                          A*x = LAMBDA*M*x. */
-
-    /*     ... Use mode 2 of SSAUPD. */
-
-    /* \BeginLib */
-
-    /* \Routines called: */
-    /*     ssband  ARPACK banded eigenproblem solver. */
-    /*     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-    /*     slaset  LAPACK routine to initialize a matrix to zero. */
-    /*     saxpy   Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     snrm2   Level 1 BLAS that computes the norm of a vector. */
-    /*     sgbmv   Level 2 BLAS that computes the band matrix vector product */
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: sbdr3.F   SID: 2.5   DATE OF SID: 08/26/96   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-
-    /* ---------------------------------------------------------------------- */
 
     /* ----------------------------------- */
     /* Define leading dimensions for all   */
@@ -170,9 +151,9 @@ int main()
     /* Zero out the workspace for banded matrices. */
     /* ------------------------------------------- */
 
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50);
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50);
-    slaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50);
+    slaset_("A", &c__50, &n, &zero, &zero, a, &c__50);
+    slaset_("A", &c__50, &n, &zero, &zero, m, &c__50);
+    slaset_("A", &c__50, &n, &zero, &zero, rfac, &c__50);
 
     /* ----------------------------------- */
     /* KU, KL are number of superdiagonals */
@@ -256,8 +237,8 @@ int main()
         i__1 = nconv;
         for (j = 1; j <= i__1; ++j)
         {
-            sgbmv_("N", &n, &n, &kl, &ku, &c_b97, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
-            sgbmv_("N", &n, &n, &kl, &ku, &c_b97, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, mx, &c__1);
+            sgbmv_("N", &n, &n, &kl, &ku, &one, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &zero, ax, &c__1);
+            sgbmv_("N", &n, &n, &kl, &ku, &one, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &zero, mx, &c__1);
             r__1 = -d[j - 1];
             saxpy_(&n, &r__1, mx, &c__1, ax, &c__1);
             d[j + 49] = snrm2_(&n, ax, &c__1);

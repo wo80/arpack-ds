@@ -10,19 +10,53 @@ struct
 
 #define convct_1 convct_
 
-/* Table of constant values */
-
-static a_dcomplex c_b1 = {1., 0.};
-static a_dcomplex c_b3 = {2., 0.};
-static a_int c__9 = 9;
-static a_int c__1 = 1;
+static a_int i_one = 1;
 static a_int c__256 = 256;
-static a_int c__3 = 3;
-static a_int c__6 = 6;
-static a_int c__25 = 25;
-static a_int c_n6 = -6;
-static a_int c__5 = 5;
 
+static a_dcomplex one = {1., 0.};
+static a_dcomplex two = {2., 0.};
+
+void av_(const a_int n, a_dcomplex *v, a_dcomplex *w);
+
+/**
+ * \BeginDoc
+ *
+ *     Simple program to illustrate the idea of reverse communication
+ *     in shift-invert mode for a standard complex nonsymmetric eigenvalue
+ *     problem.
+ *
+ *     We implement example two of ex-complex.doc in DOCUMENTS directory
+ *
+ * \Example-2
+ *     ... Suppose we want to solve A*x = lambda*x in shift-invert mode,
+ *         where A is derived from the central difference discretization
+ *         of the 1-dimensional convection-diffusion operator
+ *                   (d^2u/dx^2) + rho*(du/dx)
+ *         on the interval [0,1] with zero Dirichlet boundary condition.
+ *     ... The shift sigma is a complex number.
+ *
+ *     ... OP = inv[A-sigma*I] and  B = I.
+ *
+ *     ... Use mode 3 of ZNAUPD .
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     znaupd   ARPACK reverse communication interface routine.
+ *     zneupd   ARPACK routine that returns Ritz values and (optionally)
+ *             Ritz vectors.
+ *     zgttrf   LAPACK tridiagonal factorization routine.
+ *     zgttrs   LAPACK tridiagonal solve routine.
+ *     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     zaxpy    Level 1 BLAS that computes y <- alpha*x+y.
+ *     zcopy    Level 1 BLAS that copies one vector to another.
+ *     dznrm2   Level 1 BLAS that computes the norm of a vector.
+ *     av      Matrix vector multiplication routine that computes A*x.
+ *
+ * \EndLib
+ */
 int main()
 {
     /* System generated locals */
@@ -40,64 +74,11 @@ int main()
     char *bmat, *which;
     double tol;
 
-    /*     Simple program to illustrate the idea of reverse communication */
-    /*     in shift-invert mode for a standard complex nonsymmetric eigenvalue */
-    /*     problem. */
+    /* Define maximum dimensions for all arrays. */
 
-    /*     We implement example two of ex-complex.doc in DOCUMENTS directory */
-
-    /* \Example-2 */
-    /*     ... Suppose we want to solve A*x = lambda*x in shift-invert mode, */
-    /*         where A is derived from the central difference discretization */
-    /*         of the 1-dimensional convection-diffusion operator */
-    /*                   (d^2u/dx^2) + rho*(du/dx) */
-    /*         on the interval [0,1] with zero Dirichlet boundary condition. */
-    /*     ... The shift sigma is a complex number. */
-
-    /*     ... OP = inv[A-sigma*I] and  B = I. */
-
-    /*     ... Use mode 3 of ZNAUPD . */
-
-    /* \BeginLib */
-
-    /* \Routines called: */
-    /*     znaupd   ARPACK reverse communication interface routine. */
-    /*     zneupd   ARPACK routine that returns Ritz values and (optionally) */
-    /*             Ritz vectors. */
-    /*     zgttrf   LAPACK tridiagonal factorization routine. */
-    /*     zgttrs   LAPACK tridiagonal solve routine. */
-    /*     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-    /*     zaxpy    Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     zcopy    Level 1 BLAS that copies one vector to another. */
-    /*     dznrm2   Level 1 BLAS that computes the norm of a vector. */
-    /*     av      Matrix vector multiplication routine that computes A*x. */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: ndrv2.F   SID: 2.6   DATE OF SID: 10/18/00   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-    /* -------------------------------------------------------------------------- */
-
-    /* --------------------------- */
-    /* Define leading dimensions   */
-    /* for all arrays.             */
-    /* MAXN:   Maximum dimension   */
-    /*         of the A allowed.   */
-    /* MAXNEV: Maximum NEV allowed */
-    /* MAXNCV: Maximum NCV allowed */
-    /* --------------------------- */
+    const int MAXN   = 256; /* Maximum dimension of the A allowed. */
+    const int MAXNEV =  10; /* Maximum NEV allowed */
+    const int MAXNCV =  25; /* Maximum NCV allowed */
 
     /* ------------------------------------------------ */
     /* The number N is the dimension of the matrix.  A  */
@@ -156,11 +137,11 @@ int main()
     convct_1.rho.r = 10., convct_1.rho.i = 0.;
     i__1 = n + 1;
     z__2.r = (double)i__1, z__2.i = 0.;
-    ar_z_div(&z__1, &c_b1, &z__2);
+    ar_z_div(&z__1, &one, &z__2);
     h.r = z__1.r, h.i = z__1.i;
     z__1.r = h.r * h.r - h.i * h.i, z__1.i = h.r * h.i + h.i * h.r;
     h2.r = z__1.r, h2.i = z__1.i;
-    ar_z_div(&z__1, &convct_1.rho, &c_b3);
+    ar_z_div(&z__1, &convct_1.rho, &two);
     s.r = z__1.r, s.i = z__1.i;
 
     z__3.r = -1., z__3.i = -0.;
@@ -168,7 +149,7 @@ int main()
     ar_z_div(&z__4, &s, &h);
     z__1.r = z__2.r - z__4.r, z__1.i = z__2.i - z__4.i;
     s1.r = z__1.r, s1.i = z__1.i;
-    ar_z_div(&z__2, &c_b3, &h2);
+    ar_z_div(&z__2, &two, &h2);
     z__1.r = z__2.r - sigma.r, z__1.i = z__2.i - sigma.i;
     s2.r = z__1.r, s2.i = z__1.i;
     z__3.r = -1., z__3.i = -0.;
@@ -270,9 +251,9 @@ L20:
         /* the result to workd(ipntr(2)).            */
         /* ----------------------------------------- */
 
-        zcopy_(&n, &workd[ipntr[0] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
+        zcopy_(&n, &workd[ipntr[0] - 1], &i_one, &workd[ipntr[1] - 1], &i_one);
 
-        zgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
+        zgttrs_("N", &n, &i_one, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             printf(" \n");
@@ -368,14 +349,14 @@ L20:
                 /* tolerance)                */
                 /* ------------------------- */
 
-                av_(&n, &v[(j << 8) - 256], ax);
+                av_(n, &v[(j << 8) - 256], ax);
                 i__2 = j - 1;
                 z__1.r = -d[i__2].r, z__1.i = -d[i__2].i;
-                zaxpy_(&n, &z__1, &v[(j << 8) - 256], &c__1, ax, &c__1);
+                zaxpy_(&n, &z__1, &v[(j << 8) - 256], &i_one, ax, &i_one);
                 i__2 = j - 1;
                 rd[j - 1] = d[i__2].r;
                 rd[j + 24] = d[j - 1].i;
-                rd[j + 49] = dznrm2_(&n, ax, &c__1);
+                rd[j + 49] = dznrm2_(&n, ax, &i_one);
                 rd[j + 49] /= dlapy2_(&rd[j - 1], &rd[j + 24]);
             }
 
@@ -441,11 +422,10 @@ L20:
     return nconv < nev ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 
-/* ------------------------------------------------------------------- */
-
-/*     matrix vector multiplication subroutine */
-
-int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
+/**
+ * Matrix vector multiplication subroutine.
+ */
+void av_(const a_int n, a_dcomplex *v, a_dcomplex *w)
 {
     /* System generated locals */
     a_int i__1, i__2, i__3, i__4, i__5;
@@ -460,15 +440,15 @@ int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     --w;
     --v;
 
-    i__1 = *n + 1;
+    i__1 = n + 1;
     z__2.r = (double)i__1, z__2.i = 0.;
-    ar_z_div(&z__1, &c_b1, &z__2);
+    ar_z_div(&z__1, &one, &z__2);
     h.r = z__1.r, h.i = z__1.i;
     z__1.r = h.r * h.r - h.i * h.i, z__1.i = h.r * h.i + h.i * h.r;
     h2.r = z__1.r, h2.i = z__1.i;
-    ar_z_div(&z__1, &convct_1.rho, &c_b3);
+    ar_z_div(&z__1, &convct_1.rho, &two);
     s.r = z__1.r, s.i = z__1.i;
-    ar_z_div(&z__1, &c_b3, &h2);
+    ar_z_div(&z__1, &two, &h2);
     dd.r = z__1.r, dd.i = z__1.i;
     z__3.r = -1., z__3.i = -0.;
     ar_z_div(&z__2, &z__3, &h2);
@@ -485,7 +465,7 @@ int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
     z__3.r = du.r * v[2].r - du.i * v[2].i, z__3.i = du.r * v[2].i + du.i * v[2].r;
     z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
     w[1].r = z__1.r, w[1].i = z__1.i;
-    i__1 = *n - 1;
+    i__1 = n - 1;
     for (j = 2; j <= i__1; ++j)
     {
         i__2 = j;
@@ -499,12 +479,11 @@ int av_(a_int *n, a_dcomplex *v, a_dcomplex *w)
         z__1.r = z__2.r + z__5.r, z__1.i = z__2.i + z__5.i;
         w[i__2].r = z__1.r, w[i__2].i = z__1.i;
     }
-    i__1 = *n;
-    i__2 = *n - 1;
+    i__1 = n;
+    i__2 = n - 1;
     z__2.r = dl.r * v[i__2].r - dl.i * v[i__2].i, z__2.i = dl.r * v[i__2].i + dl.i * v[i__2].r;
-    i__3 = *n;
+    i__3 = n;
     z__3.r = dd.r * v[i__3].r - dd.i * v[i__3].i, z__3.i = dd.r * v[i__3].i + dd.i * v[i__3].r;
     z__1.r = z__2.r + z__3.r, z__1.i = z__2.i + z__3.i;
     w[i__1].r = z__1.r, w[i__1].i = z__1.i;
-    return 0;
 } /* av_ */

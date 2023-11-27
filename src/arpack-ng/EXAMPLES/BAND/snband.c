@@ -4,11 +4,10 @@
 
 /* Table of constant values */
 
-static a_int c__9 = 9;
-static a_int c__1 = 1;
-static float c_b83 = 1.f;
-static float c_b85 = 0.f;
-static a_int c__3 = 3;
+static a_int i_one = 1;
+static float one = 1.f;
+static float zero = 0.f;
+
 /**
  * \BeginDoc
  *
@@ -346,7 +345,7 @@ static a_int c__3 = 3;
  *     Restarted Arnoldi Iteration", Ph.D thesis, TR95-13, Rice Univ,
  *     May 1995.
  *
- * \Routines called:
+ * Routines called:
  *     snaupd  ARPACK reverse communication interface routine.
  *     sneupd  ARPACK routine that returns Ritz values and (optionally)
  *             Ritz vectors.
@@ -716,7 +715,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (type == 2)
         {
@@ -731,8 +730,8 @@ L90:
                 /* into the range of OP.            */
                 /* -------------------------------- */
 
-                scopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                scopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+                sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -760,7 +759,7 @@ L90:
                     workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
                 }
 
-                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -786,9 +785,9 @@ L90:
             /* the range of OP.                  */
             /* --------------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -807,7 +806,7 @@ L90:
             /* range of OP.                            */
             /* --------------------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
             if (*sigmai == 0.f)
             {
@@ -817,7 +816,7 @@ L90:
                 /* in real arithmetic. */
                 /* ------------------- */
 
-                sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -842,7 +841,7 @@ L90:
                     workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
                 }
 
-                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -878,7 +877,7 @@ L90:
                 workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
             }
 
-            cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -903,7 +902,7 @@ L90:
             /* range of OP.                           */
             /* -------------------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
             i__1 = *n;
             for (i = 1; i <= i__1; ++i)
@@ -914,7 +913,7 @@ L90:
                 workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
             }
 
-            cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -940,7 +939,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (type == 2)
         {
@@ -953,8 +952,8 @@ L90:
                 /* y <--- OP*x = inv[A-sigmar*I]*x. */
                 /* -------------------------------- */
 
-                scopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                scopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+                sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             }
             else
             {
@@ -974,7 +973,7 @@ L90:
                     workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
                 }
 
-                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -998,9 +997,9 @@ L90:
             /* Perform  y <--- OP*x = inv[M]*A*x */
             /* --------------------------------- */
 
-            sgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            sgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
-            sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -1026,8 +1025,8 @@ L90:
                 /* real arithmetic.       */
                 /* ---------------------- */
 
-                scopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-                sgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                scopy_(n, &workd[ipntr[2]], &i_one, &workd[ipntr[1]], &i_one);
+                sgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -1052,7 +1051,7 @@ L90:
                     workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
                 }
 
-                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -1086,7 +1085,7 @@ L90:
                 workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
             }
 
-            cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -1118,7 +1117,7 @@ L90:
                 workc[i__2].r = q__1.r, workc[i__2].i = q__1.i;
             }
 
-            cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -1143,7 +1142,7 @@ L90:
         /* type = 1,2.        */
         /* ------------------ */
 
-        sgbmv_("N", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+        sgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
     }
     else
     {
@@ -1227,7 +1226,7 @@ L90:
                                 /* d = (x'*inv[A-sigma*M]*M*x) / (x'*x) */
                                 /* ------------------------------------ */
 
-                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1);
+                                sgbmv_("Nontranspose", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &i_one, &zero, &workd[1], &i_one);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1236,7 +1235,7 @@ L90:
                                     q__1.r = workd[i__4], q__1.i = 0.f;
                                     workc[i__3].r = q__1.r, workc[i__3].i = q__1.i;
                                 }
-                                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1244,10 +1243,10 @@ L90:
                                     workd[i] = workc[i__3].r;
                                     workd[i + *n] = workc[i].i;
                                 }
-                                denr = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                deni = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                denr = sdot_(n, &z[j * z_dim1 + 1], &i_one, &workd[1], &i_one);
+                                deni = sdot_(n, &z[j * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
                                 /* Computing 2nd power */
-                                r__1 = snrm2_(n, &z[j * z_dim1 + 1], &c__1);
+                                r__1 = snrm2_(n, &z[j * z_dim1 + 1], &i_one);
                                 numr = r__1 * r__1;
                                 /* Computing 2nd power */
                                 r__1 = slapy2_(&denr, &deni);
@@ -1282,8 +1281,8 @@ L90:
                                 /* Compute M*x */
                                 /* ----------- */
 
-                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1);
-                                sgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[(j + 1) * z_dim1 + 1], &c__1, &c_b85, &workd[*n + 1], &c__1);
+                                sgbmv_("Nontranspose", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &i_one, &zero, &workd[1], &i_one);
+                                sgbmv_("Nontranspose", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &z[(j + 1) * z_dim1 + 1], &i_one, &zero, &workd[*n + 1], &i_one);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1298,7 +1297,7 @@ L90:
                                 /* Compute inv(A-sigma*M)*M*x */
                                 /* -------------------------- */
 
-                                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
 
                                 /* ----------------------------- */
                                 /* Compute x'*inv(A-sigma*M)*M*x */
@@ -1311,17 +1310,17 @@ L90:
                                     workd[i] = workc[i__3].r;
                                     workd[i + *n] = workc[i].i;
                                 }
-                                denr = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                denr += sdot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni -= sdot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                denr = sdot_(n, &z[j * z_dim1 + 1], &i_one, &workd[1], &i_one);
+                                denr += sdot_(n, &z[(j + 1) * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
+                                deni = sdot_(n, &z[j * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
+                                deni -= sdot_(n, &z[(j + 1) * z_dim1 + 1], &i_one, &workd[1], &i_one);
 
                                 /* -------------- */
                                 /* Compute (x'*x) */
                                 /* -------------- */
 
-                                r__2 = snrm2_(n, &z[j * z_dim1 + 1], &c__1);
-                                r__3 = snrm2_(n, &z[(j + 1) * z_dim1 + 1], &c__1);
+                                r__2 = snrm2_(n, &z[j * z_dim1 + 1], &i_one);
+                                r__3 = snrm2_(n, &z[(j + 1) * z_dim1 + 1], &i_one);
                                 /* Computing 2nd power */
                                 r__1 = slapy2_(&r__2, &r__3);
                                 numr = r__1 * r__1;
@@ -1398,7 +1397,7 @@ L90:
                                     q__1.r = z[i__4], q__1.i = 0.f;
                                     workc[i__3].r = q__1.r, workc[i__3].i = q__1.i;
                                 }
-                                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1406,10 +1405,10 @@ L90:
                                     workd[i] = workc[i__3].r;
                                     workd[i + *n] = workc[i].i;
                                 }
-                                denr = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                deni = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                denr = sdot_(n, &z[j * z_dim1 + 1], &i_one, &workd[1], &i_one);
+                                deni = sdot_(n, &z[j * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
                                 /* Computing 2nd power */
-                                r__1 = snrm2_(n, &z[j * z_dim1 + 1], &c__1);
+                                r__1 = snrm2_(n, &z[j * z_dim1 + 1], &i_one);
                                 numr = r__1 * r__1;
                                 /* Computing 2nd power */
                                 r__1 = slapy2_(&denr, &deni);
@@ -1454,7 +1453,7 @@ L90:
                                 /* Compute inv[A-sigma*I]*x. */
                                 /* ------------------------- */
 
-                                cgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                cgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
 
                                 /* --------------------------- */
                                 /* Compute x'*inv(A-sigma*I)*x */
@@ -1467,17 +1466,17 @@ L90:
                                     workd[i] = workc[i__3].r;
                                     workd[i + *n] = workc[i].i;
                                 }
-                                denr = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                denr += sdot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni = sdot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni -= sdot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                denr = sdot_(n, &z[j * z_dim1 + 1], &i_one, &workd[1], &i_one);
+                                denr += sdot_(n, &z[(j + 1) * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
+                                deni = sdot_(n, &z[j * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
+                                deni -= sdot_(n, &z[(j + 1) * z_dim1 + 1], &i_one, &workd[1], &i_one);
 
                                 /* -------------- */
                                 /* Compute (x'*x) */
                                 /* -------------- */
 
-                                r__2 = snrm2_(n, &z[j * z_dim1 + 1], &c__1);
-                                r__3 = snrm2_(n, &z[(j + 1) * z_dim1 + 1], &c__1);
+                                r__2 = snrm2_(n, &z[j * z_dim1 + 1], &i_one);
+                                r__3 = snrm2_(n, &z[(j + 1) * z_dim1 + 1], &i_one);
                                 /* Computing 2nd power */
                                 r__1 = slapy2_(&r__2, &r__3);
                                 numr = r__1 * r__1;

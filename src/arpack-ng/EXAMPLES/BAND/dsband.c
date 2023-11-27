@@ -2,13 +2,10 @@
 
 #include "arpack_internal.h"
 
-/* Table of constant values */
+static a_int i_one = 1;
+static double one = 1.;
+static double zero = 0.;
 
-static a_int c__9 = 9;
-static a_int c__1 = 1;
-static double c_b50 = 1.;
-static double c_b52 = 0.;
-static a_int c__3 = 3;
 /**
  * \BeginDoc
  *
@@ -307,7 +304,7 @@ static a_int c__3 = 3;
  *     Restarted Arnoldi Iteration", Ph.D thesis, TR95-13, Rice Univ,
  *     May 1995.
  *
- * \Routines called:
+ * Routines called:
  *     dsaupd  ARPACK reverse communication interface routine.
  *     dseupd  ARPACK routine that returns Ritz values and (optionally)
  *             Ritz vectors.
@@ -535,7 +532,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (type == 2)
         {
@@ -547,8 +544,8 @@ L90:
             /* into the range of OP.            */
             /* -------------------------------- */
 
-            dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dcopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -566,9 +563,9 @@ L90:
             /* the range of OP.                  */
             /* --------------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-            dcopy_(n, &workd[ipntr[1]], &c__1, &workd[ipntr[0]], &c__1);
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+            dcopy_(n, &workd[ipntr[1]], &i_one, &workd[ipntr[0]], &i_one);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -587,8 +584,8 @@ L90:
             /* range of OP.                            */
             /* --------------------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b50, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -607,8 +604,8 @@ L90:
             /* range of OP.                          */
             /* ------------------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
 
             if (ierr != 0)
             {
@@ -630,16 +627,16 @@ L90:
 
             if (*bmat == 'G')
             {
-                dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-                dgbmv_("N", n, n, kl, ku, sigma, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b50, &workd[ipntr[1]], &c__1);
+                dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+                dgbmv_("N", n, n, kl, ku, sigma, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &one, &workd[ipntr[1]], &i_one);
             }
             else
             {
-                dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, sigma, &workd[ipntr[1]], &c__1);
+                dcopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+                dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, sigma, &workd[ipntr[1]], &i_one);
             }
 
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
 
             if (ierr != 0)
             {
@@ -660,7 +657,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (type == 2)
         {
@@ -670,8 +667,8 @@ L90:
             /* y <--- OP*x = inv[A-sigma*I]*x.  */
             /* -------------------------------- */
 
-            dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dcopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -687,9 +684,9 @@ L90:
             /* Perform  y <--- OP*x = inv[M]*A*x */
             /* --------------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-            dcopy_(n, &workd[ipntr[1]], &c__1, &workd[ipntr[0]], &c__1);
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+            dcopy_(n, &workd[ipntr[1]], &i_one, &workd[ipntr[0]], &i_one);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -707,8 +704,8 @@ L90:
             /* in workd(ipntr(3)).                 */
             /* ----------------------------------- */
 
-            dcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dcopy_(n, &workd[ipntr[2]], &i_one, &workd[ipntr[1]], &i_one);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -727,8 +724,8 @@ L90:
             /* and saved in workd(ipntr(3)). */
             /* ----------------------------- */
 
-            dcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dcopy_(n, &workd[ipntr[2]], &i_one, &workd[ipntr[1]], &i_one);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -749,15 +746,15 @@ L90:
 
             if (*bmat == 'G')
             {
-                dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
-                daxpy_(n, sigma, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
+                dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
+                daxpy_(n, sigma, &workd[ipntr[2]], &i_one, &workd[ipntr[1]], &i_one);
             }
             else
             {
-                dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, sigma, &workd[ipntr[1]], &c__1);
+                dcopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+                dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, sigma, &workd[ipntr[1]], &i_one);
             }
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
         }
     }
     else if (ido == 2)
@@ -776,11 +773,11 @@ L90:
             /* Buckling Mode, B=A. */
             /* ------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b50, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else
         {
-            dgbmv_("N", n, n, kl, ku, &c_b50, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b52, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
     }
     else

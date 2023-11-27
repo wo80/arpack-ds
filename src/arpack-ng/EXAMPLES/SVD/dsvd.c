@@ -3,18 +3,100 @@
 #include <stdlib.h>
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_int c__9 = 9;
-static a_int c__1 = 1;
+static a_int i_one = 1;
 static a_int c__250 = 250;
-static a_int c__3 = 3;
-static a_int c__6 = 6;
-static a_int c__2 = 2;
-static a_int c__25 = 25;
-static a_int c_n6 = -6;
-static a_int c__5 = 5;
 
+void av_(const a_int m, const a_int n, const double *x, double *w);
+void atv_(const a_int m, const a_int n, const double *w, double *y);
+
+/**
+ * \BeginDoc
+ *
+ *     This example program is intended to illustrate the
+ *     the use of ARPACK to compute the Singular Value Decomposition.
+ *
+ *     This code shows how to use ARPACK to find a few of the
+ *     largest singular values(sigma) and corresponding right singular
+ *     vectors (v) for the the matrix A by solving the symmetric problem:
+ *
+ *                        (A'*A)*v = sigma*v
+ *
+ *     where A is an m by n real matrix.
+ *
+ *     This code may be easily modified to estimate the 2-norm
+ *     condition number  largest(sigma)/smallest(sigma) by setting
+ *     which = 'BE' below.  This will ask for a few of the smallest
+ *     and a few of the largest singular values simultaneously.
+ *     The condition number could then be estimated by taking
+ *     the ratio of the largest and smallest singular values.
+ *
+ *     This formulation is appropriate when  m  .ge.  n.
+ *     Reverse the roles of A and A' in the case that  m .le. n.
+ *
+ *     The main points illustrated here are
+ *
+ *        1) How to declare sufficient memory to find NEV
+ *           largest singular values of A .
+ *
+ *        2) Illustration of the reverse communication interface
+ *           needed to utilize the top level ARPACK routine DSAUPD
+ *           that computes the quantities needed to construct
+ *           the desired singular values and vectors(if requested).
+ *
+ *        3) How to extract the desired singular values and vectors
+ *           using the ARPACK routine DSEUPD.
+ *
+ *        4) How to construct the left singular vectors U from the
+ *           right singular vectors V to obtain the decomposition
+ *
+ *                        A*V = U*S
+ *
+ *           where S = diag(sigma_1, sigma_2, ..., sigma_k).
+ *
+ *     The only thing that must be supplied in order to use this
+ *     routine on your problem is to change the array dimensions
+ *     appropriately, to specify WHICH singular values you want to
+ *     compute and to supply a the matrix-vector products
+
+ *                         w <-  Ax
+ *                         y <-  A'w
+ *
+ *     in place of the calls  to AV( ) and ATV( ) respectively below.
+ *
+ *     Further documentation is available in the header of DSAUPD
+ *     which may be found in the SRC directory.
+ *
+ *     This codes implements
+ *
+ * \Example-1
+ *     ... Suppose we want to solve A'A*v = sigma*v in regular mode,
+ *         where A is derived from the simplest finite difference
+ *         discretization of the 2-dimensional kernel  K(s,t)dt  where
+ *
+ *                 K(s,t) =  s(t-1)   if 0 .le. s .le. t .le. 1,
+ *                           t(s-1)   if 0 .le. t .lt. s .le. 1.
+ *
+ *         See subroutines AV  and ATV for details.
+ *     ... OP = A'*A  and  B = I.
+ *     ... Assume "call av (n,x,y)" computes y = A*x
+ *     ... Assume "call atv (n,y,w)" computes w = A'*y
+ *     ... Assume exact shifts are used
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     dsaupd  ARPACK reverse communication interface routine.
+ *     dseupd  ARPACK routine that returns Ritz values and (optionally)
+ *             Ritz vectors.
+ *     dnrm2   Level 1 BLAS that computes the norm of a vector.
+ *     daxpy   Level 1 BLAS that computes y <- alpha*x+y.
+ *     dscal   Level 1 BLAS thst computes x <- x*alpha.
+ *     dcopy   Level 1 BLAS thst computes y <- x.
+ *
+ * \EndLib
+ */
 int main()
 {
     /* System generated locals */
@@ -30,107 +112,6 @@ int main()
     a_int info, mode1, nconv, ishfts, lworkl, maxitr;
     char *bmat, *which;
     double tol, temp, sigma;
-
-    /*     This example program is intended to illustrate the */
-    /*     the use of ARPACK to compute the Singular Value Decomposition. */
-
-    /*     This code shows how to use ARPACK to find a few of the */
-    /*     largest singular values(sigma) and corresponding right singular */
-    /*     vectors (v) for the the matrix A by solving the symmetric problem: */
-
-    /*                        (A'*A)*v = sigma*v */
-
-    /*     where A is an m by n real matrix. */
-
-    /*     This code may be easily modified to estimate the 2-norm */
-    /*     condition number  largest(sigma)/smallest(sigma) by setting */
-    /*     which = 'BE' below.  This will ask for a few of the smallest */
-    /*     and a few of the largest singular values simultaneously. */
-    /*     The condition number could then be estimated by taking */
-    /*     the ratio of the largest and smallest singular values. */
-
-    /*     This formulation is appropriate when  m  .ge.  n. */
-    /*     Reverse the roles of A and A' in the case that  m .le. n. */
-
-    /*     The main points illustrated here are */
-
-    /*        1) How to declare sufficient memory to find NEV */
-    /*           largest singular values of A . */
-
-    /*        2) Illustration of the reverse communication interface */
-    /*           needed to utilize the top level ARPACK routine DSAUPD */
-    /*           that computes the quantities needed to construct */
-    /*           the desired singular values and vectors(if requested). */
-
-    /*        3) How to extract the desired singular values and vectors */
-    /*           using the ARPACK routine DSEUPD. */
-
-    /*        4) How to construct the left singular vectors U from the */
-    /*           right singular vectors V to obtain the decomposition */
-
-    /*                        A*V = U*S */
-
-    /*           where S = diag(sigma_1, sigma_2, ..., sigma_k). */
-
-    /*     The only thing that must be supplied in order to use this */
-    /*     routine on your problem is to change the array dimensions */
-    /*     appropriately, to specify WHICH singular values you want to */
-    /*     compute and to supply a the matrix-vector products */
-
-    /*                         w <-  Ax */
-    /*                         y <-  A'w */
-
-    /*     in place of the calls  to AV( ) and ATV( ) respectively below. */
-
-    /*     Further documentation is available in the header of DSAUPD */
-    /*     which may be found in the SRC directory. */
-
-    /*     This codes implements */
-
-    /* \Example-1 */
-    /*     ... Suppose we want to solve A'A*v = sigma*v in regular mode, */
-    /*         where A is derived from the simplest finite difference */
-    /*         discretization of the 2-dimensional kernel  K(s,t)dt  where */
-
-    /*                 K(s,t) =  s(t-1)   if 0 .le. s .le. t .le. 1, */
-    /*                           t(s-1)   if 0 .le. t .lt. s .le. 1. */
-
-    /*         See subroutines AV  and ATV for details. */
-    /*     ... OP = A'*A  and  B = I. */
-    /*     ... Assume "call av (n,x,y)" computes y = A*x */
-    /*     ... Assume "call atv (n,y,w)" computes w = A'*y */
-    /*     ... Assume exact shifts are used */
-    /*     ... */
-
-    /* \BeginLib */
-
-    /* \Routines called: */
-    /*     dsaupd  ARPACK reverse communication interface routine. */
-    /*     dseupd  ARPACK routine that returns Ritz values and (optionally) */
-    /*             Ritz vectors. */
-    /*     dnrm2   Level 1 BLAS that computes the norm of a vector. */
-    /*     daxpy   Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     dscal   Level 1 BLAS thst computes x <- x*alpha. */
-    /*     dcopy   Level 1 BLAS thst computes y <- x. */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: svd.F   SID: 2.4   DATE OF SID: 10/17/00   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-
-    /* ----------------------------------------------------------------------- */
 
     /* ---------------------------------------------------- */
     /* Storage Declarations:                                */
@@ -338,8 +319,8 @@ L10:
         /* workd(ipntr(2)).                      */
         /* ------------------------------------- */
 
-        av_(&m, &n, &workd[ipntr[0] - 1], ax);
-        atv_(&m, &n, ax, &workd[ipntr[1] - 1]);
+        av_(m, n, &workd[ipntr[0] - 1], ax);
+        atv_(m, n, ax, &workd[ipntr[1] - 1]);
 
         /* --------------------------------------- */
         /* L O O P   B A C K to call DSAUPD again. */
@@ -384,7 +365,7 @@ L10:
 
         rvec = TRUE_;
 
-        dseupd_(&rvec, "All", select, s, v, &c__250, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__250, iparam, ipntr, workd, workl, &lworkl, &ierr);
+        dseupd_(&rvec, "A", select, s, v, &c__250, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__250, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /* --------------------------------------------- */
         /* Singular values are returned in the first     */
@@ -427,10 +408,10 @@ L10:
                 /* divide by norm(Av) instead. */
                 /* --------------------------- */
 
-                av_(&m, &n, &v[j * 250 - 250], ax);
-                dcopy_(&m, ax, &c__1, &u[j * 500 - 500], &c__1);
-                temp = 1. / dnrm2_(&m, &u[j * 500 - 500], &c__1);
-                dscal_(&m, &temp, &u[j * 500 - 500], &c__1);
+                av_(m, n, &v[j * 250 - 250], ax);
+                dcopy_(&m, ax, &i_one, &u[j * 500 - 500], &i_one);
+                temp = 1. / dnrm2_(&m, &u[j * 500 - 500], &i_one);
+                dscal_(&m, &temp, &u[j * 500 - 500], &i_one);
 
                 /* ------------------------- */
                 /*                           */
@@ -449,8 +430,8 @@ L10:
                 /* ------------------------- */
 
                 d__1 = -s[j - 1];
-                daxpy_(&m, &d__1, &u[j * 500 - 500], &c__1, ax, &c__1);
-                s[j + 24] = dnrm2_(&m, ax, &c__1);
+                daxpy_(&m, &d__1, &u[j * 500 - 500], &i_one, ax, &i_one);
+                s[j + 24] = dnrm2_(&m, ax, &i_one);
             }
 
             /* ----------------------------- */
@@ -531,7 +512,7 @@ L10:
 
 /* ------------------------------------------------------------------- */
 
-int av_(a_int *m, a_int *n, double *x, double *w)
+void av_(const a_int m, const a_int n, const double *x, double *w)
 {
     /* System generated locals */
     a_int i__1, i__2;
@@ -547,16 +528,16 @@ int av_(a_int *m, a_int *n, double *x, double *w)
     --w;
     --x;
 
-    h = 1. / (double)(*m + 1);
-    k = 1. / (double)(*n + 1);
-    i__1 = *m;
+    h = 1. / (double)(m + 1);
+    k = 1. / (double)(n + 1);
+    i__1 = m;
     for (i = 1; i <= i__1; ++i)
     {
         w[i] = 0.;
     }
     t = 0.;
 
-    i__1 = *n;
+    i__1 = n;
     for (j = 1; j <= i__1; ++j)
     {
         t += k;
@@ -567,20 +548,18 @@ int av_(a_int *m, a_int *n, double *x, double *w)
             s += h;
             w[i] += k * s * (t - 1.) * x[j];
         }
-        i__2 = *m;
+        i__2 = m;
         for (i = j + 1; i <= i__2; ++i)
         {
             s += h;
             w[i] += k * t * (s - 1.) * x[j];
         }
     }
-
-    return 0;
 } /* av_ */
 
 /* ------------------------------------------------------------------- */
 
-int atv_(a_int *m, a_int *n, double *w, double *y)
+void atv_(const a_int m, const a_int n, const double *w, double *y)
 {
     /* System generated locals */
     a_int i__1, i__2;
@@ -596,16 +575,16 @@ int atv_(a_int *m, a_int *n, double *w, double *y)
     --w;
     --y;
 
-    h = 1. / (double)(*m + 1);
-    k = 1. / (double)(*n + 1);
-    i__1 = *n;
+    h = 1. / (double)(m + 1);
+    k = 1. / (double)(n + 1);
+    i__1 = n;
     for (i = 1; i <= i__1; ++i)
     {
         y[i] = 0.;
     }
     t = 0.;
 
-    i__1 = *n;
+    i__1 = n;
     for (j = 1; j <= i__1; ++j)
     {
         t += k;
@@ -616,13 +595,11 @@ int atv_(a_int *m, a_int *n, double *w, double *y)
             s += h;
             y[j] += k * s * (t - 1.) * w[i];
         }
-        i__2 = *m;
+        i__2 = m;
         for (i = j + 1; i <= i__2; ++i)
         {
             s += h;
             y[j] += k * t * (s - 1.) * w[i];
         }
     }
-
-    return 0;
 } /* atv_ */

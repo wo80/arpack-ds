@@ -10,17 +10,55 @@ struct
 
 #define convct_1 convct_
 
-/* Table of constant values */
-
-static a_int c__9 = 9;
-static a_int c__1 = 1;
+static a_int i_one = 1;
 static a_int c__256 = 256;
-static a_int c__3 = 3;
-static a_int c__6 = 6;
-static a_int c__25 = 25;
-static a_int c_n6 = -6;
-static a_int c__5 = 5;
 
+void mv_(const a_int n, double *v, double *w);
+void av_(const a_int n, double *v, double *w);
+
+/**
+ * \BeginDoc
+ *
+ *     Simple program to illustrate the idea of reverse communication
+ *     in shift-invert mode for a generalized nonsymmetric eigenvalue
+ *     problem.
+ *
+ *     We implement example four of ex-nonsym.doc in DOCUMENTS directory
+ *
+ * \Example-4
+ *     ... Suppose we want to solve A*x = lambda*B*x in inverse mode,
+ *         where A and B are derived from the finite element discretization
+ *         of the 1-dimensional convection-diffusion operator
+ *                           (d^2u / dx^2) + rho*(du/dx)
+ *         on the interval [0,1] with zero Dirichlet boundary condition
+ *         using linear elements.
+ *
+ *     ... The shift sigma is a real number.
+ *
+ *     ... OP = inv[A-SIGMA*M]*M  and  B = M.
+ *
+ *     ... Use mode 3 of DNAUPD.
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     dnaupd  ARPACK reverse communication interface routine.
+ *     dneupd  ARPACK routine that returns Ritz values and (optionally)
+ *             Ritz vectors.
+ *     dgttrf  LAPACK tridiagonal factorization routine.
+ *     dgttrs  LAPACK tridiagonal linear system solve routine.
+ *     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     daxpy   Level 1 BLAS that computes y <- alpha*x+y.
+ *     dcopy   Level 1 BLAS that copies one vector to another.
+ *     ddot    Level 1 BLAS that computes the dot product of two vectors.
+ *     dnrm2   Level 1 BLAS that computes the norm of a vector.
+ *     av      Matrix vector multiplication routine that computes A*x.
+ *     mv      Matrix vector multiplication routine that computes M*x.
+ *
+ * \EndLib
+ */
 int main()
 {
     /* System generated locals */
@@ -38,68 +76,11 @@ int main()
     double h, s, s1, s2, s3, tol, sigmai;
     double sigmar;
 
-    /*     Simple program to illustrate the idea of reverse communication */
-    /*     in shift-invert mode for a generalized nonsymmetric eigenvalue */
-    /*     problem. */
+    /* Define maximum dimensions for all arrays. */
 
-    /*     We implement example four of ex-nonsym.doc in DOCUMENTS directory */
-
-    /* \Example-4 */
-    /*     ... Suppose we want to solve A*x = lambda*B*x in inverse mode, */
-    /*         where A and B are derived from the finite element discretization */
-    /*         of the 1-dimensional convection-diffusion operator */
-    /*                           (d^2u / dx^2) + rho*(du/dx) */
-    /*         on the interval [0,1] with zero Dirichlet boundary condition */
-    /*         using linear elements. */
-
-    /*     ... The shift sigma is a real number. */
-
-    /*     ... OP = inv[A-SIGMA*M]*M  and  B = M. */
-
-    /*     ... Use mode 3 of DNAUPD. */
-
-    /* \BeginLib */
-
-    /* \Routines called: */
-    /*     dnaupd  ARPACK reverse communication interface routine. */
-    /*     dneupd  ARPACK routine that returns Ritz values and (optionally) */
-    /*             Ritz vectors. */
-    /*     dgttrf  LAPACK tridiagonal factorization routine. */
-    /*     dgttrs  LAPACK tridiagonal linear system solve routine. */
-    /*     dlapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-    /*     daxpy   Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     dcopy   Level 1 BLAS that copies one vector to another. */
-    /*     ddot    Level 1 BLAS that computes the dot product of two vectors. */
-    /*     dnrm2   Level 1 BLAS that computes the norm of a vector. */
-    /*     av      Matrix vector multiplication routine that computes A*x. */
-    /*     mv      Matrix vector multiplication routine that computes M*x. */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: ndrv4.F   SID: 2.5   DATE OF SID: 10/17/00   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-    /* ----------------------------------------------------------------------- */
-
-    /* --------------------------- */
-    /* Define leading dimensions   */
-    /* for all arrays.             */
-    /* MAXN:   Maximum dimension   */
-    /*         of the A allowed.   */
-    /* MAXNEV: Maximum NEV allowed */
-    /* MAXNCV: Maximum NCV allowed */
-    /* --------------------------- */
+    const int MAXN   = 256; /* Maximum dimension of the A allowed. */
+    const int MAXNEV =  10; /* Maximum NEV allowed */
+    const int MAXNCV =  25; /* Maximum NCV allowed */
 
     /* -------------------------------------------------- */
     /* The number N is the dimension of the matrix.  A    */
@@ -259,8 +240,8 @@ L20:
         /* workd(ipntr(2)).                          */
         /* ----------------------------------------- */
 
-        mv_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
-        dgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
+        mv_(n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
+        dgttrs_("N", &n, &i_one, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             printf(" \n");
@@ -287,8 +268,8 @@ L20:
         /* workd(ipntr(2)).                        */
         /* --------------------------------------- */
 
-        dcopy_(&n, &workd[ipntr[2] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
-        dgttrs_("N", &n, &c__1, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
+        dcopy_(&n, &workd[ipntr[2] - 1], &i_one, &workd[ipntr[1] - 1], &i_one);
+        dgttrs_("N", &n, &i_one, dl, dd, du, du2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             printf(" \n");
@@ -313,7 +294,7 @@ L20:
         /* and returns the result to workd(ipntr(2)).  */
         /* ------------------------------------------- */
 
-        mv_(&n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
+        mv_(n, &workd[ipntr[0] - 1], &workd[ipntr[1] - 1]);
 
         /* --------------------------------------- */
         /* L O O P   B A C K to call DNAUPD again. */
@@ -410,11 +391,11 @@ L20:
                     /* Ritz value is real */
                     /* ------------------ */
 
-                    av_(&n, &v[(j << 8) - 256], ax);
-                    mv_(&n, &v[(j << 8) - 256], mx);
+                    av_(n, &v[(j << 8) - 256], ax);
+                    mv_(n, &v[(j << 8) - 256], mx);
                     d__1 = -d[j - 1];
-                    daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
-                    d[j + 49] = dnrm2_(&n, ax, &c__1);
+                    daxpy_(&n, &d__1, mx, &i_one, ax, &i_one);
+                    d[j + 49] = dnrm2_(&n, ax, &i_one);
                     d[j + 49] /= (d__1 = d[j - 1], abs(d__1));
                 }
                 else if (first)
@@ -427,21 +408,21 @@ L20:
                     /* pair is computed.      */
                     /* ---------------------- */
 
-                    av_(&n, &v[(j << 8) - 256], ax);
-                    mv_(&n, &v[(j << 8) - 256], mx);
+                    av_(n, &v[(j << 8) - 256], ax);
+                    mv_(n, &v[(j << 8) - 256], mx);
                     d__1 = -d[j - 1];
-                    daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
-                    mv_(&n, &v[(j + 1 << 8) - 256], mx);
-                    daxpy_(&n, &d[j + 24], mx, &c__1, ax, &c__1);
-                    d[j + 49] = dnrm2_(&n, ax, &c__1);
-                    av_(&n, &v[(j + 1 << 8) - 256], ax);
-                    mv_(&n, &v[(j + 1 << 8) - 256], mx);
+                    daxpy_(&n, &d__1, mx, &i_one, ax, &i_one);
+                    mv_(n, &v[(j + 1 << 8) - 256], mx);
+                    daxpy_(&n, &d[j + 24], mx, &i_one, ax, &i_one);
+                    d[j + 49] = dnrm2_(&n, ax, &i_one);
+                    av_(n, &v[(j + 1 << 8) - 256], ax);
+                    mv_(n, &v[(j + 1 << 8) - 256], mx);
                     d__1 = -d[j - 1];
-                    daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
-                    mv_(&n, &v[(j << 8) - 256], mx);
+                    daxpy_(&n, &d__1, mx, &i_one, ax, &i_one);
+                    mv_(n, &v[(j << 8) - 256], mx);
                     d__1 = -d[j + 24];
-                    daxpy_(&n, &d__1, mx, &c__1, ax, &c__1);
-                    d__1 = dnrm2_(&n, ax, &c__1);
+                    daxpy_(&n, &d__1, mx, &i_one, ax, &i_one);
+                    d__1 = dnrm2_(&n, ax, &i_one);
                     d[j + 49] = dlapy2_(&d[j + 49], &d__1);
                     d[j + 49] /= dlapy2_(&d[j - 1], &d[j + 24]);
                     d[j + 50] = d[j + 49];
@@ -518,7 +499,7 @@ L20:
 
 /*     matrix vector multiplication subroutine */
 
-int mv_(a_int *n, double *v, double *w)
+void mv_(const a_int n, double *v, double *w)
 {
     /* System generated locals */
     a_int i__1;
@@ -536,20 +517,19 @@ int mv_(a_int *n, double *v, double *w)
     --v;
 
     w[1] = (v[1] * 4. + v[2] * 1.) / 6.;
-    i__1 = *n - 1;
+    i__1 = n - 1;
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = (v[j - 1] * 1. + v[j] * 4. + v[j + 1] * 1.) / 6.;
     }
-    w[*n] = (v[*n - 1] * 1. + v[*n] * 4.) / 6.;
+    w[n] = (v[n - 1] * 1. + v[n] * 4.) / 6.;
 
-    h = 1. / (double)(*n + 1);
-    dscal_(n, &h, &w[1], &c__1);
-    return 0;
+    h = 1. / (double)(n + 1);
+    dscal_(&n, &h, &w[1], &i_one);
 } /* mv_ */
 
 /* ------------------------------------------------------------------ */
-int av_(a_int *n, double *v, double *w)
+void av_(const a_int n, double *v, double *w)
 {
     /* System generated locals */
     a_int i__1;
@@ -571,18 +551,17 @@ int av_(a_int *n, double *v, double *w)
     --w;
     --v;
 
-    h = 1. / (double)(*n + 1);
+    h = 1. / (double)(n + 1);
     s = convct_1.rho / 2.;
     dd = 2. / h;
     dl = -1. / h - s;
     du = -1. / h + s;
 
     w[1] = dd * v[1] + du * v[2];
-    i__1 = *n - 1;
+    i__1 = n - 1;
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = dl * v[j - 1] + dd * v[j] + du * v[j + 1];
     }
-    w[*n] = dl * v[*n - 1] + dd * v[*n];
-    return 0;
+    w[n] = dl * v[n - 1] + dd * v[n];
 } /* av_ */

@@ -3,18 +3,46 @@
 #include <stdlib.h>
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_int c__9 = 9;
-static a_int c__1 = 1;
+static a_int i_one = 1;
 static a_int c__256 = 256;
-static a_int c__3 = 3;
-static a_int c__6 = 6;
-static a_int c__2 = 2;
-static a_int c__25 = 25;
-static a_int c_n6 = -6;
-static a_int c__4 = 4;
 
+void av_(const a_int n, float *v, float *w);
+
+/**
+ * \BeginDoc
+ *
+ *     Program to illustrate the idea of reverse communication
+ *     in shift and invert mode for a standard symmetric eigenvalue
+ *     problem.  The following program uses the two LAPACK subroutines
+ *     sgttrf.f and sgttrs.f to factor and solve a tridiagonal system of
+ *     equations.
+ *
+ *     We implement example two of ex-sym.doc in DOCUMENTS directory
+ *
+ * \Example-2
+ *     ... Suppose we want to solve A*x = lambda*x in shift-invert mode,
+ *         where A is derived from the central difference discretization
+ *         of the 1-dimensional Laplacian on [0,1]  with zero Dirichlet
+ *         boundary condition.
+ *     ... OP = (inv[A - sigma*I]) and  B = I.
+ *     ... Use mode 3 of SSAUPD.
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     ssaupd  ARPACK reverse communication interface routine.
+ *     sseupd  ARPACK routine that returns Ritz values and (optionally)
+ *             Ritz vectors.
+ *     sgttrf  LAPACK tridiagonal factorization routine.
+ *     sgttrs  LAPACK tridiagonal solve routine.
+ *     saxpy   saxpy   Level 1 BLAS that computes y <- alpha*x+y.
+ *     snrm2   Level 1 BLAS that computes the norm of a vector.
+ *     av      Matrix vector multiplication routine that computes A*x.
+ *
+ * \EndLib
+ */
 int main()
 {
     /* System generated locals */
@@ -31,60 +59,11 @@ int main()
     char *bmat, *which;
     float h2, tol, sigma;
 
-    /*     Program to illustrate the idea of reverse communication */
-    /*     in shift and invert mode for a standard symmetric eigenvalue */
-    /*     problem.  The following program uses the two LAPACK subroutines */
-    /*     sgttrf.f and sgttrs.f to factor and solve a tridiagonal system of */
-    /*     equations. */
+    /* Define maximum dimensions for all arrays. */
 
-    /*     We implement example two of ex-sym.doc in DOCUMENTS directory */
-
-    /* \Example-2 */
-    /*     ... Suppose we want to solve A*x = lambda*x in shift-invert mode, */
-    /*         where A is derived from the central difference discretization */
-    /*         of the 1-dimensional Laplacian on [0,1]  with zero Dirichlet */
-    /*         boundary condition. */
-    /*     ... OP = (inv[A - sigma*I]) and  B = I. */
-    /*     ... Use mode 3 of SSAUPD. */
-
-    /* \BeginLib */
-
-    /* \Routines called: */
-    /*     ssaupd  ARPACK reverse communication interface routine. */
-    /*     sseupd  ARPACK routine that returns Ritz values and (optionally) */
-    /*             Ritz vectors. */
-    /*     sgttrf  LAPACK tridiagonal factorization routine. */
-    /*     sgttrs  LAPACK tridiagonal solve routine. */
-    /*     saxpy   saxpy   Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     snrm2   Level 1 BLAS that computes the norm of a vector. */
-    /*     av      Matrix vector multiplication routine that computes A*x. */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: sdrv2.F   SID: 2.5   DATE OF SID: 10/17/00   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-    /* ---------------------------------------------------------------------- */
-
-    /* --------------------------- */
-    /* Define leading dimensions   */
-    /* for all arrays.             */
-    /* MAXN:   Maximum dimension   */
-    /*         of the A allowed.   */
-    /* MAXNEV: Maximum NEV allowed */
-    /* MAXNCV: Maximum NCV allowed */
-    /* --------------------------- */
+    const int MAXN   = 256; /* Maximum dimension of the A allowed. */
+    const int MAXNEV =  10; /* Maximum NEV allowed */
+    const int MAXNCV =  25; /* Maximum NCV allowed */
 
     /* -------------------------------------------------- */
     /* The number N is the dimension of the matrix.  A    */
@@ -184,7 +163,7 @@ int main()
         ad[j - 1] = 2.f / h2 - sigma;
         adl[j - 1] = -1.f / h2;
     }
-    scopy_(&n, adl, &c__1, adu, &c__1);
+    scopy_(&n, adl, &i_one, adu, &i_one);
     sgttrf_(&n, adl, ad, adu, adu2, ipiv, &ierr);
     if (ierr != 0)
     {
@@ -220,9 +199,9 @@ L10:
         /* workd(ipntr(2)).                       */
         /* -------------------------------------- */
 
-        scopy_(&n, &workd[ipntr[0] - 1], &c__1, &workd[ipntr[1] - 1], &c__1);
+        scopy_(&n, &workd[ipntr[0] - 1], &i_one, &workd[ipntr[1] - 1], &i_one);
 
-        sgttrs_("N", &n, &c__1, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
+        sgttrs_("N", &n, &i_one, adl, ad, adu, adu2, ipiv, &workd[ipntr[1] - 1], &n, &ierr);
         if (ierr != 0)
         {
             printf(" \n");
@@ -271,7 +250,7 @@ L10:
 
         rvec = TRUE_;
 
-        sseupd_(&rvec, "All", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
+        sseupd_(&rvec, "A", select, d, v, &c__256, &sigma, bmat, &n, which, &nev, &tol, resid, &ncv, v, &c__256, iparam, ipntr, workd, workl, &lworkl, &ierr);
 
         /* -------------------------------------------- */
         /* Eigenvalues are returned in the first column */
@@ -317,10 +296,10 @@ L10:
                 /* tolerance)                */
                 /* ------------------------- */
 
-                av_(&n, &v[(j << 8) - 256], ax);
+                av_(n, &v[(j << 8) - 256], ax);
                 r__1 = -d[j - 1];
-                saxpy_(&n, &r__1, &v[(j << 8) - 256], &c__1, ax, &c__1);
-                d[j + 24] = snrm2_(&n, ax, &c__1);
+                saxpy_(&n, &r__1, &v[(j << 8) - 256], &i_one, ax, &i_one);
+                d[j + 24] = snrm2_(&n, ax, &i_one);
                 d[j + 24] /= (r__1 = d[j - 1], dabs(r__1));
             }
 
@@ -388,7 +367,7 @@ L10:
 /*     where the matrix is the 1 dimensional discrete Laplacian on */
 /*     the interval [0,1] with zero Dirichlet boundary condition. */
 
-int av_(a_int *n, float *v, float *w)
+void av_(const a_int n, float *v, float *w)
 {
     /* System generated locals */
     a_int i__1;
@@ -403,18 +382,17 @@ int av_(a_int *n, float *v, float *w)
     --v;
 
     w[1] = v[1] * 2.f - v[2];
-    i__1 = *n - 1;
+    i__1 = n - 1;
     for (j = 2; j <= i__1; ++j)
     {
         w[j] = -v[j - 1] + v[j] * 2.f - v[j + 1];
     }
-    j = *n;
+    j = n;
     w[j] = -v[j - 1] + v[j] * 2.f;
 
     /*     Scale the vector w by (1 / h^2). */
 
-    h2 = 1.f / (float)((*n + 1) * (*n + 1));
+    h2 = 1.f / (float)((n + 1) * (n + 1));
     r__1 = 1.f / h2;
-    sscal_(n, &r__1, &w[1], &c__1);
-    return 0;
+    sscal_(&n, &r__1, &w[1], &i_one);
 } /* av_ */

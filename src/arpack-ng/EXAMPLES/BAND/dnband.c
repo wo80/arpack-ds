@@ -2,13 +2,10 @@
 
 #include "arpack_internal.h"
 
-/* Table of constant values */
+static a_int i_one = 1;
+static double one = 1.;
+static double zero = 0.;
 
-static a_int c__9 = 9;
-static a_int c__1 = 1;
-static double c_b83 = 1.;
-static double c_b85 = 0.;
-static a_int c__3 = 3;
 /**
  * \BeginDoc
  *
@@ -346,7 +343,7 @@ static a_int c__3 = 3;
  *     Restarted Arnoldi Iteration", Ph.D thesis, TR95-13, Rice Univ,
  *     May 1995.
  *
- * \Routines called:
+ * Routines called:
  *     dnaupd  ARPACK reverse communication interface routine.
  *     dneupd  ARPACK routine that returns Ritz values and (optionally)
  *             Ritz vectors.
@@ -715,7 +712,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (type == 2)
         {
@@ -730,8 +727,8 @@ L90:
                 /* into the range of OP.            */
                 /* -------------------------------- */
 
-                dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                dcopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+                dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -759,7 +756,7 @@ L90:
                     workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
                 }
 
-                zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -785,9 +782,9 @@ L90:
             /* the range of OP.                  */
             /* --------------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -806,7 +803,7 @@ L90:
             /* range of OP.                            */
             /* --------------------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
             if (*sigmai == 0.)
             {
@@ -816,7 +813,7 @@ L90:
                 /* in real arithmetic. */
                 /* ------------------- */
 
-                dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -841,7 +838,7 @@ L90:
                     workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
                 }
 
-                zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -877,7 +874,7 @@ L90:
                 workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
             }
 
-            zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -902,7 +899,7 @@ L90:
             /* range of OP.                           */
             /* -------------------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
             i__1 = *n;
             for (i = 1; i <= i__1; ++i)
@@ -913,7 +910,7 @@ L90:
                 workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
             }
 
-            zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -939,7 +936,7 @@ L90:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (type == 2)
         {
@@ -952,8 +949,8 @@ L90:
                 /* y <--- OP*x = inv[A-sigmar*I]*x. */
                 /* -------------------------------- */
 
-                dcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                dcopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+                dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             }
             else
             {
@@ -973,7 +970,7 @@ L90:
                     workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
                 }
 
-                zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -997,9 +994,9 @@ L90:
             /* Perform  y <--- OP*x = inv[M]*A*x */
             /* --------------------------------- */
 
-            dgbmv_("N", n, n, kl, ku, &c_b83, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+            dgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
-            dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -1025,8 +1022,8 @@ L90:
                 /* real arithmetic.       */
                 /* ---------------------- */
 
-                dcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-                dgbtrs_("N", n, kl, ku, &c__1, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                dcopy_(n, &workd[ipntr[2]], &i_one, &workd[ipntr[1]], &i_one);
+                dgbtrs_("N", n, kl, ku, &i_one, &rfac[rfac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -1051,7 +1048,7 @@ L90:
                     workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
                 }
 
-                zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+                zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -1085,7 +1082,7 @@ L90:
                 workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
             }
 
-            zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -1117,7 +1114,7 @@ L90:
                 workc[i__2].r = z__1.r, workc[i__2].i = z__1.i;
             }
 
-            zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
+            zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -1142,7 +1139,7 @@ L90:
         /* type = 1,2.        */
         /* ------------------ */
 
-        dgbmv_("N", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b85, &workd[ipntr[1]], &c__1);
+        dgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
     }
     else
     {
@@ -1226,7 +1223,7 @@ L90:
                                 /* d = (x'*inv[A-sigma*M]*M*x) / (x'*x) */
                                 /* ------------------------------------ */
 
-                                dgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1);
+                                dgbmv_("Nontranspose", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &i_one, &zero, &workd[1], &i_one);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1235,7 +1232,7 @@ L90:
                                     z__1.r = workd[i__4], z__1.i = 0.;
                                     workc[i__3].r = z__1.r, workc[i__3].i = z__1.i;
                                 }
-                                zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1243,10 +1240,10 @@ L90:
                                     workd[i] = workc[i__3].r;
                                     workd[i + *n] = workc[i].i;
                                 }
-                                denr = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                deni = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                denr = ddot_(n, &z[j * z_dim1 + 1], &i_one, &workd[1], &i_one);
+                                deni = ddot_(n, &z[j * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
                                 /* Computing 2nd power */
-                                d__1 = dnrm2_(n, &z[j * z_dim1 + 1], &c__1);
+                                d__1 = dnrm2_(n, &z[j * z_dim1 + 1], &i_one);
                                 numr = d__1 * d__1;
                                 /* Computing 2nd power */
                                 d__1 = dlapy2_(&denr, &deni);
@@ -1281,8 +1278,8 @@ L90:
                                 /* Compute M*x */
                                 /* ----------- */
 
-                                dgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &c__1, &c_b85, &workd[1], &c__1);
-                                dgbmv_("Nontranspose", n, n, kl, ku, &c_b83, &mb[itop + mb_dim1], lda, &z[(j + 1) * z_dim1 + 1], &c__1, &c_b85, &workd[*n + 1], &c__1);
+                                dgbmv_("Nontranspose", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &z[j * z_dim1 + 1], &i_one, &zero, &workd[1], &i_one);
+                                dgbmv_("Nontranspose", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &z[(j + 1) * z_dim1 + 1], &i_one, &zero, &workd[*n + 1], &i_one);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1297,7 +1294,7 @@ L90:
                                 /* Compute inv(A-sigma*M)*M*x */
                                 /* -------------------------- */
 
-                                zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
 
                                 /* ----------------------------- */
                                 /* Compute x'*inv(A-sigma*M)*M*x */
@@ -1310,17 +1307,17 @@ L90:
                                     workd[i] = workc[i__3].r;
                                     workd[i + *n] = workc[i].i;
                                 }
-                                denr = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                denr += ddot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni -= ddot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                denr = ddot_(n, &z[j * z_dim1 + 1], &i_one, &workd[1], &i_one);
+                                denr += ddot_(n, &z[(j + 1) * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
+                                deni = ddot_(n, &z[j * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
+                                deni -= ddot_(n, &z[(j + 1) * z_dim1 + 1], &i_one, &workd[1], &i_one);
 
                                 /* -------------- */
                                 /* Compute (x'*x) */
                                 /* -------------- */
 
-                                d__2 = dnrm2_(n, &z[j * z_dim1 + 1], &c__1);
-                                d__3 = dnrm2_(n, &z[(j + 1) * z_dim1 + 1], &c__1);
+                                d__2 = dnrm2_(n, &z[j * z_dim1 + 1], &i_one);
+                                d__3 = dnrm2_(n, &z[(j + 1) * z_dim1 + 1], &i_one);
                                 /* Computing 2nd power */
                                 d__1 = dlapy2_(&d__2, &d__3);
                                 numr = d__1 * d__1;
@@ -1397,7 +1394,7 @@ L90:
                                     z__1.r = z[i__4], z__1.i = 0.;
                                     workc[i__3].r = z__1.r, workc[i__3].i = z__1.i;
                                 }
-                                zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
                                 i__2 = *n;
                                 for (i = 1; i <= i__2; ++i)
                                 {
@@ -1405,10 +1402,10 @@ L90:
                                     workd[i] = workc[i__3].r;
                                     workd[i + *n] = workc[i].i;
                                 }
-                                denr = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                deni = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
+                                denr = ddot_(n, &z[j * z_dim1 + 1], &i_one, &workd[1], &i_one);
+                                deni = ddot_(n, &z[j * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
                                 /* Computing 2nd power */
-                                d__1 = dnrm2_(n, &z[j * z_dim1 + 1], &c__1);
+                                d__1 = dnrm2_(n, &z[j * z_dim1 + 1], &i_one);
                                 numr = d__1 * d__1;
                                 /* Computing 2nd power */
                                 d__1 = dlapy2_(&denr, &deni);
@@ -1453,7 +1450,7 @@ L90:
                                 /* Compute inv[A-sigma*I]*x. */
                                 /* ------------------------- */
 
-                                zgbtrs_("N", n, kl, ku, &c__1, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
+                                zgbtrs_("N", n, kl, ku, &i_one, &cfac[cfac_offset], lda, &iwork[1], &workc[1], n, info);
 
                                 /* --------------------------- */
                                 /* Compute x'*inv(A-sigma*I)*x */
@@ -1466,17 +1463,17 @@ L90:
                                     workd[i] = workc[i__3].r;
                                     workd[i + *n] = workc[i].i;
                                 }
-                                denr = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[1], &c__1);
-                                denr += ddot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni = ddot_(n, &z[j * z_dim1 + 1], &c__1, &workd[*n + 1], &c__1);
-                                deni -= ddot_(n, &z[(j + 1) * z_dim1 + 1], &c__1, &workd[1], &c__1);
+                                denr = ddot_(n, &z[j * z_dim1 + 1], &i_one, &workd[1], &i_one);
+                                denr += ddot_(n, &z[(j + 1) * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
+                                deni = ddot_(n, &z[j * z_dim1 + 1], &i_one, &workd[*n + 1], &i_one);
+                                deni -= ddot_(n, &z[(j + 1) * z_dim1 + 1], &i_one, &workd[1], &i_one);
 
                                 /* -------------- */
                                 /* Compute (x'*x) */
                                 /* -------------- */
 
-                                d__2 = dnrm2_(n, &z[j * z_dim1 + 1], &c__1);
-                                d__3 = dnrm2_(n, &z[(j + 1) * z_dim1 + 1], &c__1);
+                                d__2 = dnrm2_(n, &z[j * z_dim1 + 1], &i_one);
+                                d__3 = dnrm2_(n, &z[(j + 1) * z_dim1 + 1], &i_one);
                                 /* Computing 2nd power */
                                 d__1 = dlapy2_(&d__2, &d__3);
                                 numr = d__1 * d__1;

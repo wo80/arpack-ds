@@ -3,21 +3,44 @@
 #include <stdlib.h>
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_fcomplex c_b1 = {1.f, 0.f};
-static a_fcomplex c_b2 = {0.f, 0.f};
-static a_fcomplex c_b3 = {2.f, 0.f};
-static a_fcomplex c_b5 = {6.f, 0.f};
-static a_int c__9 = 9;
 static a_int c__1 = 1;
 static a_int c__50 = 50;
 static a_int c__1000 = 1000;
-static a_int c__3 = 3;
-static a_int c__4 = 4;
-static a_int c__6 = 6;
-static a_int c_n6 = -6;
 
+static a_fcomplex zero = {0.f, 0.f};
+static a_fcomplex one = {1.f, 0.f};
+static a_fcomplex two = {2.f, 0.f};
+static a_fcomplex six = {6.f, 0.f};
+
+/**
+ * \BeginDoc
+ *
+ * Construct matrices A and M in LAPACK-style band form.
+ * Matries A and M are derived from the finite
+ * element discretization of the 1-dimensional
+ * convection-diffusion operator
+ *                 (d^2u/dx^2) + rho*(du/dx)
+ * on the interval [0,1] with zero boundary condition using
+ * piecewise linear elements.
+ *
+ * Call CNBAND to find eigenvalues LAMBDA such that
+ *            A*x = M*x*LAMBDA.
+ *
+ * Use mode 3 of CNAUPD.
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     cnband  ARPACK banded eigenproblem solver.
+ *     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     claset  LAPACK routine to initialize a matrix to zero.
+ *     caxpy   Level 1 BLAS that computes y <- alpha*x+y.
+ *     scnrm2  Level 1 BLAS that computes the norm of a vector.
+ *     cgbmv   Level 2 BLAS that computes the band matrix vector product.
+ *
+ * \EndLib */
 int main()
 {
     /* System generated locals */
@@ -33,48 +56,6 @@ int main()
     a_int isub, isup, mode, idiag, nconv, lworkl, maxitr;
     char *bmat, *which;
     float tol;
-
-    /*     ... Construct matrices A and M in LAPACK-style band form. */
-    /*         Matries A and M are derived from the finite */
-    /*         element discretization of the 1-dimensional */
-    /*         convection-diffusion operator */
-    /*                         (d^2u/dx^2) + rho*(du/dx) */
-    /*         on the interval [0,1] with zero boundary condition using */
-    /*         piecewise linear elements. */
-
-    /*     ... Call CNBAND to find eigenvalues LAMBDA such that */
-    /*                    A*x = M*x*LAMBDA. */
-
-    /*     ... Use mode 3 of CNAUPD. */
-
-    /* \BeginLib */
-
-    /* \Routines called: */
-    /*     cnband  ARPACK banded eigenproblem solver. */
-    /*     slapy2  LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-    /*     claset  LAPACK routine to initialize a matrix to zero. */
-    /*     caxpy   Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     scnrm2  Level 1 BLAS that computes the norm of a vector. */
-    /*     cgbmv   Level 2 BLAS that computes the band matrix vector product. */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: nbdr4.F   SID: 2.5   DATE OF SID: 10/17/00   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-
-    /* ------------------------------------------------------------------------- */
 
     /* ----------------------------------- */
     /* Define leading dimensions for all   */
@@ -182,9 +163,9 @@ int main()
     /* Zero out the workspace for banded matrices. */
     /* ------------------------------------------- */
 
-    claset_("A", &c__50, &n, &c_b2, &c_b2, a, &c__50);
-    claset_("A", &c__50, &n, &c_b2, &c_b2, m, &c__50);
-    claset_("A", &c__50, &n, &c_b2, &c_b2, fac, &c__50);
+    claset_("A", &c__50, &n, &zero, &zero, a, &c__50);
+    claset_("A", &c__50, &n, &zero, &zero, m, &c__50);
+    claset_("A", &c__50, &n, &zero, &zero, fac, &c__50);
 
     /* ----------------------------------- */
     /* KU, KL are number of superdiagonals */
@@ -201,18 +182,18 @@ int main()
 
     i__1 = n + 1;
     q__2.r = (float)i__1, q__2.i = 0.f;
-    ar_c_div(&q__1, &c_b1, &q__2);
+    ar_c_div(&q__1, &one, &q__2);
     h.r = q__1.r, h.i = q__1.i;
     idiag = kl + ku + 1;
     i__1 = n;
     for (j = 1; j <= i__1; ++j)
     {
         i__2 = idiag + j * 50 - 51;
-        ar_c_div(&q__1, &c_b3, &h);
+        ar_c_div(&q__1, &two, &h);
         a[i__2].r = q__1.r, a[i__2].i = q__1.i;
         i__2 = idiag + j * 50 - 51;
         q__2.r = h.r * 4.f - h.i * 0.f, q__2.i = h.i * 4.f + h.r * 0.f;
-        ar_c_div(&q__1, &q__2, &c_b5);
+        ar_c_div(&q__1, &q__2, &six);
         m[i__2].r = q__1.r, m[i__2].i = q__1.i;
     }
 
@@ -229,22 +210,22 @@ int main()
         i__2 = isup + (j + 1) * 50 - 51;
         q__3.r = -1.f, q__3.i = -0.f;
         ar_c_div(&q__2, &q__3, &h);
-        ar_c_div(&q__4, &rho, &c_b3);
+        ar_c_div(&q__4, &rho, &two);
         q__1.r = q__2.r + q__4.r, q__1.i = q__2.i + q__4.i;
         a[i__2].r = q__1.r, a[i__2].i = q__1.i;
         i__2 = isub + j * 50 - 51;
         q__3.r = -1.f, q__3.i = -0.f;
         ar_c_div(&q__2, &q__3, &h);
-        ar_c_div(&q__4, &rho, &c_b3);
+        ar_c_div(&q__4, &rho, &two);
         q__1.r = q__2.r - q__4.r, q__1.i = q__2.i - q__4.i;
         a[i__2].r = q__1.r, a[i__2].i = q__1.i;
         i__2 = isup + (j + 1) * 50 - 51;
         q__2.r = h.r * 1.f - h.i * 0.f, q__2.i = h.i * 1.f + h.r * 0.f;
-        ar_c_div(&q__1, &q__2, &c_b5);
+        ar_c_div(&q__1, &q__2, &six);
         m[i__2].r = q__1.r, m[i__2].i = q__1.i;
         i__2 = isub + j * 50 - 51;
         q__2.r = h.r * 1.f - h.i * 0.f, q__2.i = h.i * 1.f + h.r * 0.f;
-        ar_c_div(&q__1, &q__2, &c_b5);
+        ar_c_div(&q__1, &q__2, &six);
         m[i__2].r = q__1.r, m[i__2].i = q__1.i;
     }
 
@@ -291,8 +272,8 @@ int main()
             /*    ||  A*x - lambda*x ||   */
             /* -------------------------- */
 
-            cgbmv_("N", &n, &n, &kl, &ku, &c_b1, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, ax, &c__1);
-            cgbmv_("N", &n, &n, &kl, &ku, &c_b1, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b2, mx, &c__1);
+            cgbmv_("N", &n, &n, &kl, &ku, &one, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &zero, ax, &c__1);
+            cgbmv_("N", &n, &n, &kl, &ku, &one, &m[kl], &c__50, &v[j * 1000 - 1000], &c__1, &zero, mx, &c__1);
             i__2 = j - 1;
             q__1.r = -d[i__2].r, q__1.i = -d[i__2].i;
             caxpy_(&n, &q__1, mx, &c__1, ax, &c__1);

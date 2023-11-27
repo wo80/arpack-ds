@@ -3,19 +3,43 @@
 #include <stdlib.h>
 #include "arpack_internal.h"
 
-/* Table of constant values */
-
-static a_int c__9 = 9;
 static a_int c__1 = 1;
 static a_int c__50 = 50;
-static double c_b15 = 0.;
 static a_int c__1000 = 1000;
-static a_int c__3 = 3;
-static a_int c__5 = 5;
-static double c_b100 = 1.;
-static a_int c__6 = 6;
-static a_int c_n6 = -6;
 
+static double zero = 0.;
+static double one = 1.;
+
+/**
+ * \BeginDoc
+ *
+ * Construct the matrix A in LAPACK-style band form.
+ * The matrix A is derived from the discretization of
+ * the 2-d convection-diffusion operator
+ *
+ *      -Laplacian(u) + rho*partial(u)/partial(x).
+ *
+ * on the unit square with zero Dirichlet boundary condition
+ * using standard central difference.
+ *
+ * Call DNBAND  to find eigenvalues LAMBDA such that
+ *                  A*x = LAMBDA*x.
+ *
+ * Use mode 1 of DNAUPD .
+ *
+ * \EndDoc
+ *
+ * \BeginLib
+ *
+ * Routines called:
+ *     dnband   ARPACK banded eigenproblem solver.
+ *     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully.
+ *     dlaset   LAPACK routine to initialize a matrix to zero.
+ *     daxpy    Level 1 BLAS that computes y <- alpha*x+y.
+ *     dnrm2    Level 1 BLAS that computes the norm of a vector.
+ *     dgbmv    Level 2 BLAS that computes the band matrix vector product
+ *
+ * \EndLib */
 int main()
 {
     /* System generated locals */
@@ -31,48 +55,6 @@ int main()
     a_int idiag, nconv, lworkl, maxitr;
     char *bmat, *which;
     double h, h2, rho, tol, sigmai, sigmar;
-
-    /*     ... Construct the matrix A in LAPACK-style band form. */
-    /*         The matrix A is derived from the discretization of */
-    /*         the 2-d convection-diffusion operator */
-
-    /*              -Laplacian(u) + rho*partial(u)/partial(x). */
-
-    /*         on the unit square with zero Dirichlet boundary condition */
-    /*         using standard central difference. */
-
-    /*     ... Call DNBAND  to find eigenvalues LAMBDA such that */
-    /*                          A*x = LAMBDA*x. */
-
-    /*     ... Use mode 1 of DNAUPD . */
-
-    /* \BeginLib */
-
-    /*     dnband   ARPACK banded eigenproblem solver. */
-    /*     dlapy2   LAPACK routine to compute sqrt(x**2+y**2) carefully. */
-    /*     dlaset   LAPACK routine to initialize a matrix to zero. */
-    /*     daxpy    Level 1 BLAS that computes y <- alpha*x+y. */
-    /*     dnrm2    Level 1 BLAS that computes the norm of a vector. */
-    /*     dgbmv    Level 2 BLAS that computes the band matrix vector product */
-
-    /* \Author */
-    /*     Richard Lehoucq */
-    /*     Danny Sorensen */
-    /*     Chao Yang */
-    /*     Dept. of Computational & */
-    /*     Applied Mathematics */
-    /*     Rice University */
-    /*     Houston, Texas */
-
-    /* \SCCS Information: @(#) */
-    /* FILE: nbdr1.F   SID: 2.5   DATE OF SID: 08/26/96   RELEASE: 2 */
-
-    /* \Remarks */
-    /*     1. None */
-
-    /* \EndLib */
-
-    /* ---------------------------------------------------------------------- */
 
     /* ----------------------------------- */
     /* Define leading dimensions for all   */
@@ -179,9 +161,9 @@ int main()
     /* Zero out the workspace for banded matrices. */
     /* ------------------------------------------- */
 
-    dlaset_("A", &c__50, &n, &c_b15, &c_b15, a, &c__50);
-    dlaset_("A", &c__50, &n, &c_b15, &c_b15, m, &c__50);
-    dlaset_("A", &c__50, &n, &c_b15, &c_b15, rfac, &c__50);
+    dlaset_("A", &c__50, &n, &zero, &zero, a, &c__50);
+    dlaset_("A", &c__50, &n, &zero, &zero, m, &c__50);
+    dlaset_("A", &c__50, &n, &zero, &zero, rfac, &c__50);
 
     /* ----------------------------------- */
     /* KU, KL are number of superdiagonals */
@@ -296,7 +278,7 @@ int main()
                 /* Ritz value is real */
                 /* ------------------ */
 
-                dgbmv_("N", &n, &n, &kl, &ku, &c_b100, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                dgbmv_("N", &n, &n, &kl, &ku, &one, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &zero, ax, &c__1);
                 d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
                 d[j + 99] = dnrm2_(&n, ax, &c__1);
@@ -312,12 +294,12 @@ int main()
                 /* pair is computed.      */
                 /* ---------------------- */
 
-                dgbmv_("N", &n, &n, &kl, &ku, &c_b100, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                dgbmv_("N", &n, &n, &kl, &ku, &one, &a[kl], &c__50, &v[j * 1000 - 1000], &c__1, &zero, ax, &c__1);
                 d__1 = -d[j - 1];
                 daxpy_(&n, &d__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
                 daxpy_(&n, &d[j + 49], &v[(j + 1) * 1000 - 1000], &c__1, ax, &c__1);
                 d[j + 99] = dnrm2_(&n, ax, &c__1);
-                dgbmv_("N", &n, &n, &kl, &ku, &c_b100, &a[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &c_b15, ax, &c__1);
+                dgbmv_("N", &n, &n, &kl, &ku, &one, &a[kl], &c__50, &v[(j + 1) * 1000 - 1000], &c__1, &zero, ax, &c__1);
                 d__1 = -d[j + 49];
                 daxpy_(&n, &d__1, &v[j * 1000 - 1000], &c__1, ax, &c__1);
                 d__1 = -d[j - 1];

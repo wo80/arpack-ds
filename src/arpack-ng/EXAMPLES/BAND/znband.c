@@ -4,11 +4,11 @@
 
 /* Table of constant values */
 
-static a_dcomplex c_b1 = {1., 0.};
-static a_dcomplex c_b2 = {0., 0.};
-static a_int c__9 = 9;
-static a_int c__1 = 1;
-static a_int c__3 = 3;
+static a_dcomplex one = {1., 0.};
+static a_dcomplex zero = {0., 0.};
+
+static a_int i_one = 1;
+
 /**
  * \BeginDoc
  *
@@ -275,7 +275,7 @@ static a_int c__3 = 3;
  *
  * \BeginLib
  *
- * \Routines called
+ * Routines called
  *     znaupd   ARPACK reverse communication interface routine.
  *     zneupd   ARPACK routine that returns Ritz values and (optionally)
  *             Ritz vectors.
@@ -464,7 +464,7 @@ L40:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            zgbmv_("N", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+            zgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (mode == 2)
         {
@@ -473,9 +473,9 @@ L40:
             /* Perform  y <--- OP*x = inv[M]*A*x */
             /* --------------------------------- */
 
-            zgbmv_("N", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+            zgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
-            zgbtrs_("N", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            zgbtrs_("N", n, kl, ku, &i_one, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -494,9 +494,9 @@ L40:
             /*           | range of OP.                            | */
             /* --------------------------------------- */
 
-            zgbmv_("N", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+            zgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
-            zgbtrs_("N", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+            zgbtrs_("N", n, kl, ku, &i_one, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -516,7 +516,7 @@ L40:
             /* Perform  y <--- OP*x = A*x */
             /* -------------------------- */
 
-            zgbmv_("N", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+            zgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
         }
         else if (mode == 2)
         {
@@ -525,9 +525,9 @@ L40:
             /* Perform  y <--- OP*x = inv[M]*A*x */
             /* --------------------------------- */
 
-            zgbmv_("N", n, n, kl, ku, &c_b1, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+            zgbmv_("N", n, n, kl, ku, &one, &ab[itop + ab_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
 
-            zgbtrs_("N", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], ldv, &ierr);
+            zgbtrs_("N", n, kl, ku, &i_one, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], ldv, &ierr);
             if (ierr != 0)
             {
                 printf(" \n");
@@ -546,8 +546,8 @@ L40:
                 /* Perform  y <-- inv(A-sigma*I)*x. */
                 /* -------------------------------- */
 
-                zcopy_(n, &workd[ipntr[0]], &c__1, &workd[ipntr[1]], &c__1);
-                zgbtrs_("N", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                zcopy_(n, &workd[ipntr[0]], &i_one, &workd[ipntr[1]], &i_one);
+                zgbtrs_("N", n, kl, ku, &i_one, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -565,8 +565,8 @@ L40:
                 /* in workd(ipntr(3)).                  */
                 /* ------------------------------------ */
 
-                zcopy_(n, &workd[ipntr[2]], &c__1, &workd[ipntr[1]], &c__1);
-                zgbtrs_("N", n, kl, ku, &c__1, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
+                zcopy_(n, &workd[ipntr[2]], &i_one, &workd[ipntr[1]], &i_one);
+                zgbtrs_("N", n, kl, ku, &i_one, &fac[fac_offset], lda, &iwork[1], &workd[ipntr[1]], n, &ierr);
                 if (ierr != 0)
                 {
                     printf(" \n");
@@ -584,7 +584,7 @@ L40:
         /* Perform y <-- M*x  */
         /* ------------------ */
 
-        zgbmv_("N", n, n, kl, ku, &c_b1, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &c__1, &c_b2, &workd[ipntr[1]], &c__1);
+        zgbmv_("N", n, n, kl, ku, &one, &mb[itop + mb_dim1], lda, &workd[ipntr[0]], &i_one, &zero, &workd[ipntr[1]], &i_one);
     }
     else
     {
