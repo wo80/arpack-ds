@@ -13,6 +13,11 @@ option(ENABLE_TESTS "Compile ARPACK tests" ON)
 option(ENABLE_TIMING "Enable ARPACK timing feature" ON)
 option(ENABLE_TRACING "Enable ARPACK tracing feature" ON)
 
+include(GNUInstallDirs)
+
+set(ARPACK_INSTALL_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}/arpack")
+set(ARPACK_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/arpackng")
+
 if(MSVC)
   add_compile_definitions(NOMINMAX _COMPLEX_DEFINED)
 endif()
@@ -54,3 +59,35 @@ if(ENABLE_TESTS)
 endif()
 
 add_subdirectory(src)
+
+# Install
+
+set(PACKAGE_NAME ${PROJECT_NAME})
+set(PACKAGE_VERSION ${arpack_ng_VERSION})
+set(PACKAGE_URL "https://github.com/wo80/arpack-ds/")
+
+set(installTargets arpack)
+
+install(TARGETS ${installTargets}
+  EXPORT arpackngTargets
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+install(FILES
+  src/arpack-ng/arpack.h
+  src/arpack-ng/arpack_types.h
+  DESTINATION ${ARPACK_INSTALL_INCLUDEDIR})
+
+install(EXPORT arpackngTargets
+  DESTINATION "${ARPACK_INSTALL_CMAKEDIR}"
+)
+
+# Provide find_package for arpack-ng to users.
+configure_file(cmake/arpackng-config.cmake.in "${PROJECT_BINARY_DIR}/arpackng-config.cmake" @ONLY)
+configure_file(cmake/arpackng-config-version.cmake.in "${PROJECT_BINARY_DIR}/arpackng-config-version.cmake" @ONLY)
+install(
+  FILES
+  "${PROJECT_BINARY_DIR}/arpackng-config.cmake"
+  "${PROJECT_BINARY_DIR}/arpackng-config-version.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/arpackng)

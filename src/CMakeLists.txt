@@ -1,5 +1,5 @@
-add_library(arpack STATIC)
-add_library(ARPACK::arpack ALIAS arpack)
+add_library(arpack)
+add_library(ARPACK::ARPACK ALIAS arpack)
 
 set_target_properties(arpack PROPERTIES DEBUG_POSTFIX _d)
 

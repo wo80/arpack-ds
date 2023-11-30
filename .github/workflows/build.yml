@@ -54,35 +54,38 @@ jobs:
           del lib\libopenblas*.a lib\libopenblas.lib
           lib /def:lib\libopenblas.def /machine:x64 /out:lib\libopenblas.lib
 
-      - name: Install SuperLU
+      - name: Build SuperLU
         run: |
           cd src\arpackpp\external
           set INSTALL_PREFIX=%CD%
           curl -L -o SuperLU-6.0.1.tar.gz https://github.com/xiaoyeli/superlu/archive/refs/tags/v6.0.1.tar.gz
           tar -xvf SuperLU-6.0.1.tar.gz
           cd superlu-6.0.1
-          cmake -B build -D enable_examples=OFF -D enable_tests=OFF -D BUILD_SHARED_LIBS=OFF -D CMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -D BLAS_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib
+          cmake -B build -Denable_examples=OFF -Denable_tests=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -DBLAS_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib
           cmake --build build --config Release
           cmake --install build
 
       - name: Build arpack-ng
         run: |
           set INSTALL_PREFIX=%CD%\src\arpackpp\external
-          cmake -B build -D BUILD_SHARED_LIBS=OFF -D CMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -D BLAS_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib -D LAPACK_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib
+          cmake -B build -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -DBLAS_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib -DLAPACK_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib
           cmake --build build --config Release
 
       - name: Test arpack-ng
         run: |
           set PATH=%PATH%;%CD%\src\arpackpp\external\bin
-          set INSTALL_PREFIX=%CD%\src\arpackpp\external
           ctest --test-dir build --output-on-failure -C Release
+
+      - name: Install arpack-ng
+        run: |
+          set INSTALL_PREFIX=%CD%\src\arpackpp\external
           cmake --install build --prefix %INSTALL_PREFIX% --config Release
 
       - name: Build arpackpp
         run: |
           cd src\arpackpp
           set INSTALL_PREFIX=%CD%\external
-          cmake -B build -D ENABLE_SUPERLU=ON -D CMAKE_BUILD_TYPE=Release -D BLAS_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib -D LAPACK_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib
+          cmake -B build -DENABLE_SUPERLU=ON -DCMAKE_BUILD_TYPE=Release -DBLAS_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib -DLAPACK_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib
           cmake --build build --config Release
 
       - name: Test arpackpp
