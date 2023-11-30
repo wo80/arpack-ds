@@ -1,0 +1,92 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  ubuntu:
+    name: Ubuntu (build and test)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt install -y cmake libopenblas-dev
+
+      - name: Configure
+        run: cmake -B build -D BUILD_SHARED_LIBS=OFF
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  windows:
+    name: Windows (build and test)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: cmd
+
+    steps:
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download arpackpp
+        run: |
+          cd src
+          mkdir arpackpp
+          curl -L -o arpackpp-2.4.0.tar.gz https://github.com/m-reuter/arpackpp/archive/refs/tags/2.4.0.tar.gz
+          tar -xvf arpackpp-2.4.0.tar.gz
+          xcopy /s arpackpp-2.4.0 arpackpp
+          cd arpackpp
+          mkdir external
+
+      - name: Download OpenBLAS
+        run: |
+          cd src\arpackpp\external
+          curl -L -o OpenBLAS-0.3.25-x64.zip https://github.com/OpenMathLib/OpenBLAS/releases/download/v0.3.25/OpenBLAS-0.3.25-x64.zip
+          tar -xvf OpenBLAS-0.3.25-x64.zip
+          del lib\libopenblas*.a lib\libopenblas.lib
+          lib /def:lib\libopenblas.def /machine:x64 /out:lib\libopenblas.lib
+
+      - name: Install SuperLU
+        run: |
+          cd src\arpackpp\external
+          set INSTALL_PREFIX=%CD%
+          curl -L -o SuperLU-6.0.1.tar.gz https://github.com/xiaoyeli/superlu/archive/refs/tags/v6.0.1.tar.gz
+          tar -xvf SuperLU-6.0.1.tar.gz
+          cd superlu-6.0.1
+          cmake -B build -D enable_examples=OFF -D enable_tests=OFF -D BUILD_SHARED_LIBS=OFF -D CMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -D BLAS_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib
+          cmake --build build --config Release
+          cmake --install build
+
+      - name: Build arpack-ng
+        run: |
+          set INSTALL_PREFIX=%CD%\src\arpackpp\external
+          cmake -B build -D BUILD_SHARED_LIBS=OFF -D CMAKE_INSTALL_PREFIX=%INSTALL_PREFIX% -D BLAS_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib -D LAPACK_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib
+          cmake --build build --config Release
+
+      - name: Test arpack-ng
+        run: |
+          set PATH=%PATH%;%CD%\src\arpackpp\external\bin
+          set INSTALL_PREFIX=%CD%\src\arpackpp\external
+          ctest --test-dir build --output-on-failure -C Release
+          cmake --install build --prefix %INSTALL_PREFIX% --config Release
+
+      - name: Build arpackpp
+        run: |
+          cd src\arpackpp
+          set INSTALL_PREFIX=%CD%\external
+          cmake -B build -D ENABLE_SUPERLU=ON -D CMAKE_BUILD_TYPE=Release -D BLAS_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib -D LAPACK_LIBRARIES=%INSTALL_PREFIX%\lib\libopenblas.lib
+          cmake --build build --config Release
+
+      - name: Test arpackpp
+        run: |
+          cd src\arpackpp
+          set PATH=%PATH%;%CD%\external\bin
+          ctest --test-dir build --output-on-failure -C Release
