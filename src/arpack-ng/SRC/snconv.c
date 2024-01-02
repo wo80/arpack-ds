@@ -71,7 +71,6 @@ int snconv_(a_int *n, float *ritzr, float *ritzi, float *bounds, float *tol, a_i
     /* System generated locals */
     a_int i__1;
     float r__1, r__2;
-    double d__1;
 
     /* Local variables */
     a_int i;

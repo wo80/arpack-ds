@@ -312,7 +312,7 @@ static double d_n1 = -1.;
  */
 int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double *di, double *z,
      a_int *ldz, double *sigmar, double *sigmai, double *workev, const char *bmat, a_int *n,
-     char *which, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv,
+     const char *which, a_int *nev, double *tol, double *resid, a_int *ncv, double *v, a_int *ldv,
      a_int *iparam, a_int *ipntr, double *workd, double *workl, a_int *lworkl, a_int *info)
 {
     /* System generated locals */
@@ -398,7 +398,8 @@ int dneupd_(a_bool *rvec, const char *howmny, a_bool *select, double *dr, double
     {
         ierr = -3;
     }
-    else if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LR") != 0 && strcmp(which, "SR") != 0 && strcmp(which, "LI") != 0 && strcmp(which, "SI") != 0)
+    else if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LR") != 0 &&
+             strcmp(which, "SR") != 0 && strcmp(which, "LI") != 0 && strcmp(which, "SI") != 0)
     {
         ierr = -5;
     }

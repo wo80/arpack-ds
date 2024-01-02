@@ -244,14 +244,13 @@ int sgetv0_(a_int *ido, const char *bmat, a_int *itry, a_bool *initv, a_int *n, 
         goto L40;
     }
 
+#ifndef NO_TIMER
     if (*bmat == 'G')
     {
-#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvopx += t3 - t2;
-#endif
-
     }
+#endif
 
     /* ---------------------------------------------------- */
     /* Starting vector is now in the range of OP; r = OP*r; */
@@ -282,14 +281,13 @@ int sgetv0_(a_int *ido, const char *bmat, a_int *itry, a_bool *initv, a_int *n, 
 
 L20:
 
+#ifndef NO_TIMER
     if (*bmat == 'G')
     {
-#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
-#endif
-
     }
+#endif
 
     first = FALSE_;
     if (*bmat == 'G')
@@ -356,14 +354,13 @@ L30:
 
 L40:
 
+#ifndef NO_TIMER
     if (*bmat == 'G')
     {
-#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
-#endif
-
     }
+#endif
 
     if (*bmat == 'G')
     {

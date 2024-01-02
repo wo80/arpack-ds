@@ -2,10 +2,10 @@
 
 #include "arpack_internal.h"
 
-     /* ------------------------------------------- */
-/*     | Initialize statistic and timing information | */
-/*     | for symmetric Arnoldi code.                 | */
-     /* ------------------------------------------- */
+/* ------------------------------------------- */
+/* Initialize statistic and timing information */
+/* for symmetric Arnoldi code.                 */
+/* ------------------------------------------- */
 int dstats_(void)
 {
 

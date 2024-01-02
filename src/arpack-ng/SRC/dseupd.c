@@ -232,8 +232,7 @@ int dseupd_(a_bool *rvec, const char *howmny, a_bool *select, double *d, double 
     double d__1, d__2, d__3;
 
     /* Local variables */
-    a_int j, k, ih, jj, iq, np, iw, ibd, ihb, ihd, ldh, ldq, irz;
-    a_int mode;
+    a_int j, k, ih, jj, iq, np, iw, ibd, ihb, ihd, ldh, ldq, irz, mode;
     double eps23;
     a_int ierr;
     double temp;
@@ -298,7 +297,8 @@ int dseupd_(a_bool *rvec, const char *howmny, a_bool *select, double *d, double 
     {
         ierr = -3;
     }
-    if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LA") != 0 && strcmp(which, "SA") != 0 && strcmp(which, "BE") != 0)
+    if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LA") != 0 &&
+        strcmp(which, "SA") != 0 && strcmp(which, "BE") != 0)
     {
         ierr = -5;
     }

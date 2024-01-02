@@ -230,7 +230,6 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, i__1;
     float r__1, r__2, r__3;
-    double d__1;
 
     /* Local variables */
     a_int j, k, ih, jj, iq, np, iw, ibd, ihb, ihd, ldh, ldq, irz, mode;
@@ -298,7 +297,8 @@ int sseupd_(a_bool *rvec, const char *howmny, a_bool *select, float *d, float *z
     {
         ierr = -3;
     }
-    if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LA") != 0 && strcmp(which, "SA") != 0 && strcmp(which, "BE") != 0)
+    if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LA") != 0 &&
+        strcmp(which, "SA") != 0 && strcmp(which, "BE") != 0)
     {
         ierr = -5;
     }

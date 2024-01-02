@@ -312,13 +312,12 @@ static float s_n1 = -1.f;
  */
 int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *di, float *z,
      a_int *ldz, float *sigmar, float *sigmai, float *workev, const char *bmat, a_int *n,
-     char *which, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv,
+     const char *which, a_int *nev, float *tol, float *resid, a_int *ncv, float *v, a_int *ldv,
      a_int *iparam, a_int *ipntr, float *workd, float *workl, a_int *lworkl, a_int *info)
 {
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, i__1;
     float r__1, r__2;
-    double d__1;
 
     /* Local variables */
     a_int j, k, ih, jj, np;
@@ -397,7 +396,8 @@ int sneupd_(a_bool *rvec, const char *howmny, a_bool *select, float *dr, float *
     {
         ierr = -3;
     }
-    else if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LR") != 0 && strcmp(which, "SR") != 0 && strcmp(which, "LI") != 0 && strcmp(which, "SI") != 0)
+    else if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LR") != 0 &&
+             strcmp(which, "SR") != 0 && strcmp(which, "LI") != 0 && strcmp(which, "SI") != 0)
     {
         ierr = -5;
     }

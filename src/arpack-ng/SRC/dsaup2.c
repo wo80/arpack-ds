@@ -860,14 +860,13 @@ L100:
     /* WORKD(1:N) := B*RESID            */
     /* -------------------------------- */
 
+#ifndef NO_TIMER
     if (*bmat == 'G')
     {
-#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
-#endif
-
     }
+#endif
 
     if (*bmat == 'G')
     {

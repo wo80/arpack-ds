@@ -65,7 +65,6 @@ int ssconv_(a_int *n, float *ritz, float *bounds, float *tol, a_int *nconv)
     /* System generated locals */
     a_int i__1;
     float r__1, r__2, r__3;
-    double d__1;
 
     /* Local variables */
     a_int i;

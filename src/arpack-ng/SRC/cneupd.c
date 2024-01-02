@@ -264,7 +264,6 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
     /* System generated locals */
     a_int v_dim1, v_offset, z_dim1, z_offset, i__1, i__2;
     float r__1, r__2, r__3, r__4;
-    double d__1;
     a_fcomplex q__1, q__2;
 
     /* Local variables */
@@ -344,7 +343,8 @@ int cneupd_(a_bool *rvec, const char *howmny, a_bool *select, a_fcomplex *d, a_f
     {
         ierr = -3;
     }
-    else if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LR") != 0 && strcmp(which, "SR") != 0 && strcmp(which, "LI") != 0 && strcmp(which, "SI") != 0)
+    else if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LR") != 0 &&
+             strcmp(which, "SR") != 0 && strcmp(which, "LI") != 0 && strcmp(which, "SI") != 0)
     {
         ierr = -5;
     }

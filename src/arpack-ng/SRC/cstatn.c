@@ -2,13 +2,10 @@
 
 #include "arpack_internal.h"
 
-/* \SCCS Information: @(#) */
-/* FILE: statn.F   SID: 2.2   DATE OF SID: 4/20/96   RELEASE: 2 */
-
-     /* ------------------------------------------- */
-/*     | Initialize statistic and timing information | */
-/*     | for complex nonsymmetric Arnoldi code.      | */
-     /* ------------------------------------------- */
+/* ------------------------------------------- */
+/* Initialize statistic and timing information */
+/* for complex nonsymmetric Arnoldi code.      */
+/* ------------------------------------------- */
 int cstatn_(void)
 {
 

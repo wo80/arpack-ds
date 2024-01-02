@@ -101,14 +101,14 @@ extern "C"
 
     /* f2c */
 
-    double ar_d_sign(double *, double *);
-    double ar_r_sign(float *, float *);
+    double ar_d_sign(const double *, const double *);
+    double ar_r_sign(const float *, const float *);
 
-    void ar_r_cnjg(a_fcomplex *, a_fcomplex *);
-    void ar_d_cnjg(a_dcomplex *, a_dcomplex *);
+    void ar_r_cnjg(a_fcomplex *, const a_fcomplex *);
+    void ar_d_cnjg(a_dcomplex *, const a_dcomplex *);
 
-    void ar_c_div(a_fcomplex *, a_fcomplex *, a_fcomplex *);
-    void ar_z_div(a_dcomplex *, a_dcomplex *, a_dcomplex *);
+    void ar_c_div(a_fcomplex *, const a_fcomplex *, const a_fcomplex *);
+    void ar_z_div(a_dcomplex *, const a_dcomplex *, const a_dcomplex *);
 
     /* END: private interface */
 

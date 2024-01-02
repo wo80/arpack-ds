@@ -40,7 +40,7 @@ extern "C"
 
     int dneupd_(a_bool* rvec, const char* howmny, a_bool* select, double* dr, double* di, double* z,
         a_int* ldz, double* sigmar, double* sigmai, double* workev, const char* bmat, a_int* n,
-        char* which, a_int* nev, double* tol, double* resid, a_int* ncv, double* v,
+        const char* which, a_int* nev, double* tol, double* resid, a_int* ncv, double* v,
         a_int* ldv, a_int* iparam, a_int* ipntr, double* workd, double* workl, a_int* lworkl,
         a_int* info);
 
@@ -59,7 +59,7 @@ extern "C"
 
     int sneupd_(a_bool* rvec, const char* howmny, a_bool* select, float* dr, float* di, float* z,
         a_int* ldz, float* sigmar, float* sigmai, float* workev, const char* bmat, a_int* n,
-        char* which, a_int* nev, float* tol, float* resid, a_int* ncv, float* v,
+        const char* which, a_int* nev, float* tol, float* resid, a_int* ncv, float* v,
         a_int* ldv, a_int* iparam, a_int* ipntr, float* workd, float* workl, a_int* lworkl,
         a_int* info);
 

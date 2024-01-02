@@ -542,14 +542,13 @@ L60:
     /* WORKD(IPJ:IPJ+N-1) := B*OP*v_{j}. */
     /* --------------------------------- */
 
+#ifndef NO_TIMER
     if (*bmat == 'G')
     {
-#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
-#endif
-
     }
+#endif
 
     step4 = FALSE_;
 
@@ -658,14 +657,13 @@ L70:
     /* WORKD(IPJ:IPJ+N-1) := B*r_{j}.                    */
     /* ------------------------------------------------- */
 
+#ifndef NO_TIMER
     if (*bmat == 'G')
     {
-#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
-#endif
-
     }
+#endif
 
     orth1 = FALSE_;
 
@@ -775,14 +773,13 @@ L90:
     /* Back from reverse communication if ORTH2 = .true. */
     /* ------------------------------------------------- */
 
+#ifndef NO_TIMER
     if (*bmat == 'G')
     {
-#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
-#endif
-
     }
+#endif
 
     /* --------------------------------------------------- */
     /* Compute the B-norm of the corrected residual r_{j}. */

@@ -489,7 +489,8 @@ int dsaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         {
             ierr = -4;
         }
-        if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LA") != 0 && strcmp(which, "SA") != 0 && strcmp(which, "BE") != 0)
+        if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LA") != 0 &&
+            strcmp(which, "SA") != 0 && strcmp(which, "BE") != 0)
         {
             ierr = -5;
         }

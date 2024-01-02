@@ -455,7 +455,8 @@ int znaupd_(a_int *ido, const char *bmat, a_int *n, const char *which, a_int *ne
         {
             ierr = -4;
         }
-        else if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LR") != 0 && strcmp(which, "SR") != 0 && strcmp(which, "LI") != 0 && strcmp(which, "SI") != 0)
+        else if (strcmp(which, "LM") != 0 && strcmp(which, "SM") != 0 && strcmp(which, "LR") != 0 &&
+                 strcmp(which, "SR") != 0 && strcmp(which, "LI") != 0 && strcmp(which, "SI") != 0)
         {
             ierr = -5;
         }

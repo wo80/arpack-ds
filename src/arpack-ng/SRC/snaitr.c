@@ -345,16 +345,16 @@ int snaitr_(a_int *ido, const char *bmat, a_int *n, a_int *k, a_int *np, a_int *
         goto L30;
     }
 
-     /* --------------------------- */
-/*     | Else this is the first step | */
-     /* --------------------------- */
+    /* --------------------------- */
+    /* Else this is the first step */
+    /* --------------------------- */
 
-     /* ------------------------------------------------------------ */
-/*     |                                                              | */
-/*     |        A R N O L D I     I T E R A T I O N     L O O P       | */
-/*     |                                                              | */
-/*     | Note:  B*r_{j-1} is already in WORKD(1:N)=WORKD(IPJ:IPJ+N-1) | */
-     /* ------------------------------------------------------------ */
+    /* ------------------------------------------------------------ */
+    /*                                                              */
+    /*        A R N O L D I     I T E R A T I O N     L O O P       */
+    /*                                                              */
+    /* Note:  B*r_{j-1} is already in WORKD(1:N)=WORKD(IPJ:IPJ+N-1) */
+    /* ------------------------------------------------------------ */
 L1000:
 
 #ifndef NO_TRACE
@@ -544,14 +544,13 @@ L60:
     /* if step4 = .true.                */
     /* -------------------------------- */
 
+#ifndef NO_TIMER
     if (*bmat == 'G')
     {
-#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
-#endif
-
     }
+#endif
 
     step4 = FALSE_;
 
@@ -632,14 +631,13 @@ L70:
     /* WORKD(IPJ:IPJ+N-1) := B*r_{j}.                    */
     /* ------------------------------------------------- */
 
+#ifndef NO_TIMER
     if (*bmat == 'G')
     {
-#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
-#endif
-
     }
+#endif
 
     orth1 = FALSE_;
 
@@ -748,14 +746,13 @@ L90:
     /* Back from reverse communication if ORTH2 = .true. */
     /* ------------------------------------------------- */
 
+#ifndef NO_TIMER
     if (*bmat == 'G')
     {
-#ifndef NO_TIMER
         arscnd_(&t3);
         timing_1.tmvbx += t3 - t2;
-#endif
-
     }
+#endif
 
     /* --------------------------------------------------- */
     /* Compute the B-norm of the corrected residual r_{j}. */

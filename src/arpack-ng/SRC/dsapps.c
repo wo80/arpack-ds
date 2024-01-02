@@ -4,8 +4,8 @@
 
 /* Table of constant values */
 
-static double c_b4 = 0.;
-static double c_b5 = 1.;
+static double d_zero = 0.;
+static double d_one = 1.;
 static a_int i_one = 1;
 static double d_n1 = -1.;
 
@@ -197,7 +197,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     /* kplusp used to accumulate the rotations.     */
     /* -------------------------------------------- */
 
-    dlaset_("A", &kplusp, &kplusp, &c_b4, &c_b5, &q[q_offset], ldq);
+    dlaset_("A", &kplusp, &kplusp, &d_zero, &d_one, &q[q_offset], ldq);
 
     /* -------------------------------------------- */
     /* Quick return if there are no shifts to apply */
@@ -463,7 +463,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
 
     if (h[*kev + 1 + h_dim1] > 0.)
     {
-        dgemv_("N", n, &kplusp, &c_b5, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &c_b4, &workd[*n + 1], &i_one);
+        dgemv_("N", n, &kplusp, &d_one, &v[v_offset], ldv, &q[(*kev + 1) * q_dim1 + 1], &i_one, &d_zero, &workd[*n + 1], &i_one);
     }
 
     /* ----------------------------------------------------- */
@@ -477,7 +477,7 @@ int dsapps_(a_int *n, a_int *kev, a_int *np, double *shift, double *v, a_int *ld
     for (i = 1; i <= i__1; ++i)
     {
         i__2 = kplusp - i + 1;
-        dgemv_("N", n, &i__2, &c_b5, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &c_b4, &workd[1], &i_one);
+        dgemv_("N", n, &i__2, &d_one, &v[v_offset], ldv, &q[(*kev - i + 1) * q_dim1 + 1], &i_one, &d_zero, &workd[1], &i_one);
         dcopy_(n, &workd[1], &i_one, &v[(kplusp - i + 1) * v_dim1 + 1], &i_one);
         /* L130: */
     }
